@@ -39,7 +39,7 @@ Meridian uses a five-room relay structure.
 
 ## Scope Discipline
 
-Wave 1 foundation work is limited to repo substrate and root canon until a later block explicitly widens scope.
+Wave 1 remains bounded to repo-native governed foundation work, delivered through Architect-approved blocks: A (root canon and substrate), B (governance shadows and 12 civic entity scaffolds), C (narrow Constellation config and package substrate), and D (structural proof suite).
 
 ## Closeout Standard
 

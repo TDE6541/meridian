@@ -20,13 +20,31 @@ TEAM_CHARTER.md
 AI_EXECUTION_DOCTRINE.md
 CONTRIBUTING.md
 MIGRATIONS.md
+package.json
 .gitignore
 src/
-  entities/
-  governance/
   config/
+    constellation.js
+  entities/
+    action_request.js
+    authority_grant.js
+    corridor_zone.js
+    critical_site.js
+    decision_record.js
+    device.js
+    incident_observation.js
+    inspection.js
+    obligation.js
+    organization.js
+    permit_application.js
+    utility_asset.js
+  governance/
+    shadows.js
 tests/
   .gitkeep
+  config.test.js
+  deny-patterns.test.js
+  entities.test.js
 docs/
   specs/
     .gitkeep

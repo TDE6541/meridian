@@ -46,15 +46,32 @@ Edit(/**/*.config.*)
 - `AI_EXECUTION_DOCTRINE.md`
 - `CONTRIBUTING.md`
 - `MIGRATIONS.md`
+- `package.json`
 - `.gitignore`
-- `src/entities/`
-- `src/governance/`
-- `src/config/`
+- `src/config/constellation.js`
+- `src/entities/action_request.js`
+- `src/entities/authority_grant.js`
+- `src/entities/corridor_zone.js`
+- `src/entities/critical_site.js`
+- `src/entities/decision_record.js`
+- `src/entities/device.js`
+- `src/entities/incident_observation.js`
+- `src/entities/inspection.js`
+- `src/entities/obligation.js`
+- `src/entities/organization.js`
+- `src/entities/permit_application.js`
+- `src/entities/utility_asset.js`
+- `src/governance/shadows.js`
 - `tests/.gitkeep`
+- `tests/config.test.js`
+- `tests/deny-patterns.test.js`
+- `tests/entities.test.js`
 - `docs/specs/.gitkeep`
 - `docs/schemas/.gitkeep`
 - `docs/learning-notes/.gitkeep`
 - `scripts/.gitkeep`
+- Block C truth: narrow Constellation config and package substrate are present; no `nats` dependency is declared; upstream 5 stream helpers remain excluded.
+- Block D truth: structural proof suite exists under `tests/` (`config.test.js`, `deny-patterns.test.js`, `entities.test.js`).
 
 ## Required Sync Surfaces
 
