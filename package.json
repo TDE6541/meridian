@@ -1,0 +1,10 @@
+{
+  "name": "meridian",
+  "version": "0.1.0",
+  "description": "Governed city digital twin intelligence system",
+  "license": "MIT",
+  "repository": "github.com/TDE6541/meridian",
+  "scripts": {
+    "test": "node --test tests/**/*.test.js"
+  }
+}
