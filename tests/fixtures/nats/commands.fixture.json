@@ -1,0 +1,16 @@
+{
+  "entity_command": {
+    "subject": "constellation.commands.fortworth-dev.device-100",
+    "payload": {
+      "command": "pause-inspection",
+      "entity_type": "device",
+      "requested_by": "ops-dispatch"
+    }
+  },
+  "broadcast_command": {
+    "subject": "constellation.commands.fortworth-dev.broadcast",
+    "payload": {
+      "command": "pause-all"
+    }
+  }
+}

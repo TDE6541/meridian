@@ -1,0 +1,22 @@
+{
+  "valid_event": {
+    "id": "evt-100",
+    "type": "entity.updated",
+    "subject": "constellation.events.entity.updated",
+    "data": {
+      "entity_id": "device-100",
+      "org_id": "fortworth-dev",
+      "org_name": "Fort Worth Dev",
+      "name": "Pump Station 7",
+      "entity_type": "device",
+      "status": "operational",
+      "priority": "high",
+      "is_live": true
+    },
+    "metadata": {
+      "trace_id": "trace-100"
+    },
+    "timestamp": "2026-04-14T12:00:00.000Z",
+    "source": "constellation.synthetic"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "valid_telemetry": {
+    "subject": "constellation.telemetry.fortworth-dev.device-100",
+    "payload": {
+      "message_id": "mav-200",
+      "message_type": "HEARTBEAT",
+      "system_id": 22,
+      "component_id": 1,
+      "data": {
+        "armed": false
+      },
+      "timestamp": "2026-04-14T12:01:00.000Z",
+      "entity_type": "device"
+    }
+  }
+}

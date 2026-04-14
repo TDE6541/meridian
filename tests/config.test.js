@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const PACKAGE_PATH = path.join(__dirname, "..", "package.json");
+const PACKAGE_LOCK_PATH = path.join(__dirname, "..", "package-lock.json");
 const CONSTELLATION_PATH = path.join(
   __dirname,
   "..",
@@ -14,6 +15,7 @@ const CONSTELLATION_PATH = path.join(
 
 const EXPECTED_PACKAGE_KEYS = [
   "description",
+  "dependencies",
   "license",
   "name",
   "repository",
@@ -31,8 +33,9 @@ const EXPECTED_CONSTELLATION_EXPORTS = [
   "buildGovernanceSubject",
 ].sort();
 
-test("package.json stays at the locked minimum surface", () => {
+test("package.json stays at the locked Wave 3 minimum surface", () => {
   assert.equal(fs.existsSync(PACKAGE_PATH), true);
+  assert.equal(fs.existsSync(PACKAGE_LOCK_PATH), true);
 
   const packageJson = JSON.parse(fs.readFileSync(PACKAGE_PATH, "utf8"));
 
@@ -40,10 +43,9 @@ test("package.json stays at the locked minimum surface", () => {
   assert.deepEqual(packageJson.scripts, {
     test: "node --test tests/**/*.test.js",
   });
-  assert.equal(
-    Object.prototype.hasOwnProperty.call(packageJson, "dependencies"),
-    false
-  );
+  assert.deepEqual(packageJson.dependencies, {
+    nats: "^2.29.3",
+  });
   assert.equal(
     Object.prototype.hasOwnProperty.call(packageJson, "devDependencies"),
     false

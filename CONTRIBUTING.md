@@ -21,6 +21,7 @@
 - Treat root canon as load-bearing.
 - Update every affected canon surface when substrate truth changes.
 - Do not introduce silent drift between repo state and repo documents.
+- Treat Wave 3 bridge-local contracts as transport contracts, not persistent entity widening.
 
 ## Canon Vs Reference Boundaries
 
@@ -39,3 +40,4 @@
 - Keep each change set narrow and legible.
 - Avoid mixed-purpose edits.
 - Do not commit until the approved session says commit is in scope.
+- When touching the Wave 3 bridge, sync the bridge specs, tests, migration log, and closeout in the same session.

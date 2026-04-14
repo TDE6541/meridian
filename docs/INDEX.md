@@ -8,6 +8,8 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 
 - Specs lane: [`docs/specs/`](specs/)
 - Entity ontology spec: [`docs/specs/ENTITY_ONTOLOGY.md`](specs/ENTITY_ONTOLOGY.md)
+- Wave 3 bridge spec: [`docs/specs/WAVE3_NATS_BRIDGE.md`](specs/WAVE3_NATS_BRIDGE.md)
+- Wave 3 translation spec: [`docs/specs/NATS_EVENT_COMMAND_TRANSLATION.md`](specs/NATS_EVENT_COMMAND_TRANSLATION.md)
 - Schemas lane: [`docs/schemas/`](schemas/)
 - Learning notes lane: [`docs/learning-notes/`](learning-notes/)
 - Closeouts lane: [`docs/closeouts/README.md`](closeouts/README.md)
@@ -17,4 +19,4 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 
 ## Placeholder Note
 
-Some lanes are placeholders by design in Wave 1. Placeholder lanes are intentional and do not imply shipped runtime/UI surfaces.
+Some lanes are placeholders by design. Placeholder lanes are intentional and do not imply shipped UI, live broker proof, or runtime mutation surfaces.

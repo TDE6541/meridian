@@ -22,49 +22,33 @@ AI_EXECUTION_DOCTRINE.md
 CONTRIBUTING.md
 MIGRATIONS.md
 package.json
+package-lock.json
 .gitignore
 src/
-  config/
-    constellation.js
-  entities/
-    action_request.js
-    authority_grant.js
-    corridor_zone.js
-    critical_site.js
-    decision_record.js
-    device.js
-    evidence_artifact.js
-    incident_observation.js
-    inspection.js
-    obligation.js
-    organization.js
-    permit_application.js
-    utility_asset.js
-  governance/
-    shadows.js
+  bridge/*.js
+  config/constellation.js
+  entities/*.js
+  governance/shadows.js
 tests/
-  .gitkeep
+  bridge*.test.js
   config.test.js
   deny-patterns.test.js
   entities.test.js
+  fixtures/nats/*.json
 docs/
   INDEX.md
   ENGINE_INDEX.md
   UI_INDEX.md
   WHERE_TO_CHANGE_X.md
-  closeouts/
-    README.md
-    WAVE1_CLOSEOUT.md
-    WAVE2_CLOSEOUT.md
-  specs/
-    ENTITY_ONTOLOGY.md
-    .gitkeep
-  schemas/
-    .gitkeep
-  learning-notes/
-    .gitkeep
+  closeouts/README.md
+  closeouts/WAVE1_CLOSEOUT.md
+  closeouts/WAVE2_CLOSEOUT.md
+  closeouts/WAVE3_CLOSEOUT.md
+  specs/ENTITY_ONTOLOGY.md
+  specs/NATS_EVENT_COMMAND_TRANSLATION.md
+  specs/WAVE3_NATS_BRIDGE.md
 scripts/
-  .gitkeep
+  synthetic-constellation.js
 ```
 
 ## Operating Rules
@@ -74,6 +58,7 @@ scripts/
 - Preserve canon alignment across root documents.
 - Treat upstream references as references unless their contents are available in this repo.
 - Surface uncertainty as HOLD.
+- Describe Wave 3 only as a transport-only bridge and fail-closed governance stub.
 
 ## Planning Gate
 
@@ -88,6 +73,7 @@ scripts/
 - Keep prose plain and direct.
 - Do not invent runtime behavior, ontology detail, or dependency detail.
 - Do not add adjacent improvements.
+- Do not widen Wave 3 into actor-level authority or mutation behavior.
 - Stop if repo truth conflicts with the approved task.
 
 ## Verification Rules
@@ -97,12 +83,13 @@ scripts/
 - Confirm blocked surfaces remain untouched.
 - Confirm required placeholders exist only where approved.
 - Confirm no extra files entered the repo.
+- Confirm the two reference files remain unstaged.
 
 ## Contract And Migration Rules
 
 - Root canon is a contract surface and must stay synchronized.
+- Bridge-local contracts do not widen the persistent Wave 2 entity contract.
 - Migration records are append-only after real changes require them.
-- A template migration file must not imply history that did not happen.
 - If a future task changes structure, update every affected canon surface in the same session.
 
 ## HOLD Format

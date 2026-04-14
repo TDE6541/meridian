@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. This repository currently contains the Wave 1 foundation and the Wave 2 entity ontology extension work. It is a controlled build substrate, not a runnable application or a production runtime.
+Meridian is a governed city digital twin intelligence repo. This repository now contains the Wave 1 foundation, the Wave 2 entity ontology extension, and the shipped Wave 3 NATS bridge substrate. It is a runtime-adjacent bridge surface, not a full governance runtime or a runnable application.
 
 ## Agent Start Here
 
@@ -10,20 +10,22 @@ Meridian is a governed city digital twin intelligence repo. This repository curr
 
 ## Current Status
 
-Wave 2 — entity ontology extension over the Wave 1 foundation
+Wave 3 - NATS bridge substrate, governance transport stub, and canon sync
 
 ## What This Is
 
 - A Meridian-native repo substrate for governed execution.
-- A root canon set for scope, posture, and closeout discipline.
-- A Wave 1 foundation surface widened in Wave 2 with typed signal_tree ontology, 13 civic entity scaffolds, and structural test artifacts.
+- A Wave 1 and Wave 2 schema surface plus a Wave 3 transport-only bridge under `src/bridge/`.
+- A fake-transport proof harness for event normalization, fail-closed command handling, and Meridian publication shaping.
+- A single external runtime dependency surface: `nats`.
 
 ## What This Is Not
 
 - Not a runnable application.
-- Not a full production runtime, messaging integration, or deployment surface.
-- Not a setup guide or dependency surface.
-- Not a source of ontology detail beyond the upstream filename reference.
+- Not live-broker proof or production Constellation compatibility proof.
+- Not actor-level authorization topology or evaluate-before-mutate state governance.
+- Not entity mutation, KV mutation, or civic ForensicChain runtime persistence.
+- Not a source of ontology detail beyond the shipped in-repo specs.
 
 ## Repo Structure
 
@@ -37,8 +39,18 @@ AI_EXECUTION_DOCTRINE.md
 CONTRIBUTING.md
 MIGRATIONS.md
 package.json
+package-lock.json
 .gitignore
 src/
+  bridge/
+    commandSubscriber.js
+    commandTranslator.js
+    eventSubscriber.js
+    eventTranslator.js
+    governancePublisher.js
+    governanceTransportAdapter.js
+    natsTransport.js
+    subjectCatalog.js
   config/
     constellation.js
   entities/
@@ -58,10 +70,22 @@ src/
   governance/
     shadows.js
 tests/
-  .gitkeep
+  bridge.commandSubscriber.test.js
+  bridge.commandTranslator.test.js
+  bridge.eventSubscriber.test.js
+  bridge.eventTranslator.test.js
+  bridge.governancePublisher.test.js
+  bridge.governanceTransportAdapter.test.js
+  bridge.subjectCatalog.test.js
   config.test.js
   deny-patterns.test.js
   entities.test.js
+  fixtures/
+    nats/
+      commands.fixture.json
+      events.fixture.json
+      publications.fixture.json
+      telemetry.fixture.json
 docs/
   INDEX.md
   ENGINE_INDEX.md
@@ -71,15 +95,13 @@ docs/
     README.md
     WAVE1_CLOSEOUT.md
     WAVE2_CLOSEOUT.md
+    WAVE3_CLOSEOUT.md
   specs/
     ENTITY_ONTOLOGY.md
-    .gitkeep
-  schemas/
-    .gitkeep
-  learning-notes/
-    .gitkeep
+    NATS_EVENT_COMMAND_TRANSLATION.md
+    WAVE3_NATS_BRIDGE.md
 scripts/
-  .gitkeep
+  synthetic-constellation.js
 ```
 
 ## Upstream References

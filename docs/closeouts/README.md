@@ -15,5 +15,6 @@ This lane stores durable wave/session closeout records.
 
 - [`WAVE1_CLOSEOUT.md`](WAVE1_CLOSEOUT.md)
 - [`WAVE2_CLOSEOUT.md`](WAVE2_CLOSEOUT.md)
+- [`WAVE3_CLOSEOUT.md`](WAVE3_CLOSEOUT.md)
 
 Future waves should add new closeout files in this directory and list them here.

@@ -1,0 +1,57 @@
+{
+  "hold_missing_authority": {
+    "decision": "HOLD",
+    "reason": "authority_context_absent",
+    "evaluated_at": "2026-04-14T12:03:00.000Z",
+    "publications": [
+      {
+        "stream": "CONSTELLATION_GOVERNANCE",
+        "subject": "constellation.governance.fortworth-dev.device-100.hold",
+        "payload": {
+          "kind": "command_request",
+          "org_id": "fortworth-dev",
+          "entity_ref": {
+            "entity_id": "device-100",
+            "entity_type": "device"
+          },
+          "raw_subject": "constellation.commands.fortworth-dev.device-100",
+          "reason": "authority_context_absent",
+          "evaluated_at": "2026-04-14T12:03:00.000Z",
+          "decision": "HOLD"
+        }
+      },
+      {
+        "stream": "CONSTELLATION_EVIDENCE",
+        "subject": "constellation.evidence.fortworth-dev.device-100.missing",
+        "payload": {
+          "kind": "command_request",
+          "org_id": "fortworth-dev",
+          "entity_ref": {
+            "entity_id": "device-100",
+            "entity_type": "device"
+          },
+          "raw_subject": "constellation.commands.fortworth-dev.device-100",
+          "reason": "authority_context_absent",
+          "evaluated_at": "2026-04-14T12:03:00.000Z",
+          "evidence_status": "missing"
+        }
+      },
+      {
+        "stream": "CONSTELLATION_DISCLOSURES",
+        "subject": "constellation.disclosures.fortworth-dev.device-100.notice-required",
+        "payload": {
+          "kind": "command_request",
+          "org_id": "fortworth-dev",
+          "entity_ref": {
+            "entity_id": "device-100",
+            "entity_type": "device"
+          },
+          "raw_subject": "constellation.commands.fortworth-dev.device-100",
+          "reason": "authority_context_absent",
+          "evaluated_at": "2026-04-14T12:03:00.000Z",
+          "disclosure_status": "notice-required"
+        }
+      }
+    ]
+  }
+}

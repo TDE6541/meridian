@@ -2,7 +2,20 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation plus the shipped Wave 2 entity ontology extension.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, and shipped Wave 3 bridge substrate.
+
+## Bridge Substrate
+
+Purpose: transport-only NATS bridge surfaces for subject cataloging, event and telemetry normalization, command translation, fail-closed governance transport, and Meridian publication shaping.
+
+- `src/bridge/subjectCatalog.js`
+- `src/bridge/natsTransport.js`
+- `src/bridge/eventTranslator.js`
+- `src/bridge/commandTranslator.js`
+- `src/bridge/eventSubscriber.js`
+- `src/bridge/commandSubscriber.js`
+- `src/bridge/governancePublisher.js`
+- `src/bridge/governanceTransportAdapter.js`
 
 ## Governance Substrate
 
@@ -30,14 +43,26 @@ Purpose: locked structural entity scaffolds with governance/evidence/disclosure 
 
 ## Config Substrate
 
-Purpose: narrow Constellation subject builders and event/config exports used as foundation surface.
+Purpose: read-only Meridian publisher subject builders and connection config imported by the Wave 3 bridge.
 
 - `src/config/constellation.js`
 
-## Structural Proof Tests
+## Proof Surfaces
 
-Purpose: structural proof suite for config surface, deny matrix, and entity scaffold floor.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
 - `tests/entities.test.js`
+- `tests/bridge.subjectCatalog.test.js`
+- `tests/bridge.eventTranslator.test.js`
+- `tests/bridge.commandTranslator.test.js`
+- `tests/bridge.eventSubscriber.test.js`
+- `tests/bridge.commandSubscriber.test.js`
+- `tests/bridge.governancePublisher.test.js`
+- `tests/bridge.governanceTransportAdapter.test.js`
+- `tests/fixtures/nats/events.fixture.json`
+- `tests/fixtures/nats/telemetry.fixture.json`
+- `tests/fixtures/nats/commands.fixture.json`
+- `tests/fixtures/nats/publications.fixture.json`
+- `scripts/synthetic-constellation.js`
