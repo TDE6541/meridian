@@ -1,5 +1,11 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const {
+  createEmptySignalTree,
+  createTypedSignalTree,
+  validateMinimalSignalTree,
+  validateTypedSignalTree,
+} = require("../src/governance/shadows");
 
 const ENTITY_SPECS = [
   {
@@ -8,6 +14,14 @@ const ENTITY_SPECS = [
     factory: "createActionRequest",
     validator: "validateActionRequest",
     hasLifecycleStates: true,
+    lifecycleStates: [
+      "requested",
+      "held",
+      "authorized",
+      "blocked",
+      "executed",
+      "cancelled",
+    ],
   },
   {
     file: "authority_grant",
@@ -15,6 +29,7 @@ const ENTITY_SPECS = [
     factory: "createAuthorityGrant",
     validator: "validateAuthorityGrant",
     hasLifecycleStates: false,
+    lifecycleStates: null,
   },
   {
     file: "corridor_zone",
@@ -22,6 +37,7 @@ const ENTITY_SPECS = [
     factory: "createCorridorZone",
     validator: "validateCorridorZone",
     hasLifecycleStates: false,
+    lifecycleStates: null,
   },
   {
     file: "critical_site",
@@ -29,6 +45,7 @@ const ENTITY_SPECS = [
     factory: "createCriticalSite",
     validator: "validateCriticalSite",
     hasLifecycleStates: false,
+    lifecycleStates: null,
   },
   {
     file: "decision_record",
@@ -36,6 +53,13 @@ const ENTITY_SPECS = [
     factory: "createDecisionRecord",
     validator: "validateDecisionRecord",
     hasLifecycleStates: true,
+    lifecycleStates: [
+      "proposed",
+      "ratified",
+      "superseded",
+      "rescinded",
+      "expired",
+    ],
   },
   {
     file: "device",
@@ -43,6 +67,21 @@ const ENTITY_SPECS = [
     factory: "createDevice",
     validator: "validateDevice",
     hasLifecycleStates: false,
+    lifecycleStates: null,
+  },
+  {
+    file: "evidence_artifact",
+    entityType: "evidence_artifact",
+    factory: "createEvidenceArtifact",
+    validator: "validateEvidenceArtifact",
+    hasLifecycleStates: true,
+    lifecycleStates: [
+      "created",
+      "linked",
+      "verified",
+      "contested",
+      "superseded",
+    ],
   },
   {
     file: "incident_observation",
@@ -50,6 +89,14 @@ const ENTITY_SPECS = [
     factory: "createIncidentObservation",
     validator: "validateIncidentObservation",
     hasLifecycleStates: true,
+    lifecycleStates: [
+      "detected",
+      "triaged",
+      "verified",
+      "mitigated",
+      "resolved",
+      "closed",
+    ],
   },
   {
     file: "inspection",
@@ -57,6 +104,15 @@ const ENTITY_SPECS = [
     factory: "createInspection",
     validator: "validateInspection",
     hasLifecycleStates: true,
+    lifecycleStates: [
+      "scheduled",
+      "in_progress",
+      "passed",
+      "failed",
+      "conditional",
+      "reinspection_required",
+      "closed",
+    ],
   },
   {
     file: "obligation",
@@ -64,6 +120,14 @@ const ENTITY_SPECS = [
     factory: "createObligation",
     validator: "validateObligation",
     hasLifecycleStates: true,
+    lifecycleStates: [
+      "proposed",
+      "active",
+      "due",
+      "overdue",
+      "satisfied",
+      "waived",
+    ],
   },
   {
     file: "organization",
@@ -71,6 +135,7 @@ const ENTITY_SPECS = [
     factory: "createOrganization",
     validator: "validateOrganization",
     hasLifecycleStates: false,
+    lifecycleStates: null,
   },
   {
     file: "permit_application",
@@ -78,13 +143,31 @@ const ENTITY_SPECS = [
     factory: "createPermitApplication",
     validator: "validatePermitApplication",
     hasLifecycleStates: true,
+    lifecycleStates: [
+      "scoping",
+      "submitted",
+      "in_review",
+      "approved",
+      "issued",
+      "active",
+      "expired",
+      "revoked",
+      "closed",
+    ],
   },
   {
     file: "utility_asset",
     entityType: "utility_asset",
     factory: "createUtilityAsset",
     validator: "validateUtilityAsset",
-    hasLifecycleStates: false,
+    hasLifecycleStates: true,
+    lifecycleStates: [
+      "proposed",
+      "operational",
+      "under_maintenance",
+      "failed",
+      "retired",
+    ],
   },
 ];
 
@@ -115,6 +198,68 @@ const SIGNAL_TREE_KEYS = [
 
 const GOVERNANCE_ERROR =
   "entity.governance must contain authority, evidence, obligation, and absence plain objects";
+const SIGNAL_TREE_ERROR =
+  "entity.signal_tree must match the typed Meridian signal_tree subset";
+
+test("shadows: createEmptySignalTree preserves the Wave 1 compatibility shape", () => {
+  assert.deepEqual(createEmptySignalTree(), {
+    governance: {},
+    civic: {},
+    lineage: {},
+  });
+});
+
+test("shadows: validateMinimalSignalTree preserves the Wave 1 compatibility shim", () => {
+  assert.equal(validateMinimalSignalTree(createEmptySignalTree()), true);
+  assert.equal(validateMinimalSignalTree({ governance: {}, civic: {} }), false);
+});
+
+test("shadows: typed signal_tree defaults are locked", () => {
+  assert.deepEqual(createTypedSignalTree(), {
+    governance: {
+      decision_state: null,
+      authority_chain: {
+        requested_by_role: null,
+        required_approvals: [],
+        resolved_approvals: [],
+        missing_approvals: [],
+      },
+      evidence: {
+        required_count: 0,
+        present_count: 0,
+        missing_types: [],
+      },
+      absence: {
+        inspection_missing: false,
+        notice_missing: false,
+        supersession_missing: false,
+      },
+    },
+    civic: {
+      promise_status: {
+        conditions_total: 0,
+        conditions_satisfied: 0,
+        oldest_open_condition_at: null,
+      },
+      related_zone_ids: [],
+      related_asset_ids: [],
+    },
+    lineage: {
+      decision_record_ids: [],
+      evidence_ids: [],
+    },
+  });
+});
+
+test("shadows: validateTypedSignalTree accepts typed defaults and rejects invalid typed fields", () => {
+  const typedSignalTree = createTypedSignalTree();
+  const invalidTypedSignalTree = createTypedSignalTree();
+
+  invalidTypedSignalTree.governance.evidence.required_count = "1";
+
+  assert.equal(validateTypedSignalTree(typedSignalTree), true);
+  assert.equal(validateTypedSignalTree(invalidTypedSignalTree), false);
+});
 
 function loadEntityModule(spec) {
   return require(`../src/entities/${spec.file}.js`);
@@ -143,6 +288,7 @@ for (const spec of ENTITY_SPECS) {
     assert.deepEqual(Object.keys(entity).sort(), DEFAULT_ENTITY_KEYS);
     assert.deepEqual(Object.keys(entity.governance).sort(), GOVERNANCE_KEYS);
     assert.deepEqual(Object.keys(entity.signal_tree).sort(), SIGNAL_TREE_KEYS);
+    assert.deepEqual(entity.signal_tree, createTypedSignalTree());
   });
 
   test(`${spec.file}: missing one governance shadow fails validation for the structural reason`, () => {
@@ -164,16 +310,44 @@ for (const spec of ENTITY_SPECS) {
     assert.equal(entity.status, null);
   });
 
-  test(`${spec.file}: arbitrary string status values are not lifecycle-bound`, () => {
+  test(`${spec.file}: a valid entity with the typed signal_tree default passes validation`, () => {
     const entityModule = loadEntityModule(spec);
-    const entity = createValidEntity(spec, {
-      status: "totally-arbitrary-status",
-    });
+    const entity = createValidEntity(spec);
 
     const result = entityModule[spec.validator](entity);
 
     assert.equal(result.valid, true);
     assert.deepEqual(result.errors, []);
+  });
+
+  test(`${spec.file}: lifecycle binding matches the approved status rules`, () => {
+    const entityModule = loadEntityModule(spec);
+
+    if (spec.hasLifecycleStates) {
+      const activeEntity = createValidEntity(spec, {
+        status: spec.lifecycleStates[0],
+      });
+      const invalidEntity = createValidEntity(spec, {
+        status: "totally-arbitrary-status",
+      });
+
+      assert.equal(entityModule[spec.validator](activeEntity).valid, true);
+      assert.deepEqual(entityModule[spec.validator](activeEntity).errors, []);
+      assert.equal(entityModule[spec.validator](invalidEntity).valid, false);
+      assert.deepEqual(entityModule[spec.validator](invalidEntity).errors, [
+        "entity.status must be null or one of LIFECYCLE_STATES",
+      ]);
+      return;
+    }
+
+    const invalidEntity = createValidEntity(spec, {
+      status: "unexpected-status",
+    });
+
+    assert.equal(entityModule[spec.validator](invalidEntity).valid, false);
+    assert.deepEqual(entityModule[spec.validator](invalidEntity).errors, [
+      "entity.status must be null for stateless entities",
+    ]);
   });
 
   test(`${spec.file}: lifecycle export posture matches the approved allowlist`, () => {
@@ -183,5 +357,24 @@ for (const spec of ENTITY_SPECS) {
       Object.prototype.hasOwnProperty.call(entityModule, "LIFECYCLE_STATES"),
       spec.hasLifecycleStates
     );
+
+    if (spec.hasLifecycleStates) {
+      assert.deepEqual(entityModule.LIFECYCLE_STATES, spec.lifecycleStates);
+      return;
+    }
+
+    assert.equal(spec.lifecycleStates, null);
+  });
+
+  test(`${spec.file}: typed signal_tree validation rejects the Wave 1 minimal shim shape`, () => {
+    const entityModule = loadEntityModule(spec);
+    const entity = createValidEntity(spec, {
+      signal_tree: createEmptySignalTree(),
+    });
+
+    const result = entityModule[spec.validator](entity);
+
+    assert.equal(result.valid, false);
+    assert.deepEqual(result.errors, [SIGNAL_TREE_ERROR]);
   });
 }

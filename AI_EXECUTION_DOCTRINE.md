@@ -15,6 +15,7 @@
 ```text
 LICENSE
 README.md
+REPO_INDEX.md
 CLAUDE.md
 TEAM_CHARTER.md
 AI_EXECUTION_DOCTRINE.md
@@ -32,6 +33,7 @@ src/
     critical_site.js
     decision_record.js
     device.js
+    evidence_artifact.js
     incident_observation.js
     inspection.js
     obligation.js
@@ -46,7 +48,16 @@ tests/
   deny-patterns.test.js
   entities.test.js
 docs/
+  INDEX.md
+  ENGINE_INDEX.md
+  UI_INDEX.md
+  WHERE_TO_CHANGE_X.md
+  closeouts/
+    README.md
+    WAVE1_CLOSEOUT.md
+    WAVE2_CLOSEOUT.md
   specs/
+    ENTITY_ONTOLOGY.md
     .gitkeep
   schemas/
     .gitkeep

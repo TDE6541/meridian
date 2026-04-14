@@ -39,7 +39,7 @@ Meridian uses a five-room relay structure.
 
 ## Scope Discipline
 
-Wave 1 remains bounded to repo-native governed foundation work, delivered through Architect-approved blocks: A (root canon and substrate), B (governance shadows and 12 civic entity scaffolds), C (narrow Constellation config and package substrate), and D (structural proof suite).
+Wave 1 remains bounded to repo-native governed foundation work, delivered through Architect-approved blocks: A (root canon and substrate), B (governance shadows and 12 civic entity scaffolds), C (narrow Constellation config and package substrate), and D (structural proof suite). Wave 2 is a bounded extension inside that same repo-native lane: typed signal_tree, lifecycle-bound status validation, utility_asset promotion, evidence_artifact, and required canon/spec/test/migration sync.
 
 ## Closeout Standard
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for Wave 1 foundation.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation plus the shipped Wave 2 entity ontology extension.
 
 ## Governance Substrate
 
@@ -12,7 +12,7 @@ Purpose: shared governance shadow fields and validation substrate for entity sca
 
 ## Entity Scaffold Substrate
 
-Purpose: locked structural entity scaffolds with governance/evidence/disclosure shadow shape.
+Purpose: locked structural entity scaffolds with governance/evidence/disclosure shadow shape across 13 entity files.
 
 - `src/entities/action_request.js`
 - `src/entities/authority_grant.js`
@@ -20,6 +20,7 @@ Purpose: locked structural entity scaffolds with governance/evidence/disclosure 
 - `src/entities/critical_site.js`
 - `src/entities/decision_record.js`
 - `src/entities/device.js`
+- `src/entities/evidence_artifact.js`
 - `src/entities/incident_observation.js`
 - `src/entities/inspection.js`
 - `src/entities/obligation.js`

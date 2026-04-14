@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo for Wave 1 foundation work. The plugin governs. HoldPoint captures. The twin mirrors. Fort Worth proves it. The current Wave 1 foundation includes root canon, governance shadows, civic entity scaffolds, narrow Constellation config, package substrate, and structural proof tests, all bounded to repo truth.
+Meridian is a governed city digital twin intelligence repo. This repository currently contains the Wave 1 foundation and the Wave 2 entity ontology extension work. It is a controlled build substrate, not a runnable application or a production runtime.
 
 ## Agent Start Here
 
@@ -10,13 +10,13 @@ Meridian is a governed city digital twin intelligence repo for Wave 1 foundation
 
 ## Current Status
 
-Wave 1 — foundation
+Wave 2 — entity ontology extension over the Wave 1 foundation
 
 ## What This Is
 
 - A Meridian-native repo substrate for governed execution.
 - A root canon set for scope, posture, and closeout discipline.
-- A Wave 1 foundation surface with governance, entity, config, and structural test artifacts.
+- A Wave 1 foundation surface widened in Wave 2 with typed signal_tree ontology, 13 civic entity scaffolds, and structural test artifacts.
 
 ## What This Is Not
 
@@ -48,6 +48,7 @@ src/
     critical_site.js
     decision_record.js
     device.js
+    evidence_artifact.js
     incident_observation.js
     inspection.js
     obligation.js
@@ -69,7 +70,9 @@ docs/
   closeouts/
     README.md
     WAVE1_CLOSEOUT.md
+    WAVE2_CLOSEOUT.md
   specs/
+    ENTITY_ONTOLOGY.md
     .gitkeep
   schemas/
     .gitkeep

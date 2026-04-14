@@ -5,9 +5,16 @@ const {
   validateTypedSignalTree,
 } = require("../governance/shadows");
 
-const ENTITY_TYPE = "device";
+const ENTITY_TYPE = "evidence_artifact";
+const LIFECYCLE_STATES = [
+  "created",
+  "linked",
+  "verified",
+  "contested",
+  "superseded",
+];
 
-function createDevice(overrides = {}) {
+function createEvidenceArtifact(overrides = {}) {
   const entity = {
     entity_id: overrides.entity_id ?? "",
     org_id: overrides.org_id ?? "",
@@ -26,7 +33,7 @@ function createDevice(overrides = {}) {
   return entity;
 }
 
-function validateDevice(entity) {
+function validateEvidenceArtifact(entity) {
   const errors = [];
 
   if (entity === null || typeof entity !== "object" || Array.isArray(entity)) {
@@ -66,8 +73,8 @@ function validateDevice(entity) {
     errors.push("entity.is_live must be a boolean");
   }
 
-  if (entity.status !== null) {
-    errors.push("entity.status must be null for stateless entities");
+  if (entity.status !== null && !LIFECYCLE_STATES.includes(entity.status)) {
+    errors.push("entity.status must be null or one of LIFECYCLE_STATES");
   }
 
   if (!validateGovernanceShadows(entity.governance)) {
@@ -86,6 +93,7 @@ function validateDevice(entity) {
 
 module.exports = {
   ENTITY_TYPE,
-  createDevice,
-  validateDevice,
+  LIFECYCLE_STATES,
+  createEvidenceArtifact,
+  validateEvidenceArtifact,
 };

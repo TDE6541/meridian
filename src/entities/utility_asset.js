@@ -1,11 +1,18 @@
 const {
   createGovernanceShadows,
-  createEmptySignalTree,
+  createTypedSignalTree,
   validateGovernanceShadows,
-  validateMinimalSignalTree,
+  validateTypedSignalTree,
 } = require("../governance/shadows");
 
 const ENTITY_TYPE = "utility_asset";
+const LIFECYCLE_STATES = [
+  "proposed",
+  "operational",
+  "under_maintenance",
+  "failed",
+  "retired",
+];
 
 function createUtilityAsset(overrides = {}) {
   const entity = {
@@ -17,7 +24,7 @@ function createUtilityAsset(overrides = {}) {
     priority: overrides.priority ?? null,
     is_live: overrides.is_live ?? false,
     governance: createGovernanceShadows(),
-    signal_tree: createEmptySignalTree(),
+    signal_tree: createTypedSignalTree(),
     ...overrides,
   };
 
@@ -66,12 +73,16 @@ function validateUtilityAsset(entity) {
     errors.push("entity.is_live must be a boolean");
   }
 
+  if (entity.status !== null && !LIFECYCLE_STATES.includes(entity.status)) {
+    errors.push("entity.status must be null or one of LIFECYCLE_STATES");
+  }
+
   if (!validateGovernanceShadows(entity.governance)) {
     errors.push("entity.governance must contain authority, evidence, obligation, and absence plain objects");
   }
 
-  if (!validateMinimalSignalTree(entity.signal_tree)) {
-    errors.push("entity.signal_tree must contain governance, civic, and lineage plain objects");
+  if (!validateTypedSignalTree(entity.signal_tree)) {
+    errors.push("entity.signal_tree must match the typed Meridian signal_tree subset");
   }
 
   return {
@@ -82,6 +93,7 @@ function validateUtilityAsset(entity) {
 
 module.exports = {
   ENTITY_TYPE,
+  LIFECYCLE_STATES,
   createUtilityAsset,
   validateUtilityAsset,
 };

@@ -6,7 +6,7 @@ This is the front-door navigation index for Meridian. It points agents and maint
 
 ## Wave Scope Status
 
-Wave 1 is foundation only. The repo ships substrate, not a runnable application.
+Wave 2 ships a bounded entity ontology extension on top of the Wave 1 foundation. The repo still ships substrate, not a runnable application.
 
 ## Canonical Root Files
 
@@ -31,13 +31,14 @@ Wave 1 is foundation only. The repo ships substrate, not a runnable application.
 - Posture and operating rules: `CLAUDE.md`, `TEAM_CHARTER.md`, `AI_EXECUTION_DOCTRINE.md`
 - Repo identity and front door: `README.md`
 - Governance substrate: `src/governance/shadows.js`
-- Entity scaffold substrate: `src/entities/*.js` (12 files)
+- Entity scaffold substrate: `src/entities/*.js` (13 files)
+- Entity ontology spec: `docs/specs/ENTITY_ONTOLOGY.md`
 - Constellation config substrate: `src/config/constellation.js`
 - Structural proof tests: `tests/entities.test.js`, `tests/deny-patterns.test.js`, `tests/config.test.js`
 
 ## Current Repo State
 
-- Wave 1 foundation is landed on `main`.
+- Wave 1 foundation and the Wave 2 entity ontology extension are landed on `main`.
 - No UI ships in this repo today.
 - No runnable application ships in this repo today.
 - No deployment/runtime messaging integration ships in this repo today.
@@ -51,7 +52,8 @@ Wave 1 is foundation only. The repo ships substrate, not a runnable application.
 - Agent start surfaces: `README.md`, `CLAUDE.md`
 - Governance shadows: `src/governance/shadows.js`
 - Entity scaffolds: `src/entities/*.js`
+- Entity ontology spec: `docs/specs/ENTITY_ONTOLOGY.md`
 - Constellation config: `src/config/constellation.js`
 - Structural proof tests: `tests/entities.test.js`, `tests/deny-patterns.test.js`, `tests/config.test.js`
-- Closeouts: `docs/closeouts/README.md`, `docs/closeouts/WAVE1_CLOSEOUT.md`
+- Closeouts: `docs/closeouts/README.md`, `docs/closeouts/WAVE1_CLOSEOUT.md`, `docs/closeouts/WAVE2_CLOSEOUT.md`
 - Detailed mapping: `docs/WHERE_TO_CHANGE_X.md`

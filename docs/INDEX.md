@@ -7,6 +7,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 ## Documentation Lanes
 
 - Specs lane: [`docs/specs/`](specs/)
+- Entity ontology spec: [`docs/specs/ENTITY_ONTOLOGY.md`](specs/ENTITY_ONTOLOGY.md)
 - Schemas lane: [`docs/schemas/`](schemas/)
 - Learning notes lane: [`docs/learning-notes/`](learning-notes/)
 - Closeouts lane: [`docs/closeouts/README.md`](closeouts/README.md)

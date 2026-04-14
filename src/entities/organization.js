@@ -1,8 +1,8 @@
 const {
   createGovernanceShadows,
-  createEmptySignalTree,
+  createTypedSignalTree,
   validateGovernanceShadows,
-  validateMinimalSignalTree,
+  validateTypedSignalTree,
 } = require("../governance/shadows");
 
 const ENTITY_TYPE = "organization";
@@ -17,7 +17,7 @@ function createOrganization(overrides = {}) {
     priority: overrides.priority ?? null,
     is_live: overrides.is_live ?? false,
     governance: createGovernanceShadows(),
-    signal_tree: createEmptySignalTree(),
+    signal_tree: createTypedSignalTree(),
     ...overrides,
   };
 
@@ -66,12 +66,16 @@ function validateOrganization(entity) {
     errors.push("entity.is_live must be a boolean");
   }
 
+  if (entity.status !== null) {
+    errors.push("entity.status must be null for stateless entities");
+  }
+
   if (!validateGovernanceShadows(entity.governance)) {
     errors.push("entity.governance must contain authority, evidence, obligation, and absence plain objects");
   }
 
-  if (!validateMinimalSignalTree(entity.signal_tree)) {
-    errors.push("entity.signal_tree must contain governance, civic, and lineage plain objects");
+  if (!validateTypedSignalTree(entity.signal_tree)) {
+    errors.push("entity.signal_tree must match the typed Meridian signal_tree subset");
   }
 
   return {

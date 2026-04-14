@@ -66,6 +66,7 @@ Edit(/**/*.config.*)
 - `src/entities/critical_site.js`
 - `src/entities/decision_record.js`
 - `src/entities/device.js`
+- `src/entities/evidence_artifact.js`
 - `src/entities/incident_observation.js`
 - `src/entities/inspection.js`
 - `src/entities/obligation.js`
@@ -77,6 +78,7 @@ Edit(/**/*.config.*)
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
 - `tests/entities.test.js`
+- `docs/specs/ENTITY_ONTOLOGY.md`
 - `docs/specs/.gitkeep`
 - `docs/schemas/.gitkeep`
 - `docs/learning-notes/.gitkeep`
@@ -86,6 +88,7 @@ Edit(/**/*.config.*)
 - `docs/WHERE_TO_CHANGE_X.md`
 - `docs/closeouts/README.md`
 - `docs/closeouts/WAVE1_CLOSEOUT.md`
+- `docs/closeouts/WAVE2_CLOSEOUT.md`
 - `scripts/.gitkeep`
 - Block C truth: narrow Constellation config and package substrate are present; no `nats` dependency is declared; upstream 5 stream helpers remain excluded.
 - Block D truth: structural proof suite exists under `tests/` (`config.test.js`, `deny-patterns.test.js`, `entities.test.js`).
@@ -101,6 +104,8 @@ Edit(/**/*.config.*)
 - `docs/WHERE_TO_CHANGE_X.md`
 - `docs/closeouts/README.md`
 - `docs/closeouts/WAVE1_CLOSEOUT.md`
+- `docs/closeouts/WAVE2_CLOSEOUT.md`
+- `docs/specs/ENTITY_ONTOLOGY.md`
 - `TEAM_CHARTER.md`
 - `AI_EXECUTION_DOCTRINE.md`
 - `CONTRIBUTING.md`
