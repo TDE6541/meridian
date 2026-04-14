@@ -2,6 +2,12 @@
 
 Meridian is a governed city digital twin intelligence repo for Wave 1 foundation work. The plugin governs. HoldPoint captures. The twin mirrors. Fort Worth proves it. The current Wave 1 foundation includes root canon, governance shadows, civic entity scaffolds, narrow Constellation config, package substrate, and structural proof tests, all bounded to repo truth.
 
+## Agent Start Here
+
+1. [CLAUDE.md](CLAUDE.md)
+2. [REPO_INDEX.md](REPO_INDEX.md)
+3. [docs/INDEX.md](docs/INDEX.md)
+
 ## Current Status
 
 Wave 1 — foundation
@@ -24,6 +30,7 @@ Wave 1 — foundation
 ```text
 LICENSE
 README.md
+REPO_INDEX.md
 CLAUDE.md
 TEAM_CHARTER.md
 AI_EXECUTION_DOCTRINE.md
@@ -55,6 +62,13 @@ tests/
   deny-patterns.test.js
   entities.test.js
 docs/
+  INDEX.md
+  ENGINE_INDEX.md
+  UI_INDEX.md
+  WHERE_TO_CHANGE_X.md
+  closeouts/
+    README.md
+    WAVE1_CLOSEOUT.md
   specs/
     .gitkeep
   schemas/

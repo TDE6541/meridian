@@ -4,6 +4,16 @@
 
 Meridian is a governed city digital twin intelligence repo.
 
+## Agent Start Here / Read First
+
+1. [`README.md`](README.md)
+2. [`REPO_INDEX.md`](REPO_INDEX.md)
+3. [`docs/INDEX.md`](docs/INDEX.md)
+4. [`docs/ENGINE_INDEX.md`](docs/ENGINE_INDEX.md)
+5. [`docs/UI_INDEX.md`](docs/UI_INDEX.md)
+6. [`docs/WHERE_TO_CHANGE_X.md`](docs/WHERE_TO_CHANGE_X.md)
+7. [`docs/closeouts/README.md`](docs/closeouts/README.md)
+
 ## Session Posture
 
 - Treat repo truth as the working perimeter.
@@ -41,6 +51,7 @@ Edit(/**/*.config.*)
 
 - `LICENSE`
 - `README.md`
+- `REPO_INDEX.md`
 - `CLAUDE.md`
 - `TEAM_CHARTER.md`
 - `AI_EXECUTION_DOCTRINE.md`
@@ -69,6 +80,12 @@ Edit(/**/*.config.*)
 - `docs/specs/.gitkeep`
 - `docs/schemas/.gitkeep`
 - `docs/learning-notes/.gitkeep`
+- `docs/INDEX.md`
+- `docs/ENGINE_INDEX.md`
+- `docs/UI_INDEX.md`
+- `docs/WHERE_TO_CHANGE_X.md`
+- `docs/closeouts/README.md`
+- `docs/closeouts/WAVE1_CLOSEOUT.md`
 - `scripts/.gitkeep`
 - Block C truth: narrow Constellation config and package substrate are present; no `nats` dependency is declared; upstream 5 stream helpers remain excluded.
 - Block D truth: structural proof suite exists under `tests/` (`config.test.js`, `deny-patterns.test.js`, `entities.test.js`).
@@ -76,7 +93,14 @@ Edit(/**/*.config.*)
 ## Required Sync Surfaces
 
 - `README.md`
+- `REPO_INDEX.md`
 - `CLAUDE.md`
+- `docs/INDEX.md`
+- `docs/ENGINE_INDEX.md`
+- `docs/UI_INDEX.md`
+- `docs/WHERE_TO_CHANGE_X.md`
+- `docs/closeouts/README.md`
+- `docs/closeouts/WAVE1_CLOSEOUT.md`
 - `TEAM_CHARTER.md`
 - `AI_EXECUTION_DOCTRINE.md`
 - `CONTRIBUTING.md`
