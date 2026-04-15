@@ -2,11 +2,11 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, and shipped Wave 3 bridge substrate.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, and bounded Wave 4A Block A governance runtime landing zone.
 
 ## Bridge Substrate
 
-Purpose: transport-only NATS bridge surfaces for subject cataloging, event and telemetry normalization, command translation, fail-closed governance transport, and Meridian publication shaping.
+Purpose: transport-only NATS bridge surfaces for subject cataloging, event and telemetry normalization, command translation, adapter delegation, and Meridian publication shaping.
 
 - `src/bridge/subjectCatalog.js`
 - `src/bridge/natsTransport.js`
@@ -16,6 +16,14 @@ Purpose: transport-only NATS bridge surfaces for subject cataloging, event and t
 - `src/bridge/commandSubscriber.js`
 - `src/bridge/governancePublisher.js`
 - `src/bridge/governanceTransportAdapter.js`
+
+## Governance Runtime Landing Zone
+
+Purpose: bounded Wave 4A Block A `command_request` evaluator that returns `ALLOW`, `HOLD`, or `BLOCK` without widening publisher behavior or event-side routing.
+
+- `src/governance/runtime/decisionVocabulary.js`
+- `src/governance/runtime/evaluateGovernanceRequest.js`
+- `src/governance/runtime/index.js`
 
 ## Governance Substrate
 
@@ -49,7 +57,7 @@ Purpose: read-only Meridian publisher subject builders and connection config imp
 
 ## Proof Surfaces
 
-Purpose: structural proof suite plus Wave 3 bridge proof surfaces.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces and the Wave 4A Block A runtime activation proof.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
@@ -61,6 +69,9 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces.
 - `tests/bridge.commandSubscriber.test.js`
 - `tests/bridge.governancePublisher.test.js`
 - `tests/bridge.governanceTransportAdapter.test.js`
+- `tests/governance.runtime.test.js`
+- `tests/fixtures/governance/refusal.commandRequest.json`
+- `tests/fixtures/governance/safe-pass.commandRequest.json`
 - `tests/fixtures/nats/events.fixture.json`
 - `tests/fixtures/nats/telemetry.fixture.json`
 - `tests/fixtures/nats/commands.fixture.json`

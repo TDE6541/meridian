@@ -1,16 +1,9 @@
 const { createGovernancePublisher } = require("./governancePublisher");
-
-function isPlainObject(value) {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function requirePlainObject(value, fieldName) {
-  if (!isPlainObject(value)) {
-    throw new TypeError(`${fieldName} must be a plain object`);
-  }
-
-  return value;
-}
+const {
+  GOVERNANCE_DECISIONS,
+  evaluateGovernanceRequest,
+  isGovernanceDecision,
+} = require("../governance/runtime");
 
 function requireNonEmptyString(value, fieldName) {
   if (typeof value !== "string" || value.trim() === "") {
@@ -20,84 +13,66 @@ function requireNonEmptyString(value, fieldName) {
   return value;
 }
 
-function optionalObjectOrNull(value, fieldName) {
-  if (value === null) {
-    return null;
-  }
-
-  return requirePlainObject(value, fieldName);
-}
-
-function optionalEntityType(value) {
-  if (value === null) {
-    return null;
-  }
-
-  return requireNonEmptyString(value, "request.entity_ref.entity_type");
-}
-
-function validateGovernanceEvaluationRequest(request) {
-  requirePlainObject(request, "request");
-
+function normalizeOutcome(outcome) {
   if (
-    request.kind !== "event_observation" &&
-    request.kind !== "command_request"
+    !outcome ||
+    typeof outcome !== "object" ||
+    Array.isArray(outcome) ||
+    !isGovernanceDecision(outcome.decision) ||
+    typeof outcome.reason !== "string" ||
+    outcome.reason.trim() === ""
   ) {
-    throw new TypeError(
-      "request.kind must be event_observation or command_request"
-    );
+    return {
+      decision: GOVERNANCE_DECISIONS.BLOCK,
+      reason: "governance_runtime_invalid_outcome",
+    };
   }
 
-  requireNonEmptyString(request.org_id, "request.org_id");
-  requirePlainObject(request.entity_ref, "request.entity_ref");
-  requireNonEmptyString(
-    request.entity_ref.entity_id,
-    "request.entity_ref.entity_id"
-  );
-  optionalEntityType(request.entity_ref.entity_type);
-  optionalObjectOrNull(request.authority_context, "request.authority_context");
-  optionalObjectOrNull(request.evidence_context, "request.evidence_context");
-  optionalObjectOrNull(request.confidence_context, "request.confidence_context");
-  optionalObjectOrNull(
-    request.candidate_signal_patch,
-    "request.candidate_signal_patch"
-  );
-  requireNonEmptyString(request.raw_subject, "request.raw_subject");
-
-  return request;
+  return {
+    decision: outcome.decision,
+    reason: outcome.reason,
+  };
 }
 
 function createGovernanceTransportAdapter(options = {}) {
   const publisher = options.publisher || createGovernancePublisher();
+  const evaluateRequest =
+    options.evaluateGovernanceRequest || evaluateGovernanceRequest;
   const now = options.now || (() => new Date().toISOString());
 
   if (typeof publisher.publishOutcome !== "function") {
     throw new TypeError("publisher.publishOutcome must be a function");
   }
 
+  if (typeof evaluateRequest !== "function") {
+    throw new TypeError("evaluateGovernanceRequest must be a function");
+  }
+
   async function evaluate(request) {
-    validateGovernanceEvaluationRequest(request);
-
     const evaluated_at = requireNonEmptyString(now(), "evaluated_at");
-    let decision = "BLOCK";
-    let reason = "wave3_stub_never_allows";
+    let outcome;
 
-    if (request.authority_context === null) {
-      decision = "HOLD";
-      reason = "authority_context_absent";
-    } else if (request.authority_context.resolved !== true) {
-      reason = "authority_context_unresolved";
+    try {
+      outcome = normalizeOutcome(evaluateRequest(request));
+    } catch (error) {
+      outcome = {
+        decision: GOVERNANCE_DECISIONS.BLOCK,
+        reason: "governance_runtime_error",
+      };
     }
 
-    const publications = await publisher.publishOutcome(request, {
-      decision,
-      reason,
-      evaluated_at,
-    });
+    const publications =
+      outcome.decision === GOVERNANCE_DECISIONS.HOLD
+        ? await publisher.publishOutcome(request, {
+            decision: outcome.decision,
+            reason: outcome.reason,
+            evaluated_at,
+          })
+        : [];
 
     return {
-      decision,
-      reason,
+      decision: outcome.decision,
+      reason: outcome.reason,
       evaluated_at,
       publications,
     };

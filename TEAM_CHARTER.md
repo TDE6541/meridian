@@ -10,7 +10,7 @@ Advance Meridian as a governed city digital twin intelligence repo through narro
 
 ## Project Identity
 
-Meridian is a governed city digital twin intelligence effort with root canon, entity/schema discipline, and a transport-only Wave 3 bridge substrate.
+Meridian is a governed city digital twin intelligence effort with root canon, entity/schema discipline, a transport-only Wave 3 bridge substrate, and a bounded Wave 4A Block A governance runtime landing zone.
 
 ## Role Definitions
 
@@ -39,7 +39,7 @@ Meridian uses a five-room relay structure.
 
 ## Scope Discipline
 
-Wave 1 remains the repo-native foundation. Wave 2 remains the bounded entity ontology extension. Wave 3 adds only a transport-only NATS bridge substrate, a fail-closed governance transport stub, fixture-backed proof, and the required canon sync. Wave 3 does not ship live broker proof, actor-level authority topology, entity mutation, KV mutation, or civic ForensicChain runtime writes.
+Wave 1 remains the repo-native foundation. Wave 2 remains the bounded entity ontology extension. Wave 3 adds only a transport-only NATS bridge substrate, a fail-closed governance transport stub, fixture-backed proof, and the required canon sync. Wave 4A Block A adds only a bounded `command_request` governance runtime landing zone plus adapter activation. Wave 4A Block A does not ship event-side routing, publisher widening for `ALLOW` or fail-closed `BLOCK`, actor-level authority topology, entity mutation, KV mutation, or civic ForensicChain runtime writes.
 
 ## Closeout Standard
 

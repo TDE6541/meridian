@@ -10,6 +10,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 - Entity ontology spec: [`docs/specs/ENTITY_ONTOLOGY.md`](specs/ENTITY_ONTOLOGY.md)
 - Wave 3 bridge spec: [`docs/specs/WAVE3_NATS_BRIDGE.md`](specs/WAVE3_NATS_BRIDGE.md)
 - Wave 3 translation spec: [`docs/specs/NATS_EVENT_COMMAND_TRANSLATION.md`](specs/NATS_EVENT_COMMAND_TRANSLATION.md)
+- Wave 4A governance runtime spec: [`docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`](specs/WAVE4A_GOVERNANCE_RUNTIME.md)
 - Schemas lane: [`docs/schemas/`](schemas/)
 - Learning notes lane: [`docs/learning-notes/`](learning-notes/)
 - Closeouts lane: [`docs/closeouts/README.md`](closeouts/README.md)

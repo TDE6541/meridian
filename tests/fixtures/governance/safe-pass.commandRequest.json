@@ -1,0 +1,27 @@
+{
+  "kind": "command_request",
+  "org_id": "fortworth-dev",
+  "entity_ref": {
+    "entity_id": "inspection-2026-0101",
+    "entity_type": "inspection"
+  },
+  "authority_context": {
+    "resolved": true,
+    "requested_by_role": "fire_inspector",
+    "required_approvals": [
+      "fire_department"
+    ],
+    "resolved_approvals": [
+      "fire_department"
+    ],
+    "missing_approvals": []
+  },
+  "evidence_context": {
+    "required_count": 2,
+    "present_count": 2,
+    "missing_types": []
+  },
+  "confidence_context": null,
+  "candidate_signal_patch": null,
+  "raw_subject": "constellation.commands.fortworth-dev.inspection-2026-0101"
+}

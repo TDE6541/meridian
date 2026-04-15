@@ -1,0 +1,34 @@
+{
+  "kind": "command_request",
+  "org_id": "fortworth-dev",
+  "entity_ref": {
+    "entity_id": "permit-utility-2026-0847",
+    "entity_type": "permit_application"
+  },
+  "authority_context": {
+    "resolved": true,
+    "requested_by_role": "water_ops_supervisor",
+    "required_approvals": [
+      "tpw_row",
+      "development_services",
+      "water_department"
+    ],
+    "resolved_approvals": [
+      "water_department"
+    ],
+    "missing_approvals": [
+      "tpw_row",
+      "development_services"
+    ]
+  },
+  "evidence_context": {
+    "required_count": 4,
+    "present_count": 3,
+    "missing_types": [
+      "utility_conflict_assessment"
+    ]
+  },
+  "confidence_context": null,
+  "candidate_signal_patch": null,
+  "raw_subject": "constellation.commands.fortworth-dev.permit-utility-2026-0847"
+}

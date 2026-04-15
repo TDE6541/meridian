@@ -28,12 +28,15 @@ src/
   bridge/*.js
   config/constellation.js
   entities/*.js
+  governance/runtime/*.js
   governance/shadows.js
 tests/
   bridge*.test.js
   config.test.js
   deny-patterns.test.js
   entities.test.js
+  governance.runtime.test.js
+  fixtures/governance/*.json
   fixtures/nats/*.json
 docs/
   INDEX.md
@@ -44,8 +47,10 @@ docs/
   closeouts/WAVE1_CLOSEOUT.md
   closeouts/WAVE2_CLOSEOUT.md
   closeouts/WAVE3_CLOSEOUT.md
+  closeouts/WAVE4A_BLOCK_A_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
   specs/NATS_EVENT_COMMAND_TRANSLATION.md
+  specs/WAVE4A_GOVERNANCE_RUNTIME.md
   specs/WAVE3_NATS_BRIDGE.md
 scripts/
   synthetic-constellation.js
@@ -59,6 +64,7 @@ scripts/
 - Treat upstream references as references unless their contents are available in this repo.
 - Surface uncertainty as HOLD.
 - Describe Wave 3 only as a transport-only bridge and fail-closed governance stub.
+- Describe Wave 4A Block A only as bounded `command_request` runtime activation delegated from the bridge, not as event-side routing, publisher widening, or full governance runtime completion.
 
 ## Planning Gate
 
@@ -89,6 +95,7 @@ scripts/
 
 - Root canon is a contract surface and must stay synchronized.
 - Bridge-local contracts do not widen the persistent Wave 2 entity contract.
+- Wave 4A Block A activation does not widen `GovernanceEvaluationRequest`, `GovernancePublication`, or `signal_tree`.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 

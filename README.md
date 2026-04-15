@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. This repository now contains the Wave 1 foundation, the Wave 2 entity ontology extension, and the shipped Wave 3 NATS bridge substrate. It is a runtime-adjacent bridge surface, not a full governance runtime or a runnable application.
+Meridian is a governed city digital twin intelligence repo. This repository now contains the Wave 1 foundation, the Wave 2 entity ontology extension, the shipped Wave 3 NATS bridge substrate, and the bounded Wave 4A Block A governance runtime landing zone. It is still not a full governance runtime or a runnable application.
 
 ## Agent Start Here
 
@@ -10,12 +10,13 @@ Meridian is a governed city digital twin intelligence repo. This repository now 
 
 ## Current Status
 
-Wave 3 - NATS bridge substrate, governance transport stub, and canon sync
+Wave 4A Block A - command_request governance runtime activation, adapter delegation, and canon sync
 
 ## What This Is
 
 - A Meridian-native repo substrate for governed execution.
 - A Wave 1 and Wave 2 schema surface plus a Wave 3 transport-only bridge under `src/bridge/`.
+- A bounded Wave 4A Block A governance runtime landing zone under `src/governance/runtime/` for synthetic `command_request` evaluation only.
 - A fake-transport proof harness for event normalization, fail-closed command handling, and Meridian publication shaping.
 - A single external runtime dependency surface: `nats`.
 
@@ -23,7 +24,7 @@ Wave 3 - NATS bridge substrate, governance transport stub, and canon sync
 
 - Not a runnable application.
 - Not live-broker proof or production Constellation compatibility proof.
-- Not actor-level authorization topology or evaluate-before-mutate state governance.
+- Not actor-level authorization topology, event-side governance routing, or publisher widening for `ALLOW` / fail-closed `BLOCK`.
 - Not entity mutation, KV mutation, or civic ForensicChain runtime persistence.
 - Not a source of ontology detail beyond the shipped in-repo specs.
 
@@ -68,6 +69,10 @@ src/
     permit_application.js
     utility_asset.js
   governance/
+    runtime/
+      decisionVocabulary.js
+      evaluateGovernanceRequest.js
+      index.js
     shadows.js
 tests/
   bridge.commandSubscriber.test.js
@@ -80,7 +85,11 @@ tests/
   config.test.js
   deny-patterns.test.js
   entities.test.js
+  governance.runtime.test.js
   fixtures/
+    governance/
+      refusal.commandRequest.json
+      safe-pass.commandRequest.json
     nats/
       commands.fixture.json
       events.fixture.json
@@ -96,9 +105,11 @@ docs/
     WAVE1_CLOSEOUT.md
     WAVE2_CLOSEOUT.md
     WAVE3_CLOSEOUT.md
+    WAVE4A_BLOCK_A_CLOSEOUT.md
   specs/
     ENTITY_ONTOLOGY.md
     NATS_EVENT_COMMAND_TRANSLATION.md
+    WAVE4A_GOVERNANCE_RUNTIME.md
     WAVE3_NATS_BRIDGE.md
 scripts/
   synthetic-constellation.js

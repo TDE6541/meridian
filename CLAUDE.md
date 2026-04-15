@@ -2,7 +2,7 @@
 
 ## Repo Identity
 
-Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate.
+Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate plus a bounded Wave 4A Block A governance runtime landing zone.
 
 ## Agent Start Here / Read First
 
@@ -13,6 +13,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 5. [`docs/WHERE_TO_CHANGE_X.md`](docs/WHERE_TO_CHANGE_X.md)
 6. [`docs/closeouts/README.md`](docs/closeouts/README.md)
 7. [`docs/specs/WAVE3_NATS_BRIDGE.md`](docs/specs/WAVE3_NATS_BRIDGE.md)
+8. [`docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`](docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md)
 
 ## Session Posture
 
@@ -22,6 +23,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Keep root canon synchronized when substrate truth changes.
 - Treat `src/config/constellation.js` as read-only publisher truth for Wave 3 bridge work.
 - Do not describe Wave 3 as live broker proof, actor authorization topology, or mutation runtime.
+- Do not describe Wave 4A Block A as event-side routing, publisher widening, or a full governance runtime.
 
 ## Non-Negotiables
 
@@ -65,14 +67,18 @@ Edit(/**/*.config.*)
 - `src/bridge/*.js`
 - `src/entities/*.js`
 - `src/governance/shadows.js`
+- `src/governance/runtime/*.js`
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
 - `tests/entities.test.js`
 - `tests/bridge*.test.js`
+- `tests/governance.runtime.test.js`
+- `tests/fixtures/governance/*.json`
 - `tests/fixtures/nats/*.json`
 - `docs/specs/ENTITY_ONTOLOGY.md`
 - `docs/specs/WAVE3_NATS_BRIDGE.md`
 - `docs/specs/NATS_EVENT_COMMAND_TRANSLATION.md`
+- `docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`
 - `docs/INDEX.md`
 - `docs/ENGINE_INDEX.md`
 - `docs/UI_INDEX.md`
@@ -81,9 +87,11 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE1_CLOSEOUT.md`
 - `docs/closeouts/WAVE2_CLOSEOUT.md`
 - `docs/closeouts/WAVE3_CLOSEOUT.md`
+- `docs/closeouts/WAVE4A_BLOCK_A_CLOSEOUT.md`
 - `scripts/synthetic-constellation.js`
 - Block C truth: `package.json` declares only `nats` as a runtime dependency; `src/config/constellation.js` remains the narrow publisher/config substrate; transport-only bridge surfaces live in `src/bridge/`; no live broker proof claim ships.
 - Block D truth: proof surfaces now include bridge tests, fixture-backed synthetic transport proof, the existing structural suite, and the unchanged blocked entity/config runtime lanes.
+- Block E truth: `src/governance/runtime/` is a bounded Block A landing zone for `command_request` evaluation only; `event_observation` remains deferred; `governancePublisher.js` is unchanged and publisher behavior is not widened for `ALLOW` or fail-closed `BLOCK`.
 
 ## Required Sync Surfaces
 
@@ -99,8 +107,10 @@ Edit(/**/*.config.*)
 - `docs/WHERE_TO_CHANGE_X.md`
 - `docs/specs/WAVE3_NATS_BRIDGE.md`
 - `docs/specs/NATS_EVENT_COMMAND_TRANSLATION.md`
+- `docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`
 - `docs/closeouts/README.md`
 - `docs/closeouts/WAVE3_CLOSEOUT.md`
+- `docs/closeouts/WAVE4A_BLOCK_A_CLOSEOUT.md`
 
 ## Closeout Requirements
 
