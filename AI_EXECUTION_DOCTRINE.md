@@ -66,7 +66,7 @@ scripts/
 - Treat upstream references as references unless their contents are available in this repo.
 - Surface uncertainty as HOLD.
 - Describe Wave 3 only as a transport-only bridge and fail-closed governance stub.
-- Describe Wave 4A Blocks A-B only as bounded `command_request` runtime activation plus the static local policy pack, not as event-side routing, publisher widening, or full governance runtime completion.
+- Describe Wave 4A Blocks A-C only as bounded `command_request` runtime activation, the static local policy pack, and Block C runtime subset integration, not as event-side routing, publisher widening, or full governance runtime completion.
 
 ## Planning Gate
 
@@ -97,7 +97,7 @@ scripts/
 
 - Root canon is a contract surface and must stay synchronized.
 - Bridge-local contracts do not widen the persistent Wave 2 entity contract.
-- Wave 4A Blocks A-B do not widen `GovernanceEvaluationRequest`, `GovernancePublication`, or `signal_tree`.
+- Wave 4A Blocks A-C do not widen `GovernanceEvaluationRequest`, `GovernancePublication`, or `signal_tree`.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 

@@ -1,5 +1,6 @@
 const { GOVERNANCE_DECISIONS } = require("./decisionVocabulary");
 const MERIDIAN_GOVERNANCE_CONFIG = require("./meridian-governance-config");
+const { evaluateRuntimeSubset } = require("./runtimeSubset");
 
 function isPlainObject(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -62,6 +63,11 @@ function hasOverlap(left, right) {
   return left.some((value) => right.includes(value));
 }
 
+function getGovernanceAbsenceFlag(request, key) {
+  const absence = request?.candidate_signal_patch?.governance?.absence;
+  return isPlainObject(absence) && absence[key] === true;
+}
+
 function resolveGovernancePolicyContext(
   request,
   config = MERIDIAN_GOVERNANCE_CONFIG
@@ -96,9 +102,9 @@ function resolveGovernancePolicyContext(
   const authorityResolved =
     request.authority_context?.resolved === true && missingApprovals.length === 0;
   const evidenceResolved = evidenceGap <= 0 && missingTypes.length === 0;
-  const missingInspectionLikeEvidence = missingTypes.some((type) =>
-    String(type).toLowerCase().includes("inspection")
-  );
+  const missingInspectionLikeEvidence =
+    getGovernanceAbsenceFlag(request, "inspection_missing") ||
+    missingTypes.some((type) => String(type).toLowerCase().includes("inspection"));
 
   const constraintIds = [];
 
@@ -150,21 +156,6 @@ function resolveGovernancePolicyContext(
     constraintIds: sortUniqueStrings(constraintIds),
     omissionPackIds: sortUniqueStrings(omissionPackIds),
   };
-}
-
-function hasConfiguredHolds(policyContext, config = MERIDIAN_GOVERNANCE_CONFIG) {
-  const holdConstraints = policyContext.constraintIds.some(
-    (constraintId) =>
-      config.constraints[constraintId]?.defaultDecision ===
-      GOVERNANCE_DECISIONS.HOLD
-  );
-  const holdOmissions = policyContext.omissionPackIds.some(
-    (omissionPackId) =>
-      config.omissionPacks[omissionPackId]?.defaultConsequence ===
-      GOVERNANCE_DECISIONS.HOLD
-  );
-
-  return holdConstraints || holdOmissions;
 }
 
 function evaluateGovernanceRequest(request) {
@@ -264,46 +255,9 @@ function evaluateGovernanceRequest(request) {
     return block("candidate_signal_patch_must_be_plain_object_or_null");
   }
 
-  const missingApprovals = request.authority_context.missing_approvals;
-  const evidenceGap =
-    request.evidence_context.required_count - request.evidence_context.present_count;
-  const missingTypes = request.evidence_context.missing_types;
-  const authorityResolved =
-    request.authority_context.resolved === true && missingApprovals.length === 0;
-  const evidenceResolved = evidenceGap <= 0 && missingTypes.length === 0;
   const policyContext = resolveGovernancePolicyContext(request);
 
-  if (authorityResolved && evidenceResolved && !hasConfiguredHolds(policyContext)) {
-    return {
-      decision: GOVERNANCE_DECISIONS.ALLOW,
-      reason: "authority_and_evidence_resolved",
-    };
-  }
-
-  const reasonParts = [];
-
-  if (request.authority_context.resolved !== true) {
-    reasonParts.push("authority_unresolved");
-  }
-
-  if (missingApprovals.length > 0) {
-    reasonParts.push(`missing_approvals=${missingApprovals.join(",")}`);
-  }
-
-  if (evidenceGap > 0) {
-    reasonParts.push(
-      `evidence_gap=${request.evidence_context.present_count}/${request.evidence_context.required_count}`
-    );
-  }
-
-  if (missingTypes.length > 0) {
-    reasonParts.push(`missing_evidence_types=${missingTypes.join(",")}`);
-  }
-
-  return {
-    decision: GOVERNANCE_DECISIONS.HOLD,
-    reason: reasonParts.join(";"),
-  };
+  return evaluateRuntimeSubset(request, policyContext, MERIDIAN_GOVERNANCE_CONFIG);
 }
 
 module.exports = {

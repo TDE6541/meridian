@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, and bounded Wave 4A governance runtime landing zone with a static Block B civic policy pack.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, and bounded Wave 4A governance runtime landing zone with a static civic policy pack plus Block C runtime subset integration.
 
 ## Bridge Substrate
 
@@ -19,11 +19,12 @@ Purpose: transport-only NATS bridge surfaces for subject cataloging, event and t
 
 ## Governance Runtime Landing Zone
 
-Purpose: bounded Wave 4A `command_request` evaluator backed by one static local civic policy pack that returns `ALLOW`, `HOLD`, or `BLOCK` without widening publisher behavior or event-side routing.
+Purpose: bounded Wave 4A `command_request` evaluator backed by one static local civic policy pack and Block C runtime subset logic that returns `ALLOW`, `SUPERVISE`, `HOLD`, or `BLOCK` without widening publisher behavior or event-side routing.
 
 - `src/governance/runtime/decisionVocabulary.js`
 - `src/governance/runtime/meridian-governance-config.js`
 - `src/governance/runtime/evaluateGovernanceRequest.js`
+- `src/governance/runtime/runtimeSubset.js`
 - `src/governance/runtime/index.js`
 
 ## Governance Substrate
@@ -72,8 +73,11 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces and the Wave 4
 - `tests/bridge.governanceTransportAdapter.test.js`
 - `tests/governance.policyPack.test.js`
 - `tests/governance.runtime.test.js`
+- `tests/governance.runtimeSubset.test.js`
+- `tests/fixtures/governance/hard-stop.commandRequest.json`
 - `tests/fixtures/governance/refusal.commandRequest.json`
 - `tests/fixtures/governance/safe-pass.commandRequest.json`
+- `tests/fixtures/governance/supervised.commandRequest.json`
 - `tests/fixtures/nats/events.fixture.json`
 - `tests/fixtures/nats/telemetry.fixture.json`
 - `tests/fixtures/nats/commands.fixture.json`

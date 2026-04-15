@@ -4,6 +4,7 @@ const { readFileSync } = require("node:fs");
 const path = require("node:path");
 const refusalFixture = require("./fixtures/governance/refusal.commandRequest.json");
 const safePassFixture = require("./fixtures/governance/safe-pass.commandRequest.json");
+const supervisedFixture = require("./fixtures/governance/supervised.commandRequest.json");
 const {
   MERIDIAN_GOVERNANCE_CONFIG,
   evaluateGovernanceRequest,
@@ -13,11 +14,11 @@ const {
 test("governance policy pack is importable, versioned, and static-local for Wave 4A", () => {
   assert.equal(
     MERIDIAN_GOVERNANCE_CONFIG.version,
-    "wave4a-block-b-static-civic-policy-pack-v1"
+    "wave4a-block-c-runtime-subset-v1"
   );
   assert.equal(MERIDIAN_GOVERNANCE_CONFIG.source.mode, "static_local_module");
   assert.equal(MERIDIAN_GOVERNANCE_CONFIG.source.wave, "4A");
-  assert.equal(MERIDIAN_GOVERNANCE_CONFIG.source.block, "B");
+  assert.equal(MERIDIAN_GOVERNANCE_CONFIG.source.block, "C");
   assert.equal(
     MERIDIAN_GOVERNANCE_CONFIG.source.runtimeConfigSource,
     "only_runtime_config_source"
@@ -31,11 +32,11 @@ test("governance policy pack is importable, versioned, and static-local for Wave
 test("governance policy pack freezes bounded vocabulary domains thresholds and omission packs", () => {
   assert.deepEqual(MERIDIAN_GOVERNANCE_CONFIG.decisionVocabulary.emittedNow, [
     "ALLOW",
+    "SUPERVISE",
     "HOLD",
     "BLOCK",
   ]);
   assert.deepEqual(MERIDIAN_GOVERNANCE_CONFIG.decisionVocabulary.reservedOnly, [
-    "SUPERVISE",
     "REVOKE",
   ]);
 
@@ -66,6 +67,17 @@ test("governance policy pack freezes bounded vocabulary domains thresholds and o
     "action_without_authority",
     "closure_without_evidence",
   ]);
+
+  assert.deepEqual(MERIDIAN_GOVERNANCE_CONFIG.runtimeSubset.posturePrecedence, [
+    "HARD_STOP",
+    "SUPERVISED",
+    "FULL_AUTO",
+  ]);
+  assert.deepEqual(
+    MERIDIAN_GOVERNANCE_CONFIG.runtimeSubset.standingRisk.blockingStates,
+    ["STANDING"]
+  );
+  assert.equal(MERIDIAN_GOVERNANCE_CONFIG.runtimeSubset.openItemsBoard.enabled, true);
 });
 
 test("governance runtime resolves policy context from the static civic pack", () => {
@@ -87,9 +99,15 @@ test("governance runtime resolves policy context from the static civic pack", ()
     omissionPackIds: [],
   });
 
-  assert.deepEqual(evaluateGovernanceRequest(safePassFixture), {
-    decision: "ALLOW",
-    reason: "authority_and_evidence_resolved",
+  const safePassResult = evaluateGovernanceRequest(safePassFixture);
+  assert.equal(safePassResult.decision, "ALLOW");
+  assert.equal(safePassResult.reason, "authority_and_evidence_resolved");
+
+  const supervisedContext = resolveGovernancePolicyContext(supervisedFixture);
+  assert.deepEqual(supervisedContext, {
+    domainIds: ["public_notice_action"],
+    constraintIds: [],
+    omissionPackIds: [],
   });
 });
 
@@ -98,12 +116,20 @@ test("governance runtime uses a static local import without env or dynamic fetch
     path.join(__dirname, "../src/governance/runtime/evaluateGovernanceRequest.js"),
     "utf8"
   );
+  const runtimeSubsetSource = readFileSync(
+    path.join(__dirname, "../src/governance/runtime/runtimeSubset.js"),
+    "utf8"
+  );
 
   assert.match(evaluatorSource, /require\(\"\.\/meridian-governance-config\"\)/);
+  assert.match(evaluatorSource, /require\(\"\.\/runtimeSubset\"\)/);
+  assert.match(runtimeSubsetSource, /require\(\"\.\/meridian-governance-config\"\)/);
   assert.equal(evaluatorSource.includes("process.env"), false);
   assert.equal(/fetch\s*\(/.test(evaluatorSource), false);
   assert.equal(
     /require\(["']fs["']\)|readFileSync\s*\(|readFile\s*\(/.test(evaluatorSource),
     false
   );
+  assert.equal(runtimeSubsetSource.includes("process.env"), false);
+  assert.equal(/fetch\s*\(/.test(runtimeSubsetSource), false);
 });

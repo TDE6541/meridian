@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. This repository now contains the Wave 1 foundation, the Wave 2 entity ontology extension, the shipped Wave 3 NATS bridge substrate, and the bounded Wave 4A runtime landing zone with a static Block B civic policy pack. It is still not a full governance runtime or a runnable application.
+Meridian is a governed city digital twin intelligence repo. This repository now contains the Wave 1 foundation, the Wave 2 entity ontology extension, the shipped Wave 3 NATS bridge substrate, and the bounded Wave 4A runtime landing zone with the Block B static civic policy pack plus Block C runtime subset integration. It is still not a full governance runtime or a runnable application.
 
 ## Agent Start Here
 
@@ -10,14 +10,15 @@ Meridian is a governed city digital twin intelligence repo. This repository now 
 
 ## Current Status
 
-Wave 4A Block B - static civic policy pack, bounded `command_request` runtime consumption, and canon sync
+Wave 4A Block C - runtime subset integration, real `ALLOW` / `SUPERVISE` / `HOLD` / `BLOCK` paths, and canon sync
 
 ## What This Is
 
 - A Meridian-native repo substrate for governed execution.
 - A Wave 1 and Wave 2 schema surface plus a Wave 3 transport-only bridge under `src/bridge/`.
 - A bounded Wave 4A governance runtime landing zone under `src/governance/runtime/` for synthetic `command_request` evaluation only.
-- A static Wave 4A Block B civic policy pack under `src/governance/runtime/meridian-governance-config.js` that acts as the only runtime config source for the current evaluator.
+- A static Wave 4A civic policy pack under `src/governance/runtime/meridian-governance-config.js` that remains the only runtime config source for the current evaluator.
+- A bounded Wave 4A Block C runtime subset that routes synthetic requests through control-rod posture, constraints, interlocks, hold shaping, omission evaluation, continuity, and standing-risk logic.
 - A fake-transport proof harness for event normalization, fail-closed command handling, and Meridian publication shaping.
 - A single external runtime dependency surface: `nats`.
 
@@ -25,7 +26,7 @@ Wave 4A Block B - static civic policy pack, bounded `command_request` runtime co
 
 - Not a runnable application.
 - Not live-broker proof or production Constellation compatibility proof.
-- Not actor-level authorization topology, event-side governance routing, or publisher widening for `ALLOW` / fail-closed `BLOCK`.
+- Not actor-level authorization topology, event-side governance routing, or publisher widening for `ALLOW`, `SUPERVISE`, or fail-closed `BLOCK`.
 - Not entity mutation, KV mutation, or civic ForensicChain runtime persistence.
 - Not a source of ontology detail beyond the shipped in-repo specs.
 
@@ -74,6 +75,7 @@ src/
       decisionVocabulary.js
       meridian-governance-config.js
       evaluateGovernanceRequest.js
+      runtimeSubset.js
       index.js
     shadows.js
 tests/
@@ -89,10 +91,13 @@ tests/
   entities.test.js
   governance.policyPack.test.js
   governance.runtime.test.js
+  governance.runtimeSubset.test.js
   fixtures/
     governance/
+      hard-stop.commandRequest.json
       refusal.commandRequest.json
       safe-pass.commandRequest.json
+      supervised.commandRequest.json
     nats/
       commands.fixture.json
       events.fixture.json
@@ -110,6 +115,7 @@ docs/
     WAVE3_CLOSEOUT.md
     WAVE4A_BLOCK_A_CLOSEOUT.md
     WAVE4A_BLOCK_B_CLOSEOUT.md
+    WAVE4A_BLOCK_C_CLOSEOUT.md
   specs/
     ENTITY_ONTOLOGY.md
     NATS_EVENT_COMMAND_TRANSLATION.md

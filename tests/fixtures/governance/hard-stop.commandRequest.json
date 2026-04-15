@@ -1,0 +1,27 @@
+{
+  "kind": "command_request",
+  "org_id": "fortworth-dev",
+  "entity_ref": {
+    "entity_id": "decision-closeout-2026-0210",
+    "entity_type": "decision_record"
+  },
+  "authority_context": {
+    "resolved": true,
+    "requested_by_role": "city_clerk",
+    "required_approvals": [
+      "records_office"
+    ],
+    "resolved_approvals": [
+      "records_office"
+    ],
+    "missing_approvals": []
+  },
+  "evidence_context": {
+    "required_count": 2,
+    "present_count": 2,
+    "missing_types": []
+  },
+  "confidence_context": null,
+  "candidate_signal_patch": null,
+  "raw_subject": "constellation.commands.fortworth-dev.decision-closeout-2026-0210"
+}

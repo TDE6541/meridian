@@ -4,6 +4,7 @@ const {
   isGovernanceDecision,
 } = require("./decisionVocabulary");
 const MERIDIAN_GOVERNANCE_CONFIG = require("./meridian-governance-config");
+const { evaluateRuntimeSubset } = require("./runtimeSubset");
 const {
   evaluateGovernanceRequest,
   resolveGovernancePolicyContext,
@@ -14,6 +15,7 @@ module.exports = {
   GOVERNANCE_DECISION_VALUES,
   isGovernanceDecision,
   MERIDIAN_GOVERNANCE_CONFIG,
+  evaluateRuntimeSubset,
   evaluateGovernanceRequest,
   resolveGovernancePolicyContext,
 };

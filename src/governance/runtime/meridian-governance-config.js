@@ -13,22 +13,22 @@ function deepFreeze(value) {
 }
 
 const MERIDIAN_GOVERNANCE_CONFIG = {
-  version: "wave4a-block-b-static-civic-policy-pack-v1",
+  version: "wave4a-block-c-runtime-subset-v1",
   source: {
     mode: "static_local_module",
     wave: "4A",
-    block: "B",
+    block: "C",
     runtimeConfigSource: "only_runtime_config_source",
     notes: [
-      "This module is the only runtime config source for Wave 4A governance evaluation.",
-      "Live NATS KV reads, env branching, dynamic fetch, and filesystem reads are out of scope for Block B.",
+      "This module remains the only runtime config source for Wave 4A governance evaluation.",
+      "Live NATS KV reads, env branching, dynamic fetch, and filesystem reads are out of scope for Block C.",
     ],
   },
   decisionVocabulary: {
-    emittedNow: ["ALLOW", "HOLD", "BLOCK"],
-    reservedOnly: ["SUPERVISE", "REVOKE"],
+    emittedNow: ["ALLOW", "SUPERVISE", "HOLD", "BLOCK"],
+    reservedOnly: ["REVOKE"],
     notes:
-      "Reserved decisions remain documented policy metadata only in Block B and are not emitted by the runtime.",
+      "Block C activates SUPERVISE as a real emitted runtime outcome while keeping REVOKE deferred.",
   },
   domains: {
     permit_authorization: {
@@ -196,6 +196,48 @@ const MERIDIAN_GOVERNANCE_CONFIG = {
         "required closure evidence counts are resolved",
       ],
       defaultConsequence: "HOLD",
+    },
+  },
+  runtimeSubset: {
+    posturePrecedence: ["HARD_STOP", "SUPERVISED", "FULL_AUTO"],
+    hold: {
+      defaultStatus: "active",
+      impact:
+        "The runtime keeps the request in HOLD until the unresolved governance conditions are cleared.",
+      resolutionPath:
+        "Resolve missing approvals, required evidence, omission findings, or blocking standing-risk entries and then re-evaluate.",
+    },
+    interlocks: {
+      supervised_domain_review: {
+        appliesToRodPositions: ["SUPERVISED"],
+        defaultOutcome: "require_authorization",
+        emittedDecision: "SUPERVISE",
+        reason: "supervised_domain_requires_operator_review",
+        description:
+          "SUPERVISED domains emit SUPERVISE instead of ALLOW until operator review occurs outside this bounded runtime.",
+      },
+      hard_stop_domain_block: {
+        appliesToRodPositions: ["HARD_STOP"],
+        defaultOutcome: "stop",
+        emittedDecision: "BLOCK",
+        reason: "hard_stop_domain_requires_manual_lane",
+        description:
+          "HARD_STOP domains remain blocked in Block C rather than auto-proceeding inside the bounded runtime subset.",
+      },
+    },
+    standingRisk: {
+      blockingStates: ["STANDING"],
+      notes:
+        "Only standing continuity risk blocks outright in Block C; lower derived states remain visible without widening persistence.",
+    },
+    openItemsBoard: {
+      enabled: true,
+      groups: [
+        "Missing now",
+        "Still unresolved",
+        "Aging into risk",
+        "Resolved this session",
+      ],
     },
   },
 };

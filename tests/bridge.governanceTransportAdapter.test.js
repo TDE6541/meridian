@@ -2,6 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const refusalFixture = require("./fixtures/governance/refusal.commandRequest.json");
 const safePassFixture = require("./fixtures/governance/safe-pass.commandRequest.json");
+const supervisedFixture = require("./fixtures/governance/supervised.commandRequest.json");
 const {
   createGovernanceTransportAdapter,
 } = require("../src/bridge/governanceTransportAdapter.js");
@@ -44,6 +45,27 @@ test("governance transport adapter returns ALLOW without forcing publisher widen
   assert.equal(result.decision, "ALLOW");
   assert.equal(result.reason, "authority_and_evidence_resolved");
   assert.equal(result.evaluated_at, "2026-04-14T12:04:00.000Z");
+  assert.deepEqual(result.publications, []);
+  assert.equal(publishCalls, 0);
+});
+
+test("governance transport adapter returns SUPERVISE without forcing publisher widening", async () => {
+  let publishCalls = 0;
+  const adapter = createGovernanceTransportAdapter({
+    now: () => "2026-04-14T12:04:30.000Z",
+    publisher: {
+      async publishOutcome() {
+        publishCalls += 1;
+        return [];
+      },
+    },
+  });
+
+  const result = await adapter.evaluate(supervisedFixture);
+
+  assert.equal(result.decision, "SUPERVISE");
+  assert.equal(result.reason, "supervised_domain_requires_operator_review");
+  assert.equal(result.evaluated_at, "2026-04-14T12:04:30.000Z");
   assert.deepEqual(result.publications, []);
   assert.equal(publishCalls, 0);
 });

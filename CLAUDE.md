@@ -2,7 +2,7 @@
 
 ## Repo Identity
 
-Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate plus a bounded Wave 4A governance runtime landing zone and static Block B civic policy pack.
+Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate plus a bounded Wave 4A governance runtime landing zone, static civic policy pack, and Block C runtime subset integration.
 
 ## Agent Start Here / Read First
 
@@ -23,7 +23,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Keep root canon synchronized when substrate truth changes.
 - Treat `src/config/constellation.js` as read-only publisher truth for Wave 3 bridge work.
 - Do not describe Wave 3 as live broker proof, actor authorization topology, or mutation runtime.
-- Do not describe Wave 4A Blocks A-B as event-side routing, publisher widening, or a full governance runtime.
+- Do not describe Wave 4A Blocks A-C as event-side routing, publisher widening, or a full governance runtime.
 
 ## Non-Negotiables
 
@@ -92,7 +92,7 @@ Edit(/**/*.config.*)
 - `scripts/synthetic-constellation.js`
 - Block C truth: `package.json` declares only `nats` as a runtime dependency; `src/config/constellation.js` remains the narrow publisher/config substrate; transport-only bridge surfaces live in `src/bridge/`; no live broker proof claim ships.
 - Block D truth: proof surfaces now include bridge tests, fixture-backed synthetic transport proof, the existing structural suite, and the unchanged blocked entity/config runtime lanes.
-- Block E truth: `src/governance/runtime/` remains a bounded Wave 4A landing zone for `command_request` evaluation only; Block B adds `meridian-governance-config.js` as the sole static local runtime config source; `event_observation` remains deferred; `governancePublisher.js` is unchanged and publisher behavior is not widened for `ALLOW` or fail-closed `BLOCK`.
+- Block E truth: `src/governance/runtime/` remains a bounded Wave 4A landing zone for `command_request` evaluation only; `meridian-governance-config.js` remains the sole static local runtime config source; Block C adds bounded runtime subset integration that may emit `SUPERVISE`; `event_observation` remains deferred; `governancePublisher.js` is unchanged and publisher behavior is not widened for `ALLOW`, `SUPERVISE`, or fail-closed `BLOCK`.
 
 ## Required Sync Surfaces
 

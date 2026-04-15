@@ -1,5 +1,6 @@
 const GOVERNANCE_DECISIONS = Object.freeze({
   ALLOW: "ALLOW",
+  SUPERVISE: "SUPERVISE",
   HOLD: "HOLD",
   BLOCK: "BLOCK",
 });
