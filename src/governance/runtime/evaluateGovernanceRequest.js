@@ -1,4 +1,6 @@
 const { GOVERNANCE_DECISIONS } = require("./decisionVocabulary");
+const { deriveCivicConfidence, deriveDecisionRationale } = require("./deriveCivicConfidence");
+const { createEmptyPromiseStatus } = require("./derivePromiseStatus");
 const MERIDIAN_GOVERNANCE_CONFIG = require("./meridian-governance-config");
 const { evaluateRuntimeSubset } = require("./runtimeSubset");
 
@@ -22,9 +24,32 @@ function isStringArray(value) {
 }
 
 function block(reason) {
+  const decision = GOVERNANCE_DECISIONS.BLOCK;
+  const confidence = deriveCivicConfidence(
+    {
+      decision,
+      reason,
+      hold: null,
+      standingRisk: null,
+    },
+    MERIDIAN_GOVERNANCE_CONFIG
+  );
+
   return {
-    decision: GOVERNANCE_DECISIONS.BLOCK,
+    decision,
     reason,
+    runtimeSubset: {
+      civic: {
+        promise_status: createEmptyPromiseStatus(),
+        confidence,
+        rationale: {
+          decision: deriveDecisionRationale({
+            decision,
+            reason,
+          }),
+        },
+      },
+    },
   };
 }
 

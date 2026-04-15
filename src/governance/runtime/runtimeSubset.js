@@ -1,4 +1,6 @@
 const { GOVERNANCE_DECISIONS } = require("./decisionVocabulary");
+const { deriveCivicConfidence, deriveDecisionRationale } = require("./deriveCivicConfidence");
+const { derivePromiseStatus } = require("./derivePromiseStatus");
 const MERIDIAN_GOVERNANCE_CONFIG = require("./meridian-governance-config");
 
 const ROD_PRIORITY = Object.freeze({
@@ -895,6 +897,52 @@ function buildRuntimeSubsetDetails(
   };
 }
 
+function attachCivicProjection(
+  runtimeSubset,
+  request,
+  requestFacts,
+  omissions,
+  standingRisk,
+  controlRod,
+  decision,
+  reason,
+  hold,
+  config = MERIDIAN_GOVERNANCE_CONFIG
+) {
+  const confidence = deriveCivicConfidence(
+    {
+      decision,
+      reason,
+      hold,
+      standingRisk,
+    },
+    config
+  );
+
+  return {
+    ...runtimeSubset,
+    civic: {
+      promise_status: derivePromiseStatus(
+        request,
+        requestFacts,
+        omissions,
+        standingRisk
+      ),
+      confidence,
+      rationale: {
+        decision: deriveDecisionRationale({
+          decision,
+          reason,
+          requestFacts,
+          omissions,
+          standingRisk,
+          controlRod,
+        }),
+      },
+    },
+  };
+}
+
 function evaluateRuntimeSubset(
   request,
   policyContext,
@@ -936,7 +984,18 @@ function evaluateRuntimeSubset(
     return {
       decision: GOVERNANCE_DECISIONS.BLOCK,
       reason: syntheticContext.invalidReason,
-      runtimeSubset,
+      runtimeSubset: attachCivicProjection(
+        runtimeSubset,
+        request,
+        requestFacts,
+        omissions,
+        standingRisk,
+        controlRod,
+        GOVERNANCE_DECISIONS.BLOCK,
+        syntheticContext.invalidReason,
+        null,
+        config
+      ),
     };
   }
 
@@ -944,7 +1003,18 @@ function evaluateRuntimeSubset(
     return {
       decision: GOVERNANCE_DECISIONS.BLOCK,
       reason: "unsupported_request_domain",
-      runtimeSubset,
+      runtimeSubset: attachCivicProjection(
+        runtimeSubset,
+        request,
+        requestFacts,
+        omissions,
+        standingRisk,
+        controlRod,
+        GOVERNANCE_DECISIONS.BLOCK,
+        "unsupported_request_domain",
+        null,
+        config
+      ),
     };
   }
 
@@ -956,7 +1026,18 @@ function evaluateRuntimeSubset(
     return {
       decision: GOVERNANCE_DECISIONS.BLOCK,
       reason: blockingConstraint.constraintId,
-      runtimeSubset,
+      runtimeSubset: attachCivicProjection(
+        runtimeSubset,
+        request,
+        requestFacts,
+        omissions,
+        standingRisk,
+        controlRod,
+        GOVERNANCE_DECISIONS.BLOCK,
+        blockingConstraint.constraintId,
+        null,
+        config
+      ),
     };
   }
 
@@ -967,20 +1048,32 @@ function evaluateRuntimeSubset(
 
   if (shouldHold) {
     const reason = composeHoldReason(requestFacts, omissions, standingRisk);
+    const hold = createHoldProjection(
+      request,
+      controlRod,
+      reason,
+      requestFacts,
+      omissions,
+      standingRisk,
+      config
+    );
 
     return {
       decision: GOVERNANCE_DECISIONS.HOLD,
       reason,
-      hold: createHoldProjection(
+      hold,
+      runtimeSubset: attachCivicProjection(
+        runtimeSubset,
         request,
-        controlRod,
-        reason,
         requestFacts,
         omissions,
         standingRisk,
+        controlRod,
+        GOVERNANCE_DECISIONS.HOLD,
+        reason,
+        hold,
         config
       ),
-      runtimeSubset,
     };
   }
 
@@ -988,7 +1081,18 @@ function evaluateRuntimeSubset(
     return {
       decision: GOVERNANCE_DECISIONS.BLOCK,
       reason: interlocks.effective.reason,
-      runtimeSubset,
+      runtimeSubset: attachCivicProjection(
+        runtimeSubset,
+        request,
+        requestFacts,
+        omissions,
+        standingRisk,
+        controlRod,
+        GOVERNANCE_DECISIONS.BLOCK,
+        interlocks.effective.reason,
+        null,
+        config
+      ),
     };
   }
 
@@ -996,14 +1100,36 @@ function evaluateRuntimeSubset(
     return {
       decision: GOVERNANCE_DECISIONS.SUPERVISE,
       reason: interlocks.effective.reason,
-      runtimeSubset,
+      runtimeSubset: attachCivicProjection(
+        runtimeSubset,
+        request,
+        requestFacts,
+        omissions,
+        standingRisk,
+        controlRod,
+        GOVERNANCE_DECISIONS.SUPERVISE,
+        interlocks.effective.reason,
+        null,
+        config
+      ),
     };
   }
 
   return {
     decision: GOVERNANCE_DECISIONS.ALLOW,
     reason: "authority_and_evidence_resolved",
-    runtimeSubset,
+    runtimeSubset: attachCivicProjection(
+      runtimeSubset,
+      request,
+      requestFacts,
+      omissions,
+      standingRisk,
+      controlRod,
+      GOVERNANCE_DECISIONS.ALLOW,
+      "authority_and_evidence_resolved",
+      null,
+      config
+    ),
   };
 }
 

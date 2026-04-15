@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This spec records the shipped Wave 4A truth that exists in-repo today. Block A activates the governance transport adapter for synthetic `command_request` evaluation through a bounded runtime landing zone. Block B freezes one static local civic policy pack as the only runtime config source for that evaluator. Block C integrates the approved runtime subset so the bounded evaluator can now emit real `ALLOW`, `SUPERVISE`, `HOLD`, and `BLOCK` paths without widening frozen bridge, publication, entity, or typed `signal_tree` contracts.
+This spec records the shipped Wave 4A truth that exists in-repo today. Block A activates the governance transport adapter for synthetic `command_request` evaluation through a bounded runtime landing zone. Block B freezes one static local civic policy pack as the only runtime config source for that evaluator. Block C integrates the approved runtime subset so the bounded evaluator can now emit real `ALLOW`, `SUPERVISE`, `HOLD`, and `BLOCK` paths without widening frozen bridge, publication, entity, or typed `signal_tree` contracts. Block D adds bounded promise-status derivation, civic confidence tiers, and short runtime rationale strings so the output is legible as civic governance state without opening publisher widening, event-side routing, or authority-topology work.
 
 This spec does not rewrite or supersede the frozen Wave 3 specs.
 
@@ -19,6 +19,7 @@ Wave 4A now ships these runtime files:
 Wave 4A now ships these direct proof surfaces:
 
 - `tests/governance.policyPack.test.js`
+- `tests/governance.promiseConfidence.test.js`
 - `tests/governance.runtime.test.js`
 - `tests/governance.runtimeSubset.test.js`
 - `tests/fixtures/governance/refusal.commandRequest.json`
@@ -32,6 +33,7 @@ Wave 4A closeout and canon surfaces now include:
 - `docs/closeouts/WAVE4A_BLOCK_A_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_B_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_C_CLOSEOUT.md`
+- `docs/closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md`
 
 Wave 4A Block A also updates:
 
@@ -61,6 +63,20 @@ Wave 4A Block C updates only:
 - `MIGRATIONS.md`
 - front-door docs that would otherwise become stale
 
+Wave 4A Block D updates only:
+
+- `src/governance/runtime/deriveCivicConfidence.js`
+- `src/governance/runtime/derivePromiseStatus.js`
+- `src/governance/runtime/decisionVocabulary.js`
+- `src/governance/runtime/evaluateGovernanceRequest.js`
+- `src/governance/runtime/runtimeSubset.js`
+- `src/governance/runtime/index.js`
+- `tests/governance.runtime.test.js`
+- `tests/governance.promiseConfidence.test.js`
+- `MIGRATIONS.md`
+- `docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`
+- front-door docs that would otherwise become stale
+
 ## Frozen Contracts
 
 Wave 4A activates behavior without widening these existing contracts:
@@ -86,6 +102,17 @@ Wave 4A still does not emit:
 - `REVOKE`
 
 `SUPERVISE` is a real Block C runtime outcome. `REVOKE` remains reserved for later approved work.
+
+## Civic Confidence Vocabulary
+
+Wave 4A Block D now emits a separate bounded civic confidence tier at `runtimeSubset.civic.confidence.tier`:
+
+- `WATCH`
+- `GAP`
+- `HOLD`
+- `KILL`
+
+This tier is not the same field as top-level runtime `decision`. Decision state and civic confidence remain separate axes.
 
 ## Static Civic Policy Pack
 
@@ -144,22 +171,26 @@ For resolved `FULL_AUTO` posture with no blocking constraints, omissions, or sta
 
 - `ALLOW`
 - `authority_and_evidence_resolved`
+- `runtimeSubset.civic.confidence.tier === WATCH`
 
 For resolved `SUPERVISED` posture with no blocking constraints, omissions, or standing-risk escalation, Wave 4A returns:
 
 - `SUPERVISE`
 - `supervised_domain_requires_operator_review`
+- `runtimeSubset.civic.confidence.tier === GAP`
 
 For missing approvals, missing evidence, deterministic omission findings, or blocking standing-risk escalation, Wave 4A returns:
 
 - `HOLD`
 - a deterministic reason string
 - a structured hold projection with blocking status, summary, evidence, options, and resolution path
+- `runtimeSubset.civic.confidence.tier === HOLD`
 
 For resolved `HARD_STOP` posture with no earlier HOLD condition, Wave 4A returns:
 
 - `BLOCK`
 - `hard_stop_domain_requires_manual_lane`
+- `runtimeSubset.civic.confidence.tier === KILL`
 
 The Block C runtime subset now performs bounded equivalents of:
 
@@ -172,6 +203,42 @@ The Block C runtime subset now performs bounded equivalents of:
 - optional internal Open Items Board projection
 
 Synthetic continuity and standing-risk inputs may be carried inside the existing optional `confidence_context` object. This is a bounded runtime behavior inside the already-frozen request shape, not a new bridge contract.
+
+## Block D Civic Output
+
+Wave 4A Block D adds a bounded civic projection under `runtimeSubset.civic`.
+
+`runtimeSubset.civic.promise_status` uses the existing shipped typed field family:
+
+- `conditions_total`
+- `conditions_satisfied`
+- `oldest_open_condition_at`
+
+This is a bounded transient runtime projection, not an entity mutation and not a `signal_tree` widening.
+
+Promise-status derivation counts these runtime facts as civic conditions:
+
+- required approvals
+- required evidence counts
+- active omission findings
+- continuity-derived standing-risk entries that remain unresolved
+
+When bounded runtime facts do not carry a real timestamp, `oldest_open_condition_at` remains `null`. Block D does not invent temporal provenance.
+
+`runtimeSubset.civic.confidence` adds:
+
+- `tier`
+- `posture`
+- `rationale`
+
+Tier posture is intentionally bounded:
+
+- `WATCH`: non-blocking, low-risk advisory posture
+- `GAP`: meaningful review-relevant signal that is not fatal by itself
+- `HOLD`: blocking absence or unresolved required condition
+- `KILL`: malformed, unsupported, or hard-stop fail-closed posture
+
+`runtimeSubset.civic.rationale.decision` now carries a short deterministic string for operator or developer debugging. This is not a full explanation surface or refusal-product UX.
 
 ## Adapter And Publication Posture
 
@@ -187,7 +254,7 @@ Publication posture remains intentionally narrow:
 
 ## Explicit Non-Claims
 
-Wave 4A Blocks A-C do not ship:
+Wave 4A Blocks A-D do not ship:
 
 - event-side governance routing
 - publisher widening beyond the current truthful `HOLD` path
@@ -196,9 +263,10 @@ Wave 4A Blocks A-C do not ship:
 - NATS KV policy reads or dynamic policy fetch
 - entity mutation or KV mutation
 - civic ForensicChain runtime writes
-- promise-status derivation
-- widened confidence emission or civic confidence rendering
 - session or operator trust surfaces
+- authority-topology semantics
+- on-demand governance sweep
+- explanation-product refusal UX
 - full HookRuntime transplant
 - UI, skins, or dashboard work
 

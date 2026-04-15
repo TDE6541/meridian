@@ -13,10 +13,9 @@ test("governance runtime fails closed on malformed requests", () => {
     kind: "command_request",
   });
 
-  assert.deepEqual(result, {
-    decision: "BLOCK",
-    reason: "request_org_id_required",
-  });
+  assert.equal(result.decision, "BLOCK");
+  assert.equal(result.reason, "request_org_id_required");
+  assert.equal(result.runtimeSubset.civic.confidence.tier, "KILL");
 });
 
 test("governance runtime blocks event observations as deferred in Block A", () => {
@@ -47,6 +46,24 @@ test("governance runtime blocks event observations as deferred in Block A", () =
   assert.deepEqual(result, {
     decision: "BLOCK",
     reason: "event_observation_deferred_block_a_command_request_only",
+    runtimeSubset: {
+      civic: {
+        promise_status: {
+          conditions_total: 0,
+          conditions_satisfied: 0,
+          oldest_open_condition_at: null,
+        },
+        confidence: {
+          tier: "KILL",
+          posture:
+            "malformed request, impossible state, invalid config, or unsupported path",
+          rationale: "kill_fail_closed_posture",
+        },
+        rationale: {
+          decision: "Event-side governance routing remains deferred.",
+        },
+      },
+    },
   });
 });
 

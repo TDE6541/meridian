@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, and bounded Wave 4A governance runtime landing zone with a static civic policy pack plus Block C runtime subset integration.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, and bounded Wave 4A governance runtime landing zone with a static civic policy pack plus Blocks C-D runtime interpretation output.
 
 ## Bridge Substrate
 
@@ -19,8 +19,10 @@ Purpose: transport-only NATS bridge surfaces for subject cataloging, event and t
 
 ## Governance Runtime Landing Zone
 
-Purpose: bounded Wave 4A `command_request` evaluator backed by one static local civic policy pack and Block C runtime subset logic that returns `ALLOW`, `SUPERVISE`, `HOLD`, or `BLOCK` without widening publisher behavior or event-side routing.
+Purpose: bounded Wave 4A `command_request` evaluator backed by one static local civic policy pack plus runtime subset logic that returns `ALLOW`, `SUPERVISE`, `HOLD`, or `BLOCK`, derives bounded `promise_status`, emits separate civic confidence tiers, and adds short rationale strings without widening publisher behavior or event-side routing.
 
+- `src/governance/runtime/deriveCivicConfidence.js`
+- `src/governance/runtime/derivePromiseStatus.js`
 - `src/governance/runtime/decisionVocabulary.js`
 - `src/governance/runtime/meridian-governance-config.js`
 - `src/governance/runtime/evaluateGovernanceRequest.js`
@@ -72,6 +74,7 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces and the Wave 4
 - `tests/bridge.governancePublisher.test.js`
 - `tests/bridge.governanceTransportAdapter.test.js`
 - `tests/governance.policyPack.test.js`
+- `tests/governance.promiseConfidence.test.js`
 - `tests/governance.runtime.test.js`
 - `tests/governance.runtimeSubset.test.js`
 - `tests/fixtures/governance/hard-stop.commandRequest.json`

@@ -36,7 +36,9 @@ tests/
   deny-patterns.test.js
   entities.test.js
   governance.policyPack.test.js
+  governance.promiseConfidence.test.js
   governance.runtime.test.js
+  governance.runtimeSubset.test.js
   fixtures/governance/*.json
   fixtures/nats/*.json
 docs/
@@ -50,6 +52,8 @@ docs/
   closeouts/WAVE3_CLOSEOUT.md
   closeouts/WAVE4A_BLOCK_A_CLOSEOUT.md
   closeouts/WAVE4A_BLOCK_B_CLOSEOUT.md
+  closeouts/WAVE4A_BLOCK_C_CLOSEOUT.md
+  closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
   specs/NATS_EVENT_COMMAND_TRANSLATION.md
   specs/WAVE4A_GOVERNANCE_RUNTIME.md
@@ -66,7 +70,7 @@ scripts/
 - Treat upstream references as references unless their contents are available in this repo.
 - Surface uncertainty as HOLD.
 - Describe Wave 3 only as a transport-only bridge and fail-closed governance stub.
-- Describe Wave 4A Blocks A-C only as bounded `command_request` runtime activation, the static local policy pack, and Block C runtime subset integration, not as event-side routing, publisher widening, or full governance runtime completion.
+- Describe Wave 4A Blocks A-D only as bounded `command_request` runtime activation, the static local policy pack, runtime subset integration, and Block D civic interpretation output, not as event-side routing, publisher widening, or full governance runtime completion.
 
 ## Planning Gate
 
@@ -97,7 +101,7 @@ scripts/
 
 - Root canon is a contract surface and must stay synchronized.
 - Bridge-local contracts do not widen the persistent Wave 2 entity contract.
-- Wave 4A Blocks A-C do not widen `GovernanceEvaluationRequest`, `GovernancePublication`, or `signal_tree`.
+- Wave 4A Blocks A-D do not widen `GovernanceEvaluationRequest`, `GovernancePublication`, or `signal_tree`.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 
