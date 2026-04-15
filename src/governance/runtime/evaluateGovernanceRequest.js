@@ -1,4 +1,5 @@
 const { GOVERNANCE_DECISIONS } = require("./decisionVocabulary");
+const MERIDIAN_GOVERNANCE_CONFIG = require("./meridian-governance-config");
 
 function isPlainObject(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -24,6 +25,146 @@ function block(reason) {
     decision: GOVERNANCE_DECISIONS.BLOCK,
     reason,
   };
+}
+
+function sortUniqueStrings(values) {
+  return [...new Set(values)].sort();
+}
+
+function domainMatchesRequest(domain, request) {
+  if (!isPlainObject(domain) || !isPlainObject(domain.appliesTo)) {
+    return false;
+  }
+
+  const entityType = request.entity_ref?.entity_type;
+  const subjectText = [
+    request.raw_subject,
+    request.entity_ref?.entity_id,
+    entityType,
+  ]
+    .filter((value) => typeof value === "string" && value.trim() !== "")
+    .join(" ")
+    .toLowerCase();
+
+  const entityTypeMatch =
+    Array.isArray(domain.appliesTo.entityTypes) &&
+    domain.appliesTo.entityTypes.includes(entityType);
+  const subjectMatch =
+    Array.isArray(domain.appliesTo.subjectIncludes) &&
+    domain.appliesTo.subjectIncludes.some((token) =>
+      subjectText.includes(String(token).toLowerCase())
+    );
+
+  return entityTypeMatch || subjectMatch;
+}
+
+function hasOverlap(left, right) {
+  return left.some((value) => right.includes(value));
+}
+
+function resolveGovernancePolicyContext(
+  request,
+  config = MERIDIAN_GOVERNANCE_CONFIG
+) {
+  if (!isPlainObject(request)) {
+    return {
+      domainIds: [],
+      constraintIds: ["malformed_or_unsupported_input"],
+      omissionPackIds: [],
+    };
+  }
+
+  const domainIds = sortUniqueStrings(
+    Object.entries(config.domains)
+      .filter(([, domain]) => domainMatchesRequest(domain, request))
+      .map(([domainId]) => domainId)
+  );
+
+  const missingApprovals = isStringArray(request.authority_context?.missing_approvals)
+    ? request.authority_context.missing_approvals
+    : [];
+  const missingTypes = isStringArray(request.evidence_context?.missing_types)
+    ? request.evidence_context.missing_types
+    : [];
+  const evidenceGap =
+    (isNonNegativeInteger(request.evidence_context?.required_count)
+      ? request.evidence_context.required_count
+      : 0) -
+    (isNonNegativeInteger(request.evidence_context?.present_count)
+      ? request.evidence_context.present_count
+      : 0);
+  const authorityResolved =
+    request.authority_context?.resolved === true && missingApprovals.length === 0;
+  const evidenceResolved = evidenceGap <= 0 && missingTypes.length === 0;
+  const missingInspectionLikeEvidence = missingTypes.some((type) =>
+    String(type).toLowerCase().includes("inspection")
+  );
+
+  const constraintIds = [];
+
+  if (request.kind !== "command_request") {
+    constraintIds.push("malformed_or_unsupported_input");
+  }
+
+  if (!authorityResolved) {
+    constraintIds.push("unresolved_required_approvals");
+  }
+
+  if (!evidenceResolved) {
+    constraintIds.push("incomplete_required_evidence");
+  }
+
+  if (
+    domainIds.includes("utility_corridor_action") &&
+    missingTypes.includes("utility_conflict_assessment")
+  ) {
+    constraintIds.push("utility_conflict_evidence_present");
+  }
+
+  if (domainIds.includes("decision_closure") && !evidenceResolved) {
+    constraintIds.push("closure_evidence_present");
+  }
+
+  const omissionPackIds = [];
+
+  if (
+    hasOverlap(
+      domainIds,
+      config.omissionPacks.action_without_authority.relevantDomains
+    ) &&
+    !authorityResolved
+  ) {
+    omissionPackIds.push("action_without_authority");
+  }
+
+  if (domainIds.includes("permit_authorization") && missingInspectionLikeEvidence) {
+    omissionPackIds.push("permit_without_inspection");
+  }
+
+  if (domainIds.includes("decision_closure") && !evidenceResolved) {
+    omissionPackIds.push("closure_without_evidence");
+  }
+
+  return {
+    domainIds,
+    constraintIds: sortUniqueStrings(constraintIds),
+    omissionPackIds: sortUniqueStrings(omissionPackIds),
+  };
+}
+
+function hasConfiguredHolds(policyContext, config = MERIDIAN_GOVERNANCE_CONFIG) {
+  const holdConstraints = policyContext.constraintIds.some(
+    (constraintId) =>
+      config.constraints[constraintId]?.defaultDecision ===
+      GOVERNANCE_DECISIONS.HOLD
+  );
+  const holdOmissions = policyContext.omissionPackIds.some(
+    (omissionPackId) =>
+      config.omissionPacks[omissionPackId]?.defaultConsequence ===
+      GOVERNANCE_DECISIONS.HOLD
+  );
+
+  return holdConstraints || holdOmissions;
 }
 
 function evaluateGovernanceRequest(request) {
@@ -130,8 +271,9 @@ function evaluateGovernanceRequest(request) {
   const authorityResolved =
     request.authority_context.resolved === true && missingApprovals.length === 0;
   const evidenceResolved = evidenceGap <= 0 && missingTypes.length === 0;
+  const policyContext = resolveGovernancePolicyContext(request);
 
-  if (authorityResolved && evidenceResolved) {
+  if (authorityResolved && evidenceResolved && !hasConfiguredHolds(policyContext)) {
     return {
       decision: GOVERNANCE_DECISIONS.ALLOW,
       reason: "authority_and_evidence_resolved",
@@ -166,4 +308,5 @@ function evaluateGovernanceRequest(request) {
 
 module.exports = {
   evaluateGovernanceRequest,
+  resolveGovernancePolicyContext,
 };

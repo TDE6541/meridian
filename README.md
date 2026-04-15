@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. This repository now contains the Wave 1 foundation, the Wave 2 entity ontology extension, the shipped Wave 3 NATS bridge substrate, and the bounded Wave 4A Block A governance runtime landing zone. It is still not a full governance runtime or a runnable application.
+Meridian is a governed city digital twin intelligence repo. This repository now contains the Wave 1 foundation, the Wave 2 entity ontology extension, the shipped Wave 3 NATS bridge substrate, and the bounded Wave 4A runtime landing zone with a static Block B civic policy pack. It is still not a full governance runtime or a runnable application.
 
 ## Agent Start Here
 
@@ -10,13 +10,14 @@ Meridian is a governed city digital twin intelligence repo. This repository now 
 
 ## Current Status
 
-Wave 4A Block A - command_request governance runtime activation, adapter delegation, and canon sync
+Wave 4A Block B - static civic policy pack, bounded `command_request` runtime consumption, and canon sync
 
 ## What This Is
 
 - A Meridian-native repo substrate for governed execution.
 - A Wave 1 and Wave 2 schema surface plus a Wave 3 transport-only bridge under `src/bridge/`.
-- A bounded Wave 4A Block A governance runtime landing zone under `src/governance/runtime/` for synthetic `command_request` evaluation only.
+- A bounded Wave 4A governance runtime landing zone under `src/governance/runtime/` for synthetic `command_request` evaluation only.
+- A static Wave 4A Block B civic policy pack under `src/governance/runtime/meridian-governance-config.js` that acts as the only runtime config source for the current evaluator.
 - A fake-transport proof harness for event normalization, fail-closed command handling, and Meridian publication shaping.
 - A single external runtime dependency surface: `nats`.
 
@@ -71,6 +72,7 @@ src/
   governance/
     runtime/
       decisionVocabulary.js
+      meridian-governance-config.js
       evaluateGovernanceRequest.js
       index.js
     shadows.js
@@ -85,6 +87,7 @@ tests/
   config.test.js
   deny-patterns.test.js
   entities.test.js
+  governance.policyPack.test.js
   governance.runtime.test.js
   fixtures/
     governance/
@@ -106,6 +109,7 @@ docs/
     WAVE2_CLOSEOUT.md
     WAVE3_CLOSEOUT.md
     WAVE4A_BLOCK_A_CLOSEOUT.md
+    WAVE4A_BLOCK_B_CLOSEOUT.md
   specs/
     ENTITY_ONTOLOGY.md
     NATS_EVENT_COMMAND_TRANSLATION.md
