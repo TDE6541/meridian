@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import importlib
+import json
 import os
 from dataclasses import dataclass
-from typing import Mapping, Optional
+from typing import Any, Mapping, Optional
 
 OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
 MERIDIAN_PIPELINE_MODEL_ENV = "MERIDIAN_PIPELINE_MODEL"
@@ -15,6 +16,14 @@ class MissingOpenAIConfigurationError(RuntimeError):
 
 class OpenAIDependencyError(RuntimeError):
     """Raised when the runtime dependency is absent at client construction time."""
+
+
+class OpenAIInvocationError(RuntimeError):
+    """Raised when an OpenAI chat completion call fails."""
+
+
+class OpenAIResponseFormatError(RuntimeError):
+    """Raised when an OpenAI response is missing valid JSON content."""
 
 
 @dataclass(frozen=True)
@@ -105,3 +114,65 @@ def create_openai_client(
         ) from exc
 
     return openai_module.OpenAI(api_key=resolved.api_key)
+
+
+def _extract_completion_content(completion) -> str:
+    choices = getattr(completion, "choices", None) or []
+    if not choices:
+        raise OpenAIResponseFormatError("OpenAI response did not include any choices.")
+
+    message = getattr(choices[0], "message", None)
+    content = getattr(message, "content", None)
+    if isinstance(content, str) and content.strip():
+        return content
+
+    raise OpenAIResponseFormatError("OpenAI response did not include JSON message content.")
+
+
+def request_json_chat_completion(
+    system_prompt: str,
+    user_prompt: str,
+    *,
+    client=None,
+    env: Optional[Mapping[str, str]] = None,
+    model: Optional[str] = None,
+    temperature: float = 0.1,
+    max_completion_tokens: int = 1400,
+) -> dict[str, Any]:
+    """
+    Invoke the Meridian-approved OpenAI chat surface and parse a JSON object result.
+
+    The environment contract stays fixed to OPENAI_API_KEY and
+    MERIDIAN_PIPELINE_MODEL. Tests may inject a fake client; production callers
+    still resolve configuration from the environment.
+    """
+
+    config = resolve_openai_config(required=True, env=env)
+    resolved_client = client if client is not None else create_openai_client(config=config)
+    resolved_model = (model or config.model).strip()
+
+    try:
+        completion = resolved_client.chat.completions.create(
+            model=resolved_model,
+            response_format={"type": "json_object"},
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=temperature,
+            max_completion_tokens=max_completion_tokens,
+        )
+    except Exception as exc:
+        raise OpenAIInvocationError(f"OpenAI extraction request failed: {exc}") from exc
+
+    content = _extract_completion_content(completion)
+
+    try:
+        parsed = json.loads(content)
+    except json.JSONDecodeError as exc:
+        raise OpenAIResponseFormatError("OpenAI response was not valid JSON.") from exc
+
+    if not isinstance(parsed, dict):
+        raise OpenAIResponseFormatError("OpenAI response JSON must be an object.")
+
+    return parsed

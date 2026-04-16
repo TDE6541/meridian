@@ -34,6 +34,9 @@ class Directive:
     responsible_party: str = ""
     status: str = ""
     confidence: float = 0.0
+    model_confidence: Optional[float] = None
+    agreement_ratio: Optional[float] = None
+    final_confidence: Optional[float] = None
     source_quote: str = ""
 
 
@@ -51,6 +54,9 @@ class Hold:
     blocking_scope: str = ""
     severity: str = ""
     confidence: float = 0.0
+    model_confidence: Optional[float] = None
+    agreement_ratio: Optional[float] = None
+    final_confidence: Optional[float] = None
     source_quote: str = ""
 
 
