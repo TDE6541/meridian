@@ -1,0 +1,59 @@
+{
+  "artifact_type": "meeting_video_motion_excerpt",
+  "source_purity": "secondary_source_reconstructed",
+  "meeting_title": "Fort Worth City Council Day Meeting",
+  "governing_body": "Fort Worth City Council",
+  "meeting_date": "2025-09-30",
+  "meeting_time": "10:00 AM CDT",
+  "location": "Fort Worth City Council Chamber, 100 Fort Worth Trail, Fort Worth, Texas",
+  "subject": "Resolution 25-5420 - Motion, Amendment, Debate, and Vote",
+  "primary_source": {
+    "type": "public_meeting_video",
+    "url": "https://www.youtube.com/watch?v=AGK1CztRd_U",
+    "video_title_per_aggregator": "City Council Meeting September 30, 2025",
+    "verbatim_transcript_captured": false,
+    "note": "The authoritative primary source is the full meeting video. YouTube auto-generated captions are available but have not been captured directly into this artifact. If Codex or evaluator requires verbatim-from-video proof, the transcript should be pulled from the video directly and used to supersede this file."
+  },
+  "secondary_source": {
+    "type": "citizen_portal_ai_summary",
+    "url": "https://citizenportal.ai/articles/6454382/fort-worth-council-rejects-amendment-to-cut-public-comment-opportunities-approves-2026-meeting-calendar",
+    "article_id": "6454382",
+    "publisher": "Citizen Portal",
+    "publisher_disclosure": "Article content is disclosed by Citizen Portal as AI-generated summary of the meeting video. Direct quoted statements in the article are presented by the publisher as quotations from named speakers but have not been independently verified against the raw video transcript by Meridian.",
+    "accessed": "2026-04-16"
+  },
+  "is_verbatim": false,
+  "reconstruction_notes": "This artifact is NOT verbatim from a single primary document. Motion sequencing, named mover, named seconder, failed amendment outcome, and approved main motion outcome are reported by Citizen Portal as factual meeting record. Direct quotations attributed to Councilman Chris Nettles and resident Bob Willoughby are presented by Citizen Portal as quoted statements from the meeting. Meridian has not independently validated these quotes against the raw video. This file should be treated as secondary-confirmed narrative, not primary verbatim transcript.",
+  "named_participants": [
+    {
+      "name": "Councilman Chris Nettles",
+      "role": "Fort Worth City Council Member",
+      "action": "Moved to amend Resolution 25-5420",
+      "quoted_statement": "I still cannot stomach to reduce the public comment.",
+      "quote_source": "Citizen Portal secondary reporting"
+    },
+    {
+      "name": "Councilwoman Deborah Peoples",
+      "role": "Fort Worth City Council Member",
+      "action": "Seconded the amendment",
+      "quoted_statement": null
+    },
+    {
+      "name": "Bob Willoughby",
+      "role": "Public commenter / Resident",
+      "action": "Addressed the council during public comment",
+      "quoted_statement": "takes away free speech",
+      "quote_source": "Citizen Portal secondary reporting"
+    }
+  ],
+  "meridian_demo_relevance": {
+    "motion_second_vote_pattern": "Present - named mover, named seconder, failed amendment followed by carried main motion",
+    "public_comment_integration": "Present - public commenter named with attributed quoted statement",
+    "deliberation_texture": "Present - 40 minutes of debate referenced; positional statements on both sides summarized",
+    "governance_hold_candidates": [
+      "Failed amendment shows a rejected alternative that could generate a Hold if captured as a competing directive",
+      "Public commenter objection registered without resolution-level response"
+    ]
+  },
+  "upgrade_path": "If Block E evaluation requires primary-source purity for this motion sequence, pull the YouTube auto-generated transcript for video ID AGK1CztRd_U, extract the Resolution 25-5420 discussion segment with timecodes, and supersede this file. The artifact_type field would then change to 'meeting_video_verbatim_transcript_excerpt' and the is_verbatim field would become true."
+}

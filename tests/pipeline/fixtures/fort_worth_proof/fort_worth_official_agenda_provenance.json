@@ -1,0 +1,68 @@
+{
+  "artifact_type": "official_agenda_excerpt",
+  "source_purity": "single_source_verbatim",
+  "meeting_title": "Fort Worth City Council Day Meeting",
+  "governing_body": "Fort Worth City Council",
+  "meeting_date": "2025-09-30",
+  "meeting_time": "10:00 AM CDT",
+  "location": "Fort Worth City Council Chamber, 100 Fort Worth Trail, Fort Worth, Texas",
+  "primary_source": {
+    "type": "official_agenda_pdf",
+    "url": "https://www.fortworthtexas.gov/files/assets/public/v/2/city-secretary/documents/calendar/2025-agendas/city-council/day-meeting/09-30-2025-city-council-day-meeting-agenda.pdf",
+    "domain": "fortworthtexas.gov",
+    "document_title": "CITY COUNCIL AGENDA FOR THE MEETING AT 10:00 AM, TUESDAY, SEPTEMBER 30, 2025",
+    "total_pages": 15,
+    "accessed": "2026-04-16"
+  },
+  "is_verbatim": true,
+  "verbatim_notes": "Every agenda item title, M&C number, Council District reference, dollar amount, zoning case number, and procedural bracket heading in this excerpt is quoted verbatim from the official Fort Worth agenda PDF. No content is paraphrased, summarized, or reconstructed from secondary sources.",
+  "excerpt_source_locations": [
+    {
+      "item_reference": "M&C 25-0933 (Atmos Gas Facilities Relocations)",
+      "source_page": "Page 5",
+      "source_section": "Consent Agenda, Section E: Award of Contract - Consent Items, Item 9"
+    },
+    {
+      "item_reference": "M&C 25-0941 (Emergency Sanitary Sewer Repair)",
+      "source_page": "Page 6",
+      "source_section": "Consent Agenda, Section E: Award of Contract - Consent Items, Item 12"
+    },
+    {
+      "item_reference": "Resolution 25-5420 (2026 Meeting Calendar)",
+      "source_page": "Page 9",
+      "source_section": "Resolutions, Item 1",
+      "note": "Only the agenda-item heading is included here. The motion/amendment/debate narrative is NOT in this file; it is in the companion meeting-video excerpt artifact with separate provenance."
+    },
+    {
+      "item_reference": "ZC-25-131 (Black Mountain Power Data Center)",
+      "source_page": "Page 10",
+      "source_section": "Zoning Hearing, Item 1"
+    },
+    {
+      "item_reference": "M&C 25-0866 (TIF Development Agreement - Continued from Previous Meeting)",
+      "source_page": "Page 12",
+      "source_section": "Report of the City Manager, Section B: General, Item 1"
+    },
+    {
+      "item_reference": "M&C 25-0866 (REVISED)",
+      "source_page": "Page 12",
+      "source_section": "Report of the City Manager, Section B: General, Item 2"
+    },
+    {
+      "item_reference": "M&C 25-0918 (Water Dept Lead Service Line Replacement Certificates)",
+      "source_page": "Page 13",
+      "source_section": "Report of the City Manager, Section B: General, Item 3"
+    }
+  ],
+  "trimmed_content": "Procedural headers (Invocation, Pledges of Allegiance), Special Presentations (Recognition for World Homeless Day, Recognition for Donald Boren), consent agenda items not selected for this excerpt, board appointment procedural items, and full adjournment boilerplate language were omitted. Selected agenda items are preserved in their original order of appearance on the official agenda.",
+  "meridian_demo_relevance": {
+    "decision_density": "7 distinct decision-bearing items across ~400 words",
+    "deferral_pattern": "Present - M&C 25-0866 is explicitly marked (Continued from a Previous Meeting) and appears alongside M&C 25-0866 (REVISED) on the same agenda",
+    "multi_department_authority": "Present - Stormwater/Water/TPW/Atmos franchise coordination (M&C 25-0933), Water/Texas Water Development Board coordination (M&C 25-0918), Zoning Commission to Council escalation (ZC-25-131)",
+    "corridor_scenario_alignment": "Strong - CD 5 has both Atmos gas relocation (multi-utility corridor coordination) and emergency sewer repair at Hart/IH-820 (emergency excavation with cross-infrastructure impact)",
+    "governance_hold_candidates": [
+      "M&C 25-0866 deferral/revision chain",
+      "ZC-25-131 site plan required as unresolved condition"
+    ]
+  }
+}
