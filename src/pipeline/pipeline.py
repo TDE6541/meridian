@@ -4,19 +4,21 @@ from dataclasses import dataclass
 from typing import Tuple
 
 from .llm_client import OpenAIConfigStatus, inspect_openai_env
-from .models import MeetingMetadata
+from .models import MeetingMetadata, Segment
+from .segmentation import segment_transcript_text
 from .transcript_cache import normalize_transcript, transcript_hash
 
 PIPELINE_PHASE_ORDER = (
     "normalize_transcript",
     "hash_transcript",
     "resolve_openai_config",
+    "transcribe_audio",
     "segment_transcript",
     "extract_capture_artifacts",
     "translate_boundary_handoff",
 )
 
-DEFERRED_PHASES = PIPELINE_PHASE_ORDER[3:]
+DEFERRED_PHASES = PIPELINE_PHASE_ORDER[5:]
 
 
 class DeferredPipelineStageError(NotImplementedError):
@@ -43,6 +45,13 @@ class PreparedPipelineContext:
     llm_config_status: OpenAIConfigStatus
 
 
+@dataclass(frozen=True)
+class SegmentedPipelineContext(PreparedPipelineContext):
+    """Prepared transcript state plus shipped Block B segmentation output."""
+
+    segments: Tuple[Segment, ...]
+
+
 PIPELINE_STAGES: Tuple[PipelineStage, ...] = (
     PipelineStage(
         name="normalize_transcript",
@@ -60,9 +69,14 @@ PIPELINE_STAGES: Tuple[PipelineStage, ...] = (
         description="Inspect env-driven OpenAI config posture without implying extraction is runnable.",
     ),
     PipelineStage(
+        name="transcribe_audio",
+        shipped_in_block_a=True,
+        description="Optional OpenAI-only audio transcription lives in src/pipeline/transcription.py.",
+    ),
+    PipelineStage(
         name="segment_transcript",
-        shipped_in_block_a=False,
-        description="Deferred to later blocks.",
+        shipped_in_block_a=True,
+        description="Segment normalized transcript text into bounded civic meeting blocks.",
     ),
     PipelineStage(
         name="extract_capture_artifacts",
@@ -78,7 +92,7 @@ PIPELINE_STAGES: Tuple[PipelineStage, ...] = (
 
 
 class MeridianPipeline:
-    """Structural Block A pipeline scaffold with explicit deferred execution stages."""
+    """Structural pipeline scaffold with shipped Block B intake/segmentation only."""
 
     def describe_phases(self) -> Tuple[PipelineStage, ...]:
         return PIPELINE_STAGES
@@ -95,17 +109,33 @@ class MeridianPipeline:
             llm_config_status=inspect_openai_env(),
         )
 
-    def run(self, meeting: MeetingMetadata, transcript_text: str) -> PreparedPipelineContext:
-        """
-        Prepare deterministic transcript state, then stop before later-wave logic.
-
-        Block A ships the scaffold only and must not claim end-to-end capture behavior.
-        """
+    def segment_text(
+        self, meeting: MeetingMetadata, transcript_text: str
+    ) -> SegmentedPipelineContext:
+        """Prepare and segment transcript text without claiming later capture stages."""
 
         prepared = self.prepare(meeting=meeting, transcript_text=transcript_text)
-        raise DeferredPipelineStageError(
-            "Wave 4B Block A ships only the pipeline substrate; "
-            "segment_transcript, extract_capture_artifacts, and "
-            "translate_boundary_handoff remain deferred to later blocks."
+        segments = tuple(segment_transcript_text(prepared.normalized_transcript))
+        return SegmentedPipelineContext(
+            meeting=prepared.meeting,
+            raw_transcript=prepared.raw_transcript,
+            normalized_transcript=prepared.normalized_transcript,
+            transcript_sha256=prepared.transcript_sha256,
+            llm_config_status=prepared.llm_config_status,
+            segments=segments,
         )
 
+    def run(self, meeting: MeetingMetadata, transcript_text: str) -> PreparedPipelineContext:
+        """
+        Prepare and segment transcript state, then stop before later-wave logic.
+
+        Block B ships transcript intake and segmentation only and must not claim
+        extraction or boundary handoff behavior.
+        """
+
+        self.segment_text(meeting=meeting, transcript_text=transcript_text)
+        raise DeferredPipelineStageError(
+            "Wave 4B Block B ships transcript segmentation only; "
+            "extract_capture_artifacts and translate_boundary_handoff remain deferred "
+            "to later blocks."
+        )

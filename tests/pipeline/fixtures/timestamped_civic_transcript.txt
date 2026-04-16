@@ -1,0 +1,13 @@
+[00:00:01] MAYOR: I call this regular meeting to order.
+[00:00:12] CLERK: Agenda item 3 is the water department update.
+[00:00:28] WATER DIRECTOR: Department report on the pump station project. The replacement valve arrived and installation starts Monday.
+[00:01:05] MAYOR: Agenda item 4 is the zoning case at 1200 Main Street.
+[00:01:22] PLANNING DIRECTOR: Staff recommends approval with the access easement condition.
+[00:01:48] COUNCILMEMBER REED: I move to approve agenda item 4 with staff conditions.
+[00:01:56] COUNCILMEMBER LOPEZ: Second.
+[00:02:10] MAYOR: Please cast your votes.
+[00:02:22] CLERK: Motion passes seven to zero.
+[00:02:55] MAYOR: We will now open public comment on nonagenda items.
+[00:03:14] JANE DOE: I am asking for traffic calming near the school.
+[00:03:32] MAYOR: Public comment is closed.
+[00:03:55] MAYOR: We will adjourn this meeting.

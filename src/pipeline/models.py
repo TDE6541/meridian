@@ -16,6 +16,9 @@ class Segment:
     timestamp_end: Optional[str] = None
     summary: str = ""
     topics: List[str] = field(default_factory=list)
+    speakers: List[str] = field(default_factory=list)
+    segment_type: Optional[str] = None
+    cue_markers: List[str] = field(default_factory=list)
     text: str = ""
 
 
