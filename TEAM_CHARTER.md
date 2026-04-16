@@ -10,7 +10,7 @@ Advance Meridian as a governed city digital twin intelligence repo through narro
 
 ## Project Identity
 
-Meridian is a governed city digital twin intelligence effort with root canon, entity/schema discipline, a transport-only Wave 3 bridge substrate, and a bounded Wave 4A governance runtime landing zone with a static civic policy pack plus Blocks C-D runtime interpretation output.
+Meridian is a governed city digital twin intelligence effort with root canon, entity/schema discipline, a transport-only Wave 3 bridge substrate, and a bounded Wave 4A governance runtime landing zone with a static civic policy pack plus Blocks C-E runtime interpretation and proof output.
 
 ## Role Definitions
 
@@ -39,7 +39,7 @@ Meridian uses a five-room relay structure.
 
 ## Scope Discipline
 
-Wave 1 remains the repo-native foundation. Wave 2 remains the bounded entity ontology extension. Wave 3 adds only a transport-only NATS bridge substrate, a fail-closed governance transport stub, fixture-backed proof, and the required canon sync. Wave 4A adds only a bounded `command_request` governance runtime landing zone, adapter activation, the static local civic policy pack, runtime subset integration that may emit `ALLOW`, `SUPERVISE`, `HOLD`, and `BLOCK`, plus Block D promise-status derivation, civic confidence tiers, and short runtime rationale strings. Wave 4A does not ship event-side routing, publisher widening beyond the existing `HOLD` path, actor-level authority topology, entity mutation, KV mutation, civic ForensicChain runtime writes, or explanation-product refusal UX.
+Wave 1 remains the repo-native foundation. Wave 2 remains the bounded entity ontology extension. Wave 3 adds only a transport-only NATS bridge substrate, a fail-closed governance transport stub, fixture-backed proof, and the required canon sync. Wave 4A adds only a bounded `command_request` governance runtime landing zone, adapter activation, the static local civic policy pack, runtime subset integration that may emit `ALLOW`, `SUPERVISE`, `HOLD`, and `BLOCK`, Block D promise-status derivation, civic confidence tiers, and short runtime rationale strings, plus Block E read-only on-demand sweep and governed non-event demo proof. Wave 4A does not ship periodic worker, scheduler, timer, or daemon sweep logic, event-side routing, publisher widening beyond the existing `HOLD` path, actor-level authority topology, entity mutation, KV mutation, civic ForensicChain runtime writes, or explanation-product refusal UX.
 
 ## Closeout Standard
 

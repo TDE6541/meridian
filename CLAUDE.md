@@ -2,7 +2,7 @@
 
 ## Repo Identity
 
-Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate plus a bounded Wave 4A governance runtime landing zone, static civic policy pack, and Blocks C-D runtime interpretation layers.
+Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate plus a bounded Wave 4A governance runtime landing zone, static civic policy pack, Blocks C-D runtime interpretation layers, and Block E proof surfaces.
 
 ## Agent Start Here / Read First
 
@@ -23,7 +23,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Keep root canon synchronized when substrate truth changes.
 - Treat `src/config/constellation.js` as read-only publisher truth for Wave 3 bridge work.
 - Do not describe Wave 3 as live broker proof, actor authorization topology, or mutation runtime.
-- Do not describe Wave 4A Blocks A-D as event-side routing, publisher widening, or a full governance runtime.
+- Do not describe Wave 4A Blocks A-E as event-side routing, periodic worker logic, publisher widening, or a full governance runtime.
 
 ## Non-Negotiables
 
@@ -75,6 +75,8 @@ Edit(/**/*.config.*)
 - `tests/governance.runtime.test.js`
 - `tests/governance.runtimeSubset.test.js`
 - `tests/governance.promiseConfidence.test.js`
+- `tests/governance.sweep.test.js`
+- `tests/governance.demoProof.test.js`
 - `tests/fixtures/governance/*.json`
 - `tests/fixtures/nats/*.json`
 - `docs/specs/ENTITY_ONTOLOGY.md`
@@ -89,14 +91,16 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE1_CLOSEOUT.md`
 - `docs/closeouts/WAVE2_CLOSEOUT.md`
 - `docs/closeouts/WAVE3_CLOSEOUT.md`
+- `docs/closeouts/WAVE4A_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_A_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_B_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_C_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md`
+- `docs/closeouts/WAVE4A_BLOCK_E_CLOSEOUT.md`
 - `scripts/synthetic-constellation.js`
 - Block C truth: `package.json` declares only `nats` as a runtime dependency; `src/config/constellation.js` remains the narrow publisher/config substrate; transport-only bridge surfaces live in `src/bridge/`; no live broker proof claim ships.
 - Block D truth: runtime results now carry bounded `runtimeSubset.civic.promise_status`, civic confidence tiers, and short decision rationale strings; `tests/governance.promiseConfidence.test.js` provides direct proof; no entity, publisher, or event-side widening shipped.
-- Block E truth: `src/governance/runtime/` remains a bounded Wave 4A landing zone for `command_request` evaluation only; `meridian-governance-config.js` remains the sole static local runtime config source; Block D adds bounded `runtimeSubset.civic.promise_status`, civic confidence tiers, and short decision rationale strings; `event_observation` remains deferred; `governancePublisher.js` is unchanged and publisher behavior is not widened for `ALLOW`, `SUPERVISE`, or fail-closed `BLOCK`.
+- Block E truth: `src/governance/runtime/runGovernanceSweep.js` adds a read-only, on-demand sweep facade for explicit synthetic input only; `tests/governance.sweep.test.js` and `tests/governance.demoProof.test.js` freeze the refusal fixture as the governed non-event proof; no periodic worker, civic chain writes, publisher widening, event-side routing, authority-topology semantics, or explanation-product UX shipped.
 
 ## Required Sync Surfaces
 
@@ -115,8 +119,12 @@ Edit(/**/*.config.*)
 - `docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`
 - `docs/closeouts/README.md`
 - `docs/closeouts/WAVE3_CLOSEOUT.md`
+- `docs/closeouts/WAVE4A_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_A_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_B_CLOSEOUT.md`
+- `docs/closeouts/WAVE4A_BLOCK_C_CLOSEOUT.md`
+- `docs/closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md`
+- `docs/closeouts/WAVE4A_BLOCK_E_CLOSEOUT.md`
 
 ## Closeout Requirements
 

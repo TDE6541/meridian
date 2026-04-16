@@ -7,6 +7,7 @@ const {
   isGovernanceConfidenceTier,
 } = require("./decisionVocabulary");
 const MERIDIAN_GOVERNANCE_CONFIG = require("./meridian-governance-config");
+const { runGovernanceSweep } = require("./runGovernanceSweep");
 const { evaluateRuntimeSubset } = require("./runtimeSubset");
 const {
   evaluateGovernanceRequest,
@@ -21,6 +22,7 @@ module.exports = {
   isGovernanceDecision,
   isGovernanceConfidenceTier,
   MERIDIAN_GOVERNANCE_CONFIG,
+  runGovernanceSweep,
   evaluateRuntimeSubset,
   evaluateGovernanceRequest,
   resolveGovernancePolicyContext,

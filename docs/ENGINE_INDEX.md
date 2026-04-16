@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, and bounded Wave 4A governance runtime landing zone with a static civic policy pack plus Blocks C-D runtime interpretation output.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, and bounded Wave 4A governance runtime landing zone with a static civic policy pack plus Blocks C-E runtime interpretation and proof output.
 
 ## Bridge Substrate
 
@@ -19,7 +19,7 @@ Purpose: transport-only NATS bridge surfaces for subject cataloging, event and t
 
 ## Governance Runtime Landing Zone
 
-Purpose: bounded Wave 4A `command_request` evaluator backed by one static local civic policy pack plus runtime subset logic that returns `ALLOW`, `SUPERVISE`, `HOLD`, or `BLOCK`, derives bounded `promise_status`, emits separate civic confidence tiers, and adds short rationale strings without widening publisher behavior or event-side routing.
+Purpose: bounded Wave 4A `command_request` evaluator backed by one static local civic policy pack plus runtime subset logic that returns `ALLOW`, `SUPERVISE`, `HOLD`, or `BLOCK`, derives bounded `promise_status`, emits separate civic confidence tiers, adds short rationale strings, and exposes a read-only on-demand sweep facade without widening publisher behavior, event-side routing, or scheduling logic.
 
 - `src/governance/runtime/deriveCivicConfidence.js`
 - `src/governance/runtime/derivePromiseStatus.js`
@@ -27,6 +27,7 @@ Purpose: bounded Wave 4A `command_request` evaluator backed by one static local 
 - `src/governance/runtime/meridian-governance-config.js`
 - `src/governance/runtime/evaluateGovernanceRequest.js`
 - `src/governance/runtime/runtimeSubset.js`
+- `src/governance/runtime/runGovernanceSweep.js`
 - `src/governance/runtime/index.js`
 
 ## Governance Substrate
@@ -61,7 +62,7 @@ Purpose: read-only Meridian publisher subject builders and connection config imp
 
 ## Proof Surfaces
 
-Purpose: structural proof suite plus Wave 3 bridge proof surfaces and the Wave 4A runtime activation and policy-pack proof.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces and the Wave 4A runtime activation, policy-pack, sweep, and governed non-event demo proof.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
@@ -73,10 +74,12 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces and the Wave 4
 - `tests/bridge.commandSubscriber.test.js`
 - `tests/bridge.governancePublisher.test.js`
 - `tests/bridge.governanceTransportAdapter.test.js`
+- `tests/governance.demoProof.test.js`
 - `tests/governance.policyPack.test.js`
 - `tests/governance.promiseConfidence.test.js`
 - `tests/governance.runtime.test.js`
 - `tests/governance.runtimeSubset.test.js`
+- `tests/governance.sweep.test.js`
 - `tests/fixtures/governance/hard-stop.commandRequest.json`
 - `tests/fixtures/governance/refusal.commandRequest.json`
 - `tests/fixtures/governance/safe-pass.commandRequest.json`
