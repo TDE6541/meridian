@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. This repository now contains the Wave 1 foundation, the Wave 2 entity ontology extension, the shipped Wave 3 NATS bridge substrate, and the bounded Wave 4A runtime landing zone with the Block B static civic policy pack, Blocks C-D runtime interpretation layers, and Block E proof lane. It is still not a full governance runtime or a runnable application.
+Meridian is a governed city digital twin intelligence repo. Local `main` now contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, and Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path. This repo is still not a runnable application.
 
 ## Agent Start Here
 
@@ -10,132 +10,63 @@ Meridian is a governed city digital twin intelligence repo. This repository now 
 
 ## Current Status
 
-Wave 4A Block E - read-only on-demand governance sweep, frozen governed non-event demo proof, and canon sync
+Wave 4B Block E shipped locally on `main`: frozen Fort Worth proof path and run-level capture receipt layered onto the Wave 4B capture pipeline.
 
 ## What This Is
 
-- A Meridian-native repo substrate for governed execution.
-- A Wave 1 and Wave 2 schema surface plus a Wave 3 transport-only bridge under `src/bridge/`.
-- A bounded Wave 4A governance runtime landing zone under `src/governance/runtime/` for synthetic `command_request` evaluation only.
-- A static Wave 4A civic policy pack under `src/governance/runtime/meridian-governance-config.js` that remains the only runtime config source for the current evaluator.
-- A bounded Wave 4A runtime subset that routes synthetic requests through control-rod posture, constraints, interlocks, hold shaping, omission evaluation, continuity, standing-risk logic, and Block D civic interpretation output.
-- A bounded Block D civic layer that derives `runtimeSubset.civic.promise_status`, emits `WATCH` / `GAP` / `HOLD` / `KILL`, and adds short runtime rationale strings without widening entity or bridge contracts.
-- A read-only Block E sweep facade under `src/governance/runtime/runGovernanceSweep.js` that evaluates explicit synthetic scenarios on demand only.
-- A frozen Block E governed non-event proof path that reuses the refusal fixture through dedicated sweep and demo tests.
-- A fake-transport proof harness for event normalization, fail-closed command handling, and Meridian publication shaping.
-- A single external runtime dependency surface: `nats`.
+- A Meridian-native governed execution substrate.
+- A Wave 1 and Wave 2 schema/entity surface plus a Wave 3 transport-only bridge under `src/bridge/`.
+- A bounded Wave 4A governance runtime lane under `src/governance/runtime/` for synthetic `command_request` evaluation only.
+- A bounded Wave 4B meeting-capture lane under `src/pipeline/` with:
+  - transcript normalization and hashing
+  - OpenAI-only transcription posture
+  - timestamp-aware and plain-text civic segmentation
+  - three-run extraction ensemble plus merge confidence backbone
+  - narrow fallback cue scan
+  - translation seam that emits a durable capture artifact and a reduced local/frozen governance handoff payload
+  - run-level frozen proof manifest and capture receipt utilities
+- A frozen Fort Worth proof lane in `tests/pipeline/fixtures/fort_worth_proof/`, `tests/pipeline/test_end_to_end_proof.py`, and `tests/governance.pipelineHandoffProof.test.js` that keeps the official agenda pair as primary verbatim source and motion-video pair as supplemental context only.
+- A single external runtime dependency surface in `package.json`: `nats`.
 
 ## What This Is Not
 
 - Not a runnable application.
-- Not live-broker proof or production Constellation compatibility proof.
-- Not actor-level authorization topology, periodic worker or scheduler sweep logic, event-side governance routing, explanation-product refusal UX, or publisher widening for `ALLOW`, `SUPERVISE`, or fail-closed `BLOCK`.
-- Not entity mutation, KV mutation, or civic ForensicChain runtime persistence.
-- Not a source of ontology detail beyond the shipped in-repo specs.
+- Not live broker proof or production Constellation compatibility proof.
+- Not general event-side governance routing or generalized publisher widening.
+- Not authority-topology semantics, civic-chain writes, or civic ForensicChain runtime persistence.
+- Not skins/dashboard UI runtime surfaces.
+- Not a claim that Wave 4B handoff seam is full runtime/governance fabric completion.
 
 ## Repo Structure
 
 ```text
-LICENSE
-README.md
-REPO_INDEX.md
-CLAUDE.md
-TEAM_CHARTER.md
-AI_EXECUTION_DOCTRINE.md
-CONTRIBUTING.md
-MIGRATIONS.md
-package.json
-package-lock.json
-.gitignore
 src/
-  bridge/
-    commandSubscriber.js
-    commandTranslator.js
-    eventSubscriber.js
-    eventTranslator.js
-    governancePublisher.js
-    governanceTransportAdapter.js
-    natsTransport.js
-    subjectCatalog.js
-  config/
-    constellation.js
-  entities/
-    action_request.js
-    authority_grant.js
-    corridor_zone.js
-    critical_site.js
-    decision_record.js
-    device.js
-    evidence_artifact.js
-    incident_observation.js
-    inspection.js
-    obligation.js
-    organization.js
-    permit_application.js
-    utility_asset.js
+  bridge/*.js
+  config/constellation.js
+  entities/*.js
   governance/
-    runtime/
-      deriveCivicConfidence.js
-      derivePromiseStatus.js
-      decisionVocabulary.js
-      meridian-governance-config.js
-      evaluateGovernanceRequest.js
-      runtimeSubset.js
-      runGovernanceSweep.js
-      index.js
+    runtime/*.js
     shadows.js
+  pipeline/*.py
 tests/
-  bridge.commandSubscriber.test.js
-  bridge.commandTranslator.test.js
-  bridge.eventSubscriber.test.js
-  bridge.eventTranslator.test.js
-  bridge.governancePublisher.test.js
-  bridge.governanceTransportAdapter.test.js
-  bridge.subjectCatalog.test.js
-  config.test.js
-  deny-patterns.test.js
-  entities.test.js
-  governance.policyPack.test.js
-  governance.demoProof.test.js
-  governance.promiseConfidence.test.js
-  governance.runtime.test.js
-  governance.runtimeSubset.test.js
-  governance.sweep.test.js
-  fixtures/
-    governance/
-      hard-stop.commandRequest.json
-      refusal.commandRequest.json
-      safe-pass.commandRequest.json
-      supervised.commandRequest.json
-    nats/
-      commands.fixture.json
-      events.fixture.json
-      publications.fixture.json
-      telemetry.fixture.json
+  bridge*.test.js
+  governance*.test.js
+  governance.pipelineHandoffProof.test.js
+  pipeline/**/*.py
 docs/
   INDEX.md
   ENGINE_INDEX.md
-  UI_INDEX.md
   WHERE_TO_CHANGE_X.md
-  closeouts/
-    README.md
-    WAVE1_CLOSEOUT.md
-    WAVE2_CLOSEOUT.md
-    WAVE3_CLOSEOUT.md
-    WAVE4A_CLOSEOUT.md
-    WAVE4A_BLOCK_A_CLOSEOUT.md
-    WAVE4A_BLOCK_B_CLOSEOUT.md
-    WAVE4A_BLOCK_C_CLOSEOUT.md
-    WAVE4A_BLOCK_D_CLOSEOUT.md
-    WAVE4A_BLOCK_E_CLOSEOUT.md
-  specs/
-    ENTITY_ONTOLOGY.md
-    NATS_EVENT_COMMAND_TRANSLATION.md
-    WAVE4A_GOVERNANCE_RUNTIME.md
-    WAVE3_NATS_BRIDGE.md
-scripts/
-  synthetic-constellation.js
+  closeouts/*.md
+  specs/*.md
 ```
+
+## Deferred After Wave 4B
+
+- Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
+- Generalized event routing and authority-topology semantics.
+- Civic-chain and ForensicChain runtime writes.
+- UI/dashboard surfaces.
 
 ## Upstream References
 

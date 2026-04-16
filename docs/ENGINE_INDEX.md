@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, and bounded Wave 4A governance runtime landing zone with a static civic policy pack plus Blocks C-E runtime interpretation and proof output.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, and bounded Wave 4B meeting-capture pipeline lane.
 
 ## Bridge Substrate
 
@@ -29,6 +29,24 @@ Purpose: bounded Wave 4A `command_request` evaluator backed by one static local 
 - `src/governance/runtime/runtimeSubset.js`
 - `src/governance/runtime/runGovernanceSweep.js`
 - `src/governance/runtime/index.js`
+
+## Pipeline Capture Lane
+
+Purpose: bounded Wave 4B civic meeting-capture pipeline for transcript normalization/hashing, OpenAI-only transcription, deterministic segmentation, extraction + merge confidence backbone, narrow fallback cues, local/frozen translation seam, and run-level receipt/proof utilities.
+
+- `src/pipeline/models.py`
+- `src/pipeline/transcript_cache.py`
+- `src/pipeline/llm_client.py`
+- `src/pipeline/transcription.py`
+- `src/pipeline/segmentation.py`
+- `src/pipeline/extraction.py`
+- `src/pipeline/merge.py`
+- `src/pipeline/fallback.py`
+- `src/pipeline/translation.py`
+- `src/pipeline/pipeline.py`
+- `src/pipeline/receipt.py`
+- `src/pipeline/__init__.py`
+- `src/pipeline/README.md`
 
 ## Governance Substrate
 
@@ -62,7 +80,7 @@ Purpose: read-only Meridian publisher subject builders and connection config imp
 
 ## Proof Surfaces
 
-Purpose: structural proof suite plus Wave 3 bridge proof surfaces and the Wave 4A runtime activation, policy-pack, sweep, and governed non-event demo proof.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, and Wave 4B pipeline/frozen-handoff proof surfaces.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
@@ -80,6 +98,24 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces and the Wave 4
 - `tests/governance.runtime.test.js`
 - `tests/governance.runtimeSubset.test.js`
 - `tests/governance.sweep.test.js`
+- `tests/governance.pipelineHandoffProof.test.js`
+- `tests/pipeline/test_models.py`
+- `tests/pipeline/test_transcript_cache.py`
+- `tests/pipeline/test_llm_client.py`
+- `tests/pipeline/test_transcription.py`
+- `tests/pipeline/test_segmentation.py`
+- `tests/pipeline/test_extraction.py`
+- `tests/pipeline/test_merge.py`
+- `tests/pipeline/test_fallback.py`
+- `tests/pipeline/test_translation.py`
+- `tests/pipeline/test_receipt.py`
+- `tests/pipeline/test_end_to_end_proof.py`
+- `tests/pipeline/fort_worth_proof_support.py`
+- `tests/pipeline/fixtures/fort_worth_proof/fort_worth_official_agenda_excerpt.txt`
+- `tests/pipeline/fixtures/fort_worth_proof/fort_worth_official_agenda_provenance.json`
+- `tests/pipeline/fixtures/fort_worth_proof/fort_worth_motion_video_excerpt.txt`
+- `tests/pipeline/fixtures/fort_worth_proof/fort_worth_motion_video_provenance.json`
+- `tests/pipeline/fixtures/utility_refusal_translation_expected.json`
 - `tests/fixtures/governance/hard-stop.commandRequest.json`
 - `tests/fixtures/governance/refusal.commandRequest.json`
 - `tests/fixtures/governance/safe-pass.commandRequest.json`

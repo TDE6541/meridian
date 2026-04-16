@@ -30,17 +30,21 @@ src/
   entities/*.js
   governance/runtime/*.js
   governance/shadows.js
+  pipeline/*.py
 tests/
   bridge*.test.js
   config.test.js
   deny-patterns.test.js
   entities.test.js
   governance.demoProof.test.js
+  governance.pipelineHandoffProof.test.js
   governance.policyPack.test.js
   governance.promiseConfidence.test.js
   governance.runtime.test.js
   governance.runtimeSubset.test.js
   governance.sweep.test.js
+  pipeline/*.py
+  pipeline/fixtures/*
   fixtures/governance/*.json
   fixtures/nats/*.json
 docs/
@@ -58,9 +62,11 @@ docs/
   closeouts/WAVE4A_BLOCK_C_CLOSEOUT.md
   closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md
   closeouts/WAVE4A_BLOCK_E_CLOSEOUT.md
+  closeouts/WAVE4B_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
   specs/NATS_EVENT_COMMAND_TRANSLATION.md
   specs/WAVE4A_GOVERNANCE_RUNTIME.md
+  specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md
   specs/WAVE3_NATS_BRIDGE.md
 scripts/
   synthetic-constellation.js
@@ -75,6 +81,7 @@ scripts/
 - Surface uncertainty as HOLD.
 - Describe Wave 3 only as a transport-only bridge and fail-closed governance stub.
 - Describe Wave 4A Blocks A-E only as bounded `command_request` runtime activation, the static local policy pack, runtime subset integration, Block D civic interpretation output, and Block E read-only on-demand sweep/demo proof, not as periodic worker logic, event-side routing, publisher widening, or full governance runtime completion.
+- Describe Wave 4B Blocks A-E only as bounded meeting-capture pipeline, translation seam, frozen proof path, and run-level receipt utilities, not as generalized runtime/event routing/publication widening completion.
 
 ## Planning Gate
 
@@ -90,6 +97,7 @@ scripts/
 - Do not invent runtime behavior, ontology detail, or dependency detail.
 - Do not add adjacent improvements.
 - Do not widen Wave 3 into actor-level authority or mutation behavior.
+- Do not widen Wave 4B into generalized authority-topology semantics, event routing, publisher widening, or civic-chain runtime writes.
 - Stop if repo truth conflicts with the approved task.
 
 ## Verification Rules
@@ -106,6 +114,7 @@ scripts/
 - Root canon is a contract surface and must stay synchronized.
 - Bridge-local contracts do not widen the persistent Wave 2 entity contract.
 - Wave 4A Blocks A-E do not widen `GovernanceEvaluationRequest`, `GovernancePublication`, or `signal_tree`.
+- Wave 4B does not widen JS runtime or bridge contract shapes; it adds bounded Python capture/handoff artifacts only.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 

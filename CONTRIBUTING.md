@@ -22,6 +22,7 @@
 - Update every affected canon surface when substrate truth changes.
 - Do not introduce silent drift between repo state and repo documents.
 - Treat Wave 3 bridge-local contracts as transport contracts, not persistent entity widening.
+- Treat Wave 4B capture artifacts and handoff payloads as bounded local seam outputs, not generalized runtime/publication completion.
 
 ## Canon Vs Reference Boundaries
 
@@ -41,3 +42,4 @@
 - Avoid mixed-purpose edits.
 - Do not commit until the approved session says commit is in scope.
 - When touching the Wave 3 bridge, sync the bridge specs, tests, migration log, and closeout in the same session.
+- When touching the Wave 4B capture lane, sync the Wave 4B spec/closeout and current-truth front doors in the same session.

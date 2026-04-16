@@ -2,7 +2,7 @@
 
 ## Repo Identity
 
-Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate plus a bounded Wave 4A governance runtime landing zone, static civic policy pack, Blocks C-D runtime interpretation layers, and Block E proof surfaces.
+Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, and a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path.
 
 ## Agent Start Here / Read First
 
@@ -14,6 +14,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 6. [`docs/closeouts/README.md`](docs/closeouts/README.md)
 7. [`docs/specs/WAVE3_NATS_BRIDGE.md`](docs/specs/WAVE3_NATS_BRIDGE.md)
 8. [`docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`](docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md)
+9. [`docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`](docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md)
 
 ## Session Posture
 
@@ -24,6 +25,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Treat `src/config/constellation.js` as read-only publisher truth for Wave 3 bridge work.
 - Do not describe Wave 3 as live broker proof, actor authorization topology, or mutation runtime.
 - Do not describe Wave 4A Blocks A-E as event-side routing, periodic worker logic, publisher widening, or a full governance runtime.
+- Do not describe Wave 4B as generalized event routing, generalized publisher widening, authority-topology semantics, or civic-chain runtime writes.
 
 ## Non-Negotiables
 
@@ -68,6 +70,7 @@ Edit(/**/*.config.*)
 - `src/entities/*.js`
 - `src/governance/shadows.js`
 - `src/governance/runtime/*.js`
+- `src/pipeline/*.py`
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
 - `tests/entities.test.js`
@@ -77,12 +80,18 @@ Edit(/**/*.config.*)
 - `tests/governance.promiseConfidence.test.js`
 - `tests/governance.sweep.test.js`
 - `tests/governance.demoProof.test.js`
+- `tests/governance.pipelineHandoffProof.test.js`
+- `tests/pipeline/*.py`
+- `tests/pipeline/fixtures/*.txt`
+- `tests/pipeline/fixtures/*.json`
+- `tests/pipeline/fixtures/fort_worth_proof/*`
 - `tests/fixtures/governance/*.json`
 - `tests/fixtures/nats/*.json`
 - `docs/specs/ENTITY_ONTOLOGY.md`
 - `docs/specs/WAVE3_NATS_BRIDGE.md`
 - `docs/specs/NATS_EVENT_COMMAND_TRANSLATION.md`
 - `docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`
+- `docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`
 - `docs/INDEX.md`
 - `docs/ENGINE_INDEX.md`
 - `docs/UI_INDEX.md`
@@ -97,10 +106,12 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE4A_BLOCK_C_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_E_CLOSEOUT.md`
+- `docs/closeouts/WAVE4B_CLOSEOUT.md`
 - `scripts/synthetic-constellation.js`
 - Block C truth: `package.json` declares only `nats` as a runtime dependency; `src/config/constellation.js` remains the narrow publisher/config substrate; transport-only bridge surfaces live in `src/bridge/`; no live broker proof claim ships.
 - Block D truth: runtime results now carry bounded `runtimeSubset.civic.promise_status`, civic confidence tiers, and short decision rationale strings; `tests/governance.promiseConfidence.test.js` provides direct proof; no entity, publisher, or event-side widening shipped.
 - Block E truth: `src/governance/runtime/runGovernanceSweep.js` adds a read-only, on-demand sweep facade for explicit synthetic input only; `tests/governance.sweep.test.js` and `tests/governance.demoProof.test.js` freeze the refusal fixture as the governed non-event proof; no periodic worker, civic chain writes, publisher widening, event-side routing, authority-topology semantics, or explanation-product UX shipped.
+- Wave 4B truth: `src/pipeline/` ships bounded capture stages (normalize/hash, OpenAI transcription, segmentation, extraction, merge, fallback, translation seam, receipt helpers); `tests/pipeline/test_end_to_end_proof.py` and `tests/governance.pipelineHandoffProof.test.js` prove the frozen local handoff path; no event routing, generalized publisher widening, authority-topology semantics, or civic-chain writes shipped in this lane.
 
 ## Required Sync Surfaces
 
@@ -117,6 +128,7 @@ Edit(/**/*.config.*)
 - `docs/specs/WAVE3_NATS_BRIDGE.md`
 - `docs/specs/NATS_EVENT_COMMAND_TRANSLATION.md`
 - `docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`
+- `docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`
 - `docs/closeouts/README.md`
 - `docs/closeouts/WAVE3_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_CLOSEOUT.md`
@@ -125,6 +137,7 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE4A_BLOCK_C_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_BLOCK_E_CLOSEOUT.md`
+- `docs/closeouts/WAVE4B_CLOSEOUT.md`
 
 ## Closeout Requirements
 
