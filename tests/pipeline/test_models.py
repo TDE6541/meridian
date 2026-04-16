@@ -17,11 +17,9 @@ from src.pipeline.models import (
     MeetingMetadata,
     Segment,
 )
-from src.pipeline.pipeline import DeferredPipelineStageError, MeridianPipeline
+from src.pipeline.pipeline import MeridianPipeline
 from src.pipeline.translation import (
-    TranslationDeferredError,
     build_governance_handoff_payload,
-    translate_internal_capture_to_handoff,
 )
 
 
@@ -72,20 +70,15 @@ class ModelContractTests(unittest.TestCase):
         self.assertEqual(payload.capture_artifacts[0].artifact_kind, "directive")
         self.assertIn("runtime_wiring", payload.deferred_stages)
 
-    def test_translation_stub_is_explicitly_deferred(self):
-        with self.assertRaises(TranslationDeferredError):
-            translate_internal_capture_to_handoff([], [], [])
-
-    def test_pipeline_scaffold_prepares_context_and_blocks_runtime_claims(self):
+    def test_pipeline_scaffold_prepares_context_and_exposes_local_handoff_stage(self):
         pipeline = MeridianPipeline()
         meeting = MeetingMetadata(org_id="fortworth-dev", meeting_id="meeting-001")
         prepared = pipeline.prepare(meeting=meeting, transcript_text="hello\r\nworld")
+        phases = {stage.name: stage for stage in pipeline.describe_phases()}
 
         self.assertEqual(prepared.normalized_transcript, "hello\nworld")
         self.assertEqual(len(prepared.transcript_sha256), 64)
-
-        with self.assertRaises(DeferredPipelineStageError):
-            pipeline.run(meeting=meeting, transcript_text="hello\r\nworld")
+        self.assertTrue(phases["translate_boundary_handoff"].shipped_in_block_a)
 
 
 if __name__ == "__main__":

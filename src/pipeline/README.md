@@ -1,8 +1,8 @@
 # Meridian Pipeline Substrate
 
-This directory now ships the Wave 4B Block C Python civic capture floor.
+This directory now ships the Wave 4B Block D Python civic capture seam.
 
-## What Block C ships
+## What Block D ships
 
 - The additive `src/pipeline/` package boundary introduced in earlier blocks.
 - Internal HoldPoint-native capture dataclasses for `Segment`, `Directive`, and `Hold`.
@@ -14,15 +14,17 @@ This directory now ships the Wave 4B Block C Python civic capture floor.
 - Civic extraction in `extraction.py` using a locked three-run ensemble with two role archetypes: `heavy-decision`, `heavy-risk`, `heavy-decision`.
 - Ensemble merge in `merge.py` that preserves directive agreement filtering, HOLD > GUESS asymmetry for holds, and the internal confidence triplet (`model_confidence`, `agreement_ratio`, `final_confidence`).
 - A narrow fallback cue scan in `fallback.py` that activates only after extraction failure and scans only for bounded civic procedural cues.
-- A `MeridianPipeline.capture_text()` surface that stops before any translation or runtime handoff claim.
+- Explicit translation logic in `translation.py` that emits:
+  - a durable capture artifact preserving meeting metadata, segment lineage, extracted items, confidence backbone, quotes, and boundary flags
+  - a reduced bounded governance handoff payload that stays local/frozen and does not invent subjects or entity certainty
+- `MeridianPipeline.capture_to_handoff()` and `MeridianPipeline.run()` surfaces that stop at the local/frozen handoff seam.
 
-## What Block C does not ship
+## What Block D does not ship
 
-- No translation seam wiring.
-- No JS runtime wiring.
+- No JS runtime source widening.
 - No transport subject invention.
 - No suggestions stage.
-- No end-to-end capture-to-governance execution claim.
+- No end-to-end capture-to-governance publication claim.
 - No local Whisper or non-OpenAI transcription path.
 - No multi-provider LLM abstraction.
 
@@ -30,6 +32,8 @@ This directory now ships the Wave 4B Block C Python civic capture floor.
 
 - Internal models remain HoldPoint-native until boundary translation.
 - Directive and Hold still do not claim one-to-one Meridian entity mapping.
-- The handoff contracts in this directory do not claim extracted artifacts are already governable by the existing JS runtime.
+- The capture artifact and handoff payload remain visibly separate.
+- The bounded governance handoff does not claim extracted artifacts are already generally governable.
+- Subject binding, authority context, evidence context, and runtime decision state remain deferred to the existing JS/runtime lane.
 - Fallback is a resilience layer only and not a second extraction engine.
-- Translation and runtime handoff behavior remain deferred to later blocks.
+- Transport publication and broader runtime wiring remain deferred to later blocks.

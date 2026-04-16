@@ -1,0 +1,162 @@
+{
+  "capture_artifact": {
+    "artifact_version": "wave4b-blockd-capture-artifact-v1",
+    "artifact_id": "capture-artifact:fortworth-dev:permit-utility-2026-0847:285a1a2559f5",
+    "meeting_metadata": {
+      "org_id": "fortworth-dev",
+      "meeting_id": "permit-utility-2026-0847",
+      "capture_source": "fixture",
+      "title": "Utility Permit Review 2026-0847"
+    },
+    "transcript_hash": "285a1a2559f5137d21462693e7d12b1ad71ac8a2e173876f552b200902c46a63",
+    "capture_counts": {
+      "segment_count": 1,
+      "directive_count": 0,
+      "hold_count": 1
+    },
+    "capture_run": {
+      "fallback_used": false,
+      "extraction_run_pattern": [
+        "heavy-decision",
+        "heavy-risk",
+        "heavy-decision"
+      ],
+      "notes": []
+    },
+    "segment_lineage": [
+      {
+        "segment_id": "S1",
+        "timestamp_start": null,
+        "timestamp_end": null,
+        "summary": "Agenda Item 7 opened the utility permit review for permit utility 2026-0847. Staff said TPW ROW and Development Services approvals are still missing, while W...",
+        "speakers": [],
+        "segment_type": "agenda_item",
+        "cue_markers": [
+          "agenda_item",
+          "department_report"
+        ]
+      }
+    ],
+    "extracted_items": [
+      {
+        "capture_item_id": "hold:S1:1",
+        "item_kind": "hold",
+        "summary": "Permit utility 2026-0847 remains blocked pending TPW ROW and Development Services approvals plus the utility conflict assessment.",
+        "owner": "Staff",
+        "source_quote": "TPW ROW and Development Services approvals are still missing, and the utility conflict assessment is not complete.",
+        "confidence_backbone": {
+          "model_confidence": 0.86,
+          "agreement_ratio": 1.0,
+          "final_confidence": 0.93
+        },
+        "lineage": {
+          "segment_id": "S1",
+          "timestamp_start": null,
+          "timestamp_end": null,
+          "transcript_hash": "285a1a2559f5137d21462693e7d12b1ad71ac8a2e173876f552b200902c46a63",
+          "stage_name": "extract_capture_artifacts"
+        },
+        "raw_capture_fields": {
+          "hold_type": "approval",
+          "blocking_scope": "permit utility 2026-0847",
+          "severity": "high",
+          "owner_to_clarify": "Staff"
+        },
+        "normalization_flags": {
+          "summary_source_field": "hold_summary",
+          "owner_source_field": "owner_to_clarify",
+          "item_type_source_field": "hold_type",
+          "normalized_item_type": "hold"
+        },
+        "governance_flags": {
+          "boundary_ambiguity_preserved": true,
+          "entity_mapping_status": "deferred",
+          "subject_binding_status": "deferred",
+          "general_entity_governance_claimed": false
+        }
+      }
+    ],
+    "normalization_flags": {
+      "internal_contracts_preserved": true,
+      "directive_hold_boundary_preserved": true,
+      "no_entity_class_inference": true
+    },
+    "governance_flags": {
+      "boundary_ambiguity_preserved": true,
+      "transport_subject_status": "deferred",
+      "general_entity_governance_claimed": false,
+      "runtime_request_ready": false
+    }
+  },
+  "governance_handoff": {
+    "handoff_version": "wave4b-blockd-governance-handoff-v1",
+    "handoff_mode": "local_frozen_proof",
+    "capture_artifact_id": "capture-artifact:fortworth-dev:permit-utility-2026-0847:285a1a2559f5",
+    "meeting_metadata": {
+      "org_id": "fortworth-dev",
+      "meeting_id": "permit-utility-2026-0847",
+      "capture_source": "fixture",
+      "title": "Utility Permit Review 2026-0847"
+    },
+    "transcript_hash": "285a1a2559f5137d21462693e7d12b1ad71ac8a2e173876f552b200902c46a63",
+    "selected_item_count": 1,
+    "selected_items": [
+      {
+        "capture_item_id": "hold:S1:1",
+        "normalized_summary": "Permit utility 2026-0847 remains blocked pending TPW ROW and Development Services approvals plus the utility conflict assessment.",
+        "normalized_owner": "Staff",
+        "normalized_item_type": "hold",
+        "source_quote": "TPW ROW and Development Services approvals are still missing, and the utility conflict assessment is not complete.",
+        "lineage": {
+          "segment_id": "S1",
+          "timestamp_start": null,
+          "timestamp_end": null,
+          "transcript_hash": "285a1a2559f5137d21462693e7d12b1ad71ac8a2e173876f552b200902c46a63",
+          "stage_name": "extract_capture_artifacts"
+        },
+        "confidence_backbone": {
+          "model_confidence": 0.86,
+          "agreement_ratio": 1.0,
+          "final_confidence": 0.93
+        },
+        "normalization_flags": {
+          "summary_source_field": "hold_summary",
+          "owner_source_field": "owner_to_clarify",
+          "item_type_source_field": "hold_type",
+          "normalized_item_type": "hold"
+        },
+        "boundary_flags": {
+          "boundary_ambiguity_preserved": true,
+          "entity_mapping_status": "deferred",
+          "subject_binding_status": "local_frozen_only",
+          "runtime_owned_fields": [
+            "entity_ref",
+            "raw_subject",
+            "authority_context",
+            "evidence_context",
+            "confidence_context",
+            "candidate_signal_patch"
+          ],
+          "general_entity_governance_claimed": false
+        }
+      }
+    ],
+    "runtime_boundary": {
+      "target_runtime": "wave4a_command_request",
+      "proof_mode": "local_frozen_only",
+      "transport_subject_status": "deferred",
+      "runtime_owned_fields": [
+        "entity_ref",
+        "raw_subject",
+        "authority_context",
+        "evidence_context",
+        "confidence_context",
+        "candidate_signal_patch"
+      ],
+      "general_entity_governance_claimed": false
+    },
+    "notes": [
+      "runtime-owned fields remain deferred to the existing JS lane"
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Tuple
+from typing import Any, Optional, Sequence, Tuple
 
 from .extraction import ENSEMBLE_RUN_PATTERN, run_ensemble_extraction
 from .fallback import scan_segments_for_fallback
@@ -17,6 +17,7 @@ from .merge import merge_directives, merge_holds
 from .models import Directive, Hold, MeetingMetadata, Segment
 from .segmentation import segment_transcript_text
 from .transcript_cache import normalize_transcript, transcript_hash
+from .translation import translate_internal_capture_to_handoff
 
 PIPELINE_PHASE_ORDER = (
     "normalize_transcript",
@@ -30,7 +31,7 @@ PIPELINE_PHASE_ORDER = (
     "translate_boundary_handoff",
 )
 
-DEFERRED_PHASES = ("translate_boundary_handoff",)
+DEFERRED_PHASES: Tuple[str, ...] = ()
 
 
 class DeferredPipelineStageError(NotImplementedError):
@@ -85,6 +86,15 @@ class CapturedPipelineContext(SegmentedPipelineContext):
     notes: Tuple[str, ...] = ()
 
 
+@dataclass(frozen=True)
+class PipelineHandoffContext:
+    """Captured pipeline state plus the Block D local/frozen seam outputs."""
+
+    captured: CapturedPipelineContext
+    capture_artifact: dict[str, Any]
+    governance_handoff: dict[str, Any]
+
+
 PIPELINE_STAGES: Tuple[PipelineStage, ...] = (
     PipelineStage(
         name="normalize_transcript",
@@ -128,14 +138,17 @@ PIPELINE_STAGES: Tuple[PipelineStage, ...] = (
     ),
     PipelineStage(
         name="translate_boundary_handoff",
-        shipped=False,
-        description="Deferred to later blocks.",
+        shipped=True,
+        description=(
+            "Build a durable capture artifact and a reduced local/frozen governance "
+            "handoff without transport, subject, or runtime-source widening."
+        ),
     ),
 )
 
 
 class MeridianPipeline:
-    """Structural pipeline scaffold with shipped Block C capture behavior."""
+    """Structural pipeline scaffold with shipped Block D seam behavior."""
 
     def describe_phases(self) -> Tuple[PipelineStage, ...]:
         return PIPELINE_STAGES
@@ -222,16 +235,72 @@ class MeridianPipeline:
             notes=notes,
         )
 
-    def run(self, meeting: MeetingMetadata, transcript_text: str) -> PreparedPipelineContext:
-        """
-        Prepare and segment transcript state, then stop before boundary handoff.
+    def translate_capture(
+        self,
+        captured_context: CapturedPipelineContext,
+        *,
+        selected_item_ids: Optional[Sequence[str]] = None,
+        notes: Optional[Sequence[str]] = None,
+    ) -> PipelineHandoffContext:
+        """Build the Block D seam outputs from an existing capture context."""
 
-        Block C ships capture behavior through capture_text(), but this method still
-        blocks end-to-end handoff claims until later work lands.
+        translation = translate_internal_capture_to_handoff(
+            captured_context,
+            selected_item_ids=selected_item_ids,
+            notes=notes,
+        )
+        return PipelineHandoffContext(
+            captured=captured_context,
+            capture_artifact=translation["capture_artifact"],
+            governance_handoff=translation["governance_handoff"],
+        )
+
+    def capture_to_handoff(
+        self,
+        meeting: MeetingMetadata,
+        transcript_text: str,
+        *,
+        client=None,
+        env=None,
+        selected_item_ids: Optional[Sequence[str]] = None,
+        notes: Optional[Sequence[str]] = None,
+    ) -> PipelineHandoffContext:
+        """Capture transcript items and build the local/frozen handoff seam."""
+
+        captured = self.capture_text(
+            meeting=meeting,
+            transcript_text=transcript_text,
+            client=client,
+            env=env,
+        )
+        return self.translate_capture(
+            captured,
+            selected_item_ids=selected_item_ids,
+            notes=notes,
+        )
+
+    def run(
+        self,
+        meeting: MeetingMetadata,
+        transcript_text: str,
+        *,
+        client=None,
+        env=None,
+        selected_item_ids: Optional[Sequence[str]] = None,
+        notes: Optional[Sequence[str]] = None,
+    ) -> PipelineHandoffContext:
+        """
+        Prepare, capture, and translate into the Block D seam outputs.
+
+        This top-level surface stops at the local/frozen governance handoff. It does
+        not claim runtime evaluation, transport publication, or grounded subject truth.
         """
 
-        self.segment_text(meeting=meeting, transcript_text=transcript_text)
-        raise DeferredPipelineStageError(
-            "Wave 4B Block C ships civic extraction, merge, and bounded fallback through "
-            "capture_text(); translate_boundary_handoff remains deferred to later blocks."
+        return self.capture_to_handoff(
+            meeting=meeting,
+            transcript_text=transcript_text,
+            client=client,
+            env=env,
+            selected_item_ids=selected_item_ids,
+            notes=notes,
         )
