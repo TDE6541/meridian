@@ -1,0 +1,135 @@
+{
+  "meeting_id": "tif3_2025-10-16",
+  "annotation_schema_version": "wave_4_5_locked_v1",
+  "schema_fields": [
+    "capture_class",
+    "semantic_subtype",
+    "source_quote",
+    "source_location",
+    "ambiguity_expected",
+    "explicit_actor_signal",
+    "notes"
+  ],
+  "annotator": "tim_deavenport_human_in_the_loop",
+  "annotation_date": "2026-04-16",
+  "holdout_designation": true,
+  "holdout_note": "DO NOT USE FOR TUNING. This meeting is the locked holdout per Wave 4.5 Pro envelope. Without a protected holdout, calibration becomes memorization. Any tuning run that touches this meeting's data invalidates the calibration methodology.",
+  "gold_items": [
+    {
+      "id": "tif3_2025-10-16_G001",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "APPROVAL OF AUGUST 6, 2025 MEETING MINUTES",
+      "source_location": "Section II",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "board",
+      "notes": "Standard procedural directive. Tests baseline extraction on a simple approval action in a non-routine body context."
+    },
+    {
+      "id": "tif3_2025-10-16_G002",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Discussion and consideration of a resolution approving the Fiscal Year 2026 Budget for TIF 3 (Downtown)",
+      "source_location": "Section IV.a",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "board_with_named_administrator",
+      "notes": "High-stakes directive with ambiguity. 'Discussion and consideration' is a compound action — the board may discuss AND vote, OR discuss without voting. Extractor must not collapse this into a simple approval. Actor is board, with Andy Taft (TIF Administrator) as named presenter."
+    },
+    {
+      "id": "tif3_2025-10-16_G003",
+      "capture_class": "hold",
+      "semantic_subtype": null,
+      "source_quote": "Seek the advice of its attorneys concerning legal issues related to any current agenda items or on any manner in which the duty of the attorney to the governmental body under the Texas Disciplinary Rules of Professional Conduct of the State Bar of Texas clearly conflicts with Chapter 551, Open Meetings of the Texas Government Code",
+      "source_location": "Section VI.a",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "board",
+      "notes": "Closed session lane — attorney advice. Extractor must recognize this as a governance-posture HOLD not a directive. The board is reserving the right to deliberate privately. Statute citation (Texas Gov't Code Chapter 551) is structural context, not a separate directive. Tests: does the extractor distinguish closed-session-posture from open-session-directive?"
+    },
+    {
+      "id": "tif3_2025-10-16_G004",
+      "capture_class": "hold",
+      "semantic_subtype": null,
+      "source_quote": "Discuss the purchase, sale, lease, or value of real property, as authorized by Section 551.072 of the Texas Government Code, deliberation of which in an open meeting would have a detrimental effect on the position of the Board of Directors in negotiations with a third party",
+      "source_location": "Section VI.b",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "board",
+      "notes": "Closed session lane — real estate. Same structural pattern as G003 but different statute and different deliberation category. Extractor must recognize this as parallel HOLD, not a different kind of item. Tests extraction consistency across closed-session subsections."
+    },
+    {
+      "id": "tif3_2025-10-16_G005",
+      "capture_class": "hold",
+      "semantic_subtype": null,
+      "source_quote": "Discuss or deliberate negotiations relating to any economic development negotiations, as authorized by Section 551.087 of the Texas Government Code",
+      "source_location": "Section VI.c",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "board",
+      "notes": "Third closed-session subsection — economic development. Completes a three-part structural pattern (VI.a attorney / VI.b real property / VI.c economic development). Tests: does the extractor preserve all three, or collapse them into one closed-session hold? Each is a distinct statutory authority."
+    },
+    {
+      "id": "tif3_2025-10-16_G006",
+      "capture_class": "hold",
+      "semantic_subtype": null,
+      "source_quote": "Tax Increment Reinvestment Zone 3 does not establish a tax rate for the City or have the authority to do so",
+      "source_location": "H.B. 1522 Taxpayer Impact Statement preamble",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "implicit_jurisdictional",
+      "notes": "Critical governance signal. The TIF board explicitly disclaims tax-setting authority — this is the body declaring the BOUNDARY of its own power. An extractor that treats the budget discussion as a tax decision would be factually wrong. This HOLD establishes that no tax rate directive exists in this meeting."
+    },
+    {
+      "id": "tif3_2025-10-16_G007",
+      "capture_class": "directive",
+      "semantic_subtype": "action_request",
+      "source_quote": "TIF 3 Development Pipeline (Downtown)",
+      "source_location": "Section V.a",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "named_administrator",
+      "notes": "Briefing directive — information transfer to board, no vote required. Andy Taft as presenter. Tests extraction of 'directive-to-brief' vs 'directive-to-decide' distinction."
+    },
+    {
+      "id": "tif3_2025-10-16_G008",
+      "capture_class": "directive",
+      "semantic_subtype": "action_request",
+      "source_quote": "PUBLIC COMMENT (3-minute limit per presentation)",
+      "source_location": "Section III",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "implicit_public",
+      "notes": "Directive to schedule public input with numeric constraint (3-minute limit). Tests numeric preservation and implicit actor handling."
+    }
+  ],
+  "negative_controls": [
+    {
+      "description": "Tax rate comparison table values are factual context, not directives",
+      "source_quote_sample": "2024 Rate as Adopted: $0.672500"
+    },
+    {
+      "description": "TIF 3 projections are forecasting data, not commitments",
+      "source_quote_sample": "YOY Growth: -0.5% | 10.7% | -3.2% | 1.2%"
+    },
+    {
+      "description": "Board member roster is metadata, not directives",
+      "source_quote_sample": "Elizabeth Beck, Chair"
+    },
+    {
+      "description": "Revenue distribution percentages describe existing TIF structure, not new decisions",
+      "source_quote_sample": "City of Fort Worth: 50%"
+    }
+  ],
+  "structural_notes": {
+    "directive_count": 4,
+    "hold_count": 4,
+    "total_gold_items": 8,
+    "negative_controls": 4,
+    "deliberation_density": "high_financial_plus_closed_session_posture",
+    "meeting_stage": "pre_deliberation_agenda_with_embedded_compliance_exhibit",
+    "confidence_tier_in_gold": "NONE_BY_DESIGN",
+    "authority_chain_in_gold": "NONE_BY_DESIGN",
+    "structural_stress_tests": [
+      "three-part closed-session posture with distinct statute citations",
+      "jurisdictional boundary self-disclosure (tax authority disclaimer)",
+      "directive-to-decide vs directive-to-brief distinction",
+      "compound action verbs ('Discussion and consideration')",
+      "embedded compliance exhibit inside agenda body"
+    ],
+    "note": "This holdout tests extraction on patterns absent from the dev set: closed-session posture, statute-heavy context, jurisdictional self-boundary declarations, and embedded budget tables. If the extractor overfits on CPC-style recommendation templates or CDC-style organizational patterns, this meeting will expose that. A model that calibrates cleanly on the dev set and generalizes here is demonstrating real extraction capability, not memorization."
+  }
+}

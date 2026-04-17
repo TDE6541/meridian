@@ -1,0 +1,120 @@
+{
+  "meeting_id": "cdc_2025-08-22",
+  "annotation_schema_version": "wave_4_5_locked_v1",
+  "schema_fields": [
+    "capture_class",
+    "semantic_subtype",
+    "source_quote",
+    "source_location",
+    "ambiguity_expected",
+    "explicit_actor_signal",
+    "notes"
+  ],
+  "annotator": "tim_deavenport_human_in_the_loop",
+  "annotation_date": "2026-04-16",
+  "meeting_status": "CANCELED",
+  "extraction_posture_note": "This meeting was CANCELED. Gold annotations capture what the agenda DIRECTED would happen — not what happened. The extractor should surface directives as proposed/scheduled, not as executed. The CANCELED marker itself is an extraction target.",
+  "gold_items": [
+    {
+      "id": "cdc_2025-08-22_G001",
+      "capture_class": "hold",
+      "semantic_subtype": null,
+      "source_quote": "CANCELED",
+      "source_location": "Appears twice — immediately before Item 7 and at end of document",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "implicit",
+      "notes": "The CANCELED marker is a governance-critical signal. A correct extractor must recognize that all directives in this document were never executed on this date. The marker's position (inside the agenda body AND at end) is itself ambiguous — does it cancel the whole meeting or only items 7 onward? A governed extractor should surface this as a HOLD rather than guess."
+    },
+    {
+      "id": "cdc_2025-08-22_G002",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Approval of Minutes from the Meeting Held on June 11, 2025",
+      "source_location": "Item 3",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "chair",
+      "notes": "Procedural directive from outgoing chair to body for minutes approval. Actor explicitly named (Daniel Villegas, 2024-2025 Chair)."
+    },
+    {
+      "id": "cdc_2025-08-22_G003",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Election of 2025-2026 Officers",
+      "source_location": "Item 6",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "chair",
+      "notes": "Directive to elect new officers, specifically Chair and Vice Chair positions. Actor is outgoing chair conducting the election. This is the pivot action in an organizational meeting — governance transition."
+    },
+    {
+      "id": "cdc_2025-08-22_G004",
+      "capture_class": "hold",
+      "semantic_subtype": "obligation",
+      "source_quote": "Presentation on 2025-2026 Annual Action Plan Submitted to the United States Department of Housing and Urban Development (HUD)",
+      "source_location": "Item 5",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "staff",
+      "notes": "This item references an external federal obligation (HUD Annual Action Plan already submitted). The directive is not the submission itself (already done) but a presentation about it. Extractor must distinguish: (a) presentation directive, from (b) the underlying federal obligation — these are different capture classes at different layers. Ambiguity expected because the directive surface is thin but the obligation underneath is substantial."
+    },
+    {
+      "id": "cdc_2025-08-22_G005",
+      "capture_class": "directive",
+      "semantic_subtype": "action_request",
+      "source_quote": "Group Activity: SWOT Analysis Assessment – Public Service Agencies Request for Proposals Process",
+      "source_location": "Item 9",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "staff",
+      "notes": "Structured group activity directive. This is a non-standard agenda type — not a vote, not a presentation, but a facilitated assessment. Tests whether extractor recognizes directive-to-deliberate patterns."
+    },
+    {
+      "id": "cdc_2025-08-22_G006",
+      "capture_class": "hold",
+      "semantic_subtype": null,
+      "source_quote": "A quorum of the City Council may be attending this meeting for informational purposes. Members of the City Council who are not members of the Council will not be deliberating or voting on matters before the Council.",
+      "source_location": "Post-agenda notice block",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "implicit",
+      "notes": "Governance-critical HOLD. Signals potential City Council presence at a non-Council body meeting. Creates Texas Open Meetings Act compliance posture. Extractor should flag this as a jurisdictional boundary signal, not a directive."
+    },
+    {
+      "id": "cdc_2025-08-22_G007",
+      "capture_class": "hold",
+      "semantic_subtype": null,
+      "source_quote": "Public Comments – Chair Elect",
+      "source_location": "Item 10 (and 11, 12)",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "transitional",
+      "notes": "Items 10-12 name 'Chair Elect' as actor — a role that does not exist until Item 6 completes. Extractor must recognize temporal dependency: actor resolves only after election. Tests whether extractor handles role-emergent-during-meeting patterns without crashing or fabricating a name."
+    }
+  ],
+  "negative_controls": [
+    {
+      "description": "Seat placeholders are member names, not directives",
+      "source_quote_sample": "Jonathan Morrison, Vice Chair, Place 5"
+    },
+    {
+      "description": "Staff liaison naming is organizational metadata, not a directive",
+      "source_quote_sample": "Staff Liaison: Juliet Moses, Community Development Manager, Neighborhood Services Department"
+    },
+    {
+      "description": "Purely informational welcome items should not be extracted as directives",
+      "source_quote_sample": "Welcome – Kacey Thomas, Director, Neighborhood Services Department"
+    }
+  ],
+  "structural_notes": {
+    "directive_count": 3,
+    "hold_count": 4,
+    "total_gold_items": 7,
+    "negative_controls": 3,
+    "deliberation_density": "low_procedural_plus_governance_transitions",
+    "meeting_stage": "pre_deliberation_agenda_canceled",
+    "confidence_tier_in_gold": "NONE_BY_DESIGN",
+    "authority_chain_in_gold": "NONE_BY_DESIGN",
+    "structural_stress_tests": [
+      "meeting cancellation signal",
+      "role-emergent-during-meeting (Chair Elect)",
+      "cross-body quorum notice",
+      "external federal obligation embedded in presentation directive"
+    ],
+    "note": "This meeting stresses the extractor on non-routine structural patterns: cancellation, officer transitions, cross-body presence. It is intentionally chosen to diverge from the CPC Jan 8 routine-procedural pattern."
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "meeting_id": "cdc_2025-08-22",
+  "meeting_name": "Community Development Council Annual Organizational Meeting (Special Called, Canceled)",
+  "meeting_date": "2025-08-22",
+  "jurisdiction": "City of Fort Worth, Texas",
+  "body": "Community Development Council",
+  "body_type": "non_council_civic_body_federal_funding",
+  "diversity_axis": "non-council civic body",
+  "source_type": "single_source_verbatim",
+  "is_verbatim": true,
+  "primary_verbatim_source": true,
+  "source_url": "https://www.fortworthtexas.gov/files/assets/public/v/5/city-secretary/documents/calendar/2025-agendas/bampc/cdc/08-22-2025-canceled-community-development-council-meeting-agenda.pdf",
+  "source_document": "08-22-2025-canceled-community-development-council-meeting-agenda.pdf",
+  "source_domain": "fortworthtexas.gov",
+  "source_tier": "primary_official",
+  "document_type": "agenda_canceled",
+  "excerpt_scope": "full_agenda_body",
+  "excerpt_redactions": [
+    "ADA accessibility statement removed as non-substantive boilerplate",
+    "Public speaker registration instructions removed as non-substantive boilerplate"
+  ],
+  "excerpt_preservations": [
+    "All 12 numbered agenda items preserved verbatim",
+    "All member seat assignments with Place numbers preserved",
+    "Both CANCELED markers preserved (pre-item-7 and end-of-document)",
+    "Staff liaison and attorney assignments preserved",
+    "City Council attendance quorum notice preserved"
+  ],
+  "retrieved_date": "2026-04-16",
+  "retrieved_by": "war_room_web_fetch",
+  "annotation_schema_version": "wave_4_5_locked_v1",
+  "structural_divergence_notes": "Annual organizational meeting format differs from routine CDC agenda: includes officer elections, member introductions, SWOT group activity, and staff orientation components not present in standard CDC meetings. CANCELED status is itself an extraction signal — directives posted here were never acted on by this body on this date."
+}

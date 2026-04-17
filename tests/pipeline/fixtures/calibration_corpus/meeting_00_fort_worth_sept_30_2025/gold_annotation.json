@@ -1,0 +1,193 @@
+{
+  "meeting_id": "fw_council_2025-09-30",
+  "annotation_schema_version": "wave_4_5_locked_v1",
+  "schema_fields": [
+    "capture_class",
+    "semantic_subtype",
+    "source_quote",
+    "source_location",
+    "ambiguity_expected",
+    "explicit_actor_signal",
+    "notes"
+  ],
+  "annotator": "tim_deavenport_human_in_the_loop",
+  "annotation_date": "2026-04-16",
+  "fixture_note": "This gold annotation file is produced at Wave 4.5 against the local calibration-corpus excerpt/provenance pair in this directory. Per CR Ruling A, meeting_00 is a self-contained triple: the expanded local excerpt and provenance are the primary/verbatim source support for this gold. The frozen Wave 4B Fort Worth proof fixture under tests/pipeline/fixtures/fort_worth_proof/** remains historical proof, byte-stable, and untouched.",
+  "diversity_axis": "council (deliberation-heavy)",
+  "source_url": "https://www.fortworthtexas.gov/files/assets/public/v/2/city-secretary/documents/calendar/2025-agendas/city-council/day-meeting/09-30-2025-city-council-day-meeting-agenda.pdf",
+  "gold_items": [
+    {
+      "id": "fw_council_2025-09-30_G001",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "A Resolution of the City Council of the City of Fort Worth, Texas, Setting the Regularly Scheduled City Council Work Sessions and City Council Meetings for January 2026 through December 2026 and Making Conforming Changes to the City Council Rules of Procedure and Updates to Reflect Changes in State Law",
+      "source_location": "RESOLUTIONS Section, Item 1, identifier 25-5420",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "council",
+      "notes": "The anchor resolution of this agenda. Directive sets entire 2026 meeting calendar AND amends Rules of Procedure AND reflects state law changes — three nested directives in one resolution title. Tests whether extractor decomposes compound resolutions correctly."
+    },
+    {
+      "id": "fw_council_2025-09-30_G002",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "A Resolution Authorizing the Initiation of Rezoning for Certain Properties in the Rosemont Neighborhood in Council Districts 9 and 11 in Accordance with the Comprehensive Plan",
+      "source_location": "RESOLUTIONS Section, Item 2, identifier 25-5456",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "council",
+      "notes": "Directive authorizes only the INITIATION of rezoning, not the rezoning itself. The actual zoning change will happen in a future proceeding. Ambiguity expected because the downstream process is unbounded by this item."
+    },
+    {
+      "id": "fw_council_2025-09-30_G003",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Adopt Resolution Retaining the Law Firm of Winstead, LLC, in an Amount Up to $100,000.00, as Outside Counsel for Federal Funding Issues",
+      "source_location": "CONSENT AGENDA, A. General Consent Items, Item 1, identifier M&C 25-0916",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "council",
+      "notes": "Consent item with explicit monetary cap and specific scope (federal funding issues). Tests numeric preservation and scope-specific directive extraction on consent pattern."
+    },
+    {
+      "id": "fw_council_2025-09-30_G004",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Authorize Execution of Amendment No. 1 to the Emergency Medical Service Interlocal Agreement with the Metropolitan Area EMS Authority d/b/a MedStar Mobile Healthcare to Extend the Agreement's End Date from September 30, 2025 to December 31, 2025",
+      "source_location": "CONSENT AGENDA, A. General Consent Items, Item 2, identifier M&C 25-0917",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "council",
+      "notes": "Interlocal agreement extension with specific date boundaries (from Sept 30 2025 to Dec 31 2025). Tests date-range preservation and named-entity recognition (MedStar)."
+    },
+    {
+      "id": "fw_council_2025-09-30_G005",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Adopt Appropriation Ordinances Allocating a Total of $14,145,000.00 in Previously Assigned Fund Balance for the McCart Avenue and McPherson Boulevard, Bailey Boswell East, and Camp Bowie Boulevard at Horne Street Capital Projects",
+      "source_location": "CONSENT AGENDA, A. General Consent Items, Item 6, identifier M&C 25-0929",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "council",
+      "notes": "Large-dollar consent item with multi-project scope. Tests numeric preservation ($14,145,000.00) and multi-object directive extraction (three named capital projects)."
+    },
+    {
+      "id": "fw_council_2025-09-30_G006",
+      "capture_class": "directive",
+      "semantic_subtype": "action_request",
+      "source_quote": "Conduct Second Public Hearing for Proposed City-Initiated Full-Purpose Annexation of Approximately 4.282 Acres of Wagley Roberts Road and Right-of-Way (AX-25-003)",
+      "source_location": "PUBLIC HEARING, Item 1, identifier 25-5464",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "council",
+      "notes": "Compound directive: conduct hearing AND act on M&C. The parenthetical 'PUBLIC HEARING - a. Staff Available for Questions: Lauren Prieur b. Public Comment; c. Council Action: Close Public Hearing and Act on M&C' decomposes into three sub-directives. Tests whether extractor handles procedural structure-in-structure patterns."
+    },
+    {
+      "id": "fw_council_2025-09-30_G007",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Conduct Public Hearing and Adopt a Resolution Adopting the Vision Zero Safety Action Plan and the Vision Zero Goal to Eliminate Traffic Fatalities and Serious Injuries in the City of Fort Worth by 2050",
+      "source_location": "PUBLIC HEARING, Item 2, identifier M&C 25-0935",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "council",
+      "notes": "Long-horizon policy adoption (2050 target). Tests extraction of policy directives with distant time horizons. Named staff (Chelsea St. Louis) in procedural structure."
+    },
+    {
+      "id": "fw_council_2025-09-30_G008",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Black Mountain Power LLC, Rhett Bennett / Ridgecrest, Villa, Reznikoff, Alumbaugh, Brandt, Skelley, Dunnagan Trust & Bradley / Bob Riley, Halff Associates, 7600, 7740, 7780 Forest Hill Drive, (119.98 acres) ie: From\"AG\" Agricultural, \"MH\" Manufactured Housing, \"A-5\" One-Family Residential & \"F\" General Commercial To: Add additional property to \"PD1435\" \"PD/I\" Planned Development for \"I\" Light Industrial uses limited to a Data Center",
+      "source_location": "ZONING HEARING, Item 1, identifier ZC-25-131",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "council_per_commission_recommendation",
+      "notes": "Dense zoning directive with multi-party applicant chain, street-specific addresses, acreage (119.98), FROM/TO zoning classifications, detailed development standards (70 ft building height, primary entrance from Forest Hill Drive), and a ZC recommendation with modification (reduce total acreage by 0.92 acres, site plan required). Tests extraction on high-density structured zoning patterns."
+    },
+    {
+      "id": "fw_council_2025-09-30_G009",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Authorize Execution of a Tax Increment Financing Development Agreement with the Board of Directors of Tax Increment Reinvestment Zone Number Two, City of Fort Worth, Texas, in an Amount Up to $1,500,000.00 for Public Improvements Associated with Traffic Signals and Pedestrian Improvements at State Highway 114 and Championship Parkway within the Boundaries of the Tax Increment Reinvestment Zone Number Two (Continued from a Previous Meeting)",
+      "source_location": "REPORT OF THE CITY MANAGER, B. General, Item 1, identifier M&C 25-0866",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "council",
+      "notes": "Cross-body directive — council authorizing agreement WITH a different governing body (TIF 2 Board of Directors). '(Continued from a Previous Meeting)' marker indicates prior deliberation. Tests cross-body authority extraction and continued-item recognition."
+    },
+    {
+      "id": "fw_council_2025-09-30_G010",
+      "capture_class": "hold",
+      "semantic_subtype": null,
+      "source_quote": "Authorize Execution of a Tax Increment Financing Development Agreement with the Board of Directors of Tax Increment Reinvestment Zone Number Two, City of Fort Worth, Texas, in an Amount Up to $1,500,000.00 for Public Improvements Associated with Traffic Signals and Pedestrian Improvements at State Highway 114 and Championship Parkway within the Boundaries of the Tax Increment Reinvestment Zone Number Two and Adopt Appropriation Ordinance",
+      "source_location": "REPORT OF THE CITY MANAGER, B. General, Item 2, identifier M&C 25-0866 (REVISED)",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "council",
+      "notes": "CRITICAL HOLD. Same M&C number (25-0866) appears twice consecutively — once standard, once REVISED. The REVISED version adds 'and Adopt Appropriation Ordinance' compared to the original (G009). Extractor must NOT treat these as two independent directives; they are a prior version and a current version of the same item. Tests extractor's handling of in-agenda revisions and version markers. The distinguishing phrase between G009 and G010 is the appended 'and Adopt Appropriation Ordinance'."
+    },
+    {
+      "id": "fw_council_2025-09-30_G011",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Adopt Ordinance Authorizing Issuance of Series 2025 Taxable Combination Tax and Surplus Revenue Certificates of Obligation in an Aggregate Principal Amount Not to Exceed $6,500,000.00 for the Water Department's Lead Service Line Replacement Project",
+      "source_location": "REPORT OF THE CITY MANAGER, B. General, Item 3, identifier M&C 25-0918",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "council",
+      "notes": "Bond issuance directive with explicit cap ('Not to Exceed $6,500,000.00'). Tests ceiling-vs-floor numeric preservation and compound directive extraction (issuance + sale to TWDB + forgiveness agreement + escrow agreement + appropriation)."
+    },
+    {
+      "id": "fw_council_2025-09-30_G012",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Authorize Execution of an Economic Development Program Agreement with Alcon Research, Inc., or an Affiliate, for Up to Seven Annual Grants in a Total Combined Amount Not to Exceed $6,000,000.00 for the Expansion of Manufacturing Facilities for Vision Care and Surgical Device Products in the City of Fort Worth Subject to Certain Investment and Employment Commitments",
+      "source_location": "REPORT OF THE CITY MANAGER, F. Award of Contract, Item 1, identifier M&C 25-0927",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "council",
+      "notes": "Multi-year performance-conditional grant. 'Subject to Certain Investment and Employment Commitments' creates implicit HOLD — directive is conditional on external performance that hasn't been verified. Tests conditional-directive extraction and performance-chain awareness."
+    },
+    {
+      "id": "fw_council_2025-09-30_G013",
+      "capture_class": "hold",
+      "semantic_subtype": null,
+      "source_quote": "The City Council may convene in Executive Session in the City Council Executive Session Room in order to conduct a closed meeting to discuss any item listed on this Agenda in accordance with Chapter 551 of the Texas Government Code.",
+      "source_location": "Near end of agenda, pre-ADJOURNMENT",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "council",
+      "notes": "Closed-session posture notice. Same structural pattern as TIF 3 VI (holdout) — governance HOLD not directive. Tests consistency across meetings in recognizing closed-session posture. Parallel to TIF 3 G003-G005 but here stated as a single catch-all rather than three statute-specific subsections."
+    }
+  ],
+  "negative_controls": [
+    {
+      "description": "Invocation and pledges — ceremonial, not directives",
+      "source_quote_sample": "INVOCATION - Pastor Robert Sample, Holy Tabernacle Church of God in Christ"
+    },
+    {
+      "description": "Recognition items are honorary, not actionable directives",
+      "source_quote_sample": "Recognition in Honor of World Homeless Day"
+    },
+    {
+      "description": "Speaker/Comment Card labels are procedural metadata",
+      "source_quote_sample": "Speaker/Comment Card"
+    },
+    {
+      "description": "Items to be withdrawn is a structural header with no content",
+      "source_quote_sample": "ITEMS TO BE WITHDRAWN FROM THE CONSENT AGENDA"
+    },
+    {
+      "description": "ADA boilerplate is not substantive content",
+      "source_quote_sample": "Fort Worth City Hall and the City Council Chamber are wheelchair accessible."
+    }
+  ],
+  "structural_notes": {
+    "directive_count": 11,
+    "hold_count": 2,
+    "total_gold_items": 13,
+    "negative_controls": 5,
+    "deliberation_density": "high_council_full_spectrum",
+    "meeting_stage": "pre_deliberation_agenda_council_full",
+    "confidence_tier_in_gold": "NONE_BY_DESIGN",
+    "authority_chain_in_gold": "NONE_BY_DESIGN",
+    "structural_stress_tests": [
+      "compound resolution with nested directives (G001)",
+      "in-agenda item revision pattern (G010 pairs with G009)",
+      "cross-body authority delegation (TIF 2 agreement)",
+      "bond-ceiling vs bond-floor numeric extraction",
+      "performance-conditional grants (Alcon)",
+      "dense zoning entity chains with FROM/TO classifications",
+      "initiation-only vs completion directives (rezoning G002)"
+    ],
+    "scope_note": "This gold annotation covers the primary decision surfaces of the Sept 30 agenda: the anchor Resolution 25-5420, consent-agenda samples demonstrating the core pattern, public hearings, zoning, TIF cross-body work, bond issuance, and economic development. It intentionally does NOT attempt exhaustive annotation of all 70+ numbered items — the gold captures are structural coverage, not completionist enumeration. The negative controls constrain over-extraction.",
+    "note": "Per Pro correction: confidence_tier and authority_chain are NOT primary fields in gold. Downstream layer concerns."
+  }
+}

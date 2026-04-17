@@ -1,0 +1,149 @@
+{
+  "corpus_name": "Wave 4.5 Calibration Corpus",
+  "corpus_version": "v2_post_cr_ruling_a",
+  "assembled_date": "2026-04-16",
+  "revised_date": "2026-04-16",
+  "assembled_by": "war_room_plus_tim_human_in_the_loop",
+  "revision_authority": "CR Ruling A + CR Ruling B, April 16 2026",
+  "revision_notes": "v2 applies CR Ruling A (meeting_00 may carry expanded fortworthtexas.gov primary/verbatim excerpt inside calibration_corpus/, with matching provenance, as long as every score-bearing annotation is directly supported). Wave 4B proof fixture at fort_worth_proof/** remains byte-stable and untouched. CR Ruling B reframed cleanliness as fence-based not whole-worktree-purity-based. Full corpus re-verified: 39/39 gold source_quote strings verbatim against excerpts, zero forbidden field violations, all capture_class values valid.",
+  "annotation_schema_version": "wave_4_5_locked_v1",
+  "schema_fields": [
+    "capture_class",
+    "semantic_subtype",
+    "source_quote",
+    "source_location",
+    "ambiguity_expected",
+    "explicit_actor_signal",
+    "notes"
+  ],
+  "schema_exclusions": [
+    "expected_confidence_tier — excluded per Pro correction, downstream concern",
+    "authority_chain as primary field — excluded per Pro correction, downstream concern"
+  ],
+  "corpus_size": {
+    "required_meetings": 4,
+    "optional_meetings": 0,
+    "total_shipped": 4,
+    "dev_set": 3,
+    "holdout": 1
+  },
+  "diversity_coverage": {
+    "council_deliberation": "meeting_00_fort_worth_sept_30_2025",
+    "commission_planning_zoning": "meeting_01_cpc_jan_8_2026",
+    "non_council_civic_body": "meeting_02_cdc_aug_22_2025",
+    "deliberation_heavy_transcript_like": "meeting_03_tif3_oct_16_2025 [HOLDOUT]"
+  },
+  "meetings": [
+    {
+      "slot": "dev_set",
+      "meeting_id": "fw_council_2025-09-30",
+      "directory": "meeting_00_fort_worth_sept_30_2025",
+      "axis": "council (deliberation-heavy)",
+      "existing_fixture": false,
+      "new_artifacts_this_session": [
+        "excerpt.txt (CR Ruling A: expanded calibration-corpus excerpt, broader than Wave 4B proof fixture)",
+        "provenance.json (CR Ruling A: matching provenance for expanded excerpt, primary/verbatim from fortworthtexas.gov)",
+        "gold_annotation.json (13 gold items, all source_quote verified verbatim in local excerpt)"
+      ],
+      "is_verbatim": true,
+      "primary_verbatim_source": true,
+      "gold_item_count": 13,
+      "negative_control_count": 5,
+      "wave_4b_fixture_relationship": {
+        "wave_4b_proof_fixture_path": "tests/pipeline/fixtures/fort_worth_proof/fort_worth_official_agenda_excerpt.txt",
+        "wave_4b_proof_fixture_status": "FROZEN AND UNTOUCHED. Byte-stable. Not referenced as source support for Wave 4.5 gold.",
+        "wave_4b_scope": "7 items corridor-scenario demo selection",
+        "wave_4_5_scope": "13 gold-annotated items plus executive session posture, full-spectrum council calibration coverage",
+        "ruling": "CR Ruling A, April 16 2026: Wave 4.5 calibration_corpus/meeting_00 carries its own expanded excerpt and provenance. Both excerpts are primary/verbatim from the same official Sept 30 agenda PDF. Neither overrides the other."
+      }
+    },
+    {
+      "slot": "dev_set",
+      "meeting_id": "cpc_2026-01-08",
+      "directory": "meeting_01_cpc_jan_8_2026",
+      "axis": "commission/planning/zoning",
+      "existing_fixture": false,
+      "new_artifacts_this_session": [
+        "excerpt.txt",
+        "provenance.json",
+        "gold_annotation.json"
+      ],
+      "is_verbatim": true,
+      "primary_verbatim_source": true,
+      "gold_item_count": 11,
+      "negative_control_count": 3
+    },
+    {
+      "slot": "dev_set",
+      "meeting_id": "cdc_2025-08-22",
+      "directory": "meeting_02_cdc_aug_22_2025",
+      "axis": "non-council civic body (federal funding)",
+      "existing_fixture": false,
+      "new_artifacts_this_session": [
+        "excerpt.txt",
+        "provenance.json",
+        "gold_annotation.json"
+      ],
+      "is_verbatim": true,
+      "primary_verbatim_source": true,
+      "gold_item_count": 7,
+      "negative_control_count": 3,
+      "status_note": "Meeting was CANCELED. Annotations capture directives AS POSTED by the agenda, plus the cancellation marker as a governance signal. This meeting stresses the extractor on non-routine patterns."
+    },
+    {
+      "slot": "holdout",
+      "meeting_id": "tif3_2025-10-16",
+      "directory": "meeting_03_tif3_oct_16_2025",
+      "axis": "financing board with closed executive session",
+      "existing_fixture": false,
+      "new_artifacts_this_session": [
+        "excerpt.txt",
+        "provenance.json",
+        "gold_annotation.json"
+      ],
+      "is_verbatim": true,
+      "primary_verbatim_source": true,
+      "gold_item_count": 8,
+      "negative_control_count": 4,
+      "holdout_rationale": "Structurally diverse from dev set. Only meeting with three-part closed executive session posture, statutory citations as structural elements, embedded H.B. 1522 compliance exhibit, and jurisdictional self-boundary declarations (tax authority disclaimer)."
+    }
+  ],
+  "totals": {
+    "total_gold_items": 39,
+    "total_negative_controls": 15,
+    "total_directives": 27,
+    "total_holds": 12
+  },
+  "source_purity_posture": {
+    "primary_verbatim_only": true,
+    "all_sources_fortworthtexas_gov_domain": true,
+    "no_ai_reconstructions": true,
+    "no_journalist_paraphrases": true,
+    "no_staff_writeups_as_gold": true,
+    "motion_video_fixture_excluded_from_gold": "Wave 4B motion video excerpt (secondary reconstructed, is_verbatim: false) exists in repo under fort_worth_proof/ and is SUPPLEMENTAL CONTEXT ONLY per CR ruling. It is NOT gold-annotated and NOT part of the scoring corpus."
+  },
+  "provenance_chain": {
+    "all_excerpts_traceable_to": "fortworthtexas.gov official PDFs",
+    "retrieval_method": "web_fetch tool, war room session April 16 2026",
+    "no_granicus_dependencies": true,
+    "note": "Granicus is robots-blocked. All fetches resolved via fortworthtexas.gov direct domain."
+  },
+  "next_action_for_CR": "CR Block A sourcing HOLD fully closed under CR Rulings A and B. Meeting_00 now has its own expanded excerpt and provenance triple (CR Ruling A). Fence-based cleanliness per CR Ruling B: out-of-fence sibling tests/pipeline/fixtures/corpus_manifest.json remains untouched and is not a ship blocker. All 39 gold items verified verbatim. Block A structural execution may resume.",
+  "cr_ruling_a_compliance": {
+    "meeting_00_self_contained_triple": true,
+    "wave_4b_proof_fixture_byte_stable": true,
+    "every_gold_item_supported_by_local_excerpt": "VERIFIED 39/39",
+    "expanded_provenance_cites_official_source": true
+  },
+  "cr_ruling_b_compliance": {
+    "fence_based_cleanliness": true,
+    "fence": "tests/pipeline/fixtures/calibration_corpus/**",
+    "out_of_fence_dirt_acknowledged": "Pre-existing untracked tests/pipeline/fixtures/corpus_manifest.json sits outside the fence. Wave 4.5 does not touch it. Not a ship blocker per CR Ruling B."
+  },
+  "frozen_contract_notes": {
+    "directory_structure_intended_for_repo": "tests/pipeline/fixtures/calibration_corpus/{meeting_slot}/{excerpt.txt, provenance.json, gold_annotation.json}",
+    "manifest_file": "tests/pipeline/fixtures/calibration_corpus/corpus_manifest.json",
+    "additive_only": true,
+    "does_not_modify_wave_4b_fixtures": "The existing fort_worth_proof/ fixture path is preserved byte-stable. This corpus lives under a NEW sibling path (calibration_corpus/). No Wave 4B contract widening."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "meeting_id": "cpc_2026-01-08",
+  "meeting_name": "City Plan Commission Meeting",
+  "meeting_date": "2026-01-08",
+  "jurisdiction": "City of Fort Worth, Texas",
+  "body": "City Plan Commission",
+  "body_type": "commission",
+  "diversity_axis": "commission/planning/zoning",
+  "source_type": "single_source_verbatim",
+  "is_verbatim": true,
+  "primary_verbatim_source": true,
+  "source_url": "https://www.fortworthtexas.gov/files/assets/public/v/2/city-secretary/documents/calendar/2026-agendas/bampc/cpc/01-08-2026-plan-commission-agenda.pdf",
+  "source_document": "01-08-2026-plan-commission-agenda.pdf",
+  "source_domain": "fortworthtexas.gov",
+  "source_tier": "primary_official",
+  "document_type": "agenda",
+  "excerpt_scope": "full_agenda_body",
+  "excerpt_redactions": [
+    "ADA accessibility statement (English + Spanish) removed as non-substantive boilerplate",
+    "Executive Session boilerplate removed as non-substantive boilerplate"
+  ],
+  "excerpt_preservations": [
+    "All 6 new case items preserved verbatim including recommendations",
+    "All commissioner seat assignments preserved",
+    "All procedural section headers preserved (I.A through I.E)"
+  ],
+  "retrieved_date": "2026-04-16",
+  "retrieved_by": "war_room_web_fetch",
+  "annotation_schema_version": "wave_4_5_locked_v1"
+}

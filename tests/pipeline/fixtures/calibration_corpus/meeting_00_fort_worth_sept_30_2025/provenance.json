@@ -1,0 +1,113 @@
+{
+  "artifact_type": "calibration_corpus_excerpt_expanded",
+  "source_purity": "single_source_verbatim",
+  "meeting_title": "Fort Worth City Council Day Meeting",
+  "governing_body": "Fort Worth City Council",
+  "meeting_date": "2025-09-30",
+  "meeting_time": "10:00 AM CDT",
+  "location": "Fort Worth City Council Chamber, 100 Fort Worth Trail, Fort Worth, Texas",
+  "primary_source": {
+    "type": "official_agenda_pdf",
+    "url": "https://www.fortworthtexas.gov/files/assets/public/v/2/city-secretary/documents/calendar/2025-agendas/city-council/day-meeting/09-30-2025-city-council-day-meeting-agenda.pdf",
+    "domain": "fortworthtexas.gov",
+    "document_title": "CITY COUNCIL AGENDA FOR THE MEETING AT 10:00 AM, TUESDAY, SEPTEMBER 30, 2025",
+    "total_pages": 15,
+    "accessed": "2026-04-16"
+  },
+  "is_verbatim": true,
+  "primary_verbatim_source": true,
+  "verbatim_notes": "Every agenda item title, M&C number, resolution number, Council District reference, dollar amount, zoning case number, and procedural bracket heading in this excerpt is quoted verbatim from the official Fort Worth agenda PDF. No content is paraphrased, summarized, or reconstructed from secondary sources.",
+  "scope_relationship_to_wave_4b_proof_fixture": {
+    "wave_4b_proof_fixture_location": "tests/pipeline/fixtures/fort_worth_proof/fort_worth_official_agenda_excerpt.txt",
+    "wave_4b_proof_fixture_status": "FROZEN AND UNTOUCHED. Byte-stable. Not modified by Wave 4.5.",
+    "wave_4b_proof_fixture_scope": "Narrow corridor-scenario selection: 7 items (M&C 25-0933 Atmos, M&C 25-0941 Sewer, Res 25-5420 Calendar, ZC-25-131 Data Center, M&C 25-0866 pair, M&C 25-0918 Water)",
+    "wave_4_5_calibration_scope": "Broader calibration-appropriate selection: 11 items supporting 13 gold annotations plus executive session posture",
+    "relationship": "Both excerpts are primary/verbatim from the same official Sept 30 agenda PDF. The Wave 4B fixture is a narrow demo-proof selection; the Wave 4.5 calibration excerpt is a broader calibration-support selection. Neither overrides the other. Both are single-source-verbatim. Wave 4B fixture remains byte-stable and authoritative for Wave 4B proof tests.",
+    "ruling_authority": "CR Ruling A, April 16 2026: 'meeting_00_fort_worth_sept_30_2025 may carry its own expanded official fortworthtexas.gov primary/verbatim excerpt support inside calibration_corpus/, with matching provenance, as long as every score-bearing annotation is directly supported by that local official source pack.'"
+  },
+  "excerpt_source_locations": [
+    {
+      "item_reference": "M&C 25-0916 (Winstead Outside Counsel for Federal Funding)",
+      "source_page": "Page 1",
+      "source_section": "Consent Agenda, Section A: General Consent Items, Item 1"
+    },
+    {
+      "item_reference": "M&C 25-0917 (MedStar Emergency Medical Service Interlocal Amendment No. 1)",
+      "source_page": "Page 1",
+      "source_section": "Consent Agenda, Section A: General Consent Items, Item 2"
+    },
+    {
+      "item_reference": "M&C 25-0929 (Capital Projects Appropriation $14,145,000.00)",
+      "source_page": "Page 2",
+      "source_section": "Consent Agenda, Section A: General Consent Items, Item 6"
+    },
+    {
+      "item_reference": "Resolution 25-5420 (2026 Meeting Calendar and Rules of Procedure)",
+      "source_page": "Page 9",
+      "source_section": "Resolutions, Item 1"
+    },
+    {
+      "item_reference": "Resolution 25-5456 (Rosemont Rezoning Initiation)",
+      "source_page": "Page 9",
+      "source_section": "Resolutions, Item 2"
+    },
+    {
+      "item_reference": "25-5464 (Wagley Roberts Road Annexation Public Hearing)",
+      "source_page": "Page 10",
+      "source_section": "Public Hearing, Item 1"
+    },
+    {
+      "item_reference": "M&C 25-0935 (Vision Zero Safety Action Plan)",
+      "source_page": "Page 10",
+      "source_section": "Public Hearing, Item 2"
+    },
+    {
+      "item_reference": "ZC-25-131 (Black Mountain Power Data Center)",
+      "source_page": "Page 10",
+      "source_section": "Zoning Hearing, Item 1"
+    },
+    {
+      "item_reference": "M&C 25-0866 (TIF Development Agreement - Continued)",
+      "source_page": "Page 12",
+      "source_section": "Report of the City Manager, Section B: General, Item 1"
+    },
+    {
+      "item_reference": "M&C 25-0866 (REVISED) (TIF Development Agreement - Revised with Appropriation)",
+      "source_page": "Page 12",
+      "source_section": "Report of the City Manager, Section B: General, Item 2"
+    },
+    {
+      "item_reference": "M&C 25-0918 (Water Dept Lead Service Line Replacement Certificates)",
+      "source_page": "Page 13",
+      "source_section": "Report of the City Manager, Section B: General, Item 3"
+    },
+    {
+      "item_reference": "M&C 25-0927 (Alcon Economic Development Program Agreement)",
+      "source_page": "Page 14",
+      "source_section": "Report of the City Manager, Section F: Award of Contract, Item 1"
+    },
+    {
+      "item_reference": "Executive Session Posture Notice",
+      "source_page": "Page 14",
+      "source_section": "Pre-Adjournment Notice"
+    }
+  ],
+  "trimmed_content": "Procedural headers (Call to Order, Invocation, Pledges of Allegiance), Special Presentations (Recognition for World Homeless Day, Recognition for Donald Boren), consent agenda items not selected for gold annotation, Board appointment procedural items, Presentations by the City Secretary (Notice of Claims), ADA accessibility statement, and speaker rules of procedure boilerplate were omitted. Selected agenda items are preserved in their original order of appearance on the official agenda, with their full item text, identifiers, and procedural brackets intact.",
+  "calibration_corpus_notes": {
+    "primary_verbatim_source": true,
+    "diversity_axis": "council (deliberation-heavy, full-spectrum)",
+    "gold_items_supported": 13,
+    "negative_controls_supported": 5,
+    "structural_coverage": "Consent (3 items), Resolutions (2), Public Hearings (2), Zoning (1), Report of City Manager (4), Executive Session Posture (1)",
+    "stress_test_patterns_preserved": [
+      "compound resolution with nested directives (Res 25-5420)",
+      "in-agenda item revision pattern (M&C 25-0866 and 25-0866 REVISED consecutively)",
+      "cross-body authority delegation (TIF 2 agreement)",
+      "bond ceiling numeric extraction ($6,500,000.00 Not to Exceed)",
+      "performance-conditional grants (Alcon)",
+      "dense zoning entity chains with FROM/TO classifications (ZC-25-131)",
+      "public hearing compound directive pattern (conduct AND act on M&C)",
+      "initiation-only vs completion directives (Rosemont rezoning)"
+    ]
+  }
+}

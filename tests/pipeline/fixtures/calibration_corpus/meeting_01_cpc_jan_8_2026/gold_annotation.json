@@ -1,0 +1,152 @@
+{
+  "meeting_id": "cpc_2026-01-08",
+  "annotation_schema_version": "wave_4_5_locked_v1",
+  "schema_fields": [
+    "capture_class",
+    "semantic_subtype",
+    "source_quote",
+    "source_location",
+    "ambiguity_expected",
+    "explicit_actor_signal",
+    "notes"
+  ],
+  "annotator": "tim_deavenport_human_in_the_loop",
+  "annotation_date": "2026-04-16",
+  "gold_items": [
+    {
+      "id": "cpc_2026-01-08_G001",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "APPROVAL December 17, 2025 MEETING MINUTES",
+      "source_location": "Section I.D",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "commission",
+      "notes": "Procedural directive for commission to approve prior meeting minutes. Actor is the commission as a body acting on its own record."
+    },
+    {
+      "id": "cpc_2026-01-08_G002",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Approval of a waiver to Section 31-102(b)(2) of the Subdivision Ordinance to not require the extension of Denton Marl Drive through the plat",
+      "source_location": "Case FS-25-136, Recommendation clause 1",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "staff",
+      "notes": "Staff-recommended waiver directive. Action is specific (waive Section 31-102(b)(2) for Denton Marl Drive extension)."
+    },
+    {
+      "id": "cpc_2026-01-08_G003",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Conditional approval of the final plat upon meeting the platting comments in the staff report",
+      "source_location": "Case FS-25-136, Recommendation clause 2",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "staff",
+      "notes": "Conditional directive. Ambiguity expected because 'platting comments in the staff report' is a pointer to an external document whose contents are not in the excerpt. The directive itself is explicit; its conditions are opaque within this source."
+    },
+    {
+      "id": "cpc_2026-01-08_G004",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Conditional approval of the plat vacation upon meeting the comments in the staff report",
+      "source_location": "Case PA-25-003, Recommendation",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "staff",
+      "notes": "Same conditional pattern as G003. Action explicit, conditions reference external staff report."
+    },
+    {
+      "id": "cpc_2026-01-08_G005",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Conditional approval of the plat vacation upon meeting the comments in the staff report",
+      "source_location": "Case PA-25-004, Recommendation",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "staff",
+      "notes": "Identical template to G004, different case. Tests whether extractor distinguishes same-phrasing-different-case or deduplicates incorrectly."
+    },
+    {
+      "id": "cpc_2026-01-08_G006",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Approval of a recommendation to City Council for the vacation of portions of 10th Avenue, Pruitt Street, and West Cannon Street, and an alley in Block 7, Edward Heirs Addition",
+      "source_location": "Case VA-25-026, Recommendation",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "staff",
+      "notes": "Directive to recommend vacation to City Council. Action specific (named streets + alley + block). Actor explicit (staff to commission to council). Cross-body referral is structurally meaningful."
+    },
+    {
+      "id": "cpc_2026-01-08_G007",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Approval of a recommendation to City Council for the vacation of a portion of a right-of-way easement for Avondale Haslet Road",
+      "source_location": "Case VA-25-027, Recommendation",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "staff",
+      "notes": "Parallel directive to G006. Tests extraction consistency across similar directive patterns."
+    },
+    {
+      "id": "cpc_2026-01-08_G008",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Approval of waiver to Section 31-106(d)(2) of the Subdivision Ordinance to allow the block face for Lots 12-41 to exceed the maximum allowed 1,320 feet in length",
+      "source_location": "Case PP-23-001, Recommendation clause 1",
+      "ambiguity_expected": false,
+      "explicit_actor_signal": "staff",
+      "notes": "Waiver directive with numeric threshold (1,320 feet). Tests numeric preservation in extraction."
+    },
+    {
+      "id": "cpc_2026-01-08_G009",
+      "capture_class": "hold",
+      "semantic_subtype": null,
+      "source_quote": "Conditional approval of the revised preliminary plat upon approval of the requested rezoning",
+      "source_location": "Case PP-23-001, Recommendation clause 2",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "staff",
+      "notes": "This is a HOLD not a clean directive. The approval is contingent on a DIFFERENT body (rezoning authority) taking a different action. A governed extractor should surface this as an unresolved dependency, not as a simple approval directive."
+    },
+    {
+      "id": "cpc_2026-01-08_G010",
+      "capture_class": "directive",
+      "semantic_subtype": "decision_record",
+      "source_quote": "Conditional approval of the revised preliminary plat upon meeting the comments in the staff report",
+      "source_location": "Case PP-23-001, Recommendation clause 3",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "staff",
+      "notes": "Same template as G003-G005. In this case it is the third clause of a three-part recommendation, testing multi-clause directive decomposition."
+    },
+    {
+      "id": "cpc_2026-01-08_G011",
+      "capture_class": "hold",
+      "semantic_subtype": null,
+      "source_quote": "Vacant, CD 10",
+      "source_location": "Commission Members roster",
+      "ambiguity_expected": true,
+      "explicit_actor_signal": "implicit",
+      "notes": "Vacant seat in a body that must vote. Not a directive but a governance posture signal — quorum risk. Extractor correctness here tests whether absence-of-member is captured as state. Second vacancy: 'Vacant, Alternate'."
+    }
+  ],
+  "negative_controls": [
+    {
+      "description": "ADA accessibility statement — boilerplate, should NOT be extracted as directive or hold",
+      "source_quote_sample": "Persons with disabilities who plan to attend this meeting and who may need accommodations"
+    },
+    {
+      "description": "Executive Session notice — procedural boilerplate, should NOT be extracted",
+      "source_quote_sample": "A closed Executive Session may be held with respect to any posted agenda item"
+    },
+    {
+      "description": "Survey/legal descriptions — geographic context, NOT directives themselves",
+      "source_quote_sample": "Being 29.8436 acres situated in the Alexander F. Albright Survey, Abstract No. 1849"
+    }
+  ],
+  "structural_notes": {
+    "directive_count": 9,
+    "hold_count": 2,
+    "total_gold_items": 11,
+    "negative_controls": 3,
+    "deliberation_density": "low_procedural_high_structure",
+    "meeting_stage": "pre_deliberation_agenda",
+    "confidence_tier_in_gold": "NONE_BY_DESIGN",
+    "authority_chain_in_gold": "NONE_BY_DESIGN",
+    "note": "Per Pro correction: gold annotations do not carry confidence_tier or authority_chain as primary fields. Those are downstream layer concerns and would smuggle downstream semantics into calibration truth."
+  }
+}

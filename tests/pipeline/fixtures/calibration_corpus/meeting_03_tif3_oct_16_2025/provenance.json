@@ -1,0 +1,38 @@
+{
+  "meeting_id": "tif3_2025-10-16",
+  "meeting_name": "Tax Increment Reinvestment Zone Number Three Board of Directors Meeting",
+  "meeting_date": "2025-10-16",
+  "jurisdiction": "City of Fort Worth, Texas",
+  "body": "Tax Increment Reinvestment Zone Number Three (Downtown)",
+  "body_type": "financing_board_with_executive_session",
+  "diversity_axis": "deliberation-heavy financing body with closed session",
+  "source_type": "single_source_verbatim",
+  "is_verbatim": true,
+  "primary_verbatim_source": true,
+  "source_url": "https://www.fortworthtexas.gov/files/assets/public/v/3/city-secretary/documents/calendar/2025-agendas/bampc/tif/10-16-2025-tif-3-agenda.pdf",
+  "source_document": "10-16-2025-tif-3-agenda.pdf",
+  "source_domain": "fortworthtexas.gov",
+  "source_tier": "primary_official",
+  "document_type": "agenda_with_budget_exhibit",
+  "excerpt_scope": "full_agenda_body_plus_budget_impact_statement_plus_projection_table",
+  "excerpt_redactions": [
+    "ADA accessibility statement removed as non-substantive boilerplate",
+    "Remote-participation notice removed as non-substantive boilerplate",
+    "Exhibit A reference line preserved but Exhibit A diagram/map omitted (not in source text)"
+  ],
+  "excerpt_preservations": [
+    "All eight roman-numeraled agenda sections (I-VIII) preserved verbatim",
+    "Full Executive Session posture with all three Texas Government Code subsections preserved",
+    "H.B. 1522 Taxpayer Impact Statement preamble preserved",
+    "Tax rate comparison table preserved (3 rates)",
+    "TIF 3 Projections table preserved (FY2025-FY2028)",
+    "Revenue distribution percentages preserved (5 taxing jurisdictions)",
+    "FY2026 expenditure line items preserved"
+  ],
+  "retrieved_date": "2026-04-16",
+  "retrieved_by": "war_room_web_fetch",
+  "annotation_schema_version": "wave_4_5_locked_v1",
+  "holdout_designation": true,
+  "holdout_rationale": "Structurally diverse from dev set (CPC Jan 8, CDC Aug 22, Council Sept 30): (1) financing board not a regulatory commission, (2) includes closed Executive Session lane — a deliberation category the other three lack, (3) embeds a formal H.B. 1522 compliance document inside the agenda body, (4) surfaces state statutory citations as structural elements (Texas Gov't Code 551.071, 551.072, 551.087, 551.043(c)(2), Chapter 551). This combination does not appear in any dev-set meeting.",
+  "structural_divergence_notes": "TIF 3 agendas embed budget deliberation and executive session posture in a single artifact. The extractor must handle: (a) directives about money with embedded tabular data, (b) closed-session posture as a structured hold type, (c) statute citations as legal context rather than directives, (d) taxpayer impact statement as a jurisdictional boundary notice rather than a commitment."
+}
