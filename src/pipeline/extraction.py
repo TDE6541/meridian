@@ -48,26 +48,54 @@ utility board, public hearing, workshop, and committee language only.
 Directive guidance:
 - Capture explicit adopted motions, accepted reports, ordinance or resolution action,
   hearing closure decisions, and direct assignments to staff, clerk, attorney, or departments.
+- Also capture formal agenda or recommendation lines when they state the civic action
+  under consideration or being recommended, even if the segment does not show a vote outcome.
+  This includes agenda-style titles such as approval of minutes, adopt/authorize/approve items,
+  hearings, recommendations, elections, presentations, briefings, public comment, and
+  structured group activities.
 - Use status = "confirmed" only when the segment clearly states the action passed,
   was adopted, or was otherwise finalized in the room.
-- Use status = "proposed" for follow-up assignments, review requests, and staff direction
-  that was stated but not yet completed.
+- Use status = "proposed" for agenda items, recommendations, hearings, public comment windows,
+  briefings, follow-up assignments, review requests, and staff direction when the action is
+  explicit but not yet proven complete inside the segment.
+- Conditional approval tied only to staff comments or routine administrative follow-up is still
+  a directive when the proposed action is explicit. Preserve the condition in the summary.
 
 Hold guidance:
 - Capture unresolved legal review, deferred votes, continued hearings, missing budget detail,
   pending staff analysis, unclear compliance steps, or explicit "bring it back later" language.
-- If the segment contains a motion but not the outcome, preserve that uncertainty as a hold.
+- Capture governance posture holds when the segment signals cancellation, optional executive
+  session, jurisdiction limits, vacancy/quorum posture, actor identity that only resolves later,
+  or a dependency on another body's approval.
+- If the segment contains a motion or agenda action title but no outcome, do not create a hold
+  solely because the outcome is unstated when the action itself is explicit enough to stand as
+  a proposed directive.
+- Use a hold instead of a directive when the segment is primarily about uncertainty, a closed
+  session notice, a superseded or revised version marker, or a dependency that blocks clean
+  execution of the action.
 - If a question is raised and answered inside the same segment, do not keep it as a hold.
 
 Evidence rules:
 - Every directive and hold must include a short verbatim source_quote from the segment text.
 - Use only the segment timestamps that are supplied in the prompt.
+- Keep quotes tight to the operative clause, not broad agenda wrappers, unless the full title is
+  itself the operative clause.
+- If a segment contains multiple numbered or lettered civic items, split them into separate
+  directives or holds instead of collapsing them into one.
 - If the transcript does not support an item, omit it.
 
 Output rules:
 - Return exactly one JSON object with "directives" and "holds" keys.
 - Use the supplied internal HoldPoint-native field names.
 - Confidence must be a decimal from 0.0 to 1.0.
+- Confidence bands matter:
+  - Use 0.80 to 1.00 only for explicit passed/adopted/approved outcomes or plainly grounded
+    unresolved blockers stated without major ambiguity.
+  - Use 0.45 to 0.79 for agenda-style proposed directives, recommendation clauses, conditional
+    approvals, revised or continued items, public-comment windows, briefings, role-emergent
+    actor posture, executive-session notices, and other governance ambiguity.
+  - Do not assign 0.80+ when ambiguity is expected, when another body's approval is still
+    required, or when the segment is only an agenda title without confirmed outcome language.
 """.strip()
 
 _ARCHETYPE_OVERLAYS = {
@@ -78,9 +106,14 @@ Prioritize clear civic decisions and assignments:
 - adopted ordinances, resolutions, motions, and hearing outcomes
 - explicit direction to staff, clerk, attorney, or department leads
 - follow-up tasks with a named owner or department
+- agenda or recommendation titles that clearly name the civic action to be taken
+- procedural action requests such as public hearings, minute approval, elections,
+  briefings, presentations, and public comment windows
 
-Do not force a directive when the segment is still undecided.
-If outcome language is incomplete, preserve a hold instead.
+Do not force a directive when the segment is primarily a cancellation notice, executive-session
+posture, jurisdiction boundary, vacancy signal, or dependency on another body's future action.
+If outcome language is incomplete but the action title is explicit, prefer a proposed directive
+instead of converting the item into a hold.
 """.strip(),
     "heavy-risk": """
 Role archetype: heavy-risk.
@@ -91,9 +124,16 @@ Prioritize ambiguity and unresolved civic risk:
 - missing vote outcomes
 - deferred budget or compliance details
 - requests for return reports, revised drafts, or future reconsideration
+- cancellation markers, executive-session notices, quorum or vacancy posture, role-emergent
+  actor gaps, and dependencies on another body's approval
+- revised-version ambiguity when a segment explicitly signals a superseded or updated item
 
 Do not invent procedural risk that the segment does not support.
 Keep every hold tied to an explicit quote.
+Do not recast ordinary agenda, recommendation, or briefing titles as holds merely because the
+segment does not show the final vote outcome.
+Keep confidence below 0.80 for holds driven by closed-session posture, revised items,
+continued items, vacancies, quorum posture, and cross-body dependencies.
 """.strip(),
 }
 

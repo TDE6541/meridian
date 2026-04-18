@@ -2,14 +2,19 @@ from __future__ import annotations
 
 from dataclasses import replace
 from difflib import SequenceMatcher
+import os
 import re
 from typing import Iterable, List, Optional, Sequence, Tuple
 
+from .llm_client import MERIDIAN_PIPELINE_MODEL_ENV
 from .models import Directive, Hold
 
 MIN_DIRECTIVE_AGREEMENT_RATIO = 2.0 / 3.0
 DIRECTIVE_SIMILARITY_THRESHOLD = 0.62
 HOLD_SIMILARITY_THRESHOLD = 0.55
+CALIBRATION_MODEL_CONFIDENCE_CAP_MODEL = "gpt-5.4"
+PROPOSED_DIRECTIVE_CONFIDENCE_CAP = 0.79
+HOLD_FINAL_CONFIDENCE_CAP = 0.79
 _REFERENCE_PATTERN = re.compile(
     r"\b(?:ordinance|resolution)\s+(?:no\.?\s*)?[a-z0-9-]+\b",
     re.IGNORECASE,
@@ -69,6 +74,17 @@ def _choose_quote(quotes: Iterable[str]) -> str:
     if not candidates:
         return ""
     return max(candidates, key=lambda quote: (len(quote), quote))
+
+
+def _calibration_confidence_caps_enabled() -> bool:
+    return (
+        os.environ.get(MERIDIAN_PIPELINE_MODEL_ENV, "").strip()
+        == CALIBRATION_MODEL_CONFIDENCE_CAP_MODEL
+    )
+
+
+def _cap_final_confidence(value: float, *, maximum: float) -> float:
+    return round(min(value, maximum), 3)
 
 
 def _directive_similarity(left: Directive, right: Directive) -> float:
@@ -158,6 +174,11 @@ def _build_directive_cluster(
         3,
     )
     final_confidence = round((agreement_ratio + model_confidence) / 2.0, 3)
+    if _calibration_confidence_caps_enabled() and base.status == "proposed":
+        final_confidence = _cap_final_confidence(
+            final_confidence,
+            maximum=PROPOSED_DIRECTIVE_CONFIDENCE_CAP,
+        )
     return replace(
         base,
         confidence=final_confidence,
@@ -185,6 +206,11 @@ def _build_hold_cluster(cluster: Sequence[Tuple[int, Hold]], total_runs: int) ->
         3,
     )
     final_confidence = round((agreement_ratio + model_confidence) / 2.0, 3)
+    if _calibration_confidence_caps_enabled():
+        final_confidence = _cap_final_confidence(
+            final_confidence,
+            maximum=HOLD_FINAL_CONFIDENCE_CAP,
+        )
     return replace(
         base,
         confidence=final_confidence,

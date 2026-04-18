@@ -18,13 +18,20 @@ _FAILED_PATTERN = re.compile(
     r"\b(?:motion|resolution|ordinance|hearing)\b.*\b(?:fails?|failed|denied|rejected)\b",
     re.IGNORECASE,
 )
-_SECOND_PATTERN = re.compile(r"\bsecond(?:ed)?\b", re.IGNORECASE)
+_SECOND_PATTERN = re.compile(
+    r"\bseconded\b|\bsecond\b(?=.*\bmotion\b)",
+    re.IGNORECASE,
+)
 _DEFERRAL_PATTERN = re.compile(
-    r"\b(?:defer(?:red)?|table(?:d)?|continue(?:d)?|refer(?:red)? to staff)\b",
+    r"\b(?:defer(?:red)?|tabled|continue(?:d)?|refer(?:red)? to staff)\b",
     re.IGNORECASE,
 )
 _FOLLOWUP_PATTERN = re.compile(
     r"\b(?:staff will|clerk will|city attorney will|bring back|return with|review and report back|prepare and return|submit for review)\b",
+    re.IGNORECASE,
+)
+_EXPLICIT_ACTION_PATTERN = re.compile(
+    r"\b(?:adopt|authorize|approval(?:\s+of)?|conditional approval|conduct(?:\s+second)?\s+public hearing|discussion and consideration|election of|group activity)\b",
     re.IGNORECASE,
 )
 
@@ -165,7 +172,7 @@ def scan_segments_for_fallback(segments: Sequence[Segment]) -> Tuple[List[Direct
                     seen.add(key)
                 continue
 
-            if _DEFERRAL_PATTERN.search(sentence):
+            if _DEFERRAL_PATTERN.search(sentence) and not _EXPLICIT_ACTION_PATTERN.search(sentence):
                 summary = f"Further action on {reference} was deferred for later clarification."
                 key = ("hold", segment.segment_id, summary)
                 if key not in seen:
