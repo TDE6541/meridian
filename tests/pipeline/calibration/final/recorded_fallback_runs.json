@@ -1,0 +1,124 @@
+{
+  "capture_mode": "injected_failure_client",
+  "corpus_manifest_path": "tests/pipeline/fixtures/calibration_corpus/corpus_manifest.json",
+  "corpus_manifest_sha256": "4894a1474fc18289e907ad4faa1e4e5e8917b08349812b31487ccdee2daa6b4b",
+  "lane": "forced_fallback",
+  "meeting_count": 4,
+  "meetings": [
+    {
+      "capture_counts": {
+        "directive_count": 0,
+        "hold_count": 0,
+        "segment_count": 12
+      },
+      "capture_mode": "injected_failure_client",
+      "excerpt_path": "tests/pipeline/fixtures/calibration_corpus/meeting_00_fort_worth_sept_30_2025/excerpt.txt",
+      "excerpt_sha256": "0b7604ffa4309a0d94006fbcf40c3220f2855fdb2a8bcfe4e81bc1b4cb89dc55",
+      "fallback_used": true,
+      "gold_annotation_path": "tests/pipeline/fixtures/calibration_corpus/meeting_00_fort_worth_sept_30_2025/gold_annotation.json",
+      "lane": "forced_fallback",
+      "llm_config_status": {
+        "api_key_present": true,
+        "model": "gpt-5.4",
+        "model_present": true
+      },
+      "meeting_directory": "meeting_00_fort_worth_sept_30_2025",
+      "meeting_id": "fw_council_2025-09-30",
+      "notes": [
+        "bounded fallback cue scan used after extraction failure: OpenAI extraction request failed: forced fallback calibration lane"
+      ],
+      "order_index": 0,
+      "provenance_path": "tests/pipeline/fixtures/calibration_corpus/meeting_00_fort_worth_sept_30_2025/provenance.json",
+      "runtime_items": [],
+      "slot": "dev_set",
+      "transcript_hash": "c02001b5f6ed0b992625a0321bbdfaeb88e9d55f56b233e51a7ded6228281647"
+    },
+    {
+      "capture_counts": {
+        "directive_count": 0,
+        "hold_count": 0,
+        "segment_count": 6
+      },
+      "capture_mode": "injected_failure_client",
+      "excerpt_path": "tests/pipeline/fixtures/calibration_corpus/meeting_01_cpc_jan_8_2026/excerpt.txt",
+      "excerpt_sha256": "9c0ccd62bf604bd7c35dc95ceef83302a1eea25a0c41812e3b52a05bdeeb361c",
+      "fallback_used": true,
+      "gold_annotation_path": "tests/pipeline/fixtures/calibration_corpus/meeting_01_cpc_jan_8_2026/gold_annotation.json",
+      "lane": "forced_fallback",
+      "llm_config_status": {
+        "api_key_present": true,
+        "model": "gpt-5.4",
+        "model_present": true
+      },
+      "meeting_directory": "meeting_01_cpc_jan_8_2026",
+      "meeting_id": "cpc_2026-01-08",
+      "notes": [
+        "bounded fallback cue scan used after extraction failure: OpenAI extraction request failed: forced fallback calibration lane"
+      ],
+      "order_index": 1,
+      "provenance_path": "tests/pipeline/fixtures/calibration_corpus/meeting_01_cpc_jan_8_2026/provenance.json",
+      "runtime_items": [],
+      "slot": "dev_set",
+      "transcript_hash": "1b5bcac7fb4d15a3ced7e19854c3313a0b1b2ee2d9764781ff3ef933562fd686"
+    },
+    {
+      "capture_counts": {
+        "directive_count": 0,
+        "hold_count": 0,
+        "segment_count": 4
+      },
+      "capture_mode": "injected_failure_client",
+      "excerpt_path": "tests/pipeline/fixtures/calibration_corpus/meeting_02_cdc_aug_22_2025/excerpt.txt",
+      "excerpt_sha256": "2b357bba9db1c0314f9078e8708a2afa9a64339fa513343be66f8fb71a5ade04",
+      "fallback_used": true,
+      "gold_annotation_path": "tests/pipeline/fixtures/calibration_corpus/meeting_02_cdc_aug_22_2025/gold_annotation.json",
+      "lane": "forced_fallback",
+      "llm_config_status": {
+        "api_key_present": true,
+        "model": "gpt-5.4",
+        "model_present": true
+      },
+      "meeting_directory": "meeting_02_cdc_aug_22_2025",
+      "meeting_id": "cdc_2025-08-22",
+      "notes": [
+        "bounded fallback cue scan used after extraction failure: OpenAI extraction request failed: forced fallback calibration lane"
+      ],
+      "order_index": 2,
+      "provenance_path": "tests/pipeline/fixtures/calibration_corpus/meeting_02_cdc_aug_22_2025/provenance.json",
+      "runtime_items": [],
+      "slot": "dev_set",
+      "transcript_hash": "3527ebe97adf969b444eed57ea7a190e0abc0134030fb9f4018750888c014d65"
+    },
+    {
+      "capture_counts": {
+        "directive_count": 0,
+        "hold_count": 0,
+        "segment_count": 7
+      },
+      "capture_mode": "injected_failure_client",
+      "excerpt_path": "tests/pipeline/fixtures/calibration_corpus/meeting_03_tif3_oct_16_2025/excerpt.txt",
+      "excerpt_sha256": "fef57ee4da9535d4691348c8e4e601dbfc972c0dfe4457b315454dae83eb521e",
+      "fallback_used": true,
+      "gold_annotation_path": "tests/pipeline/fixtures/calibration_corpus/meeting_03_tif3_oct_16_2025/gold_annotation.json",
+      "lane": "forced_fallback",
+      "llm_config_status": {
+        "api_key_present": true,
+        "model": "gpt-5.4",
+        "model_present": true
+      },
+      "meeting_directory": "meeting_03_tif3_oct_16_2025",
+      "meeting_id": "tif3_2025-10-16",
+      "notes": [
+        "bounded fallback cue scan used after extraction failure: OpenAI extraction request failed: forced fallback calibration lane"
+      ],
+      "order_index": 3,
+      "provenance_path": "tests/pipeline/fixtures/calibration_corpus/meeting_03_tif3_oct_16_2025/provenance.json",
+      "runtime_items": [],
+      "slot": "holdout",
+      "transcript_hash": "69e6ccff285642c6b0f43cb5187ad07c1f9e190a155872fa223f7bc6be42795a"
+    }
+  ],
+  "model": "gpt-5.4",
+  "replay_ready": true,
+  "runner_version": "wave4.5-blockd-final-v1"
+}

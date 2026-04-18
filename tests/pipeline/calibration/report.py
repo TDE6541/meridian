@@ -8,8 +8,11 @@ from .metrics import aggregate_evaluation_summaries, summarize_alignment
 from .runner import (
     CORPUS_MANIFEST_PATH,
     FALLBACK_BASELINE_PATH,
+    FINAL_FALLBACK_PATH,
+    FINAL_PRIMARY_PATH,
     PRIMARY_BASELINE_PATH,
     ROOT,
+    FINAL_RUNNER_VERSION,
     RUNNER_VERSION,
     load_corpus_manifest,
     load_excerpt_text,
@@ -80,6 +83,48 @@ def _lane_section(bundle: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _build_report(
+    *,
+    primary_bundle: dict[str, Any],
+    fallback_bundle: dict[str, Any],
+    primary_path,
+    fallback_path,
+    report_version: str,
+) -> dict[str, Any]:
+    manifest = load_corpus_manifest()
+    dev_meetings = [
+        entry["meeting_id"] for entry in manifest["meetings"] if entry["slot"] != "holdout"
+    ]
+    holdout_meetings = [
+        entry["meeting_id"] for entry in manifest["meetings"] if entry["slot"] == "holdout"
+    ]
+
+    return {
+        "report_version": report_version,
+        "corpus": {
+            "manifest_path": CORPUS_MANIFEST_PATH.relative_to(ROOT).as_posix(),
+            "corpus_name": manifest["corpus_name"],
+            "corpus_version": manifest["corpus_version"],
+            "annotation_schema_version": manifest["annotation_schema_version"],
+            "meeting_count": manifest["corpus_size"]["total_shipped"],
+            "dev_meeting_ids": dev_meetings,
+            "holdout_meeting_ids": holdout_meetings,
+            "gold_item_count": manifest["totals"]["total_gold_items"],
+            "directive_gold_count": manifest["totals"]["total_directives"],
+            "hold_gold_count": manifest["totals"]["total_holds"],
+            "negative_control_count": manifest["totals"]["total_negative_controls"],
+        },
+        "recordings": {
+            "primary_path": primary_path.relative_to(ROOT).as_posix(),
+            "forced_fallback_path": fallback_path.relative_to(ROOT).as_posix(),
+            "primary_replay_ready": bool(primary_bundle.get("replay_ready")),
+            "forced_fallback_replay_ready": bool(fallback_bundle.get("replay_ready")),
+        },
+        "primary_lane": _lane_section(primary_bundle),
+        "forced_fallback_lane": _lane_section(fallback_bundle),
+    }
+
+
 def build_baseline_report(
     *,
     primary_bundle: Optional[dict[str, Any]] = None,
@@ -95,35 +140,34 @@ def build_baseline_report(
         if fallback_bundle is None
         else fallback_bundle
     )
-    manifest = load_corpus_manifest()
-    dev_meetings = [
-        entry["meeting_id"] for entry in manifest["meetings"] if entry["slot"] != "holdout"
-    ]
-    holdout_meetings = [
-        entry["meeting_id"] for entry in manifest["meetings"] if entry["slot"] == "holdout"
-    ]
+    return _build_report(
+        primary_bundle=primary,
+        fallback_bundle=fallback,
+        primary_path=PRIMARY_BASELINE_PATH,
+        fallback_path=FALLBACK_BASELINE_PATH,
+        report_version=RUNNER_VERSION,
+    )
 
-    return {
-        "report_version": RUNNER_VERSION,
-        "corpus": {
-            "manifest_path": CORPUS_MANIFEST_PATH.relative_to(ROOT).as_posix(),
-            "corpus_name": manifest["corpus_name"],
-            "corpus_version": manifest["corpus_version"],
-            "annotation_schema_version": manifest["annotation_schema_version"],
-            "meeting_count": manifest["corpus_size"]["total_shipped"],
-            "dev_meeting_ids": dev_meetings,
-            "holdout_meeting_ids": holdout_meetings,
-            "gold_item_count": manifest["totals"]["total_gold_items"],
-            "directive_gold_count": manifest["totals"]["total_directives"],
-            "hold_gold_count": manifest["totals"]["total_holds"],
-            "negative_control_count": manifest["totals"]["total_negative_controls"],
-        },
-        "recordings": {
-            "primary_path": PRIMARY_BASELINE_PATH.relative_to(ROOT).as_posix(),
-            "forced_fallback_path": FALLBACK_BASELINE_PATH.relative_to(ROOT).as_posix(),
-            "primary_replay_ready": bool(primary.get("replay_ready")),
-            "forced_fallback_replay_ready": bool(fallback.get("replay_ready")),
-        },
-        "primary_lane": _lane_section(primary),
-        "forced_fallback_lane": _lane_section(fallback),
-    }
+
+def build_final_report(
+    *,
+    primary_bundle: Optional[dict[str, Any]] = None,
+    fallback_bundle: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
+    primary = (
+        load_recorded_bundle(FINAL_PRIMARY_PATH)
+        if primary_bundle is None
+        else primary_bundle
+    )
+    fallback = (
+        load_recorded_bundle(FINAL_FALLBACK_PATH)
+        if fallback_bundle is None
+        else fallback_bundle
+    )
+    return _build_report(
+        primary_bundle=primary,
+        fallback_bundle=fallback,
+        primary_path=FINAL_PRIMARY_PATH,
+        fallback_path=FINAL_FALLBACK_PATH,
+        report_version=FINAL_RUNNER_VERSION,
+    )

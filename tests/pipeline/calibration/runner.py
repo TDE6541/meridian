@@ -25,11 +25,17 @@ from src.pipeline.pipeline import MeridianPipeline  # noqa: E402
 RUNNER_VERSION = "wave4.5-blockb-baseline-v1"
 CALIBRATION_DIR = Path(__file__).resolve().parent
 BASELINES_DIR = CALIBRATION_DIR / "baselines"
+FINAL_DIR = CALIBRATION_DIR / "final"
 CORPUS_ROOT = CALIBRATION_DIR.parent / "fixtures" / "calibration_corpus"
 CORPUS_MANIFEST_PATH = CORPUS_ROOT / "corpus_manifest.json"
 PRIMARY_BASELINE_PATH = BASELINES_DIR / "recorded_primary_runs.json"
 FALLBACK_BASELINE_PATH = BASELINES_DIR / "recorded_fallback_runs.json"
 REPORT_BASELINE_PATH = BASELINES_DIR / "baseline_report.json"
+FINAL_PRIMARY_PATH = FINAL_DIR / "recorded_primary_runs.json"
+FINAL_FALLBACK_PATH = FINAL_DIR / "recorded_fallback_runs.json"
+FINAL_REPORT_PATH = FINAL_DIR / "final_report.json"
+FINAL_RUNNER_VERSION = "wave4.5-blockd-final-v1"
+FINAL_MODEL_PIN = "gpt-5.4"
 CALIBRATION_ORG_ID = "wave45-calibration"
 
 
@@ -218,6 +224,7 @@ def run_primary_live_recording(
     meetings: Optional[Sequence[CorpusMeeting]] = None,
     *,
     env: Optional[Mapping[str, str]] = None,
+    runner_version: str = RUNNER_VERSION,
 ) -> dict[str, Any]:
     corpus_meetings = tuple(meetings or list_corpus_meetings())
     resolved_env = _resolved_env(env)
@@ -237,7 +244,7 @@ def run_primary_live_recording(
         for meeting in corpus_meetings
     ]
     return {
-        "runner_version": RUNNER_VERSION,
+        "runner_version": runner_version,
         "lane": "primary",
         "capture_mode": "live_openai",
         "model": resolved_env.get(MERIDIAN_PIPELINE_MODEL_ENV) or None,
@@ -253,6 +260,7 @@ def run_forced_fallback_recording(
     meetings: Optional[Sequence[CorpusMeeting]] = None,
     *,
     env: Optional[Mapping[str, str]] = None,
+    runner_version: str = RUNNER_VERSION,
 ) -> dict[str, Any]:
     corpus_meetings = tuple(meetings or list_corpus_meetings())
     resolved_env = _resolved_env(env)
@@ -267,7 +275,7 @@ def run_forced_fallback_recording(
         for meeting in corpus_meetings
     ]
     return {
-        "runner_version": RUNNER_VERSION,
+        "runner_version": runner_version,
         "lane": "forced_fallback",
         "capture_mode": "injected_failure_client",
         "model": resolved_env.get(MERIDIAN_PIPELINE_MODEL_ENV) or None,
@@ -296,4 +304,38 @@ def generate_and_write_baselines(
         fallback_bundle=fallback_bundle,
     )
     _write_json(REPORT_BASELINE_PATH, report)
+    return primary_bundle, fallback_bundle, report
+
+
+def generate_and_write_final_artifacts(
+    *,
+    env: Optional[Mapping[str, str]] = None,
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    resolved_env = _resolved_env(env)
+    config_status = inspect_openai_env(resolved_env)
+    model = resolved_env.get(MERIDIAN_PIPELINE_MODEL_ENV, "")
+    if not config_status.api_key_present or model != FINAL_MODEL_PIN:
+        raise RuntimeError(
+            "Final calibration lane requires OPENAI_API_KEY and MERIDIAN_PIPELINE_MODEL=gpt-5.4."
+        )
+
+    primary_bundle = run_primary_live_recording(
+        env=resolved_env,
+        runner_version=FINAL_RUNNER_VERSION,
+    )
+    write_recorded_bundle(FINAL_PRIMARY_PATH, primary_bundle)
+
+    fallback_bundle = run_forced_fallback_recording(
+        env=resolved_env,
+        runner_version=FINAL_RUNNER_VERSION,
+    )
+    write_recorded_bundle(FINAL_FALLBACK_PATH, fallback_bundle)
+
+    from .report import build_final_report
+
+    report = build_final_report(
+        primary_bundle=primary_bundle,
+        fallback_bundle=fallback_bundle,
+    )
+    _write_json(FINAL_REPORT_PATH, report)
     return primary_bundle, fallback_bundle, report

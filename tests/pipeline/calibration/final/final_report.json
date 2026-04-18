@@ -1,0 +1,1485 @@
+{
+  "corpus": {
+    "annotation_schema_version": "wave_4_5_locked_v1",
+    "corpus_name": "Wave 4.5 Calibration Corpus",
+    "corpus_version": "v2_post_cr_ruling_a",
+    "dev_meeting_ids": [
+      "fw_council_2025-09-30",
+      "cpc_2026-01-08",
+      "cdc_2025-08-22"
+    ],
+    "directive_gold_count": 27,
+    "gold_item_count": 39,
+    "hold_gold_count": 12,
+    "holdout_meeting_ids": [
+      "tif3_2025-10-16"
+    ],
+    "manifest_path": "tests/pipeline/fixtures/calibration_corpus/corpus_manifest.json",
+    "meeting_count": 4,
+    "negative_control_count": 15
+  },
+  "forced_fallback_lane": {
+    "all_meetings": {
+      "confidence_buckets": [
+        {
+          "bucket": "0.00-0.49",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        },
+        {
+          "bucket": "0.50-0.69",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        },
+        {
+          "bucket": "0.70-0.84",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        },
+        {
+          "bucket": "0.85-1.00",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        }
+      ],
+      "counts": {
+        "exact_matches": 0,
+        "fallback_activations": 4,
+        "gold_items": 39,
+        "matched_items": 0,
+        "relaxed_matches": 0,
+        "runtime_items": 0,
+        "unmatched_gold_items": 39,
+        "unmatched_runtime_items": 0,
+        "unsafe_certainty": 0,
+        "unsupported_quotes": 0
+      },
+      "failure_category_counts": {
+        "duplicated/paraphrased decision merge failure": 0,
+        "fallback false positive": 0,
+        "fallback miss": 39,
+        "false negative": 39,
+        "false positive": 0,
+        "segment-boundary miss": 0,
+        "unsafe certainty": 0,
+        "unsupported quote / grounding failure": 0,
+        "wrong class": 0,
+        "wrong subtype": 0
+      },
+      "fallback_metrics": {
+        "f1": 0.0,
+        "false_positives": 0,
+        "misses": 39,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "meeting_count": 4,
+      "meeting_ids": [
+        "fw_council_2025-09-30",
+        "cpc_2026-01-08",
+        "cdc_2025-08-22",
+        "tif3_2025-10-16"
+      ],
+      "per_class_metrics": {
+        "directive": {
+          "f1": 0.0,
+          "false_negative": 27,
+          "false_positive": 0,
+          "gold_items": 27,
+          "precision": 0.0,
+          "recall": 0.0,
+          "runtime_items": 0,
+          "true_positive": 0
+        },
+        "hold": {
+          "f1": 0.0,
+          "false_negative": 12,
+          "false_positive": 0,
+          "gold_items": 12,
+          "precision": 0.0,
+          "recall": 0.0,
+          "runtime_items": 0,
+          "true_positive": 0
+        }
+      },
+      "scores": {
+        "exact_match_score": 0.0,
+        "fallback_activation_rate": 1.0,
+        "macro_f1": 0.0,
+        "macro_precision": 0.0,
+        "macro_recall": 0.0,
+        "micro_f1": 0.0,
+        "micro_precision": 0.0,
+        "micro_recall": 0.0,
+        "relaxed_match_score": 0.0,
+        "unsafe_certainty_rate": 0.0,
+        "unsupported_quote_rate": 0.0
+      }
+    },
+    "by_meeting": [
+      {
+        "confidence_buckets": [
+          {
+            "bucket": "0.00-0.49",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.50-0.69",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.70-0.84",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.85-1.00",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          }
+        ],
+        "counts": {
+          "exact_matches": 0,
+          "fallback_activations": 1,
+          "gold_items": 13,
+          "matched_items": 0,
+          "relaxed_matches": 0,
+          "runtime_items": 0,
+          "unmatched_gold_items": 13,
+          "unmatched_runtime_items": 0,
+          "unsafe_certainty": 0,
+          "unsupported_quotes": 0
+        },
+        "failure_category_counts": {
+          "duplicated/paraphrased decision merge failure": 0,
+          "fallback false positive": 0,
+          "fallback miss": 13,
+          "false negative": 13,
+          "false positive": 0,
+          "segment-boundary miss": 0,
+          "unsafe certainty": 0,
+          "unsupported quote / grounding failure": 0,
+          "wrong class": 0,
+          "wrong subtype": 0
+        },
+        "fallback_used": true,
+        "meeting_count": 1,
+        "meeting_id": "fw_council_2025-09-30",
+        "meeting_ids": [
+          "fw_council_2025-09-30"
+        ],
+        "per_class_metrics": {
+          "directive": {
+            "f1": 0.0,
+            "false_negative": 11,
+            "false_positive": 0,
+            "gold_items": 11,
+            "precision": 0.0,
+            "recall": 0.0,
+            "runtime_items": 0,
+            "true_positive": 0
+          },
+          "hold": {
+            "f1": 0.0,
+            "false_negative": 2,
+            "false_positive": 0,
+            "gold_items": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "runtime_items": 0,
+            "true_positive": 0
+          }
+        },
+        "scores": {
+          "exact_match_score": 0.0,
+          "fallback_activation_rate": 1.0,
+          "macro_f1": 0.0,
+          "macro_precision": 0.0,
+          "macro_recall": 0.0,
+          "micro_f1": 0.0,
+          "micro_precision": 0.0,
+          "micro_recall": 0.0,
+          "relaxed_match_score": 0.0,
+          "unsafe_certainty_rate": 0.0,
+          "unsupported_quote_rate": 0.0
+        },
+        "slot": "dev_set"
+      },
+      {
+        "confidence_buckets": [
+          {
+            "bucket": "0.00-0.49",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.50-0.69",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.70-0.84",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.85-1.00",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          }
+        ],
+        "counts": {
+          "exact_matches": 0,
+          "fallback_activations": 1,
+          "gold_items": 11,
+          "matched_items": 0,
+          "relaxed_matches": 0,
+          "runtime_items": 0,
+          "unmatched_gold_items": 11,
+          "unmatched_runtime_items": 0,
+          "unsafe_certainty": 0,
+          "unsupported_quotes": 0
+        },
+        "failure_category_counts": {
+          "duplicated/paraphrased decision merge failure": 0,
+          "fallback false positive": 0,
+          "fallback miss": 11,
+          "false negative": 11,
+          "false positive": 0,
+          "segment-boundary miss": 0,
+          "unsafe certainty": 0,
+          "unsupported quote / grounding failure": 0,
+          "wrong class": 0,
+          "wrong subtype": 0
+        },
+        "fallback_used": true,
+        "meeting_count": 1,
+        "meeting_id": "cpc_2026-01-08",
+        "meeting_ids": [
+          "cpc_2026-01-08"
+        ],
+        "per_class_metrics": {
+          "directive": {
+            "f1": 0.0,
+            "false_negative": 9,
+            "false_positive": 0,
+            "gold_items": 9,
+            "precision": 0.0,
+            "recall": 0.0,
+            "runtime_items": 0,
+            "true_positive": 0
+          },
+          "hold": {
+            "f1": 0.0,
+            "false_negative": 2,
+            "false_positive": 0,
+            "gold_items": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "runtime_items": 0,
+            "true_positive": 0
+          }
+        },
+        "scores": {
+          "exact_match_score": 0.0,
+          "fallback_activation_rate": 1.0,
+          "macro_f1": 0.0,
+          "macro_precision": 0.0,
+          "macro_recall": 0.0,
+          "micro_f1": 0.0,
+          "micro_precision": 0.0,
+          "micro_recall": 0.0,
+          "relaxed_match_score": 0.0,
+          "unsafe_certainty_rate": 0.0,
+          "unsupported_quote_rate": 0.0
+        },
+        "slot": "dev_set"
+      },
+      {
+        "confidence_buckets": [
+          {
+            "bucket": "0.00-0.49",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.50-0.69",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.70-0.84",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.85-1.00",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          }
+        ],
+        "counts": {
+          "exact_matches": 0,
+          "fallback_activations": 1,
+          "gold_items": 7,
+          "matched_items": 0,
+          "relaxed_matches": 0,
+          "runtime_items": 0,
+          "unmatched_gold_items": 7,
+          "unmatched_runtime_items": 0,
+          "unsafe_certainty": 0,
+          "unsupported_quotes": 0
+        },
+        "failure_category_counts": {
+          "duplicated/paraphrased decision merge failure": 0,
+          "fallback false positive": 0,
+          "fallback miss": 7,
+          "false negative": 7,
+          "false positive": 0,
+          "segment-boundary miss": 0,
+          "unsafe certainty": 0,
+          "unsupported quote / grounding failure": 0,
+          "wrong class": 0,
+          "wrong subtype": 0
+        },
+        "fallback_used": true,
+        "meeting_count": 1,
+        "meeting_id": "cdc_2025-08-22",
+        "meeting_ids": [
+          "cdc_2025-08-22"
+        ],
+        "per_class_metrics": {
+          "directive": {
+            "f1": 0.0,
+            "false_negative": 3,
+            "false_positive": 0,
+            "gold_items": 3,
+            "precision": 0.0,
+            "recall": 0.0,
+            "runtime_items": 0,
+            "true_positive": 0
+          },
+          "hold": {
+            "f1": 0.0,
+            "false_negative": 4,
+            "false_positive": 0,
+            "gold_items": 4,
+            "precision": 0.0,
+            "recall": 0.0,
+            "runtime_items": 0,
+            "true_positive": 0
+          }
+        },
+        "scores": {
+          "exact_match_score": 0.0,
+          "fallback_activation_rate": 1.0,
+          "macro_f1": 0.0,
+          "macro_precision": 0.0,
+          "macro_recall": 0.0,
+          "micro_f1": 0.0,
+          "micro_precision": 0.0,
+          "micro_recall": 0.0,
+          "relaxed_match_score": 0.0,
+          "unsafe_certainty_rate": 0.0,
+          "unsupported_quote_rate": 0.0
+        },
+        "slot": "dev_set"
+      },
+      {
+        "confidence_buckets": [
+          {
+            "bucket": "0.00-0.49",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.50-0.69",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.70-0.84",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.85-1.00",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          }
+        ],
+        "counts": {
+          "exact_matches": 0,
+          "fallback_activations": 1,
+          "gold_items": 8,
+          "matched_items": 0,
+          "relaxed_matches": 0,
+          "runtime_items": 0,
+          "unmatched_gold_items": 8,
+          "unmatched_runtime_items": 0,
+          "unsafe_certainty": 0,
+          "unsupported_quotes": 0
+        },
+        "failure_category_counts": {
+          "duplicated/paraphrased decision merge failure": 0,
+          "fallback false positive": 0,
+          "fallback miss": 8,
+          "false negative": 8,
+          "false positive": 0,
+          "segment-boundary miss": 0,
+          "unsafe certainty": 0,
+          "unsupported quote / grounding failure": 0,
+          "wrong class": 0,
+          "wrong subtype": 0
+        },
+        "fallback_used": true,
+        "meeting_count": 1,
+        "meeting_id": "tif3_2025-10-16",
+        "meeting_ids": [
+          "tif3_2025-10-16"
+        ],
+        "per_class_metrics": {
+          "directive": {
+            "f1": 0.0,
+            "false_negative": 4,
+            "false_positive": 0,
+            "gold_items": 4,
+            "precision": 0.0,
+            "recall": 0.0,
+            "runtime_items": 0,
+            "true_positive": 0
+          },
+          "hold": {
+            "f1": 0.0,
+            "false_negative": 4,
+            "false_positive": 0,
+            "gold_items": 4,
+            "precision": 0.0,
+            "recall": 0.0,
+            "runtime_items": 0,
+            "true_positive": 0
+          }
+        },
+        "scores": {
+          "exact_match_score": 0.0,
+          "fallback_activation_rate": 1.0,
+          "macro_f1": 0.0,
+          "macro_precision": 0.0,
+          "macro_recall": 0.0,
+          "micro_f1": 0.0,
+          "micro_precision": 0.0,
+          "micro_recall": 0.0,
+          "relaxed_match_score": 0.0,
+          "unsafe_certainty_rate": 0.0,
+          "unsupported_quote_rate": 0.0
+        },
+        "slot": "holdout"
+      }
+    ],
+    "capture_mode": "injected_failure_client",
+    "dev_aggregate": {
+      "confidence_buckets": [
+        {
+          "bucket": "0.00-0.49",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        },
+        {
+          "bucket": "0.50-0.69",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        },
+        {
+          "bucket": "0.70-0.84",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        },
+        {
+          "bucket": "0.85-1.00",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        }
+      ],
+      "counts": {
+        "exact_matches": 0,
+        "fallback_activations": 3,
+        "gold_items": 31,
+        "matched_items": 0,
+        "relaxed_matches": 0,
+        "runtime_items": 0,
+        "unmatched_gold_items": 31,
+        "unmatched_runtime_items": 0,
+        "unsafe_certainty": 0,
+        "unsupported_quotes": 0
+      },
+      "failure_category_counts": {
+        "duplicated/paraphrased decision merge failure": 0,
+        "fallback false positive": 0,
+        "fallback miss": 31,
+        "false negative": 31,
+        "false positive": 0,
+        "segment-boundary miss": 0,
+        "unsafe certainty": 0,
+        "unsupported quote / grounding failure": 0,
+        "wrong class": 0,
+        "wrong subtype": 0
+      },
+      "fallback_metrics": {
+        "f1": 0.0,
+        "false_positives": 0,
+        "misses": 31,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "meeting_count": 3,
+      "meeting_ids": [
+        "fw_council_2025-09-30",
+        "cpc_2026-01-08",
+        "cdc_2025-08-22"
+      ],
+      "per_class_metrics": {
+        "directive": {
+          "f1": 0.0,
+          "false_negative": 23,
+          "false_positive": 0,
+          "gold_items": 23,
+          "precision": 0.0,
+          "recall": 0.0,
+          "runtime_items": 0,
+          "true_positive": 0
+        },
+        "hold": {
+          "f1": 0.0,
+          "false_negative": 8,
+          "false_positive": 0,
+          "gold_items": 8,
+          "precision": 0.0,
+          "recall": 0.0,
+          "runtime_items": 0,
+          "true_positive": 0
+        }
+      },
+      "scores": {
+        "exact_match_score": 0.0,
+        "fallback_activation_rate": 1.0,
+        "macro_f1": 0.0,
+        "macro_precision": 0.0,
+        "macro_recall": 0.0,
+        "micro_f1": 0.0,
+        "micro_precision": 0.0,
+        "micro_recall": 0.0,
+        "relaxed_match_score": 0.0,
+        "unsafe_certainty_rate": 0.0,
+        "unsupported_quote_rate": 0.0
+      }
+    },
+    "holdout": {
+      "confidence_buckets": [
+        {
+          "bucket": "0.00-0.49",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        },
+        {
+          "bucket": "0.50-0.69",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        },
+        {
+          "bucket": "0.70-0.84",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        },
+        {
+          "bucket": "0.85-1.00",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        }
+      ],
+      "counts": {
+        "exact_matches": 0,
+        "fallback_activations": 1,
+        "gold_items": 8,
+        "matched_items": 0,
+        "relaxed_matches": 0,
+        "runtime_items": 0,
+        "unmatched_gold_items": 8,
+        "unmatched_runtime_items": 0,
+        "unsafe_certainty": 0,
+        "unsupported_quotes": 0
+      },
+      "failure_category_counts": {
+        "duplicated/paraphrased decision merge failure": 0,
+        "fallback false positive": 0,
+        "fallback miss": 8,
+        "false negative": 8,
+        "false positive": 0,
+        "segment-boundary miss": 0,
+        "unsafe certainty": 0,
+        "unsupported quote / grounding failure": 0,
+        "wrong class": 0,
+        "wrong subtype": 0
+      },
+      "fallback_metrics": {
+        "f1": 0.0,
+        "false_positives": 0,
+        "misses": 8,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "meeting_count": 1,
+      "meeting_ids": [
+        "tif3_2025-10-16"
+      ],
+      "per_class_metrics": {
+        "directive": {
+          "f1": 0.0,
+          "false_negative": 4,
+          "false_positive": 0,
+          "gold_items": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "runtime_items": 0,
+          "true_positive": 0
+        },
+        "hold": {
+          "f1": 0.0,
+          "false_negative": 4,
+          "false_positive": 0,
+          "gold_items": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "runtime_items": 0,
+          "true_positive": 0
+        }
+      },
+      "scores": {
+        "exact_match_score": 0.0,
+        "fallback_activation_rate": 1.0,
+        "macro_f1": 0.0,
+        "macro_precision": 0.0,
+        "macro_recall": 0.0,
+        "micro_f1": 0.0,
+        "micro_precision": 0.0,
+        "micro_recall": 0.0,
+        "relaxed_match_score": 0.0,
+        "unsafe_certainty_rate": 0.0,
+        "unsupported_quote_rate": 0.0
+      }
+    },
+    "lane": "forced_fallback",
+    "meeting_count": 4,
+    "model": "gpt-5.4"
+  },
+  "primary_lane": {
+    "all_meetings": {
+      "confidence_buckets": [
+        {
+          "bucket": "0.00-0.49",
+          "count": 1,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 1
+        },
+        {
+          "bucket": "0.50-0.69",
+          "count": 3,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 3
+        },
+        {
+          "bucket": "0.70-0.84",
+          "count": 48,
+          "exact_matches": 7,
+          "precision": 0.5208,
+          "relaxed_matches": 18,
+          "unmatched": 23
+        },
+        {
+          "bucket": "0.85-1.00",
+          "count": 2,
+          "exact_matches": 0,
+          "precision": 0.5,
+          "relaxed_matches": 1,
+          "unmatched": 1
+        }
+      ],
+      "counts": {
+        "exact_matches": 7,
+        "fallback_activations": 0,
+        "gold_items": 39,
+        "matched_items": 26,
+        "relaxed_matches": 19,
+        "runtime_items": 54,
+        "unmatched_gold_items": 13,
+        "unmatched_runtime_items": 28,
+        "unsafe_certainty": 0,
+        "unsupported_quotes": 1
+      },
+      "failure_category_counts": {
+        "duplicated/paraphrased decision merge failure": 0,
+        "fallback false positive": 0,
+        "fallback miss": 0,
+        "false negative": 13,
+        "false positive": 28,
+        "segment-boundary miss": 0,
+        "unsafe certainty": 0,
+        "unsupported quote / grounding failure": 1,
+        "wrong class": 2,
+        "wrong subtype": 22
+      },
+      "meeting_count": 4,
+      "meeting_ids": [
+        "fw_council_2025-09-30",
+        "cpc_2026-01-08",
+        "cdc_2025-08-22",
+        "tif3_2025-10-16"
+      ],
+      "per_class_metrics": {
+        "directive": {
+          "f1": 0.7164,
+          "false_negative": 3,
+          "false_positive": 16,
+          "gold_items": 27,
+          "precision": 0.6,
+          "recall": 0.8889,
+          "runtime_items": 40,
+          "true_positive": 24
+        },
+        "hold": {
+          "f1": 0.1538,
+          "false_negative": 10,
+          "false_positive": 12,
+          "gold_items": 12,
+          "precision": 0.1429,
+          "recall": 0.1667,
+          "runtime_items": 14,
+          "true_positive": 2
+        }
+      },
+      "scores": {
+        "exact_match_score": 0.1795,
+        "fallback_activation_rate": 0.0,
+        "macro_f1": 0.4351,
+        "macro_precision": 0.3714,
+        "macro_recall": 0.5278,
+        "micro_f1": 0.5591,
+        "micro_precision": 0.4815,
+        "micro_recall": 0.6667,
+        "relaxed_match_score": 0.6667,
+        "unsafe_certainty_rate": 0.0,
+        "unsupported_quote_rate": 0.0185
+      }
+    },
+    "by_meeting": [
+      {
+        "confidence_buckets": [
+          {
+            "bucket": "0.00-0.49",
+            "count": 1,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 1
+          },
+          {
+            "bucket": "0.50-0.69",
+            "count": 1,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 1
+          },
+          {
+            "bucket": "0.70-0.84",
+            "count": 18,
+            "exact_matches": 3,
+            "precision": 0.5556,
+            "relaxed_matches": 7,
+            "unmatched": 8
+          },
+          {
+            "bucket": "0.85-1.00",
+            "count": 2,
+            "exact_matches": 0,
+            "precision": 0.5,
+            "relaxed_matches": 1,
+            "unmatched": 1
+          }
+        ],
+        "counts": {
+          "exact_matches": 3,
+          "fallback_activations": 0,
+          "gold_items": 13,
+          "matched_items": 11,
+          "relaxed_matches": 8,
+          "runtime_items": 22,
+          "unmatched_gold_items": 2,
+          "unmatched_runtime_items": 11,
+          "unsafe_certainty": 0,
+          "unsupported_quotes": 1
+        },
+        "failure_category_counts": {
+          "duplicated/paraphrased decision merge failure": 0,
+          "fallback false positive": 0,
+          "fallback miss": 0,
+          "false negative": 2,
+          "false positive": 11,
+          "segment-boundary miss": 0,
+          "unsafe certainty": 0,
+          "unsupported quote / grounding failure": 1,
+          "wrong class": 1,
+          "wrong subtype": 10
+        },
+        "fallback_used": false,
+        "meeting_count": 1,
+        "meeting_id": "fw_council_2025-09-30",
+        "meeting_ids": [
+          "fw_council_2025-09-30"
+        ],
+        "per_class_metrics": {
+          "directive": {
+            "f1": 0.8148,
+            "false_negative": 0,
+            "false_positive": 5,
+            "gold_items": 11,
+            "precision": 0.6875,
+            "recall": 1.0,
+            "runtime_items": 16,
+            "true_positive": 11
+          },
+          "hold": {
+            "f1": 0.0,
+            "false_negative": 2,
+            "false_positive": 6,
+            "gold_items": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "runtime_items": 6,
+            "true_positive": 0
+          }
+        },
+        "scores": {
+          "exact_match_score": 0.2308,
+          "fallback_activation_rate": 0.0,
+          "macro_f1": 0.4074,
+          "macro_precision": 0.3438,
+          "macro_recall": 0.5,
+          "micro_f1": 0.6286,
+          "micro_precision": 0.5,
+          "micro_recall": 0.8462,
+          "relaxed_match_score": 0.8462,
+          "unsafe_certainty_rate": 0.0,
+          "unsupported_quote_rate": 0.0455
+        },
+        "slot": "dev_set"
+      },
+      {
+        "confidence_buckets": [
+          {
+            "bucket": "0.00-0.49",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.50-0.69",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.70-0.84",
+            "count": 14,
+            "exact_matches": 1,
+            "precision": 0.6429,
+            "relaxed_matches": 8,
+            "unmatched": 5
+          },
+          {
+            "bucket": "0.85-1.00",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          }
+        ],
+        "counts": {
+          "exact_matches": 1,
+          "fallback_activations": 0,
+          "gold_items": 11,
+          "matched_items": 9,
+          "relaxed_matches": 8,
+          "runtime_items": 14,
+          "unmatched_gold_items": 2,
+          "unmatched_runtime_items": 5,
+          "unsafe_certainty": 0,
+          "unsupported_quotes": 0
+        },
+        "failure_category_counts": {
+          "duplicated/paraphrased decision merge failure": 0,
+          "fallback false positive": 0,
+          "fallback miss": 0,
+          "false negative": 2,
+          "false positive": 5,
+          "segment-boundary miss": 0,
+          "unsafe certainty": 0,
+          "unsupported quote / grounding failure": 0,
+          "wrong class": 0,
+          "wrong subtype": 8
+        },
+        "fallback_used": false,
+        "meeting_count": 1,
+        "meeting_id": "cpc_2026-01-08",
+        "meeting_ids": [
+          "cpc_2026-01-08"
+        ],
+        "per_class_metrics": {
+          "directive": {
+            "f1": 0.8889,
+            "false_negative": 1,
+            "false_positive": 1,
+            "gold_items": 9,
+            "precision": 0.8889,
+            "recall": 0.8889,
+            "runtime_items": 9,
+            "true_positive": 8
+          },
+          "hold": {
+            "f1": 0.2857,
+            "false_negative": 1,
+            "false_positive": 4,
+            "gold_items": 2,
+            "precision": 0.2,
+            "recall": 0.5,
+            "runtime_items": 5,
+            "true_positive": 1
+          }
+        },
+        "scores": {
+          "exact_match_score": 0.0909,
+          "fallback_activation_rate": 0.0,
+          "macro_f1": 0.5873,
+          "macro_precision": 0.5444,
+          "macro_recall": 0.6944,
+          "micro_f1": 0.72,
+          "micro_precision": 0.6429,
+          "micro_recall": 0.8182,
+          "relaxed_match_score": 0.8182,
+          "unsafe_certainty_rate": 0.0,
+          "unsupported_quote_rate": 0.0
+        },
+        "slot": "dev_set"
+      },
+      {
+        "confidence_buckets": [
+          {
+            "bucket": "0.00-0.49",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.50-0.69",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.70-0.84",
+            "count": 10,
+            "exact_matches": 2,
+            "precision": 0.2,
+            "relaxed_matches": 0,
+            "unmatched": 8
+          },
+          {
+            "bucket": "0.85-1.00",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          }
+        ],
+        "counts": {
+          "exact_matches": 2,
+          "fallback_activations": 0,
+          "gold_items": 7,
+          "matched_items": 2,
+          "relaxed_matches": 0,
+          "runtime_items": 10,
+          "unmatched_gold_items": 5,
+          "unmatched_runtime_items": 8,
+          "unsafe_certainty": 0,
+          "unsupported_quotes": 0
+        },
+        "failure_category_counts": {
+          "duplicated/paraphrased decision merge failure": 0,
+          "fallback false positive": 0,
+          "fallback miss": 0,
+          "false negative": 5,
+          "false positive": 8,
+          "segment-boundary miss": 0,
+          "unsafe certainty": 0,
+          "unsupported quote / grounding failure": 0,
+          "wrong class": 1,
+          "wrong subtype": 0
+        },
+        "fallback_used": false,
+        "meeting_count": 1,
+        "meeting_id": "cdc_2025-08-22",
+        "meeting_ids": [
+          "cdc_2025-08-22"
+        ],
+        "per_class_metrics": {
+          "directive": {
+            "f1": 0.1818,
+            "false_negative": 2,
+            "false_positive": 7,
+            "gold_items": 3,
+            "precision": 0.125,
+            "recall": 0.3333,
+            "runtime_items": 8,
+            "true_positive": 1
+          },
+          "hold": {
+            "f1": 0.3333,
+            "false_negative": 3,
+            "false_positive": 1,
+            "gold_items": 4,
+            "precision": 0.5,
+            "recall": 0.25,
+            "runtime_items": 2,
+            "true_positive": 1
+          }
+        },
+        "scores": {
+          "exact_match_score": 0.2857,
+          "fallback_activation_rate": 0.0,
+          "macro_f1": 0.2576,
+          "macro_precision": 0.3125,
+          "macro_recall": 0.2917,
+          "micro_f1": 0.2353,
+          "micro_precision": 0.2,
+          "micro_recall": 0.2857,
+          "relaxed_match_score": 0.2857,
+          "unsafe_certainty_rate": 0.0,
+          "unsupported_quote_rate": 0.0
+        },
+        "slot": "dev_set"
+      },
+      {
+        "confidence_buckets": [
+          {
+            "bucket": "0.00-0.49",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          },
+          {
+            "bucket": "0.50-0.69",
+            "count": 2,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 2
+          },
+          {
+            "bucket": "0.70-0.84",
+            "count": 6,
+            "exact_matches": 1,
+            "precision": 0.6667,
+            "relaxed_matches": 3,
+            "unmatched": 2
+          },
+          {
+            "bucket": "0.85-1.00",
+            "count": 0,
+            "exact_matches": 0,
+            "precision": 0.0,
+            "relaxed_matches": 0,
+            "unmatched": 0
+          }
+        ],
+        "counts": {
+          "exact_matches": 1,
+          "fallback_activations": 0,
+          "gold_items": 8,
+          "matched_items": 4,
+          "relaxed_matches": 3,
+          "runtime_items": 8,
+          "unmatched_gold_items": 4,
+          "unmatched_runtime_items": 4,
+          "unsafe_certainty": 0,
+          "unsupported_quotes": 0
+        },
+        "failure_category_counts": {
+          "duplicated/paraphrased decision merge failure": 0,
+          "fallback false positive": 0,
+          "fallback miss": 0,
+          "false negative": 4,
+          "false positive": 4,
+          "segment-boundary miss": 0,
+          "unsafe certainty": 0,
+          "unsupported quote / grounding failure": 0,
+          "wrong class": 0,
+          "wrong subtype": 4
+        },
+        "fallback_used": false,
+        "meeting_count": 1,
+        "meeting_id": "tif3_2025-10-16",
+        "meeting_ids": [
+          "tif3_2025-10-16"
+        ],
+        "per_class_metrics": {
+          "directive": {
+            "f1": 0.7273,
+            "false_negative": 0,
+            "false_positive": 3,
+            "gold_items": 4,
+            "precision": 0.5714,
+            "recall": 1.0,
+            "runtime_items": 7,
+            "true_positive": 4
+          },
+          "hold": {
+            "f1": 0.0,
+            "false_negative": 4,
+            "false_positive": 1,
+            "gold_items": 4,
+            "precision": 0.0,
+            "recall": 0.0,
+            "runtime_items": 1,
+            "true_positive": 0
+          }
+        },
+        "scores": {
+          "exact_match_score": 0.125,
+          "fallback_activation_rate": 0.0,
+          "macro_f1": 0.3636,
+          "macro_precision": 0.2857,
+          "macro_recall": 0.5,
+          "micro_f1": 0.5,
+          "micro_precision": 0.5,
+          "micro_recall": 0.5,
+          "relaxed_match_score": 0.5,
+          "unsafe_certainty_rate": 0.0,
+          "unsupported_quote_rate": 0.0
+        },
+        "slot": "holdout"
+      }
+    ],
+    "capture_mode": "live_openai",
+    "dev_aggregate": {
+      "confidence_buckets": [
+        {
+          "bucket": "0.00-0.49",
+          "count": 1,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 1
+        },
+        {
+          "bucket": "0.50-0.69",
+          "count": 1,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 1
+        },
+        {
+          "bucket": "0.70-0.84",
+          "count": 42,
+          "exact_matches": 6,
+          "precision": 0.5,
+          "relaxed_matches": 15,
+          "unmatched": 21
+        },
+        {
+          "bucket": "0.85-1.00",
+          "count": 2,
+          "exact_matches": 0,
+          "precision": 0.5,
+          "relaxed_matches": 1,
+          "unmatched": 1
+        }
+      ],
+      "counts": {
+        "exact_matches": 6,
+        "fallback_activations": 0,
+        "gold_items": 31,
+        "matched_items": 22,
+        "relaxed_matches": 16,
+        "runtime_items": 46,
+        "unmatched_gold_items": 9,
+        "unmatched_runtime_items": 24,
+        "unsafe_certainty": 0,
+        "unsupported_quotes": 1
+      },
+      "failure_category_counts": {
+        "duplicated/paraphrased decision merge failure": 0,
+        "fallback false positive": 0,
+        "fallback miss": 0,
+        "false negative": 9,
+        "false positive": 24,
+        "segment-boundary miss": 0,
+        "unsafe certainty": 0,
+        "unsupported quote / grounding failure": 1,
+        "wrong class": 2,
+        "wrong subtype": 18
+      },
+      "meeting_count": 3,
+      "meeting_ids": [
+        "fw_council_2025-09-30",
+        "cpc_2026-01-08",
+        "cdc_2025-08-22"
+      ],
+      "per_class_metrics": {
+        "directive": {
+          "f1": 0.7143,
+          "false_negative": 3,
+          "false_positive": 13,
+          "gold_items": 23,
+          "precision": 0.6061,
+          "recall": 0.8696,
+          "runtime_items": 33,
+          "true_positive": 20
+        },
+        "hold": {
+          "f1": 0.1905,
+          "false_negative": 6,
+          "false_positive": 11,
+          "gold_items": 8,
+          "precision": 0.1538,
+          "recall": 0.25,
+          "runtime_items": 13,
+          "true_positive": 2
+        }
+      },
+      "scores": {
+        "exact_match_score": 0.1935,
+        "fallback_activation_rate": 0.0,
+        "macro_f1": 0.4524,
+        "macro_precision": 0.38,
+        "macro_recall": 0.5598,
+        "micro_f1": 0.5714,
+        "micro_precision": 0.4783,
+        "micro_recall": 0.7097,
+        "relaxed_match_score": 0.7097,
+        "unsafe_certainty_rate": 0.0,
+        "unsupported_quote_rate": 0.0217
+      }
+    },
+    "holdout": {
+      "confidence_buckets": [
+        {
+          "bucket": "0.00-0.49",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        },
+        {
+          "bucket": "0.50-0.69",
+          "count": 2,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 2
+        },
+        {
+          "bucket": "0.70-0.84",
+          "count": 6,
+          "exact_matches": 1,
+          "precision": 0.6667,
+          "relaxed_matches": 3,
+          "unmatched": 2
+        },
+        {
+          "bucket": "0.85-1.00",
+          "count": 0,
+          "exact_matches": 0,
+          "precision": 0.0,
+          "relaxed_matches": 0,
+          "unmatched": 0
+        }
+      ],
+      "counts": {
+        "exact_matches": 1,
+        "fallback_activations": 0,
+        "gold_items": 8,
+        "matched_items": 4,
+        "relaxed_matches": 3,
+        "runtime_items": 8,
+        "unmatched_gold_items": 4,
+        "unmatched_runtime_items": 4,
+        "unsafe_certainty": 0,
+        "unsupported_quotes": 0
+      },
+      "failure_category_counts": {
+        "duplicated/paraphrased decision merge failure": 0,
+        "fallback false positive": 0,
+        "fallback miss": 0,
+        "false negative": 4,
+        "false positive": 4,
+        "segment-boundary miss": 0,
+        "unsafe certainty": 0,
+        "unsupported quote / grounding failure": 0,
+        "wrong class": 0,
+        "wrong subtype": 4
+      },
+      "meeting_count": 1,
+      "meeting_ids": [
+        "tif3_2025-10-16"
+      ],
+      "per_class_metrics": {
+        "directive": {
+          "f1": 0.7273,
+          "false_negative": 0,
+          "false_positive": 3,
+          "gold_items": 4,
+          "precision": 0.5714,
+          "recall": 1.0,
+          "runtime_items": 7,
+          "true_positive": 4
+        },
+        "hold": {
+          "f1": 0.0,
+          "false_negative": 4,
+          "false_positive": 1,
+          "gold_items": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "runtime_items": 1,
+          "true_positive": 0
+        }
+      },
+      "scores": {
+        "exact_match_score": 0.125,
+        "fallback_activation_rate": 0.0,
+        "macro_f1": 0.3636,
+        "macro_precision": 0.2857,
+        "macro_recall": 0.5,
+        "micro_f1": 0.5,
+        "micro_precision": 0.5,
+        "micro_recall": 0.5,
+        "relaxed_match_score": 0.5,
+        "unsafe_certainty_rate": 0.0,
+        "unsupported_quote_rate": 0.0
+      }
+    },
+    "lane": "primary",
+    "meeting_count": 4,
+    "model": "gpt-5.4"
+  },
+  "recordings": {
+    "forced_fallback_path": "tests/pipeline/calibration/final/recorded_fallback_runs.json",
+    "forced_fallback_replay_ready": true,
+    "primary_path": "tests/pipeline/calibration/final/recorded_primary_runs.json",
+    "primary_replay_ready": true
+  },
+  "report_version": "wave4.5-blockd-final-v1"
+}
