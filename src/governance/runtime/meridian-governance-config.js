@@ -12,6 +12,13 @@ function deepFreeze(value) {
   return value;
 }
 
+const {
+  FORT_WORTH_AUTHORITY_TOPOLOGY,
+  FORT_WORTH_CIVIC_DOMAIN_IDS,
+  FORT_WORTH_PORTFOLIO_ORG_IDS,
+  FORT_WORTH_ROLE_IDS,
+} = require("./fortWorthAuthorityTopology");
+
 const MERIDIAN_GOVERNANCE_CONFIG = {
   version: "wave4a-block-c-runtime-subset-v1",
   source: {
@@ -239,6 +246,16 @@ const MERIDIAN_GOVERNANCE_CONFIG = {
         "Resolved this session",
       ],
     },
+  },
+  authorityTopology: {
+    fortWorth: FORT_WORTH_AUTHORITY_TOPOLOGY,
+    alignedDomainIds: FORT_WORTH_CIVIC_DOMAIN_IDS,
+    alignedPortfolioOrgIds: FORT_WORTH_PORTFOLIO_ORG_IDS,
+    alignedRoleIds: FORT_WORTH_ROLE_IDS,
+    notes: [
+      "Wave 5 Packet 1 adds a static Fort Worth authority-topology declaration pack without changing the Wave 4A evaluator behavior.",
+      "Topology alignment stays bounded to the existing five civic domains already declared in this config.",
+    ],
   },
 };
 

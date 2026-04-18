@@ -7,6 +7,55 @@ const {
 
 const ENTITY_TYPE = "organization";
 
+function hasOwnProperty(value, key) {
+  return Object.prototype.hasOwnProperty.call(value, key);
+}
+
+function isPlainObject(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isNonEmptyString(value) {
+  return typeof value === "string" && value.trim() !== "";
+}
+
+function isNullableNonEmptyString(value) {
+  return value === null || isNonEmptyString(value);
+}
+
+function isStringArray(value) {
+  return (
+    Array.isArray(value) &&
+    value.every((item) => typeof item === "string" && item.trim() !== "")
+  );
+}
+
+function validateOfficeHolderSnapshot(value) {
+  if (value === null) {
+    return true;
+  }
+
+  if (!isPlainObject(value)) {
+    return false;
+  }
+
+  const allowedKeys = ["name", "title"];
+
+  if (Object.keys(value).some((key) => !allowedKeys.includes(key))) {
+    return false;
+  }
+
+  if (hasOwnProperty(value, "name") && !isNonEmptyString(value.name)) {
+    return false;
+  }
+
+  if (hasOwnProperty(value, "title") && !isNonEmptyString(value.title)) {
+    return false;
+  }
+
+  return true;
+}
+
 function createOrganization(overrides = {}) {
   const entity = {
     entity_id: overrides.entity_id ?? "",
@@ -76,6 +125,40 @@ function validateOrganization(entity) {
 
   if (!validateTypedSignalTree(entity.signal_tree)) {
     errors.push("entity.signal_tree must match the typed Meridian signal_tree subset");
+  }
+
+  if (hasOwnProperty(entity, "org_type") && !isNonEmptyString(entity.org_type)) {
+    errors.push("entity.org_type must be a non-empty string");
+  }
+
+  if (
+    hasOwnProperty(entity, "parent_org_id") &&
+    !isNullableNonEmptyString(entity.parent_org_id)
+  ) {
+    errors.push("entity.parent_org_id must be null or a non-empty string");
+  }
+
+  if (
+    hasOwnProperty(entity, "portfolio_org_id") &&
+    !isNullableNonEmptyString(entity.portfolio_org_id)
+  ) {
+    errors.push("entity.portfolio_org_id must be null or a non-empty string");
+  }
+
+  if (
+    hasOwnProperty(entity, "authorized_domains") &&
+    !isStringArray(entity.authorized_domains)
+  ) {
+    errors.push("entity.authorized_domains must be an array of non-empty strings");
+  }
+
+  if (
+    hasOwnProperty(entity, "office_holder_snapshot") &&
+    !validateOfficeHolderSnapshot(entity.office_holder_snapshot)
+  ) {
+    errors.push(
+      "entity.office_holder_snapshot must be null or a plain object with optional non-empty string name/title fields"
+    );
   }
 
   return {

@@ -6,7 +6,7 @@ This is the front-door navigation index for Meridian. It points agents and maint
 
 ## Wave Scope Status
 
-Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. Wave 4.5 now closes the calibration lane with frozen corpus posture, historical baseline truth/pre-Block-C comparison artifacts, and a locked final replay artifact family/report.
+Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. Wave 4.5 closes the calibration lane with frozen corpus posture, historical baseline truth/pre-Block-C comparison artifacts, and a locked final replay artifact family/report. Local/uncommitted Wave 5 Packets 1-3 add a bounded authority-topology lane in `src/governance/runtime/` with additive entity validator widening, static Fort Worth topology declaration, bounded authority evaluation, bounded REVOKE activation, and projection-only propagation.
 
 ## Canonical Root Files
 
@@ -39,15 +39,18 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Wave 4B meeting-capture spec: `docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`
 - Wave 4.5 calibration spec: `docs/specs/WAVE4_5_CALIBRATION.md`
 - Wave 4.5 closeout: `docs/closeouts/WAVE4_5_CLOSEOUT.md`
+- Wave 5 authority-topology spec: `docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`
+- Wave 5 closeout: `docs/closeouts/WAVE5_CLOSEOUT.md`
 - Governance substrate: `src/governance/shadows.js`
 - Entity scaffold substrate: `src/entities/*.js`
 - Entity ontology spec: `docs/specs/ENTITY_ONTOLOGY.md`
 - Constellation config substrate: `src/config/constellation.js`
-- Proof surfaces: `tests/bridge*.test.js`, `tests/governance.runtime.test.js`, `tests/governance.policyPack.test.js`, `tests/governance.runtimeSubset.test.js`, `tests/governance.promiseConfidence.test.js`, `tests/governance.sweep.test.js`, `tests/governance.demoProof.test.js`, `tests/governance.pipelineHandoffProof.test.js`, `tests/pipeline/*.py`, `tests/pipeline/fixtures/*`, `tests/config.test.js`, `tests/deny-patterns.test.js`, `tests/entities.test.js`, `tests/fixtures/governance/*.json`, `tests/fixtures/nats/*.json`, `scripts/synthetic-constellation.js`
+- Proof surfaces: `tests/bridge*.test.js`, `tests/governance.runtime.test.js`, `tests/governance.policyPack.test.js`, `tests/governance.runtimeSubset.test.js`, `tests/governance.promiseConfidence.test.js`, `tests/governance.sweep.test.js`, `tests/governance.demoProof.test.js`, `tests/governance.pipelineHandoffProof.test.js`, `tests/governance.authorityTopology.test.js`, `tests/governance.authorityDomain.test.js`, `tests/governance.authorityActor.test.js`, `tests/governance.revoke.test.js`, `tests/governance.authorityPropagation.test.js`, `tests/pipeline/*.py`, `tests/pipeline/fixtures/*`, `tests/config.test.js`, `tests/deny-patterns.test.js`, `tests/entities.test.js`, `tests/fixtures/governance/*.json`, `tests/fixtures/nats/*.json`, `scripts/synthetic-constellation.js`
 
 ## Current Repo State
 
 - Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport-only bridge, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture lane, and Wave 4.5 calibration truth lock are landed in-repo.
+- Wave 5 Packets 1-3 are present as local/uncommitted working-tree substrate at Packet 4 finish-lane closeout time.
 - No UI ships in this repo today.
 - No runnable application ships in this repo today.
 - No live broker proof or production runtime compatibility proof ships in this repo today.
@@ -56,6 +59,9 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - The governance transport adapter now delegates `command_request` evaluation into `src/governance/runtime/` and may return `ALLOW`, `SUPERVISE`, `HOLD`, or `BLOCK`.
 - `src/governance/runtime/meridian-governance-config.js` is the only runtime config source for Wave 4A governance evaluation.
 - `src/governance/runtime/runtimeSubset.js` now applies the approved runtime subset for control-rod posture, constraints, interlocks, hold shaping, omission evaluation, continuity, standing risk, and Block D civic interpretation output.
+- Wave 5 runtime surfaces now include `fortWorthAuthorityTopology.js`, `resolveAuthorityDomain.js`, `resolveAuthorityActor.js`, `resolveAuthorityDecision.js`, `deriveAuthorityRevocation.js`, and `projectAuthorityPropagation.js` as bounded local authority-topology logic.
+- `evaluateGovernanceRequest.js` now orchestrates additive authority domain/actor composition and optional read-only propagation projection via nested `authority_context.propagation_context`.
+- `runtimeSubset.civic.authority_resolution` and `runtimeSubset.civic.revocation` are additive runtime-only projections; top-level request shape and publication contracts remain unchanged.
 - `src/governance/runtime/runGovernanceSweep.js` now provides a read-only, on-demand sweep facade over explicit synthetic governance inputs only.
 - `runtimeSubset.civic.promise_status` mirrors the shipped typed `civic.promise_status` field family as a bounded transient projection without entity mutation.
 - `runtimeSubset.civic.confidence.tier` now emits `WATCH`, `GAP`, `HOLD`, or `KILL` as a separate axis from top-level runtime decision state.
@@ -75,11 +81,12 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
   - permanent final replay regression at `tests/pipeline/test_calibration_final.py`
   - wave-level spec/closeout at `docs/specs/WAVE4_5_CALIBRATION.md` and `docs/closeouts/WAVE4_5_CLOSEOUT.md`
 - Wave 4.5 final report records model pin `gpt-5.4` and report version `wave4.5-blockd-final-v1`.
+- Wave 5 Packet 3 `REVOKE` is active only for `authority_revoked_mid_action`, `permit_superseded_by_overlap`, and `cross_jurisdiction_resolved_against_requester`.
 - `event_observation` remains explicitly blocked and deferred in Wave 4A.
 - No periodic worker, scheduler, timer, or daemon ships for governance sweep invocation.
 - Publisher behavior remains intentionally unchanged for `ALLOW`, `SUPERVISE`, and fail-closed `BLOCK`.
 - No general event routing or general publisher widening ships in Wave 4B.
-- No authority-topology semantics, civic-chain writes, or ForensicChain runtime writes ship in Wave 4B.
+- No generalized authority-topology widening, civic-chain writes, or ForensicChain runtime writes ship in Wave 4B/Wave 5.
 - Ontology filename seam remains unresolved and out of scope here.
 
 ## Where To Change X (Quick Pointers)
@@ -91,6 +98,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Meeting-capture pipeline lane: `src/pipeline/*.py`, `src/pipeline/README.md`
 - Bridge specs: `docs/specs/WAVE3_NATS_BRIDGE.md`, `docs/specs/NATS_EVENT_COMMAND_TRANSLATION.md`
 - Governance/runtime/capture specs and closeouts: `docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`, `docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`, `docs/specs/WAVE4_5_CALIBRATION.md`, `docs/closeouts/WAVE4A_CLOSEOUT.md`, `docs/closeouts/WAVE4B_CLOSEOUT.md`, `docs/closeouts/WAVE4_5_CLOSEOUT.md`
+- Wave 5 authority-topology truth surfaces: `docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`, `docs/closeouts/WAVE5_CLOSEOUT.md`
 - Bridge/runtime/pipeline tests and fixtures: `tests/bridge*.test.js`, `tests/governance.runtime.test.js`, `tests/governance.policyPack.test.js`, `tests/governance.runtimeSubset.test.js`, `tests/governance.promiseConfidence.test.js`, `tests/governance.sweep.test.js`, `tests/governance.demoProof.test.js`, `tests/governance.pipelineHandoffProof.test.js`, `tests/pipeline/*.py`, `tests/pipeline/fixtures/*`, `tests/fixtures/governance/*.json`, `tests/fixtures/nats/*.json`, `scripts/synthetic-constellation.js`
 - Governance shadows: `src/governance/shadows.js`
 - Entity scaffolds: `src/entities/*.js`

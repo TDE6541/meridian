@@ -10,7 +10,7 @@ Advance Meridian as a governed city digital twin intelligence repo through narro
 
 ## Project Identity
 
-Meridian is a governed city digital twin intelligence effort with root canon, entity/schema discipline, a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture lane with a local/frozen governance handoff seam, and a Wave 4.5 calibration truth lane.
+Meridian is a governed city digital twin intelligence effort with root canon, entity/schema discipline, a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture lane with a local/frozen governance handoff seam, a Wave 4.5 calibration truth lane, and a local/uncommitted bounded Wave 5 authority-topology lane.
 
 ## Role Definitions
 
@@ -39,7 +39,7 @@ Meridian uses a five-room relay structure.
 
 ## Scope Discipline
 
-Wave 1 remains the repo-native foundation. Wave 2 remains the bounded entity ontology extension. Wave 3 adds only a transport-only NATS bridge substrate, a fail-closed governance transport stub, fixture-backed proof, and canon sync. Wave 4A adds only a bounded `command_request` governance runtime lane with static policy-pack truth, runtime subset output, and read-only on-demand sweep/demo proof. Wave 4B adds only a bounded capture pipeline lane (`src/pipeline/`) with deterministic transcript handling, OpenAI-only transcription posture, segmentation, extraction/merge/fallback capture flow, translation seam, frozen Fort Worth proof artifacts, and run-level capture receipt output. Wave 4.5 adds only a calibration truth lock (frozen corpus, historical baseline truth/pre-Block-C comparison artifacts, final replay artifact family, and wave-level truth surfaces). Wave 4B/Wave 4.5 do not ship general event routing, general publisher widening, authority-topology semantics, civic-chain/ForensicChain runtime writes, or UI surfaces.
+Wave 1 remains the repo-native foundation. Wave 2 remains the bounded entity ontology extension. Wave 3 adds only a transport-only NATS bridge substrate, a fail-closed governance transport stub, fixture-backed proof, and canon sync. Wave 4A adds only a bounded `command_request` governance runtime lane with static policy-pack truth, runtime subset output, and read-only on-demand sweep/demo proof. Wave 4B adds only a bounded capture pipeline lane (`src/pipeline/`) with deterministic transcript handling, OpenAI-only transcription posture, segmentation, extraction/merge/fallback capture flow, translation seam, frozen Fort Worth proof artifacts, and run-level capture receipt output. Wave 4.5 adds only a calibration truth lock (frozen corpus, historical baseline truth/pre-Block-C comparison artifacts, final replay artifact family, and wave-level truth surfaces). Wave 5 adds only bounded authority-topology behavior in local/runtime scope: additive `authority_grant`/`organization` validator widening, static Fort Worth topology declaration, bounded domain/actor authority evaluation, bounded `REVOKE` activation for three approved reasons, additive runtime-only authority/revocation projections, and projection-only read-only propagation over explicit input. Wave 5 does not ship hosted Auth0/OpenFGA integration, persistent graph storage, top-level request/publication widening, entity mutation, event-side routing, scheduler/daemon behavior, civic-chain/ForensicChain runtime writes, or UI surfaces.
 
 ## Closeout Standard
 

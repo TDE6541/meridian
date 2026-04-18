@@ -673,7 +673,12 @@ function evaluateSafetyInterlocks(
   };
 }
 
-function composeHoldReason(requestFacts, omissionCoverage, standingRisk) {
+function composeHoldReason(
+  requestFacts,
+  omissionCoverage,
+  standingRisk,
+  authorityResolution
+) {
   const reasonParts = [];
 
   if (!requestFacts.authorityResolved) {
@@ -714,19 +719,38 @@ function composeHoldReason(requestFacts, omissionCoverage, standingRisk) {
     );
   }
 
+  if (reasonParts.length === 0 && hasAuthorityHold(authorityResolution)) {
+    reasonParts.push(
+      getAuthorityReason(authorityResolution, GOVERNANCE_DECISIONS.HOLD) ||
+        authorityResolution.reason ||
+        "authority_resolution_unresolved"
+    );
+  }
+
   return reasonParts.join(";");
 }
 
-function buildHoldEvidence(requestFacts, omissionCoverage, standingRisk) {
+function buildHoldEvidence(
+  requestFacts,
+  omissionCoverage,
+  standingRisk,
+  authorityResolution
+) {
   return uniqueStrings([
     ...requestFacts.missingApprovals.map((approval) => `missing_approval:${approval}`),
     ...requestFacts.missingTypes.map((missingType) => `missing_evidence_type:${missingType}`),
     ...omissionCoverage.findings.flatMap((finding) => finding.evidenceRefs),
     ...standingRisk.blockingItems.flatMap((item) => item.evidenceRefs),
+    ...buildAuthorityEvidence(authorityResolution),
   ]);
 }
 
-function buildHoldOptions(requestFacts, omissionCoverage, standingRisk) {
+function buildHoldOptions(
+  requestFacts,
+  omissionCoverage,
+  standingRisk,
+  authorityResolution
+) {
   const options = [];
 
   if (requestFacts.missingApprovals.length > 0) {
@@ -745,10 +769,15 @@ function buildHoldOptions(requestFacts, omissionCoverage, standingRisk) {
     options.push("resolve_standing_risk_entries");
   }
 
-  return uniqueStrings(options);
+  return uniqueStrings([...options, ...buildAuthorityOptions(authorityResolution)]);
 }
 
-function buildHoldSummary(controlRod, omissionCoverage, standingRisk) {
+function buildHoldSummary(
+  controlRod,
+  omissionCoverage,
+  standingRisk,
+  authorityResolution
+) {
   if (standingRisk.blockingItems.length > 0) {
     return "Standing-risk escalation requires HOLD before this request may proceed.";
   }
@@ -761,6 +790,10 @@ function buildHoldSummary(controlRod, omissionCoverage, standingRisk) {
     return "SUPERVISED domain remains on HOLD until missing authority or evidence resolves.";
   }
 
+  if (hasAuthorityHold(authorityResolution)) {
+    return "Authority resolution remains on HOLD until the bounded authority conditions resolve.";
+  }
+
   return "Governance request remains on HOLD until required conditions resolve.";
 }
 
@@ -771,13 +804,19 @@ function createHoldProjection(
   requestFacts,
   omissionCoverage,
   standingRisk,
+  authorityResolution,
   config = MERIDIAN_GOVERNANCE_CONFIG
 ) {
   return {
     holdId: `governance-hold:${request.org_id}:${request.entity_ref.entity_id}`,
     status: config.runtimeSubset?.hold?.defaultStatus || "active",
     blocking: true,
-    summary: buildHoldSummary(controlRod, omissionCoverage, standingRisk),
+    summary: buildHoldSummary(
+      controlRod,
+      omissionCoverage,
+      standingRisk,
+      authorityResolution
+    ),
     reason,
     impact:
       config.runtimeSubset?.hold?.impact ||
@@ -785,8 +824,18 @@ function createHoldProjection(
     resolutionPath:
       config.runtimeSubset?.hold?.resolutionPath ||
       "Resolve missing approvals, required evidence, omission findings, or standing-risk conditions and re-evaluate.",
-    evidence: buildHoldEvidence(requestFacts, omissionCoverage, standingRisk),
-    options: buildHoldOptions(requestFacts, omissionCoverage, standingRisk),
+    evidence: buildHoldEvidence(
+      requestFacts,
+      omissionCoverage,
+      standingRisk,
+      authorityResolution
+    ),
+    options: buildHoldOptions(
+      requestFacts,
+      omissionCoverage,
+      standingRisk,
+      authorityResolution
+    ),
   };
 }
 
@@ -897,6 +946,393 @@ function buildRuntimeSubsetDetails(
   };
 }
 
+function normalizeAuthorityOutcome(authorityResolution) {
+  if (!isPlainObject(authorityResolution) || authorityResolution.active !== true) {
+    return {
+      active: false,
+      finalDecision: null,
+      finalReason: null,
+      conditionsTotal: 0,
+      conditionsSatisfied: 0,
+      baseResolution: null,
+      revocation: null,
+      provenance: {
+        status: "not_applicable",
+        reason: null,
+        depthCap: null,
+        checkedChainDepth: 0,
+      },
+      propagation: null,
+    };
+  }
+
+  const baseResolution =
+    isPlainObject(authorityResolution.baseResolution) &&
+    authorityResolution.baseResolution.active === true
+      ? authorityResolution.baseResolution
+      : authorityResolution;
+
+  return {
+    active: true,
+    finalDecision: authorityResolution.decision || null,
+    finalReason: authorityResolution.reason || null,
+    conditionsTotal:
+      authorityResolution.conditions_total ??
+      baseResolution.conditions_total ??
+      0,
+    conditionsSatisfied:
+      authorityResolution.conditions_satisfied ??
+      baseResolution.conditions_satisfied ??
+      0,
+    baseResolution,
+    revocation:
+      isPlainObject(authorityResolution.revocation) &&
+      authorityResolution.revocation.active === true
+        ? authorityResolution.revocation
+        : null,
+    provenance: isPlainObject(authorityResolution.provenance)
+      ? authorityResolution.provenance
+      : {
+          status: "not_applicable",
+          reason: null,
+          depthCap: null,
+          checkedChainDepth: 0,
+        },
+    propagation: isPlainObject(authorityResolution.propagation)
+      ? authorityResolution.propagation
+      : null,
+  };
+}
+
+function getAuthorityResolutionParts(authorityResolution) {
+  const authorityOutcome = normalizeAuthorityOutcome(authorityResolution);
+
+  if (!authorityOutcome.baseResolution) {
+    return [];
+  }
+
+  return [authorityOutcome.baseResolution.domain, authorityOutcome.baseResolution.actor].filter(
+    (part) => isPlainObject(part) && part.active === true
+  );
+}
+
+function hasAuthorityHold(authorityResolution) {
+  return (
+    normalizeAuthorityOutcome(authorityResolution).finalDecision ===
+    GOVERNANCE_DECISIONS.HOLD
+  );
+}
+
+function hasAuthorityBlock(authorityResolution) {
+  return (
+    normalizeAuthorityOutcome(authorityResolution).finalDecision ===
+    GOVERNANCE_DECISIONS.BLOCK
+  );
+}
+
+function hasAuthoritySupervision(authorityResolution) {
+  return (
+    normalizeAuthorityOutcome(authorityResolution).finalDecision ===
+    GOVERNANCE_DECISIONS.SUPERVISE
+  );
+}
+
+function hasAuthorityRevocation(authorityResolution) {
+  return (
+    normalizeAuthorityOutcome(authorityResolution).finalDecision ===
+    GOVERNANCE_DECISIONS.REVOKE
+  );
+}
+
+function getAuthorityReason(authorityResolution, decision) {
+  const authorityOutcome = normalizeAuthorityOutcome(authorityResolution);
+
+  if (
+    authorityOutcome.finalDecision === decision &&
+    isNonEmptyString(authorityOutcome.finalReason)
+  ) {
+    return authorityOutcome.finalReason;
+  }
+
+  return getAuthorityResolutionParts(authorityResolution)
+    .filter((part) => part.decision === decision)
+    .map((part) => part.reason)
+    .filter(isNonEmptyString)
+    .join(";");
+}
+
+function buildAuthorityEvidence(authorityResolution) {
+  const evidenceRefs = [];
+  const authorityOutcome = normalizeAuthorityOutcome(authorityResolution);
+
+  for (const part of getAuthorityResolutionParts(authorityResolution)) {
+    if (Array.isArray(part.omissions)) {
+      for (const omission of part.omissions) {
+        if (isNonEmptyString(omission?.omission_id)) {
+          evidenceRefs.push(`authority_omission:${omission.omission_id}`);
+        }
+      }
+    }
+
+    if (part.reason === "authority_portfolio_mismatch") {
+      evidenceRefs.push("authority_portfolio:mismatch");
+    }
+
+    if (part.reason === "actor_authority_unresolved") {
+      evidenceRefs.push("authority_actor:unresolved");
+    }
+  }
+
+  if (authorityOutcome.provenance.status === "phantom") {
+    evidenceRefs.push("authority_grant:missing");
+  }
+
+  if (authorityOutcome.provenance.status === "invalid") {
+    evidenceRefs.push(
+      `authority_provenance:${authorityOutcome.provenance.reason || "invalid"}`
+    );
+  }
+
+  if (authorityOutcome.revocation?.active === true) {
+    evidenceRefs.push(`authority_revocation:${authorityOutcome.revocation.reason}`);
+  }
+
+  return uniqueStrings(evidenceRefs);
+}
+
+function buildAuthorityOptions(authorityResolution) {
+  const options = [];
+  const authorityOutcome = normalizeAuthorityOutcome(authorityResolution);
+
+  for (const part of getAuthorityResolutionParts(authorityResolution)) {
+    if (
+      Array.isArray(part.omissions) &&
+      part.omissions.some(
+        (entry) =>
+          entry.omission_id === "authority_expired_mid_action" ||
+          entry.omission_id === "authority_jurisdiction_mismatch"
+      )
+    ) {
+      options.push("resolve_authority_domain_context");
+    }
+
+    if (part.reason === "authority_portfolio_mismatch") {
+      options.push("align_authority_portfolio");
+    }
+
+    if (part.reason === "actor_authority_unresolved") {
+      options.push("resolve_actor_authority_chain");
+    }
+  }
+
+  if (authorityOutcome.provenance.status === "phantom") {
+    options.push("supply_authority_grant_provenance");
+  }
+
+  if (authorityOutcome.provenance.status === "invalid") {
+    options.push("repair_authority_grant_provenance");
+  }
+
+  return uniqueStrings(options);
+}
+
+function applyAuthorityResolutionToPromiseStatus(promiseStatus, authorityResolution) {
+  const authorityOutcome = normalizeAuthorityOutcome(authorityResolution);
+
+  if (!authorityOutcome.active) {
+    return promiseStatus;
+  }
+
+  return {
+    ...promiseStatus,
+    conditions_total:
+      promiseStatus.conditions_total + authorityOutcome.conditionsTotal,
+    conditions_satisfied:
+      promiseStatus.conditions_satisfied + authorityOutcome.conditionsSatisfied,
+  };
+}
+
+function projectAuthorityResolutionPart(part) {
+  if (!isPlainObject(part) || part.active !== true) {
+    return null;
+  }
+
+  const projected = {
+    decision: part.decision || null,
+    reason: part.reason || null,
+  };
+
+  if (isNonEmptyString(part.domain_id)) {
+    projected.domain_id = part.domain_id;
+  }
+
+  if (isNonEmptyString(part.requested_role_id)) {
+    projected.requested_role_id = part.requested_role_id;
+  }
+
+  if (isNonEmptyString(part.declaration_mode)) {
+    projected.declaration_mode = part.declaration_mode;
+  }
+
+  if (isNonEmptyString(part.portfolio_status)) {
+    projected.portfolio_status = part.portfolio_status;
+  }
+
+  if (Array.isArray(part.omissions)) {
+    projected.omissions = part.omissions.map((entry) => ({
+      omission_id: entry.omission_id,
+      reason: entry.reason,
+    }));
+  }
+
+  if (isPlainObject(part.jurisdiction)) {
+    projected.jurisdiction = {
+      jurisdiction_id: part.jurisdiction.jurisdictionId,
+      matched: part.jurisdiction.matched,
+    };
+  }
+
+  if (isPlainObject(part.state_transition)) {
+    projected.state_transition = {
+      applicable: part.state_transition.applicable,
+      valid: part.state_transition.valid,
+      from_state: part.state_transition.fromState,
+      to_state: part.state_transition.toState,
+      entity_type: part.state_transition.entityType,
+    };
+  }
+
+  if (isNonEmptyString(part.lane)) {
+    projected.lane = part.lane;
+  }
+
+  if (part.refusal_rationale !== undefined) {
+    projected.refusal_rationale = part.refusal_rationale;
+  }
+
+  if (isPlainObject(part.decision_trace)) {
+    projected.decision_trace = {
+      actor_id: part.decision_trace.actor_id,
+      target_id: part.decision_trace.target_id,
+      chain_depth_cap: part.decision_trace.chain_depth_cap,
+      precedence_order: Array.isArray(part.decision_trace.precedence_order)
+        ? [...part.decision_trace.precedence_order]
+        : [],
+      path_count: part.decision_trace.path_count,
+      cycle_detected: part.decision_trace.cycle_detected,
+      depth_cap_exceeded: part.decision_trace.depth_cap_exceeded,
+      selected_relation_signature:
+        part.decision_trace.selected_relation_signature || null,
+      used_delegation: part.decision_trace.used_delegation || false,
+      selected_path: Array.isArray(part.decision_trace.selected_path)
+        ? part.decision_trace.selected_path.map((step) => ({
+            subject: step.subject,
+            relation: step.relation,
+            object: step.object,
+          }))
+        : [],
+    };
+  }
+
+  return projected;
+}
+
+function projectAuthorityResolution(authorityResolution) {
+  const authorityOutcome = normalizeAuthorityOutcome(authorityResolution);
+
+  if (!authorityOutcome.baseResolution) {
+    return null;
+  }
+
+  return {
+    decision: authorityOutcome.baseResolution.decision,
+    reason: authorityOutcome.baseResolution.reason,
+    conditions_total: authorityOutcome.baseResolution.conditions_total || 0,
+    conditions_satisfied: authorityOutcome.baseResolution.conditions_satisfied || 0,
+    domain: projectAuthorityResolutionPart(authorityOutcome.baseResolution.domain),
+    actor: projectAuthorityResolutionPart(authorityOutcome.baseResolution.actor),
+  };
+}
+
+function projectAuthorityRevocation(authorityResolution) {
+  const authorityOutcome = normalizeAuthorityOutcome(authorityResolution);
+  const hasProvenance =
+    authorityOutcome.provenance.status !== "not_applicable" ||
+    authorityOutcome.provenance.reason !== null;
+  const hasPropagation =
+    isPlainObject(authorityOutcome.propagation) &&
+    authorityOutcome.propagation.totalInputs > 0;
+
+  if (!authorityOutcome.revocation && !hasProvenance && !hasPropagation) {
+    return null;
+  }
+
+  const projected = {
+    active: authorityOutcome.revocation?.active === true,
+    decision:
+      authorityOutcome.revocation?.active === true
+        ? GOVERNANCE_DECISIONS.REVOKE
+        : null,
+    reason: authorityOutcome.revocation?.reason || null,
+    rationale: authorityOutcome.revocation?.rationale || null,
+    provenance_status: authorityOutcome.provenance.status,
+    provenance_reason: authorityOutcome.provenance.reason,
+    depth_cap: authorityOutcome.provenance.depthCap,
+    checked_chain_depth: authorityOutcome.provenance.checkedChainDepth,
+  };
+
+  if (hasPropagation) {
+    projected.propagation = authorityOutcome.propagation;
+  }
+
+  return projected;
+}
+
+function deriveBoundedAuthorityRationale(
+  decision,
+  reason,
+  requestFacts,
+  omissions,
+  standingRisk,
+  controlRod,
+  authorityResolution
+) {
+  const authorityOutcome = normalizeAuthorityOutcome(authorityResolution);
+
+  if (
+    decision === GOVERNANCE_DECISIONS.REVOKE &&
+    isNonEmptyString(authorityOutcome.revocation?.rationale)
+  ) {
+    return authorityOutcome.revocation.rationale;
+  }
+
+  if (
+    decision === GOVERNANCE_DECISIONS.HOLD &&
+    authorityOutcome.provenance.status === "phantom"
+  ) {
+    return "Bounded authority grant provenance is missing.";
+  }
+
+  if (
+    decision === GOVERNANCE_DECISIONS.BLOCK &&
+    authorityOutcome.provenance.status === "invalid"
+  ) {
+    return authorityOutcome.provenance.reason ===
+      "authority_provenance_depth_exceeded"
+      ? "Authority grant provenance exceeds the bounded depth cap."
+      : "Bounded authority grant provenance failed validation.";
+  }
+
+  return deriveDecisionRationale({
+    decision,
+    reason,
+    requestFacts,
+    omissions,
+    standingRisk,
+    controlRod,
+  });
+}
+
 function attachCivicProjection(
   runtimeSubset,
   request,
@@ -907,46 +1343,64 @@ function attachCivicProjection(
   decision,
   reason,
   hold,
+  authorityResolution,
   config = MERIDIAN_GOVERNANCE_CONFIG
 ) {
+  const confidenceDecision =
+    decision === GOVERNANCE_DECISIONS.REVOKE
+      ? GOVERNANCE_DECISIONS.BLOCK
+      : decision;
   const confidence = deriveCivicConfidence(
     {
-      decision,
+      decision: confidenceDecision,
       reason,
       hold,
       standingRisk,
     },
     config
   );
+  const promiseStatus = applyAuthorityResolutionToPromiseStatus(
+    derivePromiseStatus(request, requestFacts, omissions, standingRisk),
+    authorityResolution
+  );
+  const authorityProjection = projectAuthorityResolution(authorityResolution);
+  const revocationProjection = projectAuthorityRevocation(authorityResolution);
+
+  const civicProjection = {
+    promise_status: promiseStatus,
+    confidence,
+    rationale: {
+      decision: deriveBoundedAuthorityRationale(
+        decision,
+        reason,
+        requestFacts,
+        omissions,
+        standingRisk,
+        controlRod,
+        authorityResolution
+      ),
+    },
+  };
+
+  if (authorityProjection) {
+    civicProjection.authority_resolution = authorityProjection;
+  }
+
+  if (revocationProjection) {
+    civicProjection.revocation = revocationProjection;
+  }
 
   return {
     ...runtimeSubset,
-    civic: {
-      promise_status: derivePromiseStatus(
-        request,
-        requestFacts,
-        omissions,
-        standingRisk
-      ),
-      confidence,
-      rationale: {
-        decision: deriveDecisionRationale({
-          decision,
-          reason,
-          requestFacts,
-          omissions,
-          standingRisk,
-          controlRod,
-        }),
-      },
-    },
+    civic: civicProjection,
   };
 }
 
 function evaluateRuntimeSubset(
   request,
   policyContext,
-  config = MERIDIAN_GOVERNANCE_CONFIG
+  config = MERIDIAN_GOVERNANCE_CONFIG,
+  authorityResolution = null
 ) {
   const requestFacts = deriveRequestFacts(request);
   const syntheticContext = normalizeSyntheticRuntimeContext(request);
@@ -994,6 +1448,7 @@ function evaluateRuntimeSubset(
         GOVERNANCE_DECISIONS.BLOCK,
         syntheticContext.invalidReason,
         null,
+        authorityResolution,
         config
       ),
     };
@@ -1013,6 +1468,7 @@ function evaluateRuntimeSubset(
         GOVERNANCE_DECISIONS.BLOCK,
         "unsupported_request_domain",
         null,
+        authorityResolution,
         config
       ),
     };
@@ -1036,6 +1492,7 @@ function evaluateRuntimeSubset(
         GOVERNANCE_DECISIONS.BLOCK,
         blockingConstraint.constraintId,
         null,
+        authorityResolution,
         config
       ),
     };
@@ -1044,10 +1501,66 @@ function evaluateRuntimeSubset(
   const shouldHold =
     constraints.effectiveDecision === GOVERNANCE_DECISIONS.HOLD ||
     omissions.effectiveDecision === GOVERNANCE_DECISIONS.HOLD ||
-    standingRisk.blockingItems.length > 0;
+    standingRisk.blockingItems.length > 0 ||
+    hasAuthorityHold(authorityResolution);
+
+  if (hasAuthorityBlock(authorityResolution)) {
+    const authorityReason =
+      getAuthorityReason(authorityResolution, GOVERNANCE_DECISIONS.BLOCK) ||
+      normalizeAuthorityOutcome(authorityResolution).finalReason ||
+      "authority_resolution_blocked";
+
+    return {
+      decision: GOVERNANCE_DECISIONS.BLOCK,
+      reason: authorityReason,
+      runtimeSubset: attachCivicProjection(
+        runtimeSubset,
+        request,
+        requestFacts,
+        omissions,
+        standingRisk,
+        controlRod,
+        GOVERNANCE_DECISIONS.BLOCK,
+        authorityReason,
+        null,
+        authorityResolution,
+        config
+      ),
+    };
+  }
+
+  if (hasAuthorityRevocation(authorityResolution)) {
+    const authorityReason =
+      getAuthorityReason(authorityResolution, GOVERNANCE_DECISIONS.REVOKE) ||
+      normalizeAuthorityOutcome(authorityResolution).finalReason ||
+      "authority_revoked";
+
+    return {
+      decision: GOVERNANCE_DECISIONS.REVOKE,
+      reason: authorityReason,
+      runtimeSubset: attachCivicProjection(
+        runtimeSubset,
+        request,
+        requestFacts,
+        omissions,
+        standingRisk,
+        controlRod,
+        GOVERNANCE_DECISIONS.REVOKE,
+        authorityReason,
+        null,
+        authorityResolution,
+        config
+      ),
+    };
+  }
 
   if (shouldHold) {
-    const reason = composeHoldReason(requestFacts, omissions, standingRisk);
+    const reason = composeHoldReason(
+      requestFacts,
+      omissions,
+      standingRisk,
+      authorityResolution
+    );
     const hold = createHoldProjection(
       request,
       controlRod,
@@ -1055,6 +1568,7 @@ function evaluateRuntimeSubset(
       requestFacts,
       omissions,
       standingRisk,
+      authorityResolution,
       config
     );
 
@@ -1072,6 +1586,7 @@ function evaluateRuntimeSubset(
         GOVERNANCE_DECISIONS.HOLD,
         reason,
         hold,
+        authorityResolution,
         config
       ),
     };
@@ -1091,6 +1606,32 @@ function evaluateRuntimeSubset(
         GOVERNANCE_DECISIONS.BLOCK,
         interlocks.effective.reason,
         null,
+        authorityResolution,
+        config
+      ),
+    };
+  }
+
+  if (hasAuthoritySupervision(authorityResolution)) {
+    const authorityReason =
+      getAuthorityReason(authorityResolution, GOVERNANCE_DECISIONS.SUPERVISE) ||
+      authorityResolution.reason ||
+      "authority_supervision_required";
+
+    return {
+      decision: GOVERNANCE_DECISIONS.SUPERVISE,
+      reason: authorityReason,
+      runtimeSubset: attachCivicProjection(
+        runtimeSubset,
+        request,
+        requestFacts,
+        omissions,
+        standingRisk,
+        controlRod,
+        GOVERNANCE_DECISIONS.SUPERVISE,
+        authorityReason,
+        null,
+        authorityResolution,
         config
       ),
     };
@@ -1110,6 +1651,7 @@ function evaluateRuntimeSubset(
         GOVERNANCE_DECISIONS.SUPERVISE,
         interlocks.effective.reason,
         null,
+        authorityResolution,
         config
       ),
     };
@@ -1128,6 +1670,7 @@ function evaluateRuntimeSubset(
       GOVERNANCE_DECISIONS.ALLOW,
       "authority_and_evidence_resolved",
       null,
+      authorityResolution,
       config
     ),
   };

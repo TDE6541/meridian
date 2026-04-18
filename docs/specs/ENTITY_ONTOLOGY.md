@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This spec records the shipped Wave 2 entity ontology truth that exists in-repo today. It is a bounded contract widening, not a full Section 9 implementation.
+This spec records the shipped Meridian entity ontology truth that exists in-repo today. It remains a bounded contract widening, not a full Section 9 implementation.
 
 ## Shipped Wave 2 Contract
 
@@ -36,7 +36,52 @@ Meridian ships only this typed `signal_tree` subset in Wave 2:
 - Stateful entities may use `status === null`, or a non-null `status` that appears in that entity's exported `LIFECYCLE_STATES`.
 - Stateless entities must use `status === null`. Any non-null `status` is invalid.
 - Stateful entities in-repo after Wave 2: `action_request`, `decision_record`, `evidence_artifact`, `incident_observation`, `inspection`, `obligation`, `permit_application`, `utility_asset`.
-- Stateless entities in-repo after Wave 2: `authority_grant`, `corridor_zone`, `critical_site`, `device`, `organization`.
+- Stateless entities in-repo after Wave 2: `corridor_zone`, `critical_site`, `device`, `organization`.
+
+### Wave 5 Packet 1 additive entity widening
+
+Wave 5 Packet 1 widens only `authority_grant` and `organization`, and it does so additively:
+
+- existing factory defaults remain at the older structural floor for compatibility with the shared structural suite
+- validators now accept the widened fields when they are present
+- no graph-aware cycle detection, repo-global state lookup, or other entity widening ships in this packet
+
+#### authority_grant
+
+`authority_grant` now accepts these additive fields when present:
+
+- `granted_role`: non-empty string
+- `jurisdiction`: non-empty string
+- `scope_of_authority`: `string[]`
+- `granted_at`: `string | null`
+- `expires_at`: `string | null`
+- `revoked_at`: `string | null`
+- `superseded_at`: `string | null`
+- `granted_by_entity_id`: `string | null`
+- `supersedes_grant_ids`: `string[]`
+- `delegation_chain_ids`: `string[]`
+
+`authority_grant.status` may now be `null` or one of:
+
+- `active`
+- `expired`
+- `revoked`
+- `superseded`
+- `pending`
+
+This is a bounded validator-local status widening for `authority_grant`; it does not add graph logic, authority-topology resolution, or repo-global lookup behavior.
+
+#### organization
+
+`organization` now accepts these additive fields when present:
+
+- `org_type`: non-empty string
+- `parent_org_id`: `string | null`
+- `portfolio_org_id`: `string | null`
+- `authorized_domains`: `string[]`
+- `office_holder_snapshot`: `null` or a plain object with optional non-empty string `name` / `title` fields
+
+This widening remains shape-only and does not add mutual-exclusion rules, cross-org cycle checks, or repo-global topology validation.
 
 ### utility_asset promotion
 

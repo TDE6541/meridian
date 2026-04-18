@@ -3,6 +3,7 @@ const GOVERNANCE_DECISIONS = Object.freeze({
   SUPERVISE: "SUPERVISE",
   HOLD: "HOLD",
   BLOCK: "BLOCK",
+  REVOKE: "REVOKE",
 });
 
 const GOVERNANCE_CONFIDENCE_TIERS = Object.freeze({

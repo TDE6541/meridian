@@ -2,6 +2,13 @@ const { GOVERNANCE_DECISIONS } = require("./decisionVocabulary");
 const { deriveCivicConfidence, deriveDecisionRationale } = require("./deriveCivicConfidence");
 const { createEmptyPromiseStatus } = require("./derivePromiseStatus");
 const MERIDIAN_GOVERNANCE_CONFIG = require("./meridian-governance-config");
+const { projectAuthorityPropagation } = require("./projectAuthorityPropagation");
+const { resolveAuthorityDomain } = require("./resolveAuthorityDomain");
+const {
+  combineAuthorityResolutions,
+  resolveAuthorityDecision,
+} = require("./resolveAuthorityDecision");
+const { resolveAuthorityActor } = require("./resolveAuthorityActor");
 const { evaluateRuntimeSubset } = require("./runtimeSubset");
 
 function isPlainObject(value) {
@@ -183,7 +190,28 @@ function resolveGovernancePolicyContext(
   };
 }
 
-function evaluateGovernanceRequest(request) {
+function buildAuthorityPropagation(request, options) {
+  if (
+    options?.skipPropagation === true ||
+    !isPlainObject(request?.authority_context) ||
+    !Object.prototype.hasOwnProperty.call(
+      request.authority_context,
+      "propagation_context"
+    )
+  ) {
+    return null;
+  }
+
+  return projectAuthorityPropagation(
+    request.authority_context.propagation_context,
+    (projectionRequest) =>
+      evaluateGovernanceRequest(projectionRequest, {
+        skipPropagation: true,
+      })
+  );
+}
+
+function evaluateGovernanceRequest(request, options = {}) {
   if (!isPlainObject(request)) {
     return block("request_must_be_plain_object");
   }
@@ -226,6 +254,16 @@ function evaluateGovernanceRequest(request) {
 
   if (!isPlainObject(request.authority_context)) {
     return block("authority_context_must_be_plain_object");
+  }
+
+  if (
+    Object.prototype.hasOwnProperty.call(
+      request.authority_context,
+      "propagation_context"
+    ) &&
+    !isPlainObject(request.authority_context.propagation_context)
+  ) {
+    return block("authority_propagation_context_invalid");
   }
 
   if (typeof request.authority_context.resolved !== "boolean") {
@@ -281,11 +319,35 @@ function evaluateGovernanceRequest(request) {
   }
 
   const policyContext = resolveGovernancePolicyContext(request);
+  const authorityResolution = resolveAuthorityDecision(
+    request,
+    resolveAuthorityDomain(request, policyContext),
+    resolveAuthorityActor(request)
+  );
+  try {
+    const propagation = buildAuthorityPropagation(request, options);
+    if (propagation) {
+      authorityResolution.propagation = propagation;
+    }
+  } catch (error) {
+    if (error instanceof TypeError) {
+      return block("authority_propagation_context_invalid");
+    }
 
-  return evaluateRuntimeSubset(request, policyContext, MERIDIAN_GOVERNANCE_CONFIG);
+    throw error;
+  }
+
+  return evaluateRuntimeSubset(
+    request,
+    policyContext,
+    MERIDIAN_GOVERNANCE_CONFIG,
+    authorityResolution
+  );
 }
 
 module.exports = {
+  combineAuthorityResolutions,
   evaluateGovernanceRequest,
+  resolveAuthorityDecision,
   resolveGovernancePolicyContext,
 };

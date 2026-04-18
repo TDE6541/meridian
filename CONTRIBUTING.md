@@ -23,6 +23,7 @@
 - Do not introduce silent drift between repo state and repo documents.
 - Treat Wave 3 bridge-local contracts as transport contracts, not persistent entity widening.
 - Treat Wave 4B capture artifacts and handoff payloads as bounded local seam outputs, not generalized runtime/publication completion.
+- Treat Wave 5 authority outputs as bounded runtime-only projections (`runtimeSubset.civic.authority_resolution` and `runtimeSubset.civic.revocation`), not top-level request/publication/entity widening.
 
 ## Canon Vs Reference Boundaries
 
@@ -44,3 +45,4 @@
 - When touching the Wave 3 bridge, sync the bridge specs, tests, migration log, and closeout in the same session.
 - When touching the Wave 4B capture lane, sync the Wave 4B spec/closeout and current-truth front doors in the same session.
 - When touching the Wave 4.5 calibration lane, sync `docs/specs/WAVE4_5_CALIBRATION.md`, `docs/closeouts/WAVE4_5_CLOSEOUT.md`, and current-truth front doors in the same session.
+- When touching the Wave 5 authority-topology lane, sync `docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`, `docs/closeouts/WAVE5_CLOSEOUT.md`, `MIGRATIONS.md`, and current-truth front doors in the same session.

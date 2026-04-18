@@ -6,6 +6,32 @@ const {
 } = require("../governance/shadows");
 
 const ENTITY_TYPE = "authority_grant";
+const AUTHORITY_GRANT_STATUSES = [
+  "active",
+  "expired",
+  "revoked",
+  "superseded",
+  "pending",
+];
+
+function hasOwnProperty(value, key) {
+  return Object.prototype.hasOwnProperty.call(value, key);
+}
+
+function isNonEmptyString(value) {
+  return typeof value === "string" && value.trim() !== "";
+}
+
+function isNullableNonEmptyString(value) {
+  return value === null || isNonEmptyString(value);
+}
+
+function isStringArray(value) {
+  return (
+    Array.isArray(value) &&
+    value.every((item) => typeof item === "string" && item.trim() !== "")
+  );
+}
 
 function createAuthorityGrant(overrides = {}) {
   const entity = {
@@ -66,7 +92,10 @@ function validateAuthorityGrant(entity) {
     errors.push("entity.is_live must be a boolean");
   }
 
-  if (entity.status !== null) {
+  if (
+    entity.status !== null &&
+    !AUTHORITY_GRANT_STATUSES.includes(entity.status)
+  ) {
     errors.push("entity.status must be null for stateless entities");
   }
 
@@ -78,6 +107,70 @@ function validateAuthorityGrant(entity) {
     errors.push("entity.signal_tree must match the typed Meridian signal_tree subset");
   }
 
+  if (hasOwnProperty(entity, "granted_role") && !isNonEmptyString(entity.granted_role)) {
+    errors.push("entity.granted_role must be a non-empty string");
+  }
+
+  if (hasOwnProperty(entity, "jurisdiction") && !isNonEmptyString(entity.jurisdiction)) {
+    errors.push("entity.jurisdiction must be a non-empty string");
+  }
+
+  if (
+    hasOwnProperty(entity, "scope_of_authority") &&
+    !isStringArray(entity.scope_of_authority)
+  ) {
+    errors.push("entity.scope_of_authority must be an array of non-empty strings");
+  }
+
+  if (
+    hasOwnProperty(entity, "granted_at") &&
+    !isNullableNonEmptyString(entity.granted_at)
+  ) {
+    errors.push("entity.granted_at must be null or a non-empty string");
+  }
+
+  if (
+    hasOwnProperty(entity, "expires_at") &&
+    !isNullableNonEmptyString(entity.expires_at)
+  ) {
+    errors.push("entity.expires_at must be null or a non-empty string");
+  }
+
+  if (
+    hasOwnProperty(entity, "revoked_at") &&
+    !isNullableNonEmptyString(entity.revoked_at)
+  ) {
+    errors.push("entity.revoked_at must be null or a non-empty string");
+  }
+
+  if (
+    hasOwnProperty(entity, "superseded_at") &&
+    !isNullableNonEmptyString(entity.superseded_at)
+  ) {
+    errors.push("entity.superseded_at must be null or a non-empty string");
+  }
+
+  if (
+    hasOwnProperty(entity, "granted_by_entity_id") &&
+    !isNullableNonEmptyString(entity.granted_by_entity_id)
+  ) {
+    errors.push("entity.granted_by_entity_id must be null or a non-empty string");
+  }
+
+  if (
+    hasOwnProperty(entity, "supersedes_grant_ids") &&
+    !isStringArray(entity.supersedes_grant_ids)
+  ) {
+    errors.push("entity.supersedes_grant_ids must be an array of non-empty strings");
+  }
+
+  if (
+    hasOwnProperty(entity, "delegation_chain_ids") &&
+    !isStringArray(entity.delegation_chain_ids)
+  ) {
+    errors.push("entity.delegation_chain_ids must be an array of non-empty strings");
+  }
+
   return {
     valid: errors.length === 0,
     errors,
@@ -86,6 +179,7 @@ function validateAuthorityGrant(entity) {
 
 module.exports = {
   ENTITY_TYPE,
+  AUTHORITY_GRANT_STATUSES,
   createAuthorityGrant,
   validateAuthorityGrant,
 };

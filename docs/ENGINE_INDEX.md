@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, and Wave 4.5 calibration truth lock surfaces.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, and local/uncommitted Wave 5 authority-topology surfaces.
 
 ## Bridge Substrate
 
@@ -19,13 +19,19 @@ Purpose: transport-only NATS bridge surfaces for subject cataloging, event and t
 
 ## Governance Runtime Landing Zone
 
-Purpose: bounded Wave 4A `command_request` evaluator backed by one static local civic policy pack plus runtime subset logic that returns `ALLOW`, `SUPERVISE`, `HOLD`, or `BLOCK`, derives bounded `promise_status`, emits separate civic confidence tiers, adds short rationale strings, and exposes a read-only on-demand sweep facade without widening publisher behavior, event-side routing, or scheduling logic.
+Purpose: bounded Wave 4A+Wave 5 `command_request` evaluator backed by one static local civic policy pack plus runtime subset logic that returns `ALLOW`, `SUPERVISE`, `HOLD`, `BLOCK`, or bounded `REVOKE` (Wave 5), derives bounded `promise_status`, emits separate civic confidence tiers, adds short rationale strings, and exposes a read-only on-demand sweep facade without widening publisher behavior, event-side routing, or scheduling logic.
 
 - `src/governance/runtime/deriveCivicConfidence.js`
 - `src/governance/runtime/derivePromiseStatus.js`
 - `src/governance/runtime/decisionVocabulary.js`
 - `src/governance/runtime/meridian-governance-config.js`
 - `src/governance/runtime/evaluateGovernanceRequest.js`
+- `src/governance/runtime/fortWorthAuthorityTopology.js`
+- `src/governance/runtime/resolveAuthorityDomain.js`
+- `src/governance/runtime/resolveAuthorityActor.js`
+- `src/governance/runtime/deriveAuthorityRevocation.js`
+- `src/governance/runtime/resolveAuthorityDecision.js`
+- `src/governance/runtime/projectAuthorityPropagation.js`
 - `src/governance/runtime/runtimeSubset.js`
 - `src/governance/runtime/runGovernanceSweep.js`
 - `src/governance/runtime/index.js`
@@ -80,7 +86,7 @@ Purpose: read-only Meridian publisher subject builders and connection config imp
 
 ## Proof Surfaces
 
-Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, and Wave 4.5 calibration replay proof surfaces.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, and local Wave 5 authority-topology proof surfaces.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
@@ -97,6 +103,11 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runti
 - `tests/governance.promiseConfidence.test.js`
 - `tests/governance.runtime.test.js`
 - `tests/governance.runtimeSubset.test.js`
+- `tests/governance.authorityTopology.test.js`
+- `tests/governance.authorityDomain.test.js`
+- `tests/governance.authorityActor.test.js`
+- `tests/governance.revoke.test.js`
+- `tests/governance.authorityPropagation.test.js`
 - `tests/governance.sweep.test.js`
 - `tests/governance.pipelineHandoffProof.test.js`
 - `tests/pipeline/test_models.py`

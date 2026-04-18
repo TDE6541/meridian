@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. Local `main` now contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, and a Wave 4.5 calibration truth lock. This repo is still not a runnable application.
+Meridian is a governed city digital twin intelligence repo. Local `main` now contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, and local/uncommitted Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation). This repo is still not a runnable application.
 
 ## Agent Start Here
 
@@ -10,7 +10,7 @@ Meridian is a governed city digital twin intelligence repo. Local `main` now con
 
 ## Current Status
 
-Wave 4.5 shipped locally on `main`: calibration truth is locked with frozen corpus posture, historical baseline artifacts, and final replay artifacts/report.
+Wave 5 Packets 1-3 are present in the local working tree on `main` and remain uncommitted at Packet 4 finish-lane closeout time.
 
 ## What This Is
 
@@ -30,6 +30,13 @@ Wave 4.5 shipped locally on `main`: calibration truth is locked with frozen corp
   - historical baseline truth and pre-Block-C comparison source artifacts under `tests/pipeline/calibration/baselines/`
   - current calibrated truth artifact family under `tests/pipeline/calibration/final/`
   - wave-level truth docs at `docs/specs/WAVE4_5_CALIBRATION.md` and `docs/closeouts/WAVE4_5_CLOSEOUT.md`
+- A local Wave 5 authority-topology lane under `src/governance/runtime/` with:
+  - static Fort Worth authority-topology declaration pack keyed to stable IDs
+  - bounded domain-side and actor-side authority evaluation over explicit `authority_context` input
+  - additive `runtimeSubset.civic.authority_resolution` runtime projection
+  - bounded REVOKE activation for `authority_revoked_mid_action`, `permit_superseded_by_overlap`, and `cross_jurisdiction_resolved_against_requester`
+  - additive `runtimeSubset.civic.revocation` runtime projection
+  - projection-only, read-only propagation under optional nested `authority_context.propagation_context`
 - A single external runtime dependency surface in `package.json`: `nats`.
 
 ## What This Is Not
@@ -37,7 +44,7 @@ Wave 4.5 shipped locally on `main`: calibration truth is locked with frozen corp
 - Not a runnable application.
 - Not live broker proof or production Constellation compatibility proof.
 - Not general event-side governance routing or generalized publisher widening.
-- Not authority-topology semantics, civic-chain writes, or civic ForensicChain runtime persistence.
+- Not live/networked authority services, civic-chain writes, or civic ForensicChain runtime persistence.
 - Not skins/dashboard UI runtime surfaces.
 - Not a claim that Wave 4B handoff seam is full runtime/governance fabric completion.
 
@@ -56,6 +63,8 @@ tests/
   bridge*.test.js
   governance*.test.js
   governance.pipelineHandoffProof.test.js
+  governance.authority*.test.js
+  governance.revoke.test.js
   pipeline/**/*.py
 docs/
   INDEX.md
@@ -65,10 +74,10 @@ docs/
   specs/*.md
 ```
 
-## Deferred After Wave 4.5
+## Deferred After Wave 5 (Local)
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
-- Generalized event routing and authority-topology semantics.
+- Generalized event routing and authority-topology widening beyond the bounded Wave 5 local lane.
 - Civic-chain and ForensicChain runtime writes.
 - UI/dashboard surfaces.
 
