@@ -1,0 +1,165 @@
+{
+  "capture_mode": "injected_failure_client",
+  "corpus_manifest_path": "tests/pipeline/fixtures/calibration_corpus/corpus_manifest.json",
+  "corpus_manifest_sha256": "4894a1474fc18289e907ad4faa1e4e5e8917b08349812b31487ccdee2daa6b4b",
+  "lane": "forced_fallback",
+  "meeting_count": 4,
+  "meetings": [
+    {
+      "capture_counts": {
+        "directive_count": 0,
+        "hold_count": 2,
+        "segment_count": 12
+      },
+      "capture_mode": "injected_failure_client",
+      "excerpt_path": "tests/pipeline/fixtures/calibration_corpus/meeting_00_fort_worth_sept_30_2025/excerpt.txt",
+      "excerpt_sha256": "0b7604ffa4309a0d94006fbcf40c3220f2855fdb2a8bcfe4e81bc1b4cb89dc55",
+      "fallback_used": true,
+      "gold_annotation_path": "tests/pipeline/fixtures/calibration_corpus/meeting_00_fort_worth_sept_30_2025/gold_annotation.json",
+      "lane": "forced_fallback",
+      "llm_config_status": {
+        "api_key_present": true,
+        "model": "gpt-5.4",
+        "model_present": true
+      },
+      "meeting_directory": "meeting_00_fort_worth_sept_30_2025",
+      "meeting_id": "fw_council_2025-09-30",
+      "notes": [
+        "bounded fallback cue scan used after extraction failure: OpenAI extraction request failed: forced fallback calibration lane"
+      ],
+      "order_index": 0,
+      "provenance_path": "tests/pipeline/fixtures/calibration_corpus/meeting_00_fort_worth_sept_30_2025/provenance.json",
+      "runtime_items": [
+        {
+          "agreement_ratio": null,
+          "capture_class": "hold",
+          "confidence": 0.35,
+          "directive_summary": null,
+          "fallback_used": true,
+          "final_confidence": 0.35,
+          "hold_summary": "The final outcome for hearing still needs confirmation.",
+          "model_confidence": 0.35,
+          "runtime_item_id": "hold:S7:1",
+          "segment_id": "S7",
+          "source_quote": "Conduct Second Public Hearing for Proposed City-Initiated Full-Purpose\nAnnexation of Approximately 4.282 Acres of Wagley Roberts Road and\nRight-of-Way (AX-25-003), in Tarrant County, North of Bonds Ranch\nRoad and West of Willow Springs Road, in the Far Northwest Planning\nSector (FUTURE COUNCIL DISTRICT 10)\n(PUBLIC HEARING - a."
+        },
+        {
+          "agreement_ratio": null,
+          "capture_class": "hold",
+          "confidence": 0.45,
+          "directive_summary": null,
+          "fallback_used": true,
+          "final_confidence": 0.45,
+          "hold_summary": "Further action on agenda item was deferred for later clarification.",
+          "model_confidence": 0.45,
+          "runtime_item_id": "hold:S9:2",
+          "segment_id": "S9",
+          "source_quote": "(CD 10) Authorize Execution of a Tax Increment Financing\nDevelopment Agreement with the Board of Directors of Tax\nIncrement Reinvestment Zone Number Two, City of Fort Worth,\nTexas, in an Amount Up to $1,500,000.00 for Public Improvements\nAssociated with Traffic Signals and Pedestrian Improvements at\nState Highway 114 and Championship Parkway within the\nBoundaries of the Tax Increment Reinvestment Zone Number Two\n(Continued from a Previous Meeting)\nM&C 25-0866\nSpeaker/Comment Card"
+        }
+      ],
+      "slot": "dev_set",
+      "transcript_hash": "c02001b5f6ed0b992625a0321bbdfaeb88e9d55f56b233e51a7ded6228281647"
+    },
+    {
+      "capture_counts": {
+        "directive_count": 0,
+        "hold_count": 0,
+        "segment_count": 6
+      },
+      "capture_mode": "injected_failure_client",
+      "excerpt_path": "tests/pipeline/fixtures/calibration_corpus/meeting_01_cpc_jan_8_2026/excerpt.txt",
+      "excerpt_sha256": "9c0ccd62bf604bd7c35dc95ceef83302a1eea25a0c41812e3b52a05bdeeb361c",
+      "fallback_used": true,
+      "gold_annotation_path": "tests/pipeline/fixtures/calibration_corpus/meeting_01_cpc_jan_8_2026/gold_annotation.json",
+      "lane": "forced_fallback",
+      "llm_config_status": {
+        "api_key_present": true,
+        "model": "gpt-5.4",
+        "model_present": true
+      },
+      "meeting_directory": "meeting_01_cpc_jan_8_2026",
+      "meeting_id": "cpc_2026-01-08",
+      "notes": [
+        "bounded fallback cue scan used after extraction failure: OpenAI extraction request failed: forced fallback calibration lane"
+      ],
+      "order_index": 1,
+      "provenance_path": "tests/pipeline/fixtures/calibration_corpus/meeting_01_cpc_jan_8_2026/provenance.json",
+      "runtime_items": [],
+      "slot": "dev_set",
+      "transcript_hash": "1b5bcac7fb4d15a3ced7e19854c3313a0b1b2ee2d9764781ff3ef933562fd686"
+    },
+    {
+      "capture_counts": {
+        "directive_count": 0,
+        "hold_count": 0,
+        "segment_count": 4
+      },
+      "capture_mode": "injected_failure_client",
+      "excerpt_path": "tests/pipeline/fixtures/calibration_corpus/meeting_02_cdc_aug_22_2025/excerpt.txt",
+      "excerpt_sha256": "2b357bba9db1c0314f9078e8708a2afa9a64339fa513343be66f8fb71a5ade04",
+      "fallback_used": true,
+      "gold_annotation_path": "tests/pipeline/fixtures/calibration_corpus/meeting_02_cdc_aug_22_2025/gold_annotation.json",
+      "lane": "forced_fallback",
+      "llm_config_status": {
+        "api_key_present": true,
+        "model": "gpt-5.4",
+        "model_present": true
+      },
+      "meeting_directory": "meeting_02_cdc_aug_22_2025",
+      "meeting_id": "cdc_2025-08-22",
+      "notes": [
+        "bounded fallback cue scan used after extraction failure: OpenAI extraction request failed: forced fallback calibration lane"
+      ],
+      "order_index": 2,
+      "provenance_path": "tests/pipeline/fixtures/calibration_corpus/meeting_02_cdc_aug_22_2025/provenance.json",
+      "runtime_items": [],
+      "slot": "dev_set",
+      "transcript_hash": "3527ebe97adf969b444eed57ea7a190e0abc0134030fb9f4018750888c014d65"
+    },
+    {
+      "capture_counts": {
+        "directive_count": 0,
+        "hold_count": 1,
+        "segment_count": 7
+      },
+      "capture_mode": "injected_failure_client",
+      "excerpt_path": "tests/pipeline/fixtures/calibration_corpus/meeting_03_tif3_oct_16_2025/excerpt.txt",
+      "excerpt_sha256": "fef57ee4da9535d4691348c8e4e601dbfc972c0dfe4457b315454dae83eb521e",
+      "fallback_used": true,
+      "gold_annotation_path": "tests/pipeline/fixtures/calibration_corpus/meeting_03_tif3_oct_16_2025/gold_annotation.json",
+      "lane": "forced_fallback",
+      "llm_config_status": {
+        "api_key_present": true,
+        "model": "gpt-5.4",
+        "model_present": true
+      },
+      "meeting_directory": "meeting_03_tif3_oct_16_2025",
+      "meeting_id": "tif3_2025-10-16",
+      "notes": [
+        "bounded fallback cue scan used after extraction failure: OpenAI extraction request failed: forced fallback calibration lane"
+      ],
+      "order_index": 3,
+      "provenance_path": "tests/pipeline/fixtures/calibration_corpus/meeting_03_tif3_oct_16_2025/provenance.json",
+      "runtime_items": [
+        {
+          "agreement_ratio": null,
+          "capture_class": "hold",
+          "confidence": 0.45,
+          "directive_summary": null,
+          "fallback_used": true,
+          "final_confidence": 0.45,
+          "hold_summary": "Further action on agenda item was deferred for later clarification.",
+          "model_confidence": 0.45,
+          "runtime_item_id": "hold:S6:1",
+          "segment_id": "S6",
+          "source_quote": "The following table compares the City of Fort Worth property tax bill for a median-valued\nhomestead property for (1) the current fiscal year, (2) if the budget is adopted as proposed, and\n(3) if the adopted budget were based on the no-new-revenue tax rate:\n2024 Rate as Adopted: $0.672500\n2025 Rate as Proposed: $0.670000\n2025 No-New-Revenue Rate: $0.659126\nTIF 3 (Downtown) Projections:\nTAXABLE VALUE: FY2025 $1,303,483,513 | FY2026 $1,442,843,627 | FY2027 $1,397,228,446 | FY2028 $1,413,529,444\nYOY Growth: -0.5% | 10.7% | -3.2% | 1.2%\nTAX INCREMENT (CFW): $981,042,876 | $1,074,787,809 | $1,074,787,809 | $1,091,088,807"
+        }
+      ],
+      "slot": "holdout",
+      "transcript_hash": "69e6ccff285642c6b0f43cb5187ad07c1f9e190a155872fa223f7bc6be42795a"
+    }
+  ],
+  "model": "gpt-5.4",
+  "replay_ready": true,
+  "runner_version": "wave4.5-blockb-baseline-v1"
+}
