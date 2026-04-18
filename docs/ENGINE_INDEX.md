@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, and bounded Wave 4B meeting-capture pipeline lane.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, and Wave 4.5 calibration truth lock surfaces.
 
 ## Bridge Substrate
 
@@ -80,7 +80,7 @@ Purpose: read-only Meridian publisher subject builders and connection config imp
 
 ## Proof Surfaces
 
-Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, and Wave 4B pipeline/frozen-handoff proof surfaces.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, and Wave 4.5 calibration replay proof surfaces.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
@@ -110,6 +110,15 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runti
 - `tests/pipeline/test_translation.py`
 - `tests/pipeline/test_receipt.py`
 - `tests/pipeline/test_end_to_end_proof.py`
+- `tests/pipeline/test_calibration_final.py`
+- `tests/pipeline/calibration/runner.py`
+- `tests/pipeline/calibration/report.py`
+- `tests/pipeline/calibration/baselines/recorded_primary_runs.json`
+- `tests/pipeline/calibration/baselines/recorded_fallback_runs.json`
+- `tests/pipeline/calibration/baselines/baseline_report.json`
+- `tests/pipeline/calibration/final/recorded_primary_runs.json`
+- `tests/pipeline/calibration/final/recorded_fallback_runs.json`
+- `tests/pipeline/calibration/final/final_report.json`
 - `tests/pipeline/fort_worth_proof_support.py`
 - `tests/pipeline/fixtures/fort_worth_proof/fort_worth_official_agenda_excerpt.txt`
 - `tests/pipeline/fixtures/fort_worth_proof/fort_worth_official_agenda_provenance.json`

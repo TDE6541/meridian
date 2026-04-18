@@ -44,6 +44,8 @@ tests/
   governance.runtimeSubset.test.js
   governance.sweep.test.js
   pipeline/*.py
+  pipeline/calibration/*.py
+  pipeline/calibration/**/*.json
   pipeline/fixtures/*
   fixtures/governance/*.json
   fixtures/nats/*.json
@@ -63,10 +65,12 @@ docs/
   closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md
   closeouts/WAVE4A_BLOCK_E_CLOSEOUT.md
   closeouts/WAVE4B_CLOSEOUT.md
+  closeouts/WAVE4_5_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
   specs/NATS_EVENT_COMMAND_TRANSLATION.md
   specs/WAVE4A_GOVERNANCE_RUNTIME.md
   specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md
+  specs/WAVE4_5_CALIBRATION.md
   specs/WAVE3_NATS_BRIDGE.md
 scripts/
   synthetic-constellation.js
@@ -82,6 +86,7 @@ scripts/
 - Describe Wave 3 only as a transport-only bridge and fail-closed governance stub.
 - Describe Wave 4A Blocks A-E only as bounded `command_request` runtime activation, the static local policy pack, runtime subset integration, Block D civic interpretation output, and Block E read-only on-demand sweep/demo proof, not as periodic worker logic, event-side routing, publisher widening, or full governance runtime completion.
 - Describe Wave 4B Blocks A-E only as bounded meeting-capture pipeline, translation seam, frozen proof path, and run-level receipt utilities, not as generalized runtime/event routing/publication widening completion.
+- Describe Wave 4.5 only as calibration truth lock surfaces (frozen corpus, historical baseline truth/pre-Block-C comparison artifacts, final replay artifact family, and wave-level spec/closeout), not as structure reopening or runtime widening.
 
 ## Planning Gate
 
@@ -115,6 +120,7 @@ scripts/
 - Bridge-local contracts do not widen the persistent Wave 2 entity contract.
 - Wave 4A Blocks A-E do not widen `GovernanceEvaluationRequest`, `GovernancePublication`, or `signal_tree`.
 - Wave 4B does not widen JS runtime or bridge contract shapes; it adds bounded Python capture/handoff artifacts only.
+- Wave 4.5 does not widen runtime contracts; it locks calibration evidence/reporting truth only.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 

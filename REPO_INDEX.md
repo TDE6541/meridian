@@ -6,7 +6,7 @@ This is the front-door navigation index for Meridian. It points agents and maint
 
 ## Wave Scope Status
 
-Wave 4B Blocks A-E now layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. The repo now ships a local/frozen capture-to-handoff seam plus frozen Fort Worth proof artifacts/receipt utilities, not generalized runtime/event routing expansion.
+Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. Wave 4.5 now closes the calibration lane with frozen corpus posture, historical baseline truth/pre-Block-C comparison artifacts, and a locked final replay artifact family/report.
 
 ## Canonical Root Files
 
@@ -37,6 +37,8 @@ Wave 4B Blocks A-E now layer a bounded meeting-capture pipeline lane under `src/
 - Bridge specs: `docs/specs/WAVE3_NATS_BRIDGE.md`, `docs/specs/NATS_EVENT_COMMAND_TRANSLATION.md`
 - Wave 4A runtime activation spec: `docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`
 - Wave 4B meeting-capture spec: `docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`
+- Wave 4.5 calibration spec: `docs/specs/WAVE4_5_CALIBRATION.md`
+- Wave 4.5 closeout: `docs/closeouts/WAVE4_5_CLOSEOUT.md`
 - Governance substrate: `src/governance/shadows.js`
 - Entity scaffold substrate: `src/entities/*.js`
 - Entity ontology spec: `docs/specs/ENTITY_ONTOLOGY.md`
@@ -45,7 +47,7 @@ Wave 4B Blocks A-E now layer a bounded meeting-capture pipeline lane under `src/
 
 ## Current Repo State
 
-- Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport-only bridge, Wave 4A bounded governance runtime lane, and Wave 4B bounded meeting-capture lane are landed in-repo.
+- Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport-only bridge, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture lane, and Wave 4.5 calibration truth lock are landed in-repo.
 - No UI ships in this repo today.
 - No runnable application ships in this repo today.
 - No live broker proof or production runtime compatibility proof ships in this repo today.
@@ -67,6 +69,12 @@ Wave 4B Blocks A-E now layer a bounded meeting-capture pipeline lane under `src/
   - frozen proof manifest and run-level capture receipt builders
 - `tests/pipeline/test_end_to_end_proof.py` freezes Fort Worth proof posture: official agenda pair is primary verbatim source; motion-video pair is supplemental context only.
 - `tests/governance.pipelineHandoffProof.test.js` proves the Wave 4B handoff can ride the existing Wave 4A governed non-event sweep lane without runtime widening.
+- Wave 4.5 calibration truth lock surfaces now include:
+  - historical baseline truth and pre-Block-C comparison source trio under `tests/pipeline/calibration/baselines/`
+  - current calibrated truth artifact family under `tests/pipeline/calibration/final/`
+  - permanent final replay regression at `tests/pipeline/test_calibration_final.py`
+  - wave-level spec/closeout at `docs/specs/WAVE4_5_CALIBRATION.md` and `docs/closeouts/WAVE4_5_CLOSEOUT.md`
+- Wave 4.5 final report records model pin `gpt-5.4` and report version `wave4.5-blockd-final-v1`.
 - `event_observation` remains explicitly blocked and deferred in Wave 4A.
 - No periodic worker, scheduler, timer, or daemon ships for governance sweep invocation.
 - Publisher behavior remains intentionally unchanged for `ALLOW`, `SUPERVISE`, and fail-closed `BLOCK`.
@@ -82,11 +90,11 @@ Wave 4B Blocks A-E now layer a bounded meeting-capture pipeline lane under `src/
 - Governance runtime activation: `src/governance/runtime/*.js`
 - Meeting-capture pipeline lane: `src/pipeline/*.py`, `src/pipeline/README.md`
 - Bridge specs: `docs/specs/WAVE3_NATS_BRIDGE.md`, `docs/specs/NATS_EVENT_COMMAND_TRANSLATION.md`
-- Governance/runtime specs and closeouts: `docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`, `docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`, `docs/closeouts/WAVE4A_CLOSEOUT.md`, `docs/closeouts/WAVE4B_CLOSEOUT.md`
+- Governance/runtime/capture specs and closeouts: `docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`, `docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`, `docs/specs/WAVE4_5_CALIBRATION.md`, `docs/closeouts/WAVE4A_CLOSEOUT.md`, `docs/closeouts/WAVE4B_CLOSEOUT.md`, `docs/closeouts/WAVE4_5_CLOSEOUT.md`
 - Bridge/runtime/pipeline tests and fixtures: `tests/bridge*.test.js`, `tests/governance.runtime.test.js`, `tests/governance.policyPack.test.js`, `tests/governance.runtimeSubset.test.js`, `tests/governance.promiseConfidence.test.js`, `tests/governance.sweep.test.js`, `tests/governance.demoProof.test.js`, `tests/governance.pipelineHandoffProof.test.js`, `tests/pipeline/*.py`, `tests/pipeline/fixtures/*`, `tests/fixtures/governance/*.json`, `tests/fixtures/nats/*.json`, `scripts/synthetic-constellation.js`
 - Governance shadows: `src/governance/shadows.js`
 - Entity scaffolds: `src/entities/*.js`
 - Entity ontology spec: `docs/specs/ENTITY_ONTOLOGY.md`
 - Constellation config: `src/config/constellation.js`
-- Closeouts: `docs/closeouts/README.md`, `docs/closeouts/WAVE1_CLOSEOUT.md`, `docs/closeouts/WAVE2_CLOSEOUT.md`, `docs/closeouts/WAVE3_CLOSEOUT.md`, `docs/closeouts/WAVE4A_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_A_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_B_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_C_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_E_CLOSEOUT.md`, `docs/closeouts/WAVE4B_CLOSEOUT.md`
+- Closeouts: `docs/closeouts/README.md`, `docs/closeouts/WAVE1_CLOSEOUT.md`, `docs/closeouts/WAVE2_CLOSEOUT.md`, `docs/closeouts/WAVE3_CLOSEOUT.md`, `docs/closeouts/WAVE4A_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_A_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_B_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_C_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_E_CLOSEOUT.md`, `docs/closeouts/WAVE4B_CLOSEOUT.md`, `docs/closeouts/WAVE4_5_CLOSEOUT.md`
 - Detailed mapping: `docs/WHERE_TO_CHANGE_X.md`

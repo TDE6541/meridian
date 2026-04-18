@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. Local `main` now contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, and Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path. This repo is still not a runnable application.
+Meridian is a governed city digital twin intelligence repo. Local `main` now contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, and a Wave 4.5 calibration truth lock. This repo is still not a runnable application.
 
 ## Agent Start Here
 
@@ -10,7 +10,7 @@ Meridian is a governed city digital twin intelligence repo. Local `main` now con
 
 ## Current Status
 
-Wave 4B Block E shipped locally on `main`: frozen Fort Worth proof path and run-level capture receipt layered onto the Wave 4B capture pipeline.
+Wave 4.5 shipped locally on `main`: calibration truth is locked with frozen corpus posture, historical baseline artifacts, and final replay artifacts/report.
 
 ## What This Is
 
@@ -26,6 +26,10 @@ Wave 4B Block E shipped locally on `main`: frozen Fort Worth proof path and run-
   - translation seam that emits a durable capture artifact and a reduced local/frozen governance handoff payload
   - run-level frozen proof manifest and capture receipt utilities
 - A frozen Fort Worth proof lane in `tests/pipeline/fixtures/fort_worth_proof/`, `tests/pipeline/test_end_to_end_proof.py`, and `tests/governance.pipelineHandoffProof.test.js` that keeps the official agenda pair as primary verbatim source and motion-video pair as supplemental context only.
+- A Wave 4.5 calibration truth lane under `tests/pipeline/calibration/` with:
+  - historical baseline truth and pre-Block-C comparison source artifacts under `tests/pipeline/calibration/baselines/`
+  - current calibrated truth artifact family under `tests/pipeline/calibration/final/`
+  - wave-level truth docs at `docs/specs/WAVE4_5_CALIBRATION.md` and `docs/closeouts/WAVE4_5_CLOSEOUT.md`
 - A single external runtime dependency surface in `package.json`: `nats`.
 
 ## What This Is Not
@@ -61,7 +65,7 @@ docs/
   specs/*.md
 ```
 
-## Deferred After Wave 4B
+## Deferred After Wave 4.5
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
 - Generalized event routing and authority-topology semantics.

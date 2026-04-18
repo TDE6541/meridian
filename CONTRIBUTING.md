@@ -43,3 +43,4 @@
 - Do not commit until the approved session says commit is in scope.
 - When touching the Wave 3 bridge, sync the bridge specs, tests, migration log, and closeout in the same session.
 - When touching the Wave 4B capture lane, sync the Wave 4B spec/closeout and current-truth front doors in the same session.
+- When touching the Wave 4.5 calibration lane, sync `docs/specs/WAVE4_5_CALIBRATION.md`, `docs/closeouts/WAVE4_5_CLOSEOUT.md`, and current-truth front doors in the same session.
