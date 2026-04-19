@@ -2,11 +2,11 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, and local/uncommitted Wave 5 authority-topology surfaces.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, local/uncommitted Wave 5 authority-topology surfaces, and local/uncommitted Wave 6 forensic-chain surfaces.
 
 ## Bridge Substrate
 
-Purpose: transport-only NATS bridge surfaces for subject cataloging, event and telemetry normalization, command translation, adapter delegation, and Meridian publication shaping.
+Purpose: transport-only NATS bridge surfaces for subject cataloging, event and telemetry normalization, command translation, adapter delegation, Meridian publication shaping, and additive Wave 6 forensic receipt publication seam behavior.
 
 - `src/bridge/subjectCatalog.js`
 - `src/bridge/natsTransport.js`
@@ -35,6 +35,16 @@ Purpose: bounded Wave 4A+Wave 5 `command_request` evaluator backed by one static
 - `src/governance/runtime/runtimeSubset.js`
 - `src/governance/runtime/runGovernanceSweep.js`
 - `src/governance/runtime/index.js`
+
+## Governance Forensic Sidecar Lane
+
+Purpose: bounded Wave 6 local forensic-chain substrate and additive post-evaluation publication seam for top-level governance/authority evidence entries only, with demo JSON persistence and synthetic evidence-channel publication over existing subject families.
+
+- `src/governance/forensic/civicForensicChain.js`
+- `src/governance/forensic/governanceChainWriter.js`
+- `src/governance/forensic/chainPersistence.js`
+- `src/governance/forensic/chainPublisher.js`
+- `src/governance/forensic/index.js`
 
 ## Pipeline Capture Lane
 
@@ -86,7 +96,7 @@ Purpose: read-only Meridian publisher subject builders and connection config imp
 
 ## Proof Surfaces
 
-Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, and local Wave 5 authority-topology proof surfaces.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, local Wave 5 authority-topology proof surfaces, and local Wave 6 forensic-chain proof surfaces.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
@@ -96,8 +106,13 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runti
 - `tests/bridge.commandTranslator.test.js`
 - `tests/bridge.eventSubscriber.test.js`
 - `tests/bridge.commandSubscriber.test.js`
+- `tests/bridge.chainPublisher.test.js`
 - `tests/bridge.governancePublisher.test.js`
 - `tests/bridge.governanceTransportAdapter.test.js`
+- `tests/governance.forensicChain.test.js`
+- `tests/governance.chainWriter.test.js`
+- `tests/governance.chainPersistence.test.js`
+- `tests/governance.forensicIntegration.test.js`
 - `tests/governance.demoProof.test.js`
 - `tests/governance.policyPack.test.js`
 - `tests/governance.promiseConfidence.test.js`

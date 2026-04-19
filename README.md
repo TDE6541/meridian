@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. Local `main` now contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, and local/uncommitted Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation). This repo is still not a runnable application.
+Meridian is a governed city digital twin intelligence repo. Local `main` now contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, local/uncommitted Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), and local/uncommitted Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam). This repo is still not a runnable application.
 
 ## Agent Start Here
 
@@ -10,7 +10,7 @@ Meridian is a governed city digital twin intelligence repo. Local `main` now con
 
 ## Current Status
 
-Wave 5 Packets 1-3 are present in the local working tree on `main` and remain uncommitted at Packet 4 finish-lane closeout time.
+Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are present in the local working tree on `main` and remain uncommitted at Packet 3 finish-lane closeout time.
 
 ## What This Is
 
@@ -37,6 +37,10 @@ Wave 5 Packets 1-3 are present in the local working tree on `main` and remain un
   - bounded REVOKE activation for `authority_revoked_mid_action`, `permit_superseded_by_overlap`, and `cross_jurisdiction_resolved_against_requester`
   - additive `runtimeSubset.civic.revocation` runtime projection
   - projection-only, read-only propagation under optional nested `authority_context.propagation_context`
+- A local Wave 6 forensic-chain lane under `src/governance/forensic/` plus additive adapter seam in `src/bridge/governanceTransportAdapter.js` with:
+  - bounded civic forensic entry vocabulary (`GOVERNANCE_DECISION`, `AUTHORITY_EVALUATION`) and explicit deferred type rejection for meeting/permit/inspection/obligation forensic entries
+  - DI-only `GovernanceChainWriter` and `ChainPersistence` with demo JSON persistence under `.meridian/forensic-chain/`
+  - DI-only `ChainPublisher` that reuses the existing `constellation.evidence.*` subject family and appends forensic receipts through existing `publications` only
 - A single external runtime dependency surface in `package.json`: `nats`.
 
 ## What This Is Not
@@ -44,7 +48,8 @@ Wave 5 Packets 1-3 are present in the local working tree on `main` and remain un
 - Not a runnable application.
 - Not live broker proof or production Constellation compatibility proof.
 - Not general event-side governance routing or generalized publisher widening.
-- Not live/networked authority services, civic-chain writes, or civic ForensicChain runtime persistence.
+- Not live/networked authority services, DB-backed forensic persistence, or legal/tamper-proof immutability guarantees.
+- Not live broker proof for forensic publication; Wave 6 publication behavior remains synthetic/local seam proof.
 - Not skins/dashboard UI runtime surfaces.
 - Not a claim that Wave 4B handoff seam is full runtime/governance fabric completion.
 
@@ -56,12 +61,17 @@ src/
   config/constellation.js
   entities/*.js
   governance/
+    forensic/*.js
     runtime/*.js
     shadows.js
   pipeline/*.py
 tests/
   bridge*.test.js
+  bridge.chainPublisher.test.js
   governance*.test.js
+  governance.forensic*.test.js
+  governance.chainWriter.test.js
+  governance.chainPersistence.test.js
   governance.pipelineHandoffProof.test.js
   governance.authority*.test.js
   governance.revoke.test.js
@@ -74,11 +84,12 @@ docs/
   specs/*.md
 ```
 
-## Deferred After Wave 5 (Local)
+## Deferred After Wave 6 (Local)
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
-- Generalized event routing and authority-topology widening beyond the bounded Wave 5 local lane.
-- Civic-chain and ForensicChain runtime writes.
+- Generalized event routing and authority-topology widening beyond the bounded local lanes.
+- Forensic-chain widening beyond top-level governance/authority evidence entries, including meeting/permit/inspection/obligation capture types.
+- DB-backed forensic persistence, cryptographic hash-linking, and legal immutability posture.
 - UI/dashboard surfaces.
 
 ## Upstream References

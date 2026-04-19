@@ -24,6 +24,7 @@
 - Treat Wave 3 bridge-local contracts as transport contracts, not persistent entity widening.
 - Treat Wave 4B capture artifacts and handoff payloads as bounded local seam outputs, not generalized runtime/publication completion.
 - Treat Wave 5 authority outputs as bounded runtime-only projections (`runtimeSubset.civic.authority_resolution` and `runtimeSubset.civic.revocation`), not top-level request/publication/entity widening.
+- Treat Wave 6 forensic outputs as bounded local forensic-chain and additive publication-receipt seams, not live broker proof, legal immutability, top-level request/publication widening, or DB-backed persistence.
 
 ## Canon Vs Reference Boundaries
 
@@ -46,3 +47,4 @@
 - When touching the Wave 4B capture lane, sync the Wave 4B spec/closeout and current-truth front doors in the same session.
 - When touching the Wave 4.5 calibration lane, sync `docs/specs/WAVE4_5_CALIBRATION.md`, `docs/closeouts/WAVE4_5_CLOSEOUT.md`, and current-truth front doors in the same session.
 - When touching the Wave 5 authority-topology lane, sync `docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`, `docs/closeouts/WAVE5_CLOSEOUT.md`, `MIGRATIONS.md`, and current-truth front doors in the same session.
+- When touching the Wave 6 forensic-chain lane, sync `docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`, `docs/closeouts/WAVE6_CLOSEOUT.md`, `MIGRATIONS.md`, and current-truth front doors in the same session.

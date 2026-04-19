@@ -2,7 +2,7 @@
 
 ## Repo Identity
 
-Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, and a local/uncommitted bounded Wave 5 authority-topology lane.
+Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, a local/uncommitted bounded Wave 5 authority-topology lane, and a local/uncommitted bounded Wave 6 forensic-chain lane.
 
 ## Agent Start Here / Read First
 
@@ -17,6 +17,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 9. [`docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`](docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md)
 10. [`docs/specs/WAVE4_5_CALIBRATION.md`](docs/specs/WAVE4_5_CALIBRATION.md)
 11. [`docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`](docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md)
+12. [`docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`](docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md)
 
 ## Session Posture
 
@@ -30,6 +31,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Do not describe Wave 4B as generalized event routing, generalized publisher widening, authority-topology semantics, or civic-chain runtime writes.
 - Do not describe Wave 4.5 as structure reopening, extraction retune reopening, or runtime/publication widening.
 - Do not describe Wave 5 as live Auth0/OpenFGA integration, persistent graph storage, event-side routing, publication widening, scheduler/daemon behavior, or civic-chain/ForensicChain runtime writes.
+- Do not describe Wave 6 as live broker proof, legal/tamper-proof immutability, meeting-capture forensic recording, permit/inspection/obligation forensic recording, full per-helper authority trace fanout, or production DB-backed forensic persistence.
 
 ## Non-Negotiables
 
@@ -73,6 +75,7 @@ Edit(/**/*.config.*)
 - `src/bridge/*.js`
 - `src/entities/*.js`
 - `src/governance/shadows.js`
+- `src/governance/forensic/*.js`
 - `src/governance/runtime/*.js`
 - `src/pipeline/*.py`
 - `tests/config.test.js`
@@ -87,6 +90,11 @@ Edit(/**/*.config.*)
 - `tests/governance.authorityActor.test.js`
 - `tests/governance.revoke.test.js`
 - `tests/governance.authorityPropagation.test.js`
+- `tests/governance.forensicChain.test.js`
+- `tests/governance.chainWriter.test.js`
+- `tests/governance.chainPersistence.test.js`
+- `tests/bridge.chainPublisher.test.js`
+- `tests/governance.forensicIntegration.test.js`
 - `tests/governance.sweep.test.js`
 - `tests/governance.demoProof.test.js`
 - `tests/governance.pipelineHandoffProof.test.js`
@@ -104,6 +112,7 @@ Edit(/**/*.config.*)
 - `docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`
 - `docs/specs/WAVE4_5_CALIBRATION.md`
 - `docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`
+- `docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`
 - `docs/INDEX.md`
 - `docs/ENGINE_INDEX.md`
 - `docs/UI_INDEX.md`
@@ -121,6 +130,7 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE4B_CLOSEOUT.md`
 - `docs/closeouts/WAVE4_5_CLOSEOUT.md`
 - `docs/closeouts/WAVE5_CLOSEOUT.md`
+- `docs/closeouts/WAVE6_CLOSEOUT.md`
 - `scripts/synthetic-constellation.js`
 - Block C truth: `package.json` declares only `nats` as a runtime dependency; `src/config/constellation.js` remains the narrow publisher/config substrate; transport-only bridge surfaces live in `src/bridge/`; no live broker proof claim ships.
 - Block D truth: runtime results now carry bounded `runtimeSubset.civic.promise_status`, civic confidence tiers, and short decision rationale strings; `tests/governance.promiseConfidence.test.js` provides direct proof; no entity, publisher, or event-side widening shipped.
@@ -128,6 +138,7 @@ Edit(/**/*.config.*)
 - Wave 4B truth: `src/pipeline/` ships bounded capture stages (normalize/hash, OpenAI transcription, segmentation, extraction, merge, fallback, translation seam, receipt helpers); `tests/pipeline/test_end_to_end_proof.py` and `tests/governance.pipelineHandoffProof.test.js` prove the frozen local handoff path; no event routing, generalized publisher widening, authority-topology semantics, or civic-chain writes shipped in this lane.
 - Wave 4.5 truth: calibration corpus remains frozen; Block B baseline trio under `tests/pipeline/calibration/baselines/` is historical baseline truth and pre-Block-C comparison source; current calibrated truth is locked to `tests/pipeline/calibration/final/recorded_primary_runs.json`, `tests/pipeline/calibration/final/recorded_fallback_runs.json`, and `tests/pipeline/calibration/final/final_report.json` with final replay regression in `tests/pipeline/test_calibration_final.py`.
 - Wave 5 truth: Packet 1 adds additive `authority_grant`/`organization` validator widening and static Fort Worth authority topology; Packet 2 adds bounded domain/actor authority evaluation plus additive `runtimeSubset.civic.authority_resolution`; Packet 3 activates bounded `REVOKE` for `authority_revoked_mid_action`, `permit_superseded_by_overlap`, and `cross_jurisdiction_resolved_against_requester`, adds additive `runtimeSubset.civic.revocation`, and adds read-only projection-only propagation under optional nested `authority_context.propagation_context`; no top-level request-shape widening, publication widening, signal_tree widening, entity mutation, event-side routing, scheduler behavior, or persistent graph/runtime writes ship.
+- Wave 6 truth: Packet 1 ships bounded `src/governance/forensic/` civic-chain substrate (`CivicForensicChain`, `GovernanceChainWriter`, `ChainPersistence`) with active civic entry vocabulary narrowed to `GOVERNANCE_DECISION`/`AUTHORITY_EVALUATION`, explicit deferred civic type rejection for meeting/permit/inspection/obligation entries, DI-only writer posture, non-blocking persistence warnings, and demo JSON persistence under `.meridian/forensic-chain/`; Packet 2 ships DI-only `ChainPublisher` and additive post-evaluation forensic publication seam in `src/bridge/governanceTransportAdapter.js` that publishes only to existing `constellation.evidence.*` subjects on `CONSTELLATION_EVIDENCE` with non-blocking publication failures and receipts appended only through existing `publications`; no new subject family/stream, no top-level contract widening, no governance/authority logic rewrite, no meeting-capture forensic recording, no DB persistence, and no legal immutability/live-broker proof claim ship.
 
 ## Required Sync Surfaces
 
@@ -147,6 +158,7 @@ Edit(/**/*.config.*)
 - `docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`
 - `docs/specs/WAVE4_5_CALIBRATION.md`
 - `docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`
+- `docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`
 - `docs/closeouts/README.md`
 - `docs/closeouts/WAVE3_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_CLOSEOUT.md`
@@ -158,6 +170,7 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE4B_CLOSEOUT.md`
 - `docs/closeouts/WAVE4_5_CLOSEOUT.md`
 - `docs/closeouts/WAVE5_CLOSEOUT.md`
+- `docs/closeouts/WAVE6_CLOSEOUT.md`
 
 ## Closeout Requirements
 
