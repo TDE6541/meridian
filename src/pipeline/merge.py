@@ -76,11 +76,13 @@ def _choose_quote(quotes: Iterable[str]) -> str:
     return max(candidates, key=lambda quote: (len(quote), quote))
 
 
-def _calibration_confidence_caps_enabled() -> bool:
-    return (
-        os.environ.get(MERIDIAN_PIPELINE_MODEL_ENV, "").strip()
-        == CALIBRATION_MODEL_CONFIDENCE_CAP_MODEL
+def _calibration_confidence_caps_enabled(*, pipeline_model: Optional[str] = None) -> bool:
+    resolved_model = (
+        str(pipeline_model).strip()
+        if pipeline_model is not None
+        else os.environ.get(MERIDIAN_PIPELINE_MODEL_ENV, "").strip()
     )
+    return resolved_model == CALIBRATION_MODEL_CONFIDENCE_CAP_MODEL
 
 
 def _cap_final_confidence(value: float, *, maximum: float) -> float:
@@ -153,7 +155,10 @@ def _hold_similarity(left: Hold, right: Hold) -> float:
 
 
 def _build_directive_cluster(
-    cluster: Sequence[Tuple[int, Directive]], total_runs: int
+    cluster: Sequence[Tuple[int, Directive]],
+    total_runs: int,
+    *,
+    calibration_caps_enabled: bool,
 ) -> Directive:
     base = max(
         (directive for _, directive in cluster),
@@ -174,7 +179,7 @@ def _build_directive_cluster(
         3,
     )
     final_confidence = round((agreement_ratio + model_confidence) / 2.0, 3)
-    if _calibration_confidence_caps_enabled() and base.status == "proposed":
+    if calibration_caps_enabled and base.status == "proposed":
         final_confidence = _cap_final_confidence(
             final_confidence,
             maximum=PROPOSED_DIRECTIVE_CONFIDENCE_CAP,
@@ -189,7 +194,12 @@ def _build_directive_cluster(
     )
 
 
-def _build_hold_cluster(cluster: Sequence[Tuple[int, Hold]], total_runs: int) -> Hold:
+def _build_hold_cluster(
+    cluster: Sequence[Tuple[int, Hold]],
+    total_runs: int,
+    *,
+    calibration_caps_enabled: bool,
+) -> Hold:
     base = max(
         (hold for _, hold in cluster),
         key=lambda hold: (
@@ -206,7 +216,7 @@ def _build_hold_cluster(cluster: Sequence[Tuple[int, Hold]], total_runs: int) ->
         3,
     )
     final_confidence = round((agreement_ratio + model_confidence) / 2.0, 3)
-    if _calibration_confidence_caps_enabled():
+    if calibration_caps_enabled:
         final_confidence = _cap_final_confidence(
             final_confidence,
             maximum=HOLD_FINAL_CONFIDENCE_CAP,
@@ -226,11 +236,15 @@ def merge_directives(
     *,
     min_agreement_ratio: float = MIN_DIRECTIVE_AGREEMENT_RATIO,
     similarity_threshold: float = DIRECTIVE_SIMILARITY_THRESHOLD,
+    pipeline_model: Optional[str] = None,
 ) -> List[Directive]:
     if not directive_runs:
         return []
 
     total_runs = len(directive_runs)
+    calibration_caps_enabled = _calibration_confidence_caps_enabled(
+        pipeline_model=pipeline_model
+    )
     clusters: List[List[Tuple[int, Directive]]] = []
 
     for run_index, directives in enumerate(directive_runs):
@@ -256,7 +270,11 @@ def merge_directives(
 
     merged = []
     for cluster in clusters:
-        merged_directive = _build_directive_cluster(cluster, total_runs)
+        merged_directive = _build_directive_cluster(
+            cluster,
+            total_runs,
+            calibration_caps_enabled=calibration_caps_enabled,
+        )
         if (merged_directive.agreement_ratio or 0.0) >= min_agreement_ratio:
             merged.append(merged_directive)
 
@@ -274,11 +292,15 @@ def merge_holds(
     hold_runs: Sequence[Sequence[Hold]],
     *,
     similarity_threshold: float = HOLD_SIMILARITY_THRESHOLD,
+    pipeline_model: Optional[str] = None,
 ) -> List[Hold]:
     if not hold_runs:
         return []
 
     total_runs = len(hold_runs)
+    calibration_caps_enabled = _calibration_confidence_caps_enabled(
+        pipeline_model=pipeline_model
+    )
     clusters: List[List[Tuple[int, Hold]]] = []
 
     for run_index, holds in enumerate(hold_runs):
@@ -302,7 +324,14 @@ def merge_holds(
             else:
                 matched_cluster.append((run_index, hold))
 
-    merged = [_build_hold_cluster(cluster, total_runs) for cluster in clusters]
+    merged = [
+        _build_hold_cluster(
+            cluster,
+            total_runs,
+            calibration_caps_enabled=calibration_caps_enabled,
+        )
+        for cluster in clusters
+    ]
     return sorted(
         merged,
         key=lambda hold: (
