@@ -35,10 +35,9 @@ test("governance policy pack freezes bounded vocabulary domains thresholds and o
     "SUPERVISE",
     "HOLD",
     "BLOCK",
-  ]);
-  assert.deepEqual(MERIDIAN_GOVERNANCE_CONFIG.decisionVocabulary.reservedOnly, [
     "REVOKE",
   ]);
+  assert.deepEqual(MERIDIAN_GOVERNANCE_CONFIG.decisionVocabulary.reservedOnly, []);
 
   const domains = MERIDIAN_GOVERNANCE_CONFIG.domains;
   const domainIds = Object.keys(domains);

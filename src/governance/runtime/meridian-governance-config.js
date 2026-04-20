@@ -32,10 +32,10 @@ const MERIDIAN_GOVERNANCE_CONFIG = {
     ],
   },
   decisionVocabulary: {
-    emittedNow: ["ALLOW", "SUPERVISE", "HOLD", "BLOCK"],
-    reservedOnly: ["REVOKE"],
+    emittedNow: ["ALLOW", "SUPERVISE", "HOLD", "BLOCK", "REVOKE"],
+    reservedOnly: [],
     notes:
-      "Block C activates SUPERVISE as a real emitted runtime outcome while keeping REVOKE deferred.",
+      "Block C activates SUPERVISE, and Wave 5 Packet 3 activates bounded REVOKE for three approved revocation paths.",
   },
   domains: {
     permit_authorization: {
