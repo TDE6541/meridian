@@ -16,6 +16,19 @@ Packet 1 does not compute new governance truth.
 - `tests/skins.sweep.test.js`
 - `docs/specs/WAVE7_CIVIC_SKINS.md`
 
+## Packet 2 Shipped Surface
+
+- `src/skins/civic/council.js`
+- `src/skins/civic/operations.js`
+- `src/skins/civic/dispatch.js`
+- `tests/skins.council.test.js`
+- `tests/skins.operations.test.js`
+- `tests/skins.dispatch.test.js`
+- `docs/specs/WAVE7_CIVIC_SKINS.md`
+
+Packet 2 keeps `src/skins/CivicSkinFramework.js`, `src/skins/index.js`, and `src/skins/civic/permitting.js` unchanged.
+Packet 2 imports descriptor modules directly in tests and does not add registry wiring.
+
 ## Skins-Local Contract
 
 Packet 1 introduces a skins-local render contract.
@@ -103,6 +116,62 @@ Required source classes represented in Packet 1 output:
 - governance sweep scenario summary for `sweep-result` view type
 
 Missing source fields render deterministic absences instead of invented prose.
+
+## Packet 2 Additional Internal Skins
+
+Packet 2 ships three additional internal skins:
+
+- `civic.council`
+- `civic.operations`
+- `civic.dispatch`
+
+Packet 2 remains rendering-only.
+It does not compute new governance truth and does not widen runtime, bridge, pipeline, forensic, entity, or publication contracts.
+
+### Council skin section families
+
+- Resolution Summary
+- Obligation Status
+- Governance Rationale
+- Public Hearing / Comment Context
+- Voting Record Context
+- Authority / Revocation Notice
+- Absence Notices
+
+Council rendering must not invent voting records, public comments, intent, or ordinance passage claims.
+If source voting/comment context is absent, deterministic absences are rendered.
+
+### Operations skin section families
+
+- Work Order Summary
+- Corridor Status
+- Asset / Utility Context
+- Maintenance Priority
+- Responsible Office
+- Authority Gap / HOLD Queue
+- Revocation or Escalation Notice
+
+Operations rendering must not integrate live work-order systems, crew scheduling, or field-service automation.
+If crew/equipment/resource context is absent, deterministic absences are rendered.
+
+### Dispatch skin section families
+
+- Active Hold Queue
+- Priority Posture
+- Governance Override Status
+- Responsible Office
+- Dispatch-Style Routing Summary
+- Resource / Unit Context
+- Absence Notices
+
+Dispatch rendering must not imply live 911/CAD/public-safety operation.
+If resource/unit/incident context is absent, deterministic absences are rendered.
+
+### Packet 2 truth parity and fallback
+
+For the same input, all internal skins preserve the same `truthFingerprint` because fingerprint material stays tied to canonical truth fields only.
+Presentation differences remain vocabulary/order/section framing only.
+Unsupported internal combinations continue to return bounded `UNSUPPORTED_VIEW_INTERNAL` fallback through framework-level descriptor gating.
 
 ## Truth Fingerprint Stable Field Set
 
