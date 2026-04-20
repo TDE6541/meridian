@@ -1,6 +1,8 @@
+import os
 import unittest
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 THIS_DIR = Path(__file__).resolve().parent
 if str(THIS_DIR) not in sys.path:
@@ -13,7 +15,15 @@ class ReceiptTests(unittest.TestCase):
     maxDiff = None
 
     def test_run_level_receipt_truthfully_summarizes_fort_worth_proof_outputs(self):
-        bundle = build_fort_worth_proof_bundle()
+        with patch.dict(
+            os.environ,
+            {
+                "OPENAI_API_KEY": "sk-host",
+                "MERIDIAN_PIPELINE_MODEL": "gpt-5.4",
+            },
+            clear=False,
+        ):
+            bundle = build_fort_worth_proof_bundle()
         receipt = bundle["receipt"]
 
         self.assertEqual(receipt["meeting_id"], "fort-worth-city-council-day-meeting-2025-09-30")

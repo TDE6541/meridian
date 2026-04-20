@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Optional, Sequence, Tuple
+from typing import Any, Mapping, Optional, Sequence, Tuple
 
 from .extraction import ENSEMBLE_RUN_PATTERN, run_ensemble_extraction
 from .fallback import scan_segments_for_fallback
@@ -154,7 +154,11 @@ class MeridianPipeline:
         return PIPELINE_STAGES
 
     def prepare(
-        self, meeting: MeetingMetadata, transcript_text: str
+        self,
+        meeting: MeetingMetadata,
+        transcript_text: str,
+        *,
+        env: Optional[Mapping[str, str]] = None,
     ) -> PreparedPipelineContext:
         normalized_transcript = normalize_transcript(transcript_text)
         return PreparedPipelineContext(
@@ -162,15 +166,23 @@ class MeridianPipeline:
             raw_transcript=transcript_text,
             normalized_transcript=normalized_transcript,
             transcript_sha256=transcript_hash(normalized_transcript),
-            llm_config_status=inspect_openai_env(),
+            llm_config_status=inspect_openai_env(env=env),
         )
 
     def segment_text(
-        self, meeting: MeetingMetadata, transcript_text: str
+        self,
+        meeting: MeetingMetadata,
+        transcript_text: str,
+        *,
+        env: Optional[Mapping[str, str]] = None,
     ) -> SegmentedPipelineContext:
         """Prepare and segment transcript text without claiming later capture stages."""
 
-        prepared = self.prepare(meeting=meeting, transcript_text=transcript_text)
+        prepared = self.prepare(
+            meeting=meeting,
+            transcript_text=transcript_text,
+            env=env,
+        )
         segments = tuple(segment_transcript_text(prepared.normalized_transcript))
         return SegmentedPipelineContext(
             meeting=prepared.meeting,
@@ -196,7 +208,11 @@ class MeridianPipeline:
         instead of pretending full extraction succeeded.
         """
 
-        segmented = self.segment_text(meeting=meeting, transcript_text=transcript_text)
+        segmented = self.segment_text(
+            meeting=meeting,
+            transcript_text=transcript_text,
+            env=env,
+        )
 
         try:
             run_results = run_ensemble_extraction(
@@ -205,8 +221,18 @@ class MeridianPipeline:
                 env=env,
                 run_pattern=ENSEMBLE_RUN_PATTERN,
             )
-            directives = tuple(merge_directives([run.directives for run in run_results]))
-            holds = tuple(merge_holds([run.holds for run in run_results]))
+            directives = tuple(
+                merge_directives(
+                    [run.directives for run in run_results],
+                    pipeline_model=segmented.llm_config_status.model,
+                )
+            )
+            holds = tuple(
+                merge_holds(
+                    [run.holds for run in run_results],
+                    pipeline_model=segmented.llm_config_status.model,
+                )
+            )
             fallback_used = False
             notes: Tuple[str, ...] = ()
         except (

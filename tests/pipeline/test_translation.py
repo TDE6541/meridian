@@ -1,8 +1,10 @@
 import json
+import os
 import sys
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -89,17 +91,25 @@ class TranslationTests(unittest.TestCase):
         }
         client = _FakeClient([hold_payload, hold_payload, hold_payload])
 
-        result = pipeline.run(
-            meeting,
-            transcript_text,
-            client=client,
-            env={
-                OPENAI_API_KEY_ENV: "sk-test",
-                MERIDIAN_PIPELINE_MODEL_ENV: "gpt-5.4-mini",
+        with patch.dict(
+            os.environ,
+            {
+                OPENAI_API_KEY_ENV: "sk-host",
+                MERIDIAN_PIPELINE_MODEL_ENV: "gpt-5.4",
             },
-            selected_item_ids=["hold:S1:1"],
-            notes=["runtime-owned fields remain deferred to the existing JS lane"],
-        )
+            clear=False,
+        ):
+            result = pipeline.run(
+                meeting,
+                transcript_text,
+                client=client,
+                env={
+                    OPENAI_API_KEY_ENV: "sk-test",
+                    MERIDIAN_PIPELINE_MODEL_ENV: "gpt-5.4-mini",
+                },
+                selected_item_ids=["hold:S1:1"],
+                notes=["runtime-owned fields remain deferred to the existing JS lane"],
+            )
 
         return expected, result
 
@@ -115,6 +125,7 @@ class TranslationTests(unittest.TestCase):
             ],
             1.0,
         )
+        self.assertEqual(result.captured.llm_config_status.model, "gpt-5.4-mini")
 
     def test_bounded_handoff_payload_stays_reduced_and_preserves_boundary_ambiguity(self):
         expected, result = self._build_fixture_translation()
@@ -146,6 +157,66 @@ class TranslationTests(unittest.TestCase):
         self.assertEqual(len(result.captured.holds), 1)
         self.assertEqual(len(result.captured.directives), 0)
         self.assertEqual(result.captured.fallback_used, False)
+
+    def test_pipeline_run_uses_host_env_when_caller_env_is_omitted(self):
+        transcript_text = (FIXTURES_DIR / "utility_refusal_capture.txt").read_text(
+            encoding="utf-8"
+        )
+        meeting = MeetingMetadata(
+            org_id="fortworth-dev",
+            meeting_id="permit-utility-2026-0847",
+            capture_source="fixture",
+            title="Utility Permit Review 2026-0847",
+        )
+        pipeline = MeridianPipeline()
+        segments = pipeline.segment_text(meeting, transcript_text).segments
+        hold_payload = {
+            "directives": [],
+            "holds": [
+                {
+                    "segment_id": segments[0].segment_id,
+                    "timestamp_start": segments[0].timestamp_start,
+                    "timestamp_end": segments[0].timestamp_end,
+                    "hold_type": "approval",
+                    "hold_summary": (
+                        "Permit utility 2026-0847 remains blocked pending TPW ROW "
+                        "and Development Services approvals plus the utility conflict "
+                        "assessment."
+                    ),
+                    "owner_to_clarify": "Staff",
+                    "blocking_scope": "permit utility 2026-0847",
+                    "severity": "high",
+                    "confidence": 0.86,
+                    "source_quote": (
+                        "TPW ROW and Development Services approvals are still missing, "
+                        "and the utility conflict assessment is not complete."
+                    ),
+                }
+            ],
+        }
+        client = _FakeClient([hold_payload, hold_payload, hold_payload])
+
+        with patch.dict(
+            os.environ,
+            {
+                OPENAI_API_KEY_ENV: "sk-host",
+                MERIDIAN_PIPELINE_MODEL_ENV: "gpt-5.4",
+            },
+            clear=False,
+        ):
+            result = pipeline.run(
+                meeting,
+                transcript_text,
+                client=client,
+                selected_item_ids=["hold:S1:1"],
+                notes=["runtime-owned fields remain deferred to the existing JS lane"],
+            )
+
+        self.assertEqual(result.captured.llm_config_status.model, "gpt-5.4")
+        self.assertEqual(
+            result.capture_artifact["extracted_items"][0]["confidence_backbone"]["final_confidence"],
+            0.79,
+        )
 
 
 if __name__ == "__main__":
