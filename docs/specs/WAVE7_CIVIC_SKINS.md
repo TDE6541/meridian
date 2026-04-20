@@ -225,3 +225,74 @@ Optional helper split (`inputAdapter.js`, `truthFingerprint.js`, `sourceRefs.js`
 
 No migration row is required for Packet 1 because this packet is rendering-only and local to new `src/skins/**` surfaces.
 Wave-level canon/index/closeout synchronization remains deferred to the approved finish-sync packet.
+
+## Packet 3 Shipped Surface
+
+- `src/skins/redaction.js`
+- `src/skins/civic/public.js`
+- `tests/skins.redaction.test.js`
+- `tests/skins.public.test.js`
+- `docs/specs/WAVE7_CIVIC_SKINS.md`
+
+## Public Transparency Skin
+
+Packet 3 ships `civic.public` as a direct public renderer.
+It remains rendering-only and preserves Packet 1's frozen framework public guard by not changing `CivicSkinFramework.js` or `src/skins/index.js`.
+
+Packet 3 public section families:
+
+- Public Decision Summary
+- Public Authority Context
+- Public Confidence Tier
+- Public Promise Status
+- Public Revocation Notice
+- Public Disclosure Boundary
+- Public Disclosure Hold Notices
+
+Approved Packet 3 posture phrases:
+
+- TPIA-aware
+- public disclosure boundary
+- deterministic demo redaction
+- not legal review
+- not request adjudication
+
+Packet 3 public output stays plain-language and structurally distinct from every internal skin.
+Every public claim uses `allowedAudience: ["public"]`.
+Packet 3 does not compute new governance truth and does not widen runtime, bridge, pipeline, forensic, entity, or publication contracts.
+
+## Public Disclosure Boundary
+
+Packet 3 uses a deterministic public disclosure boundary with these redaction categories:
+
+- `entity-id-redacted`
+- `org-id-redacted`
+- `subject-address-redacted`
+- `free-form-text-redacted`
+- `unknown-field-redacted`
+
+Every redaction emits:
+
+- a stable `marker`
+- a stable `noticeId`
+- a stable `basis`
+- a stable `path`
+
+Packet 3 preserves truth fingerprint parity by reusing the existing civic input normalization and truth fingerprint helper.
+Presentation labels, section ordering, and redaction notices do not alter the fingerprint.
+If required canonical truth is missing, Packet 3 emits `PUBLIC_DISCLOSURE_HOLD` instead of falling through to internal text.
+
+## Packet 3 Non-Shipped Surfaces
+
+Packet 3 does not ship:
+
+- compliance certification claims
+- attorney-review claims
+- records-request intake or workflow automation
+- citizen identity verification
+- live portal or dashboard behavior
+- LLM-driven redaction
+- meeting-capture-to-skin routing
+- forensic-entry-to-skin routing
+- governance-truth computation inside skins
+- framework public-guard removal
