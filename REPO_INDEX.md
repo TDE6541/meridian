@@ -11,6 +11,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 ## Canonical Root Files
 
 - `README.md`
+- `AGENTS.md`
 - `CLAUDE.md`
 - `TEAM_CHARTER.md`
 - `AI_EXECUTION_DOCTRINE.md`

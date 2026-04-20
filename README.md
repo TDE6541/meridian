@@ -4,9 +4,10 @@ Meridian is a governed city digital twin intelligence repo. `main` now contains 
 
 ## Agent Start Here
 
-1. [CLAUDE.md](CLAUDE.md)
-2. [REPO_INDEX.md](REPO_INDEX.md)
-3. [docs/INDEX.md](docs/INDEX.md)
+1. [AGENTS.md](AGENTS.md)
+2. [CLAUDE.md](CLAUDE.md)
+3. [REPO_INDEX.md](REPO_INDEX.md)
+4. [docs/INDEX.md](docs/INDEX.md)
 
 ## Current Status
 
