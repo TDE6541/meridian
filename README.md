@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. Local `main` now contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, local/uncommitted Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), and local/uncommitted Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam). This repo is still not a runnable application.
+Meridian is a governed city digital twin intelligence repo. `main` now contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), and shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam). This repo is still not a runnable application.
 
 ## Agent Start Here
 
@@ -10,7 +10,7 @@ Meridian is a governed city digital twin intelligence repo. Local `main` now con
 
 ## Current Status
 
-Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are present in the local working tree on `main` and remain uncommitted at Packet 3 finish-lane closeout time.
+Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned with `origin/main`.
 
 ## What This Is
 
@@ -30,14 +30,14 @@ Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are present in the local working tree 
   - historical baseline truth and pre-Block-C comparison source artifacts under `tests/pipeline/calibration/baselines/`
   - current calibrated truth artifact family under `tests/pipeline/calibration/final/`
   - wave-level truth docs at `docs/specs/WAVE4_5_CALIBRATION.md` and `docs/closeouts/WAVE4_5_CLOSEOUT.md`
-- A local Wave 5 authority-topology lane under `src/governance/runtime/` with:
+- A Wave 5 authority-topology lane under `src/governance/runtime/` with:
   - static Fort Worth authority-topology declaration pack keyed to stable IDs
   - bounded domain-side and actor-side authority evaluation over explicit `authority_context` input
   - additive `runtimeSubset.civic.authority_resolution` runtime projection
   - bounded REVOKE activation for `authority_revoked_mid_action`, `permit_superseded_by_overlap`, and `cross_jurisdiction_resolved_against_requester`
   - additive `runtimeSubset.civic.revocation` runtime projection
   - projection-only, read-only propagation under optional nested `authority_context.propagation_context`
-- A local Wave 6 forensic-chain lane under `src/governance/forensic/` plus additive adapter seam in `src/bridge/governanceTransportAdapter.js` with:
+- A Wave 6 forensic-chain lane under `src/governance/forensic/` plus additive adapter seam in `src/bridge/governanceTransportAdapter.js` with:
   - bounded civic forensic entry vocabulary (`GOVERNANCE_DECISION`, `AUTHORITY_EVALUATION`) and explicit deferred type rejection for meeting/permit/inspection/obligation forensic entries
   - DI-only `GovernanceChainWriter` and `ChainPersistence` with demo JSON persistence under `.meridian/forensic-chain/`
   - DI-only `ChainPublisher` that reuses the existing `constellation.evidence.*` subject family and appends forensic receipts through existing `publications` only
@@ -84,10 +84,10 @@ docs/
   specs/*.md
 ```
 
-## Deferred After Wave 6 (Local)
+## Deferred After Wave 6
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
-- Generalized event routing and authority-topology widening beyond the bounded local lanes.
+- Generalized event routing and authority-topology widening beyond the bounded lanes.
 - Forensic-chain widening beyond top-level governance/authority evidence entries, including meeting/permit/inspection/obligation capture types.
 - DB-backed forensic persistence, cryptographic hash-linking, and legal immutability posture.
 - UI/dashboard surfaces.
@@ -95,4 +95,4 @@ docs/
 ## Upstream References
 
 - Plugin repo: github.com/TDE6541/blue-collar-governance-plugin
-- Ontology reference: MERIDIAN_ONTOLOGY_MASTER_CONVERGENCE.md
+- Ontology reference: `docs/specs/ENTITY_ONTOLOGY.md`

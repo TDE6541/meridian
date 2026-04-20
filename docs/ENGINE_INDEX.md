@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, local/uncommitted Wave 5 authority-topology surfaces, and local/uncommitted Wave 6 forensic-chain surfaces.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, and shipped Wave 6 forensic-chain surfaces.
 
 ## Bridge Substrate
 
@@ -38,7 +38,7 @@ Purpose: bounded Wave 4A+Wave 5 `command_request` evaluator backed by one static
 
 ## Governance Forensic Sidecar Lane
 
-Purpose: bounded Wave 6 local forensic-chain substrate and additive post-evaluation publication seam for top-level governance/authority evidence entries only, with demo JSON persistence and synthetic evidence-channel publication over existing subject families.
+Purpose: bounded Wave 6 forensic-chain substrate and additive post-evaluation publication seam for top-level governance/authority evidence entries only, with demo JSON persistence and synthetic evidence-channel publication over existing subject families.
 
 - `src/governance/forensic/civicForensicChain.js`
 - `src/governance/forensic/governanceChainWriter.js`
@@ -96,7 +96,7 @@ Purpose: read-only Meridian publisher subject builders and connection config imp
 
 ## Proof Surfaces
 
-Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, local Wave 5 authority-topology proof surfaces, and local Wave 6 forensic-chain proof surfaces.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, Wave 5 authority-topology proof surfaces, and Wave 6 forensic-chain proof surfaces.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`

@@ -4,11 +4,11 @@
 
 Wave 5 Packet 1 adds a bounded static Fort Worth authority-topology declaration pack. Wave 5 Packet 2 keeps that pack static-local, then adds bounded runtime authority evaluation over explicit `authority_context` input only. Wave 5 Packet 3 composes that runtime truth into final authority decisions, activates bounded `REVOKE` semantics for three approved paths only, and adds projection-only propagation over explicit runtime inputs only. The wave still does not open publisher widening, event routing, persistence, or entity mutation.
 
-## Packet 4 Finish-Lane Status
+## Packet 4 Historical Context + Current Repo State
 
-- This spec reflects local working-tree Wave 5 Packets 1-3 truth as of Packet 4 finish-lane sync.
+- Packet 4 (historical) synced this spec to the then-local Wave 5 Packet 1-3 truth.
 - Packet 4 is truth-surface synchronization only and does not change runtime or test behavior.
-- Wave 5 remains local/uncommitted at this point and is not represented here as merged/pushed ship state.
+- Current repo state: Wave 5 Packets 1-3 are committed on `main` and aligned with `origin/main`.
 
 ## Shipped Packet 1 Truth
 

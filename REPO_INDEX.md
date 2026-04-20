@@ -6,7 +6,7 @@ This is the front-door navigation index for Meridian. It points agents and maint
 
 ## Wave Scope Status
 
-Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. Wave 4.5 closes the calibration lane with frozen corpus posture, historical baseline truth/pre-Block-C comparison artifacts, and a locked final replay artifact family/report. Local/uncommitted Wave 5 Packets 1-3 add a bounded authority-topology lane in `src/governance/runtime/` with additive entity validator widening, static Fort Worth topology declaration, bounded authority evaluation, bounded REVOKE activation, and projection-only propagation. Local/uncommitted Wave 6 Packets 1-2 add a bounded forensic-chain lane under `src/governance/forensic/` plus an additive post-evaluation publication seam in `src/bridge/governanceTransportAdapter.js`.
+Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. Wave 4.5 closes the calibration lane with frozen corpus posture, historical baseline truth/pre-Block-C comparison artifacts, and a locked final replay artifact family/report. Shipped Wave 5 Packets 1-3 add a bounded authority-topology lane in `src/governance/runtime/` with additive entity validator widening, static Fort Worth topology declaration, bounded authority evaluation, bounded REVOKE activation, and projection-only propagation. Shipped Wave 6 Packets 1-2 add a bounded forensic-chain lane under `src/governance/forensic/` plus an additive post-evaluation publication seam in `src/bridge/governanceTransportAdapter.js`.
 
 ## Canonical Root Files
 
@@ -53,7 +53,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 ## Current Repo State
 
 - Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport-only bridge, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture lane, and Wave 4.5 calibration truth lock are landed in-repo.
-- Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are present as local/uncommitted working-tree substrate at Packet 3 finish-lane closeout time.
+- Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned with `origin/main`.
 - No UI ships in this repo today.
 - No runnable application ships in this repo today.
 - No live broker proof or production runtime compatibility proof ships in this repo today.

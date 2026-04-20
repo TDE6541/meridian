@@ -4,11 +4,11 @@
 
 Wave 6 adds a bounded Meridian-native forensic chain substrate for top-level governance and authority evidence entries. Packet 1 establishes the local civic chain + writer + demo persistence seam. Packet 2 adds an additive post-evaluation synthetic publication seam on the existing evidence subject family. Wave 6 does not reopen governance decision logic, authority-topology logic, pipeline behavior, or bridge contract families.
 
-## Packet 3 Finish-Lane Status
+## Packet 3 Historical Context + Current Repo State
 
-- This spec reflects local working-tree Wave 6 Packet 1 and Packet 2 truth only.
+- Packet 3 (historical) synced this spec to the then-local Wave 6 Packet 1 and Packet 2 truth.
 - Packet 3 is truth-surface synchronization only and does not change runtime or test behavior.
-- Wave 6 remains local/uncommitted at this point and is not represented here as merged/pushed ship state.
+- Current repo state: Wave 6 Packet 1 and Packet 2 are committed on `main` and aligned with `origin/main`.
 
 ## Shipped Packet 1 Truth
 

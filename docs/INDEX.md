@@ -29,5 +29,5 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 ## Placeholder Note
 
 Some lanes are placeholders by design. Placeholder lanes are intentional and do not imply shipped UI, live broker proof, or runtime mutation surfaces.
-Wave 5 authority-topology surfaces listed above describe local Packet 1-3 substrate and should not be read as merged/pushed ship state.
-Wave 6 forensic-chain surfaces listed above describe local Packet 1-2 substrate and should not be read as merged/pushed ship state.
+Wave 5 authority-topology surfaces listed above reflect shipped in-repo Packet 1-3 substrate and are committed on `main`.
+Wave 6 forensic-chain surfaces listed above reflect shipped in-repo Packet 1-2 substrate and are committed on `main`.
