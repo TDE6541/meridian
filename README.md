@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. `main` now contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), and shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam). This repo is still not a runnable application.
+Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), and a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof). This repo is still not a runnable application.
 
 ## Agent Start Here
 
@@ -11,7 +11,7 @@ Meridian is a governed city digital twin intelligence repo. `main` now contains 
 
 ## Current Status
 
-Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned with `origin/main`.
+Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned with `origin/main`. Wave 7 Packets 1-4 are present in-repo on the Wave 7 lane.
 
 ## What This Is
 
@@ -42,6 +42,11 @@ Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned wi
   - bounded civic forensic entry vocabulary (`GOVERNANCE_DECISION`, `AUTHORITY_EVALUATION`) and explicit deferred type rejection for meeting/permit/inspection/obligation forensic entries
   - DI-only `GovernanceChainWriter` and `ChainPersistence` with demo JSON persistence under `.meridian/forensic-chain/`
   - DI-only `ChainPublisher` that reuses the existing `constellation.evidence.*` subject family and appends forensic receipts through existing `publications` only
+- A Wave 7 civic skins rendering lane under `src/skins/` with:
+  - five bounded skins (`civic.permitting`, `civic.council`, `civic.operations`, `civic.dispatch`, `civic.public`)
+  - deterministic public disclosure boundary in `src/skins/redaction.js`
+  - five-skin structural integration proof at `tests/skins.integration.test.js`
+  - framework public guard retained for framework consumers (`renderDefaultSkin` continues to reserve public rendering)
 - A single external runtime dependency surface in `package.json`: `nats`.
 
 ## What This Is Not
@@ -51,7 +56,13 @@ Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned wi
 - Not general event-side governance routing or generalized publisher widening.
 - Not live/networked authority services, DB-backed forensic persistence, or legal/tamper-proof immutability guarantees.
 - Not live broker proof for forensic publication; Wave 6 publication behavior remains synthetic/local seam proof.
-- Not skins/dashboard UI runtime surfaces.
+- Not dashboard/UI runtime.
+- Not a public portal.
+- Not a legal compliance workflow.
+- Not LLM-driven redaction.
+- Not meeting-capture-to-skin routing.
+- Not forensic-entry-to-skin routing.
+- Not governance-truth computation inside skins.
 - Not a claim that Wave 4B handoff seam is full runtime/governance fabric completion.
 
 ## Repo Structure
@@ -66,6 +77,7 @@ src/
     runtime/*.js
     shadows.js
   pipeline/*.py
+  skins/**/*.js
 tests/
   bridge*.test.js
   bridge.chainPublisher.test.js
@@ -76,6 +88,7 @@ tests/
   governance.pipelineHandoffProof.test.js
   governance.authority*.test.js
   governance.revoke.test.js
+  skins*.test.js
   pipeline/**/*.py
 docs/
   INDEX.md
@@ -85,12 +98,14 @@ docs/
   specs/*.md
 ```
 
-## Deferred After Wave 6
+## Deferred After Wave 7
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
 - Generalized event routing and authority-topology widening beyond the bounded lanes.
 - Forensic-chain widening beyond top-level governance/authority evidence entries, including meeting/permit/inspection/obligation capture types.
 - DB-backed forensic persistence, cryptographic hash-linking, and legal immutability posture.
+- Meeting-capture-to-skin and forensic-entry-to-skin routing.
+- Governance-truth computation inside skins.
 - UI/dashboard surfaces.
 
 ## Upstream References

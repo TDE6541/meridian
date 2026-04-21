@@ -296,3 +296,13 @@ Packet 3 does not ship:
 - forensic-entry-to-skin routing
 - governance-truth computation inside skins
 - framework public-guard removal
+
+## Packet 4 Structural Integration Proof
+
+Packet 4 ships five-skin structural integration proof at `tests/skins.integration.test.js`.
+The proof verifies that the same governance input renders through all five shipped skins (`civic.permitting`, `civic.council`, `civic.operations`, `civic.dispatch`, `civic.public`) with `truthFingerprint` parity.
+The proof also verifies that public output preserves parity while applying deterministic public disclosure boundaries.
+
+Packet 4 adds proof only.
+Packet 4 does not widen the render contract and does not alter framework public-guard behavior.
+Packet 4 does not alter runtime, bridge, forensic, pipeline, entity, config, or package surfaces.
