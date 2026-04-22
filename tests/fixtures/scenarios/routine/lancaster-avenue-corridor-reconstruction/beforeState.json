@@ -1,0 +1,42 @@
+{
+  "scenarioId": "routine-lancaster-avenue-corridor-reconstruction",
+  "corridorId": "corridor-fw-lancaster-avenue",
+  "stateLabel": "before",
+  "entities": [
+    {
+      "entityType": "corridor_zone",
+      "entityId": "corridor-zone:lancaster-main",
+      "status": "UNDER_REVIEW"
+    },
+    {
+      "entityType": "organization",
+      "entityId": "organization:transportation-planning",
+      "status": "PARTICIPATING"
+    },
+    {
+      "entityType": "permit_application",
+      "entityId": "permit:lancaster-reconstruction-001",
+      "status": "SUBMITTED"
+    },
+    {
+      "entityType": "inspection",
+      "entityId": "inspection:lancaster-site-visit-001",
+      "status": "UNSCHEDULED"
+    },
+    {
+      "entityType": "authority_grant",
+      "entityId": "authority:lancaster-lane-occupation",
+      "status": "PENDING"
+    },
+    {
+      "entityType": "decision_record",
+      "entityId": "decision:lancaster-reconstruction-review",
+      "status": "DRAFT"
+    },
+    {
+      "entityType": "obligation",
+      "entityId": "obligation:lancaster-public-notice",
+      "status": "OPEN"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "scenarioId": "emergency-camp-bowie-water-main-break",
+  "corridorId": "corridor-fw-camp-bowie",
+  "finalStatus": "HOLD",
+  "finalDisposition": "REPAIR_COMPLETE_WITH_FOLLOW_UP_HOLD",
+  "bridgeReplayStatus": "PASS",
+  "keyOutcomes": [
+    "escalate",
+    "emergency authority approved",
+    "hard stop",
+    "repair completed",
+    "post-repair obligation created"
+  ],
+  "nonClaims": [
+    "No real TPIA legal sufficiency claim.",
+    "No real TRAIGA 2.0 compliance claim."
+  ]
+}

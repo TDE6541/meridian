@@ -1,0 +1,60 @@
+{
+  "replay_contract_version": "wave8.packet1.replayArtifact.v1",
+  "scenario_id": "routine-lancaster-avenue-corridor-reconstruction",
+  "capture_artifact": {
+    "artifact_version": "wave4b-blockd-capture-artifact-v1",
+    "artifact_id": "capture-artifact:corridor-fw-lancaster-avenue:routine",
+    "meeting_metadata": {
+      "org_id": "corridor-fw-lancaster-avenue",
+      "meeting_id": "routine-lancaster-avenue-corridor-reconstruction",
+      "capture_source": "fixture",
+      "title": "Lancaster Avenue corridor reconstruction"
+    },
+    "capture_counts": {
+      "segment_count": 2,
+      "directive_count": 2,
+      "hold_count": 0
+    },
+    "extracted_items": [
+      {
+        "capture_item_id": "directive:S1:1",
+        "item_kind": "directive",
+        "summary": "Approve the reconstruction package and schedule the corridor inspection.",
+        "lineage": {
+          "segment_id": "S1",
+          "transcript_hash": "routine-lancaster-hash"
+        }
+      },
+      {
+        "capture_item_id": "directive:S2:1",
+        "item_kind": "directive",
+        "summary": "Issue the permit after the inspection pass and keep the notice obligation active.",
+        "lineage": {
+          "segment_id": "S2",
+          "transcript_hash": "routine-lancaster-hash"
+        }
+      }
+    ]
+  },
+  "governance_handoff": {
+    "handoff_version": "wave4b-blockd-governance-handoff-v1",
+    "handoff_mode": "local_frozen_proof",
+    "selected_item_count": 2,
+    "selected_items": [
+      {
+        "capture_item_id": "directive:S1:1",
+        "normalized_item_type": "directive",
+        "normalized_summary": "Approve the reconstruction package and schedule the corridor inspection."
+      },
+      {
+        "capture_item_id": "directive:S2:1",
+        "normalized_item_type": "directive",
+        "normalized_summary": "Issue the permit after the inspection pass and keep the notice obligation active."
+      }
+    ],
+    "notes": [
+      "synthetic replay artifact",
+      "routine approval path stays local and frozen"
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "replay_contract_version": "wave8.packet1.replayArtifact.v1",
+  "scenario_id": "emergency-camp-bowie-water-main-break",
+  "capture_artifact": {
+    "artifact_version": "wave4b-blockd-capture-artifact-v1",
+    "artifact_id": "capture-artifact:corridor-fw-camp-bowie:emergency",
+    "meeting_metadata": {
+      "org_id": "corridor-fw-camp-bowie",
+      "meeting_id": "emergency-camp-bowie-water-main-break",
+      "capture_source": "fixture",
+      "title": "Camp Bowie water main break"
+    },
+    "capture_counts": {
+      "segment_count": 3,
+      "directive_count": 2,
+      "hold_count": 1
+    },
+    "extracted_items": [
+      {
+        "capture_item_id": "directive:S1:1",
+        "item_kind": "directive",
+        "summary": "Escalate the water main break and protect the critical site.",
+        "lineage": {
+          "segment_id": "S1",
+          "transcript_hash": "emergency-camp-bowie-hash"
+        }
+      },
+      {
+        "capture_item_id": "hold:S2:1",
+        "item_kind": "hold",
+        "summary": "Apply a hard stop to unrelated excavation until emergency authority is approved.",
+        "lineage": {
+          "segment_id": "S2",
+          "transcript_hash": "emergency-camp-bowie-hash"
+        }
+      },
+      {
+        "capture_item_id": "directive:S3:1",
+        "item_kind": "directive",
+        "summary": "Complete the repair and carry forward the post-repair restoration obligation.",
+        "lineage": {
+          "segment_id": "S3",
+          "transcript_hash": "emergency-camp-bowie-hash"
+        }
+      }
+    ]
+  },
+  "governance_handoff": {
+    "handoff_version": "wave4b-blockd-governance-handoff-v1",
+    "handoff_mode": "local_frozen_proof",
+    "selected_item_count": 3,
+    "selected_items": [
+      {
+        "capture_item_id": "directive:S1:1",
+        "normalized_item_type": "directive",
+        "normalized_summary": "Escalate the water main break and protect the critical site."
+      },
+      {
+        "capture_item_id": "hold:S2:1",
+        "normalized_item_type": "hold",
+        "normalized_summary": "Apply a hard stop to unrelated excavation until emergency authority is approved."
+      },
+      {
+        "capture_item_id": "directive:S3:1",
+        "normalized_item_type": "directive",
+        "normalized_summary": "Complete the repair and carry forward the post-repair restoration obligation."
+      }
+    ],
+    "notes": [
+      "synthetic replay artifact",
+      "emergency path preserves hard stop and follow-up obligation"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "scenarioId": "routine-lancaster-avenue-corridor-reconstruction",
+  "corridorId": "corridor-fw-lancaster-avenue",
+  "finalStatus": "PASS",
+  "finalDisposition": "APPROVED_AND_ISSUED",
+  "bridgeReplayStatus": "PASS",
+  "keyOutcomes": [
+    "approval logged",
+    "inspection scheduled",
+    "inspection passed",
+    "permit issued"
+  ],
+  "nonClaims": [
+    "No real TPIA legal sufficiency claim.",
+    "No real TRAIGA 2.0 compliance claim."
+  ]
+}

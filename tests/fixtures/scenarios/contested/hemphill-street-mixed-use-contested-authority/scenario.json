@@ -1,0 +1,25 @@
+{
+  "scenarioId": "contested-hemphill-street-mixed-use-contested-authority",
+  "scenarioName": "Hemphill Street mixed-use / contested authority",
+  "corridorId": "corridor-fw-hemphill-street",
+  "category": "contested",
+  "bridgeMode": "REPLAY",
+  "minimumCascadeSteps": 5,
+  "requiredEntityTypes": [
+    "authority_grant",
+    "organization",
+    "decision_record",
+    "obligation",
+    "incident_observation",
+    "corridor_zone",
+    "action_request"
+  ],
+  "resolutionRequirements": [
+    "DEFER",
+    "CONDITION",
+    "PHANTOM_AUTHORITY_DETECTED",
+    "REVOKE",
+    "CONTESTED_AUTHORITY_RESOLVED"
+  ],
+  "fixtureIntent": "Synthetic hand-curated contested authority fixture for Wave 8 Packet 1."
+}

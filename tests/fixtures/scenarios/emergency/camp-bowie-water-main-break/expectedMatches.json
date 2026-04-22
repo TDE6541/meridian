@@ -1,0 +1,40 @@
+{
+  "scenarioId": "emergency-camp-bowie-water-main-break",
+  "matches": [
+    {
+      "entityType": "utility_asset",
+      "entityId": "utility-asset:camp-bowie-water-main-77",
+      "matchReason": "water main failure is the primary asset event"
+    },
+    {
+      "entityType": "device",
+      "entityId": "device:camp-bowie-pressure-sensor-12",
+      "matchReason": "sensor evidence confirms the break"
+    },
+    {
+      "entityType": "critical_site",
+      "entityId": "critical-site:camp-bowie-clinic",
+      "matchReason": "clinic protection drives escalation"
+    },
+    {
+      "entityType": "incident_observation",
+      "entityId": "incident:camp-bowie-break-001",
+      "matchReason": "incident record anchors the emergency path"
+    },
+    {
+      "entityType": "authority_grant",
+      "entityId": "authority:camp-bowie-emergency-window",
+      "matchReason": "emergency authority enables the repair window"
+    },
+    {
+      "entityType": "obligation",
+      "entityId": "obligation:camp-bowie-pavement-restoration",
+      "matchReason": "follow-up restoration remains open"
+    },
+    {
+      "entityType": "corridor_zone",
+      "entityId": "corridor-zone:camp-bowie-main",
+      "matchReason": "corridor traffic control remains explicit"
+    }
+  ]
+}

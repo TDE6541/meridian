@@ -1,0 +1,18 @@
+{
+  "scenarioId": "contested-hemphill-street-mixed-use-contested-authority",
+  "corridorId": "corridor-fw-hemphill-street",
+  "finalStatus": "PASS",
+  "finalDisposition": "RESOLVED_WITH_CONDITIONS",
+  "bridgeReplayStatus": "PASS",
+  "keyOutcomes": [
+    "defer",
+    "condition",
+    "phantom authority detected",
+    "revoke",
+    "contested authority resolved"
+  ],
+  "nonClaims": [
+    "No real TPIA legal sufficiency claim.",
+    "No real TRAIGA 2.0 compliance claim."
+  ]
+}

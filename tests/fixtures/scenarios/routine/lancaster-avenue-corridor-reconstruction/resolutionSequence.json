@@ -1,0 +1,33 @@
+{
+  "scenarioId": "routine-lancaster-avenue-corridor-reconstruction",
+  "steps": [
+    {
+      "stepId": "R1",
+      "action": "APPROVE",
+      "entityType": "decision_record",
+      "status": "PASS",
+      "summary": "Reconstruction package approved for permit processing."
+    },
+    {
+      "stepId": "R2",
+      "action": "INSPECTION_SCHEDULED",
+      "entityType": "inspection",
+      "status": "PASS",
+      "summary": "Field inspection scheduled for the corridor work window."
+    },
+    {
+      "stepId": "R3",
+      "action": "INSPECTION_PASSED",
+      "entityType": "inspection",
+      "status": "PASS",
+      "summary": "Inspector confirmed controls and trench protection."
+    },
+    {
+      "stepId": "R4",
+      "action": "PERMIT_ISSUED",
+      "entityType": "permit_application",
+      "status": "PASS",
+      "summary": "Permit issued with authority grant and notice obligation active."
+    }
+  ]
+}

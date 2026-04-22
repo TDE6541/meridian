@@ -1,0 +1,7 @@
+Camp Bowie water main break command bridge.
+Operations dispatch escalated incident:camp-bowie-break-001 after pressure dropped on utility-asset:camp-bowie-water-main-77.
+Device:camp-bowie-pressure-sensor-12 confirmed the pressure loss and the nearby clinic critical-site:camp-bowie-clinic was flagged as at risk.
+Dispatch placed a hard stop on unrelated lane excavation until emergency authority was approved for the repair window.
+Emergency management approved authority:camp-bowie-emergency-window with corridor traffic control conditions.
+Crews completed the repair, restored service, and cleared the immediate emergency block.
+The corridor remained under follow-up control because pavement restoration and after-action review obligations stayed open.

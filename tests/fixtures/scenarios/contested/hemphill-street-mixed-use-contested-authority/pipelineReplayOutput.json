@@ -1,0 +1,74 @@
+{
+  "replay_contract_version": "wave8.packet1.replayArtifact.v1",
+  "scenario_id": "contested-hemphill-street-mixed-use-contested-authority",
+  "capture_artifact": {
+    "artifact_version": "wave4b-blockd-capture-artifact-v1",
+    "artifact_id": "capture-artifact:corridor-fw-hemphill-street:contested",
+    "meeting_metadata": {
+      "org_id": "corridor-fw-hemphill-street",
+      "meeting_id": "contested-hemphill-street-mixed-use-contested-authority",
+      "capture_source": "fixture",
+      "title": "Hemphill Street mixed-use contested authority"
+    },
+    "capture_counts": {
+      "segment_count": 3,
+      "directive_count": 1,
+      "hold_count": 2
+    },
+    "extracted_items": [
+      {
+        "capture_item_id": "hold:S1:1",
+        "item_kind": "hold",
+        "summary": "Defer action until phantom authority is removed.",
+        "lineage": {
+          "segment_id": "S1",
+          "transcript_hash": "contested-hemphill-hash"
+        }
+      },
+      {
+        "capture_item_id": "hold:S2:1",
+        "item_kind": "hold",
+        "summary": "Condition approval on a signed corridor operations grant.",
+        "lineage": {
+          "segment_id": "S2",
+          "transcript_hash": "contested-hemphill-hash"
+        }
+      },
+      {
+        "capture_item_id": "directive:S3:1",
+        "item_kind": "directive",
+        "summary": "Revoke the phantom memo path and resolve the corridor authority with conditions.",
+        "lineage": {
+          "segment_id": "S3",
+          "transcript_hash": "contested-hemphill-hash"
+        }
+      }
+    ]
+  },
+  "governance_handoff": {
+    "handoff_version": "wave4b-blockd-governance-handoff-v1",
+    "handoff_mode": "local_frozen_proof",
+    "selected_item_count": 3,
+    "selected_items": [
+      {
+        "capture_item_id": "hold:S1:1",
+        "normalized_item_type": "hold",
+        "normalized_summary": "Defer action until phantom authority is removed."
+      },
+      {
+        "capture_item_id": "hold:S2:1",
+        "normalized_item_type": "hold",
+        "normalized_summary": "Condition approval on a signed corridor operations grant."
+      },
+      {
+        "capture_item_id": "directive:S3:1",
+        "normalized_item_type": "directive",
+        "normalized_summary": "Revoke the phantom memo path and resolve the corridor authority with conditions."
+      }
+    ],
+    "notes": [
+      "synthetic replay artifact",
+      "contested authority path preserves HOLD then resolution"
+    ]
+  }
+}

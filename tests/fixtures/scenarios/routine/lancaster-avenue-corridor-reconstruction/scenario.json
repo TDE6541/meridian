@@ -1,0 +1,24 @@
+{
+  "scenarioId": "routine-lancaster-avenue-corridor-reconstruction",
+  "scenarioName": "Lancaster Avenue corridor reconstruction",
+  "corridorId": "corridor-fw-lancaster-avenue",
+  "category": "routine",
+  "bridgeMode": "REPLAY",
+  "minimumCascadeSteps": 4,
+  "requiredEntityTypes": [
+    "permit_application",
+    "inspection",
+    "authority_grant",
+    "decision_record",
+    "obligation",
+    "corridor_zone",
+    "organization"
+  ],
+  "resolutionRequirements": [
+    "APPROVE",
+    "INSPECTION_SCHEDULED",
+    "INSPECTION_PASSED",
+    "PERMIT_ISSUED"
+  ],
+  "fixtureIntent": "Synthetic hand-curated routine approval fixture for Wave 8 Packet 1."
+}

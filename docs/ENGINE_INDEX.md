@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, and shipped Wave 7 civic skins rendering/proof surfaces.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, shipped Wave 7 civic skins rendering/proof surfaces, and shipped Wave 8 corridor scenario integration/proof surfaces.
 
 ## Bridge Substrate
 
@@ -77,6 +77,17 @@ Purpose: bounded Wave 7 rendering-only civic skins surfaces with five shipped sk
 - `src/skins/civic/dispatch.js`
 - `src/skins/civic/public.js`
 
+## Corridor Scenario Integration Lane
+
+Purpose: bounded Wave 8 integration surfaces for deterministic replay bridge output, deterministic matching and absence detection, single-state scenario composition, multi-step resolution cascade replay, and runner-level verification over frozen scenario fixtures.
+
+- `src/integration/contracts.js`
+- `src/integration/pipelineBridge.js`
+- `src/integration/matchingEngine.js`
+- `src/integration/corridorScenario.js`
+- `src/integration/resolutionCascade.js`
+- `scripts/run-corridor-scenario.js`
+
 ## Governance Substrate
 
 Purpose: shared governance shadow fields and validation substrate for entity scaffolds.
@@ -109,7 +120,7 @@ Purpose: read-only Meridian publisher subject builders and connection config imp
 
 ## Proof Surfaces
 
-Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, Wave 5 authority-topology proof surfaces, Wave 6 forensic-chain proof surfaces, and Wave 7 civic skins proof surfaces.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, Wave 5 authority-topology proof surfaces, Wave 6 forensic-chain proof surfaces, Wave 7 civic skins proof surfaces, and Wave 8 corridor scenario integration proof surfaces.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
@@ -147,6 +158,13 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runti
 - `tests/skins.redaction.test.js`
 - `tests/skins.public.test.js`
 - `tests/skins.integration.test.js`
+- `tests/integration/scenarioFixtures.test.js`
+- `tests/integration/pipelineBridge.test.js`
+- `tests/integration/matchingEngine.test.js`
+- `tests/integration/corridorScenario.test.js`
+- `tests/integration/corridorCascade.test.js`
+- `tests/integration/corridorRunner.test.js`
+- `tests/fixtures/scenarios/**/*`
 - `tests/pipeline/test_models.py`
 - `tests/pipeline/test_transcript_cache.py`
 - `tests/pipeline/test_llm_client.py`

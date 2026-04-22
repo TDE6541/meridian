@@ -1,0 +1,40 @@
+{
+  "scenarioId": "contested-hemphill-street-mixed-use-contested-authority",
+  "matches": [
+    {
+      "entityType": "authority_grant",
+      "entityId": "authority:hemphill-corrected-grant",
+      "matchReason": "corrected authority resolves the dispute"
+    },
+    {
+      "entityType": "organization",
+      "entityId": "organization:hemphill-corridor-partnership",
+      "matchReason": "requesting organization remains explicit"
+    },
+    {
+      "entityType": "decision_record",
+      "entityId": "decision:hemphill-authority-review",
+      "matchReason": "deferral and resolution are logged"
+    },
+    {
+      "entityType": "obligation",
+      "entityId": "obligation:hemphill-monitoring-window",
+      "matchReason": "monitoring obligation remains after resolution"
+    },
+    {
+      "entityType": "incident_observation",
+      "entityId": "incident:hemphill-conflicting-posting",
+      "matchReason": "conflicting posting triggers phantom authority review"
+    },
+    {
+      "entityType": "corridor_zone",
+      "entityId": "corridor-zone:hemphill-mixed-use",
+      "matchReason": "corridor scope is explicit"
+    },
+    {
+      "entityType": "action_request",
+      "entityId": "action-request:hemphill-lane-closure-001",
+      "matchReason": "requested action remains the contested work item"
+    }
+  ]
+}

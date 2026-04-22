@@ -1,0 +1,40 @@
+{
+  "scenarioId": "routine-lancaster-avenue-corridor-reconstruction",
+  "matches": [
+    {
+      "entityType": "permit_application",
+      "entityId": "permit:lancaster-reconstruction-001",
+      "matchReason": "approval path remains permit-led"
+    },
+    {
+      "entityType": "inspection",
+      "entityId": "inspection:lancaster-site-visit-001",
+      "matchReason": "inspection scheduling and completion are explicit"
+    },
+    {
+      "entityType": "authority_grant",
+      "entityId": "authority:lancaster-lane-occupation",
+      "matchReason": "lane occupation authority activates after inspection"
+    },
+    {
+      "entityType": "decision_record",
+      "entityId": "decision:lancaster-reconstruction-review",
+      "matchReason": "approval record is logged"
+    },
+    {
+      "entityType": "obligation",
+      "entityId": "obligation:lancaster-public-notice",
+      "matchReason": "public notice obligation remains active"
+    },
+    {
+      "entityType": "corridor_zone",
+      "entityId": "corridor-zone:lancaster-main",
+      "matchReason": "corridor scope is explicit"
+    },
+    {
+      "entityType": "organization",
+      "entityId": "organization:transportation-planning",
+      "matchReason": "responsible organization is explicit"
+    }
+  ]
+}

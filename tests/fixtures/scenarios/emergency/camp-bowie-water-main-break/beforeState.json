@@ -1,0 +1,42 @@
+{
+  "scenarioId": "emergency-camp-bowie-water-main-break",
+  "corridorId": "corridor-fw-camp-bowie",
+  "stateLabel": "before",
+  "entities": [
+    {
+      "entityType": "corridor_zone",
+      "entityId": "corridor-zone:camp-bowie-main",
+      "status": "ACTIVE_TRAFFIC"
+    },
+    {
+      "entityType": "utility_asset",
+      "entityId": "utility-asset:camp-bowie-water-main-77",
+      "status": "FAILED"
+    },
+    {
+      "entityType": "device",
+      "entityId": "device:camp-bowie-pressure-sensor-12",
+      "status": "ALERTING"
+    },
+    {
+      "entityType": "critical_site",
+      "entityId": "critical-site:camp-bowie-clinic",
+      "status": "AT_RISK"
+    },
+    {
+      "entityType": "incident_observation",
+      "entityId": "incident:camp-bowie-break-001",
+      "status": "OPEN"
+    },
+    {
+      "entityType": "authority_grant",
+      "entityId": "authority:camp-bowie-emergency-window",
+      "status": "PENDING"
+    },
+    {
+      "entityType": "obligation",
+      "entityId": "obligation:camp-bowie-after-action",
+      "status": "OPEN"
+    }
+  ]
+}

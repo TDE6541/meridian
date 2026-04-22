@@ -1,0 +1,42 @@
+{
+  "scenarioId": "contested-hemphill-street-mixed-use-contested-authority",
+  "corridorId": "corridor-fw-hemphill-street",
+  "stateLabel": "before",
+  "entities": [
+    {
+      "entityType": "corridor_zone",
+      "entityId": "corridor-zone:hemphill-mixed-use",
+      "status": "CONTESTED"
+    },
+    {
+      "entityType": "organization",
+      "entityId": "organization:hemphill-corridor-partnership",
+      "status": "REQUESTING_ACCESS"
+    },
+    {
+      "entityType": "action_request",
+      "entityId": "action-request:hemphill-lane-closure-001",
+      "status": "SUBMITTED"
+    },
+    {
+      "entityType": "incident_observation",
+      "entityId": "incident:hemphill-conflicting-posting",
+      "status": "OPEN"
+    },
+    {
+      "entityType": "authority_grant",
+      "entityId": "authority:hemphill-legacy-memo",
+      "status": "CLAIMED_ACTIVE"
+    },
+    {
+      "entityType": "decision_record",
+      "entityId": "decision:hemphill-authority-review",
+      "status": "DEFERRED"
+    },
+    {
+      "entityType": "obligation",
+      "entityId": "obligation:hemphill-legal-confirmation",
+      "status": "OPEN"
+    }
+  ]
+}

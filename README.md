@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), and a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof). This repo is still not a runnable application.
+Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), and a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures). This repo is still not a runnable application.
 
 ## Agent Start Here
 
@@ -11,7 +11,7 @@ Meridian is a governed city digital twin intelligence repo. The repo contains th
 
 ## Current Status
 
-Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned with `origin/main`. Wave 7 Packets 1-4 are present in-repo on the Wave 7 lane.
+Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned with `origin/main`. Wave 7 Packets 1-4 and Wave 8 Packets 1-5 are present in-repo as bounded local lanes.
 
 ## What This Is
 
@@ -47,6 +47,12 @@ Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned wi
   - deterministic public disclosure boundary in `src/skins/redaction.js`
   - five-skin structural integration proof at `tests/skins.integration.test.js`
   - framework public guard retained for framework consumers (`renderDefaultSkin` continues to reserve public rendering)
+- A Wave 8 corridor scenario integration lane under `src/integration/` plus `scripts/run-corridor-scenario.js` with:
+  - additive integration-layer contracts (`wave8.pipelineBridgeOutput.v1`, `wave8.matchResult.v1`, `wave8.scenarioResult.v1`, `wave8.cascadeResult.v1`)
+  - deterministic replay mode and structured live missing-env HOLD posture
+  - single-state composition plus multi-step cascade over frozen fixture sets (`routine`, `contested`, `emergency`)
+  - runner report contract (`wave8.packet5.runnerReport.v1`) local to the runner script
+  - integration proof at `tests/integration/*.test.js` and frozen scenario fixtures under `tests/fixtures/scenarios/**`
 - A single external runtime dependency surface in `package.json`: `nats`.
 
 ## What This Is Not
@@ -64,6 +70,12 @@ Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned wi
 - Not forensic-entry-to-skin routing.
 - Not governance-truth computation inside skins.
 - Not a claim that Wave 4B handoff seam is full runtime/governance fabric completion.
+- Not multi-corridor routing in one scenario run.
+- Not a persistent match-result store.
+- Not a chain replay engine.
+- Not live Auth0/OpenFGA wiring.
+- Not live Whisper/audio ingestion.
+- Not real TPIA legal sufficiency or TRAIGA 2.0 compliance claims.
 
 ## Repo Structure
 
@@ -76,11 +88,13 @@ src/
     forensic/*.js
     runtime/*.js
     shadows.js
+  integration/*.js
   pipeline/*.py
   skins/**/*.js
 tests/
   bridge*.test.js
   bridge.chainPublisher.test.js
+  integration/*.test.js
   governance*.test.js
   governance.forensic*.test.js
   governance.chainWriter.test.js
@@ -89,7 +103,10 @@ tests/
   governance.authority*.test.js
   governance.revoke.test.js
   skins*.test.js
+  fixtures/scenarios/**/*
   pipeline/**/*.py
+scripts/
+  run-corridor-scenario.js
 docs/
   INDEX.md
   ENGINE_INDEX.md
@@ -98,7 +115,7 @@ docs/
   specs/*.md
 ```
 
-## Deferred After Wave 7
+## Deferred After Wave 8
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
 - Generalized event routing and authority-topology widening beyond the bounded lanes.
@@ -107,6 +124,9 @@ docs/
 - Meeting-capture-to-skin and forensic-entry-to-skin routing.
 - Governance-truth computation inside skins.
 - UI/dashboard surfaces.
+- Multi-corridor routing in one scenario run.
+- Persistent match-result storage.
+- Chain replay engine.
 
 ## Upstream References
 

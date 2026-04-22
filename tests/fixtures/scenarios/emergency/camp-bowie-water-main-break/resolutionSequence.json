@@ -1,0 +1,40 @@
+{
+  "scenarioId": "emergency-camp-bowie-water-main-break",
+  "steps": [
+    {
+      "stepId": "E1",
+      "action": "ESCALATE",
+      "entityType": "incident_observation",
+      "status": "PASS",
+      "summary": "Dispatch escalated the break because a critical site was at risk."
+    },
+    {
+      "stepId": "E2",
+      "action": "EMERGENCY_AUTHORITY_APPROVED",
+      "entityType": "authority_grant",
+      "status": "PASS",
+      "summary": "Emergency repair window approved with corridor traffic control conditions."
+    },
+    {
+      "stepId": "E3",
+      "action": "HARD_STOP",
+      "entityType": "corridor_zone",
+      "status": "HOLD",
+      "summary": "Unrelated excavation blocked until the emergency window was active."
+    },
+    {
+      "stepId": "E4",
+      "action": "REPAIR_COMPLETED",
+      "entityType": "utility_asset",
+      "status": "PASS",
+      "summary": "Water main repaired and service restored."
+    },
+    {
+      "stepId": "E5",
+      "action": "POST_REPAIR_OBLIGATION_CREATED",
+      "entityType": "obligation",
+      "status": "HOLD",
+      "summary": "Pavement restoration and after-action review remain open."
+    }
+  ]
+}

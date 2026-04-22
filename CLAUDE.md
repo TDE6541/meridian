@@ -2,7 +2,7 @@
 
 ## Repo Identity
 
-Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, a bounded Wave 5 authority-topology lane, a bounded Wave 6 forensic-chain lane, and a bounded Wave 7 civic skins rendering lane.
+Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, a bounded Wave 5 authority-topology lane, a bounded Wave 6 forensic-chain lane, a bounded Wave 7 civic skins rendering lane, and a bounded Wave 8 corridor scenario integration lane.
 
 ## Agent Start Here / Read First
 
@@ -19,6 +19,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 11. [`docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`](docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md)
 12. [`docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`](docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md)
 13. [`docs/specs/WAVE7_CIVIC_SKINS.md`](docs/specs/WAVE7_CIVIC_SKINS.md)
+14. [`docs/specs/WAVE8_CORRIDOR_SCENARIO.md`](docs/specs/WAVE8_CORRIDOR_SCENARIO.md)
 
 ## Session Posture
 
@@ -34,6 +35,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Do not describe Wave 5 as live Auth0/OpenFGA integration, persistent graph storage, event-side routing, publication widening, scheduler/daemon behavior, or civic-chain/ForensicChain runtime writes.
 - Do not describe Wave 6 as live broker proof, legal/tamper-proof immutability, meeting-capture forensic recording, permit/inspection/obligation forensic recording, full per-helper authority trace fanout, or production DB-backed forensic persistence.
 - Do not describe Wave 7 as dashboard/UI runtime, public portal behavior, legal compliance workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins.
+- Do not describe Wave 8 as dashboard/UI runtime, deployment/hosting, live broker proof, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, legal sufficiency, TRAIGA compliance, persistent match-result storage, chain replay engine, or multi-corridor routing in one run.
 
 ## Non-Negotiables
 
@@ -81,6 +83,7 @@ Edit(/**/*.config.*)
 - `src/governance/runtime/*.js`
 - `src/pipeline/*.py`
 - `src/skins/**/*.js`
+- `src/integration/*.js`
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
 - `tests/entities.test.js`
@@ -102,6 +105,7 @@ Edit(/**/*.config.*)
 - `tests/governance.demoProof.test.js`
 - `tests/governance.pipelineHandoffProof.test.js`
 - `tests/skins*.test.js`
+- `tests/integration/*.test.js`
 - `tests/pipeline/*.py`
 - `tests/pipeline/calibration/**/*.json`
 - `tests/pipeline/fixtures/*.txt`
@@ -118,6 +122,7 @@ Edit(/**/*.config.*)
 - `docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`
 - `docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`
 - `docs/specs/WAVE7_CIVIC_SKINS.md`
+- `docs/specs/WAVE8_CORRIDOR_SCENARIO.md`
 - `docs/INDEX.md`
 - `docs/ENGINE_INDEX.md`
 - `docs/UI_INDEX.md`
@@ -137,6 +142,8 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE5_CLOSEOUT.md`
 - `docs/closeouts/WAVE6_CLOSEOUT.md`
 - `docs/closeouts/WAVE7_CLOSEOUT.md`
+- `docs/closeouts/WAVE8_CLOSEOUT.md`
+- `scripts/run-corridor-scenario.js`
 - `scripts/synthetic-constellation.js`
 - Block C truth: `package.json` declares only `nats` as a runtime dependency; `src/config/constellation.js` remains the narrow publisher/config substrate; transport-only bridge surfaces live in `src/bridge/`; no live broker proof claim ships.
 - Block D truth: runtime results now carry bounded `runtimeSubset.civic.promise_status`, civic confidence tiers, and short decision rationale strings; `tests/governance.promiseConfidence.test.js` provides direct proof; no entity, publisher, or event-side widening shipped.
@@ -146,6 +153,7 @@ Edit(/**/*.config.*)
 - Wave 5 truth: Packet 1 adds additive `authority_grant`/`organization` validator widening and static Fort Worth authority topology; Packet 2 adds bounded domain/actor authority evaluation plus additive `runtimeSubset.civic.authority_resolution`; Packet 3 activates bounded `REVOKE` for `authority_revoked_mid_action`, `permit_superseded_by_overlap`, and `cross_jurisdiction_resolved_against_requester`, adds additive `runtimeSubset.civic.revocation`, and adds read-only projection-only propagation under optional nested `authority_context.propagation_context`; no top-level request-shape widening, publication widening, signal_tree widening, entity mutation, event-side routing, scheduler behavior, or persistent graph/runtime writes ship.
 - Wave 6 truth: Packet 1 ships bounded `src/governance/forensic/` civic-chain substrate (`CivicForensicChain`, `GovernanceChainWriter`, `ChainPersistence`) with active civic entry vocabulary narrowed to `GOVERNANCE_DECISION`/`AUTHORITY_EVALUATION`, explicit deferred civic type rejection for meeting/permit/inspection/obligation entries, DI-only writer posture, non-blocking persistence warnings, and demo JSON persistence under `.meridian/forensic-chain/`; Packet 2 ships DI-only `ChainPublisher` and additive post-evaluation forensic publication seam in `src/bridge/governanceTransportAdapter.js` that publishes only to existing `constellation.evidence.*` subjects on `CONSTELLATION_EVIDENCE` with non-blocking publication failures and receipts appended only through existing `publications`; no new subject family/stream, no top-level contract widening, no governance/authority logic rewrite, no meeting-capture forensic recording, no DB persistence, and no legal immutability/live-broker proof claim ship.
 - Wave 7 truth: five bounded civic skins are shipped (`civic.permitting`, `civic.council`, `civic.operations`, `civic.dispatch`, `civic.public`), deterministic public disclosure boundary ships in `src/skins/redaction.js`, and five-skin structural integration proof ships in `tests/skins.integration.test.js`; framework public guard remains intact, Wave 7 remains rendering-only, and no runtime/bridge/pipeline/forensic/entity/config/package widening, dashboard/UI runtime, portal behavior, legal compliance workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins ships.
+- Wave 8 truth: bounded integration surfaces ship under `src/integration/` plus `scripts/run-corridor-scenario.js` with additive integration-layer contracts (`wave8.pipelineBridgeOutput.v1`, `wave8.matchResult.v1`, `wave8.scenarioResult.v1`, `wave8.cascadeResult.v1`) and a runner-local report contract (`wave8.packet5.runnerReport.v1`); frozen scenario fixtures (`routine`, `contested`, `emergency`) and `tests/integration/*.test.js` prove deterministic replay, structured live missing-env HOLD posture, single-state composition, multi-step cascade continuity, and five-skin re-rendering at each cascade step; no Wave 1-7 runtime/module widening, no dashboard/deployment claim, no live broker/auth/audio claim, and no legal/TRAIGA sufficiency claim ship.
 
 ## Required Sync Surfaces
 
@@ -167,6 +175,7 @@ Edit(/**/*.config.*)
 - `docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`
 - `docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`
 - `docs/specs/WAVE7_CIVIC_SKINS.md`
+- `docs/specs/WAVE8_CORRIDOR_SCENARIO.md`
 - `docs/closeouts/README.md`
 - `docs/closeouts/WAVE3_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_CLOSEOUT.md`
@@ -180,6 +189,7 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE5_CLOSEOUT.md`
 - `docs/closeouts/WAVE6_CLOSEOUT.md`
 - `docs/closeouts/WAVE7_CLOSEOUT.md`
+- `docs/closeouts/WAVE8_CLOSEOUT.md`
 
 ## Closeout Requirements
 

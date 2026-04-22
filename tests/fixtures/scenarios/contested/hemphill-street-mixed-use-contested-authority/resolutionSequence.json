@@ -1,0 +1,40 @@
+{
+  "scenarioId": "contested-hemphill-street-mixed-use-contested-authority",
+  "steps": [
+    {
+      "stepId": "C1",
+      "action": "DEFER",
+      "entityType": "decision_record",
+      "status": "HOLD",
+      "summary": "Board deferred the request pending authority clarification."
+    },
+    {
+      "stepId": "C2",
+      "action": "CONDITION",
+      "entityType": "obligation",
+      "status": "HOLD",
+      "summary": "Future access conditioned on a signed corridor operations grant."
+    },
+    {
+      "stepId": "C3",
+      "action": "PHANTOM_AUTHORITY_DETECTED",
+      "entityType": "incident_observation",
+      "status": "HOLD",
+      "summary": "Legacy memo identified as phantom authority."
+    },
+    {
+      "stepId": "C4",
+      "action": "REVOKE",
+      "entityType": "authority_grant",
+      "status": "PASS",
+      "summary": "Temporary release tied to the phantom memo was revoked."
+    },
+    {
+      "stepId": "C5",
+      "action": "CONTESTED_AUTHORITY_RESOLVED",
+      "entityType": "authority_grant",
+      "status": "PASS",
+      "summary": "Corrected authority grant issued with conditions."
+    }
+  ]
+}

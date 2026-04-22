@@ -1,0 +1,25 @@
+{
+  "scenarioId": "emergency-camp-bowie-water-main-break",
+  "scenarioName": "Camp Bowie water main break",
+  "corridorId": "corridor-fw-camp-bowie",
+  "category": "emergency",
+  "bridgeMode": "REPLAY",
+  "minimumCascadeSteps": 5,
+  "requiredEntityTypes": [
+    "utility_asset",
+    "device",
+    "critical_site",
+    "incident_observation",
+    "authority_grant",
+    "obligation",
+    "corridor_zone"
+  ],
+  "resolutionRequirements": [
+    "ESCALATE",
+    "EMERGENCY_AUTHORITY_APPROVED",
+    "HARD_STOP",
+    "REPAIR_COMPLETED",
+    "POST_REPAIR_OBLIGATION_CREATED"
+  ],
+  "fixtureIntent": "Synthetic hand-curated emergency dispatch fixture for Wave 8 Packet 1."
+}
