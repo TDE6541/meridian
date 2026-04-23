@@ -3,6 +3,7 @@ import type {
   ScenarioKey,
   ScenarioRegistryEntry,
   ScenarioResult,
+  ScenarioSkinOutputKey,
   ScenarioRunnerReport,
   ScenarioStep,
   ScenarioTransitionEvidenceStep,
@@ -35,6 +36,7 @@ export type ControlRoomScenarioRecord =
 
 export interface ControlRoomState {
   activeStepIndex: number;
+  activeSkinTab: ScenarioSkinOutputKey;
   playbackState: PlaybackStatus;
   selectedScenarioKey: ScenarioKey;
 }
@@ -54,6 +56,7 @@ export function createInitialControlRoomState(
 ): ControlRoomState {
   return {
     activeStepIndex: 0,
+    activeSkinTab: "permitting",
     playbackState: "paused",
     selectedScenarioKey,
   };
@@ -133,6 +136,16 @@ export function selectStep(
     ...state,
     activeStepIndex: clampStepIndex(index, totalSteps),
     playbackState: "paused",
+  };
+}
+
+export function selectSkinTab(
+  state: ControlRoomState,
+  activeSkinTab: ScenarioSkinOutputKey
+): ControlRoomState {
+  return {
+    ...state,
+    activeSkinTab,
   };
 }
 

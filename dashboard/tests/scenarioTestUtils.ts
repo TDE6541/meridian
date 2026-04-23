@@ -3,6 +3,7 @@ import path from "node:path";
 import { readFile } from "node:fs/promises";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { scenarioRegistry } from "../src/data/scenarioRegistry.ts";
 import { getScenarioRegistryEntry } from "../src/data/scenarioRegistry.ts";
 import { assertValidScenarioPayload } from "../src/data/validateScenario.ts";
 import { createReadyScenarioRecord } from "../src/state/controlRoomState.ts";
@@ -34,6 +35,12 @@ export async function loadScenarioRecord(
   return record;
 }
 
+export async function loadAllScenarioRecords() {
+  return Promise.all(
+    scenarioRegistry.map((entry) => loadScenarioRecord(entry.key))
+  );
+}
+
 export function renderMarkup(element: React.ReactElement): string {
   return renderToStaticMarkup(element);
 }
@@ -54,9 +61,9 @@ export async function runTests(tests: readonly TestCase[]) {
 
   if (failureCount > 0) {
     process.exitCode = 1;
-    throw new Error(`${failureCount} Packet 2 dashboard test(s) failed.`);
+    throw new Error(`${failureCount} dashboard test(s) failed.`);
   }
 
   assert.equal(failureCount, 0);
-  console.log(`PASS ${tests.length} Packet 2 dashboard test(s)`);
+  console.log(`PASS ${tests.length} dashboard test(s)`);
 }

@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
+import {
+  adaptStepSkinPayloads,
+  getDashboardSkinView,
+} from "../adapters/skinPayloadAdapter.ts";
 import { GovernanceStatePanel } from "./GovernanceStatePanel.tsx";
 import { OutcomeBadge } from "./OutcomeBadge.tsx";
 import { PlaybackControls } from "./PlaybackControls.tsx";
 import { ScenarioSelector } from "./ScenarioSelector.tsx";
+import { SkinPanel } from "./SkinPanel.tsx";
+import { SkinSwitcher } from "./SkinSwitcher.tsx";
 import { StatusBar } from "./StatusBar.tsx";
 import { TimelinePanel } from "./TimelinePanel.tsx";
 import {
@@ -18,6 +24,7 @@ import {
   resetControlRoom,
   resolveScenarioDataVersion,
   selectScenario,
+  selectSkinTab,
   selectStep,
   startPlayback,
 } from "../state/controlRoomState.ts";
@@ -70,6 +77,11 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
   const timelineSteps =
     selectedRecord?.status === "ready" ? buildTimelineSteps(selectedRecord.scenario) : [];
   const currentStep = getActiveTimelineStep(timelineSteps, controlState);
+  const skinViews = currentStep ? adaptStepSkinPayloads(currentStep.step) : [];
+  const activeSkinView =
+    getDashboardSkinView(skinViews, controlState.activeSkinTab) ??
+    skinViews[0] ??
+    null;
   const dataVersion = resolveScenarioDataVersion(selectedRecord);
   const scenarioId =
     selectedRecord?.status === "ready"
@@ -99,11 +111,12 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
     <section className="control-room-shell">
       <header className="hero control-room-hero">
         <div className="control-room-hero__copy">
-          <p className="eyebrow">Wave 9 Packet 2</p>
+          <p className="eyebrow">Wave 9 Packet 3</p>
           <h1>Control Room Shell</h1>
           <p className="hero-copy">
             Scenario selector, timeline, deterministic playback, governance state, and
-            status bar over frozen Wave 8 replay+cascade payloads only.
+            actual frozen civic-skin audience switching over committed Wave 8 cascade
+            payloads only.
           </p>
         </div>
 
@@ -178,15 +191,35 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
           timelineSteps={timelineSteps}
         />
 
-        <GovernanceStatePanel
-          currentStep={currentStep}
-          message={getShellMessage(selectedRecord)}
-          status={selectedRecord?.status ?? "loading"}
-        />
+        <div className="control-room-detail">
+          <GovernanceStatePanel
+            currentStep={currentStep}
+            message={getShellMessage(selectedRecord)}
+            status={selectedRecord?.status ?? "loading"}
+          />
+
+          <SkinSwitcher
+            activeSkinTab={controlState.activeSkinTab}
+            message={getShellMessage(selectedRecord)}
+            onSelect={(skinKey) =>
+              setControlState((current) => selectSkinTab(current, skinKey))
+            }
+            status={selectedRecord?.status ?? "loading"}
+            views={skinViews}
+          />
+
+          <SkinPanel
+            activeStepLabel={activeStepLabel}
+            message={getShellMessage(selectedRecord)}
+            skinView={activeSkinView}
+            status={selectedRecord?.status ?? "loading"}
+          />
+        </div>
       </div>
 
       <StatusBar
         activeOutcome={currentStep?.decision ?? null}
+        activeSkinLabel={activeSkinView?.label ?? "Unavailable"}
         activeStepLabel={activeStepLabel}
         dataVersion={dataVersion}
         scenarioId={scenarioId}

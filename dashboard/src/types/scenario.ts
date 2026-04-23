@@ -10,6 +10,12 @@ export type DecisionOutcome =
 export type ScenarioTopLevelStatus = "PASS" | "HOLD" | "FAIL";
 export type ScenarioStageStatus = "PASS" | "HOLD" | "FAIL" | "SKIPPED";
 export type PlaybackStatus = "playing" | "paused";
+export type ScenarioSkinOutputKey =
+  | "permitting"
+  | "council"
+  | "operations"
+  | "dispatch"
+  | "public";
 
 export type ScenarioObject = Record<string, unknown>;
 
@@ -31,6 +37,77 @@ export interface ScenarioStepSummary extends ScenarioObject {
   selectedMatchTouchesAuthority?: boolean;
   selectedMatchType?: string | null;
   skinParityHolds?: boolean;
+}
+
+export interface ScenarioSourceRef extends ScenarioObject {
+  path?: string;
+  required?: boolean;
+  sourceKind?: string;
+}
+
+export interface ScenarioSkinTruthFingerprint extends ScenarioObject {
+  canonicalTruth?: ScenarioObject;
+  confidenceTier?: string | null;
+  decision?: string | null;
+  digest?: string | null;
+  schemaVersion?: string | null;
+}
+
+export interface ScenarioSkinSection extends ScenarioObject {
+  absenceIds?: string[];
+  body?: string | string[];
+  claimIds?: string[];
+  disclosureNoticeIds?: string[];
+  id?: string;
+  sourceRefs?: ScenarioSourceRef[];
+  title?: string;
+}
+
+export interface ScenarioSkinClaim extends ScenarioObject {
+  allowedAudience?: string[];
+  claimKind?: string;
+  confidenceTier?: string | null;
+  id?: string;
+  sourceRefs?: ScenarioSourceRef[];
+  text?: string;
+}
+
+export interface ScenarioSkinAbsence extends ScenarioObject {
+  displayText?: string;
+  id?: string;
+  path?: string;
+  reason?: string;
+  sourceRefs?: ScenarioSourceRef[];
+}
+
+export interface ScenarioSkinRedaction extends ScenarioObject {
+  basis?: string;
+  category?: string;
+  id?: string;
+  marker?: string;
+  noticeId?: string;
+  path?: string;
+  sourceRefs?: ScenarioSourceRef[];
+  text?: string;
+}
+
+export interface ScenarioSkinFallback extends ScenarioObject {
+  active?: boolean;
+  code?: string | null;
+  message?: string | null;
+}
+
+export interface ScenarioSkinPayload extends ScenarioObject {
+  absences?: ScenarioSkinAbsence[];
+  audience?: string;
+  claims?: ScenarioSkinClaim[];
+  fallback?: ScenarioSkinFallback;
+  redactions?: ScenarioSkinRedaction[];
+  sections?: ScenarioSkinSection[];
+  skinId?: string;
+  sourceRefs?: ScenarioSourceRef[];
+  truthFingerprint?: ScenarioSkinTruthFingerprint;
+  viewType?: string;
 }
 
 export interface ScenarioRuntimeSubsetCivic extends ScenarioObject {
@@ -57,6 +134,13 @@ export interface ScenarioGovernanceSection extends ScenarioStageSection {
   result: ScenarioGovernanceResult;
 }
 
+export interface ScenarioSkinsSection extends ScenarioStageSection {
+  fallbackSkinIds?: string[];
+  outputs?: Partial<Record<ScenarioSkinOutputKey, ScenarioSkinPayload>>;
+  parityHolds?: boolean;
+  renderedSkinIds?: string[];
+ }
+
 export interface ScenarioStageStatusMap {
   authority: ScenarioStageSection;
   forensic: ScenarioStageSection;
@@ -74,7 +158,7 @@ export interface ScenarioStep extends ScenarioObject {
   holds?: ScenarioObject[];
   matching: ScenarioObject;
   pipeline: ScenarioObject;
-  skins: ScenarioObject;
+  skins: ScenarioSkinsSection;
   stageStatus?: ScenarioStageStatusMap;
   status: ScenarioTopLevelStatus | string;
   summary?: ScenarioStepSummary;

@@ -2,6 +2,7 @@ import { OutcomeBadge } from "./OutcomeBadge.tsx";
 
 export interface StatusBarProps {
   activeOutcome: string | null;
+  activeSkinLabel: string;
   activeStepLabel: string;
   dataVersion: string | null;
   scenarioId: string;
@@ -9,6 +10,7 @@ export interface StatusBarProps {
 
 export function StatusBar({
   activeOutcome,
+  activeSkinLabel,
   activeStepLabel,
   dataVersion,
   scenarioId,
@@ -26,6 +28,10 @@ export function StatusBar({
       <div className="status-bar__item">
         <p className="status-bar__label">Active outcome</p>
         <OutcomeBadge decision={activeOutcome} />
+      </div>
+      <div className="status-bar__item">
+        <p className="status-bar__label">Active skin</p>
+        <p className="status-bar__value">{activeSkinLabel}</p>
       </div>
       <div className="status-bar__item">
         <p className="status-bar__label">Active data version</p>
