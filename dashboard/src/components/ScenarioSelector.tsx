@@ -2,6 +2,7 @@ import {
   getScenarioRecord,
   getScenarioStepCount,
 } from "../state/controlRoomState.ts";
+import { demoScenarioOrder, getDemoScenarioMeta } from "../demo/demoScenarios.ts";
 import type {
   ControlRoomScenarioRecord,
 } from "../state/controlRoomState.ts";
@@ -46,39 +47,52 @@ export function ScenarioSelector({
   selectedScenarioKey,
 }: ScenarioSelectorProps) {
   const selectedRecord = getScenarioRecord(records, selectedScenarioKey);
+  const flowSummary = demoScenarioOrder
+    .map((key) => getDemoScenarioMeta(key).displayLabel)
+    .join(" -> ");
 
   return (
     <section className="panel scenario-selector" aria-labelledby="scenario-selector-title">
       <div className="panel-heading">
         <p className="panel-eyebrow">Scenario selector</p>
-        <h2 id="scenario-selector-title">Frozen Wave 8 scenarios</h2>
+        <h2 id="scenario-selector-title">Committed local scenarios</h2>
       </div>
 
       <div className="scenario-selector__options" role="tablist" aria-label="Scenario selector">
         {records.map((record) => (
-          <button
-            type="button"
-            key={record.entry.key}
-            className={[
-              "selector-button",
-              `selector-button--${record.status}`,
-              record.entry.key === selectedScenarioKey ? "selector-button--selected" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            data-scenario-key={record.entry.key}
-            aria-pressed={record.entry.key === selectedScenarioKey}
-            onClick={() => onSelect(record.entry.key)}
-          >
-            <span className="selector-button__key">{record.entry.key}</span>
-            <strong>{record.entry.label}</strong>
-            <span className="selector-button__status">{getStatusLabel(record)}</span>
-          </button>
+          (() => {
+            const meta = getDemoScenarioMeta(record.entry.key);
+
+            return (
+              <button
+                type="button"
+                key={record.entry.key}
+                className={[
+                  "selector-button",
+                  `selector-button--${record.status}`,
+                  record.entry.key === selectedScenarioKey
+                    ? "selector-button--selected"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                data-scenario-key={record.entry.key}
+                aria-pressed={record.entry.key === selectedScenarioKey}
+                onClick={() => onSelect(record.entry.key)}
+              >
+                <span className="selector-button__key">{record.entry.key}</span>
+                <strong>{meta.displayLabel}</strong>
+                <span className="selector-button__description">{meta.description}</span>
+                <span className="selector-button__status">{getStatusLabel(record)}</span>
+              </button>
+            );
+          })()
         ))}
       </div>
 
       <p className="selector-note">
-        Scenario switching resets the active step to the first frozen cascade step.
+        Suggested flow: {flowSummary}. Scenario switching resets the active step to
+        the first frozen cascade step.
       </p>
 
       <p

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "node --import tsx tests/data-loader.test.ts && node --import tsx tests/scenario-selector.test.tsx && node --import tsx tests/timeline-state.test.tsx && node --import tsx tests/playback-controls.test.tsx && node --import tsx tests/skin-switcher.test.tsx && node --import tsx tests/public-redaction.test.tsx && node --import tsx tests/skin-structure-distinctness.test.tsx && node --import tsx tests/forensic-panel.test.tsx && node --import tsx tests/entity-relationship.test.tsx && node --import tsx tests/cascade-choreography.test.tsx",
+    "test": "node --import tsx tests/data-loader.test.ts && node --import tsx tests/scenario-selector.test.tsx && node --import tsx tests/timeline-state.test.tsx && node --import tsx tests/playback-controls.test.tsx && node --import tsx tests/skin-switcher.test.tsx && node --import tsx tests/public-redaction.test.tsx && node --import tsx tests/skin-structure-distinctness.test.tsx && node --import tsx tests/forensic-panel.test.tsx && node --import tsx tests/entity-relationship.test.tsx && node --import tsx tests/cascade-choreography.test.tsx && node --import tsx tests/responsive-layout.test.tsx",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

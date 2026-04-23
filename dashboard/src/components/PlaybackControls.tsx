@@ -39,6 +39,8 @@ export function PlaybackControls({
         <button
           type="button"
           className="control-button"
+          aria-keyshortcuts="ArrowLeft"
+          data-demo-control="previous-step"
           onClick={onPrevious}
           disabled={!canInteract || atFirstStep}
         >
@@ -47,6 +49,8 @@ export function PlaybackControls({
         <button
           type="button"
           className="control-button"
+          aria-keyshortcuts="ArrowRight"
+          data-demo-control="next-step"
           onClick={onNext}
           disabled={!canInteract || atLastStep}
         >
@@ -56,6 +60,8 @@ export function PlaybackControls({
           <button
             type="button"
             className="control-button control-button--primary"
+            aria-keyshortcuts="Space"
+            data-demo-control="pause-playback"
             onClick={onPause}
             disabled={!canInteract}
           >
@@ -65,6 +71,8 @@ export function PlaybackControls({
           <button
             type="button"
             className="control-button control-button--primary"
+            aria-keyshortcuts="Space"
+            data-demo-control="start-playback"
             onClick={onPlay}
             disabled={!canInteract || totalSteps === 0}
           >
@@ -74,6 +82,8 @@ export function PlaybackControls({
         <button
           type="button"
           className="control-button"
+          aria-keyshortcuts="R"
+          data-demo-control="reset-playback"
           onClick={onReset}
           disabled={!canInteract || (activeStepIndex === 0 && !isPlaying)}
         >

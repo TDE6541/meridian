@@ -3,15 +3,22 @@ import {
   adaptStepSkinPayloads,
   getDashboardSkinView,
 } from "../adapters/skinPayloadAdapter.ts";
+import { DemoHeader } from "./DemoHeader.tsx";
+import { KeyboardShortcutsHelp } from "./KeyboardShortcutsHelp.tsx";
 import { adaptCascadeChoreography } from "../adapters/cascadeChoreographyAdapter.ts";
 import { adaptEntityRelationships } from "../adapters/entityRelationshipAdapter.ts";
 import { adaptForensicChain } from "../adapters/forensicAdapter.ts";
+import {
+  resolveScenarioShortcutKey,
+  resolveSkinShortcutKey,
+  shouldIgnoreDemoShortcutTarget,
+} from "../demo/demoShortcuts.ts";
+import { getDemoScenarioMeta } from "../demo/demoScenarios.ts";
 import { CascadeChoreography } from "./CascadeChoreography.tsx";
 import { EntityRelationshipGraph } from "./EntityRelationshipGraph.tsx";
 import { EntityRelationshipStrip } from "./EntityRelationshipStrip.tsx";
 import { ForensicChainPanel } from "./ForensicChainPanel.tsx";
 import { GovernanceStatePanel } from "./GovernanceStatePanel.tsx";
-import { OutcomeBadge } from "./OutcomeBadge.tsx";
 import { PlaybackControls } from "./PlaybackControls.tsx";
 import { ScenarioSelector } from "./ScenarioSelector.tsx";
 import { SkinPanel } from "./SkinPanel.tsx";
@@ -71,6 +78,10 @@ function getShellMessage(record: ControlRoomScenarioRecord | undefined): string 
   return `${record.scenario.steps.length} frozen cascade steps available.`;
 }
 
+function formatSkinLabel(skinKey: string): string {
+  return skinKey.slice(0, 1).toUpperCase() + skinKey.slice(1);
+}
+
 export function ControlRoomShell({ records }: ControlRoomShellProps) {
   const [controlState, setControlState] = useState(() =>
     createInitialControlRoomState(records[0]?.entry.key ?? "routine")
@@ -104,11 +115,14 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
     selectedRecord?.status === "ready"
       ? selectedRecord.scenario.scenarioId
       : selectedRecord?.entry.key ?? "unavailable";
+  const scenarioMeta = getDemoScenarioMeta(controlState.selectedScenarioKey);
   const activeStepLabel = currentStep
     ? `${currentStep.stepId} (${currentStep.index + 1}/${timelineSteps.length})`
     : totalSteps > 0
       ? `${controlState.activeStepIndex + 1}/${totalSteps}`
       : "Unavailable";
+  const activeSkinLabel =
+    activeSkinView?.label ?? formatSkinLabel(controlState.activeSkinTab);
 
   useEffect(() => {
     if (controlState.playbackState !== "playing" || totalSteps === 0) {
@@ -124,50 +138,102 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
     };
   }, [controlState.playbackState, totalSteps, controlState.selectedScenarioKey]);
 
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (
+        event.defaultPrevented ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        shouldIgnoreDemoShortcutTarget(event.target)
+      ) {
+        return;
+      }
+
+      const selectedShortcutScenario = resolveScenarioShortcutKey(event.key);
+      if (selectedShortcutScenario) {
+        event.preventDefault();
+        setControlState((current) =>
+          current.selectedScenarioKey === selectedShortcutScenario
+            ? current
+            : selectScenario(current, selectedShortcutScenario)
+        );
+        return;
+      }
+
+      const selectedShortcutSkin = resolveSkinShortcutKey(event.key);
+      if (selectedShortcutSkin) {
+        event.preventDefault();
+        setControlState((current) =>
+          current.activeSkinTab === selectedShortcutSkin
+            ? current
+            : selectSkinTab(current, selectedShortcutSkin)
+        );
+        return;
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setControlState((current) =>
+          goToPreviousStep(
+            current,
+            getScenarioStepCount(getScenarioRecord(records, current.selectedScenarioKey))
+          )
+        );
+        return;
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setControlState((current) =>
+          goToNextStep(
+            current,
+            getScenarioStepCount(getScenarioRecord(records, current.selectedScenarioKey))
+          )
+        );
+        return;
+      }
+
+      if (event.key === " " || event.code === "Space") {
+        event.preventDefault();
+        setControlState((current) => {
+          const currentTotalSteps = getScenarioStepCount(
+            getScenarioRecord(records, current.selectedScenarioKey)
+          );
+
+          return current.playbackState === "playing"
+            ? pausePlayback(current)
+            : startPlayback(current, currentTotalSteps);
+        });
+        return;
+      }
+
+      if (event.key.toLowerCase() === "r") {
+        event.preventDefault();
+        setControlState((current) => resetControlRoom(current));
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [records]);
+
   return (
-    <section className="control-room-shell">
-      <header className="hero control-room-hero">
-        <div className="control-room-hero__copy">
-          <p className="eyebrow">Wave 9 Packet 4</p>
-          <h1>Control Room Shell</h1>
-          <p className="hero-copy">
-            Scenario selector, timeline, deterministic playback, governance state, and
-            actual frozen civic-skin audience switching now layered with snapshot-only
-            forensic, relationship, and cascade choreography visibility.
-          </p>
-        </div>
-
-        <div className="panel panel--inset control-room-hero__current">
-          <div className="control-room-hero__status">
-            <div>
-              <p className="status-label">Active step</p>
-              <p className="control-room-hero__step">{activeStepLabel}</p>
-            </div>
-            <OutcomeBadge decision={currentStep?.decision} />
-          </div>
-
-          <dl className="hero-facts">
-            <div>
-              <dt>scenario status</dt>
-              <dd>{getScenarioStatusLabel(selectedRecord)}</dd>
-            </div>
-            <div>
-              <dt>loaded snapshots</dt>
-              <dd>
-                {readyCount}/{records.length}
-              </dd>
-            </div>
-            <div>
-              <dt>load failures</dt>
-              <dd>{errorCount}</dd>
-            </div>
-            <div>
-              <dt>data version</dt>
-              <dd>{dataVersion ?? "Pending"}</dd>
-            </div>
-          </dl>
-        </div>
-      </header>
+    <section
+      className="control-room-shell control-room-shell--projector"
+      data-responsive-shell="projector-safe"
+    >
+      <DemoHeader
+        activeOutcome={currentStep?.decision ?? null}
+        activeSkinLabel={activeSkinLabel}
+        activeStepLabel={activeStepLabel}
+        dataVersion={dataVersion}
+        scenarioDescription={scenarioMeta.description}
+        scenarioLabel={scenarioMeta.displayLabel}
+        scenarioStatus={getScenarioStatusLabel(selectedRecord)}
+      />
 
       <div className="control-room-toolbar">
         <ScenarioSelector
@@ -178,23 +244,27 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
           }
         />
 
-        <PlaybackControls
-          activeStepIndex={controlState.activeStepIndex}
-          canInteract={selectedRecord?.status === "ready"}
-          isPlaying={controlState.playbackState === "playing"}
-          onNext={() =>
-            setControlState((current) => goToNextStep(current, totalSteps))
-          }
-          onPause={() => setControlState((current) => pausePlayback(current))}
-          onPlay={() =>
-            setControlState((current) => startPlayback(current, totalSteps))
-          }
-          onPrevious={() =>
-            setControlState((current) => goToPreviousStep(current, totalSteps))
-          }
-          onReset={() => setControlState((current) => resetControlRoom(current))}
-          totalSteps={totalSteps}
-        />
+        <div className="control-room-driver-stack">
+          <PlaybackControls
+            activeStepIndex={controlState.activeStepIndex}
+            canInteract={selectedRecord?.status === "ready"}
+            isPlaying={controlState.playbackState === "playing"}
+            onNext={() =>
+              setControlState((current) => goToNextStep(current, totalSteps))
+            }
+            onPause={() => setControlState((current) => pausePlayback(current))}
+            onPlay={() =>
+              setControlState((current) => startPlayback(current, totalSteps))
+            }
+            onPrevious={() =>
+              setControlState((current) => goToPreviousStep(current, totalSteps))
+            }
+            onReset={() => setControlState((current) => resetControlRoom(current))}
+            totalSteps={totalSteps}
+          />
+
+          <KeyboardShortcutsHelp />
+        </div>
       </div>
 
       <div className="control-room-grid">
@@ -264,7 +334,7 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
 
       <StatusBar
         activeOutcome={currentStep?.decision ?? null}
-        activeSkinLabel={activeSkinView?.label ?? "Unavailable"}
+        activeSkinLabel={activeSkinLabel}
         activeStepLabel={activeStepLabel}
         dataVersion={dataVersion}
         scenarioId={scenarioId}
