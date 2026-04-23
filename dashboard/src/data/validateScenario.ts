@@ -20,6 +20,7 @@ const REQUIRED_STEP_SECTIONS = [
   "forensic",
   "skins",
 ] as const;
+const REQUIRED_TRANSITION_FIELDS = ["stepId"] as const;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -112,6 +113,36 @@ export function validateScenarioPayload(
         return;
       }
 
+      if (!isRecord(result.transitionEvidence)) {
+        pushMissing(
+          issues,
+          `${scenarioPath}.result.transitionEvidence`,
+          "expected object"
+        );
+      } else {
+        const transitionEvidence = result.transitionEvidence as {
+          steps?: unknown[];
+        };
+
+        if (!Array.isArray(transitionEvidence.steps)) {
+          pushMissing(
+            issues,
+            `${scenarioPath}.result.transitionEvidence.steps`,
+            "expected array"
+          );
+        } else if (transitionEvidence.steps.length !== result.steps.length) {
+          pushMissing(
+            issues,
+            `${scenarioPath}.result.transitionEvidence.steps`,
+            "expected one transition step per scenario step"
+          );
+        }
+      }
+
+      const transitionSteps = isRecord(result.transitionEvidence)
+        ? ((result.transitionEvidence as { steps?: unknown[] }).steps ?? [])
+        : [];
+
       result.steps.forEach((step, stepIndex) => {
         const stepPath = `${scenarioPath}.result.steps[${stepIndex}]`;
 
@@ -123,6 +154,25 @@ export function validateScenarioPayload(
         REQUIRED_STEP_SECTIONS.forEach((fieldName) => {
           if (!isRecord(step[fieldName])) {
             pushMissing(issues, `${stepPath}.${fieldName}`, "expected object");
+          }
+        });
+
+        const transitionStep = transitionSteps[stepIndex];
+        const transitionStepPath =
+          `${scenarioPath}.result.transitionEvidence.steps[${stepIndex}]`;
+
+        if (!isRecord(transitionStep)) {
+          pushMissing(issues, transitionStepPath, "expected object");
+          return;
+        }
+
+        REQUIRED_TRANSITION_FIELDS.forEach((fieldName) => {
+          if (!isNonEmptyString(transitionStep[fieldName])) {
+            pushMissing(
+              issues,
+              `${transitionStepPath}.${fieldName}`,
+              "expected non-empty string"
+            );
           }
         });
       });
