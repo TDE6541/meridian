@@ -3,6 +3,13 @@ import {
   adaptStepSkinPayloads,
   getDashboardSkinView,
 } from "../adapters/skinPayloadAdapter.ts";
+import { adaptCascadeChoreography } from "../adapters/cascadeChoreographyAdapter.ts";
+import { adaptEntityRelationships } from "../adapters/entityRelationshipAdapter.ts";
+import { adaptForensicChain } from "../adapters/forensicAdapter.ts";
+import { CascadeChoreography } from "./CascadeChoreography.tsx";
+import { EntityRelationshipGraph } from "./EntityRelationshipGraph.tsx";
+import { EntityRelationshipStrip } from "./EntityRelationshipStrip.tsx";
+import { ForensicChainPanel } from "./ForensicChainPanel.tsx";
 import { GovernanceStatePanel } from "./GovernanceStatePanel.tsx";
 import { OutcomeBadge } from "./OutcomeBadge.tsx";
 import { PlaybackControls } from "./PlaybackControls.tsx";
@@ -77,11 +84,21 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
   const timelineSteps =
     selectedRecord?.status === "ready" ? buildTimelineSteps(selectedRecord.scenario) : [];
   const currentStep = getActiveTimelineStep(timelineSteps, controlState);
+  const forensicChainView = adaptForensicChain(
+    timelineSteps,
+    controlState.activeStepIndex
+  );
   const skinViews = currentStep ? adaptStepSkinPayloads(currentStep.step) : [];
   const activeSkinView =
     getDashboardSkinView(skinViews, controlState.activeSkinTab) ??
     skinViews[0] ??
     null;
+  const entityRelationshipView = adaptEntityRelationships(currentStep);
+  const choreographyView = adaptCascadeChoreography(
+    currentStep,
+    forensicChainView,
+    skinViews
+  );
   const dataVersion = resolveScenarioDataVersion(selectedRecord);
   const scenarioId =
     selectedRecord?.status === "ready"
@@ -111,12 +128,12 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
     <section className="control-room-shell">
       <header className="hero control-room-hero">
         <div className="control-room-hero__copy">
-          <p className="eyebrow">Wave 9 Packet 3</p>
+          <p className="eyebrow">Wave 9 Packet 4</p>
           <h1>Control Room Shell</h1>
           <p className="hero-copy">
             Scenario selector, timeline, deterministic playback, governance state, and
-            actual frozen civic-skin audience switching over committed Wave 8 cascade
-            payloads only.
+            actual frozen civic-skin audience switching now layered with snapshot-only
+            forensic, relationship, and cascade choreography visibility.
           </p>
         </div>
 
@@ -213,6 +230,34 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
             message={getShellMessage(selectedRecord)}
             skinView={activeSkinView}
             status={selectedRecord?.status ?? "loading"}
+          />
+        </div>
+      </div>
+
+      <div className="packet4-grid">
+        <ForensicChainPanel
+          chainView={forensicChainView}
+          message={getShellMessage(selectedRecord)}
+          status={selectedRecord?.status ?? "loading"}
+        />
+
+        <div className="packet4-sidecar">
+          <EntityRelationshipStrip
+            message={getShellMessage(selectedRecord)}
+            status={selectedRecord?.status ?? "loading"}
+            view={entityRelationshipView}
+          />
+
+          <EntityRelationshipGraph
+            message={getShellMessage(selectedRecord)}
+            status={selectedRecord?.status ?? "loading"}
+            view={entityRelationshipView}
+          />
+
+          <CascadeChoreography
+            message={getShellMessage(selectedRecord)}
+            status={selectedRecord?.status ?? "loading"}
+            view={choreographyView}
           />
         </div>
       </div>
