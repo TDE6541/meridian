@@ -1,0 +1,90 @@
+{
+  "version": "holdpointArtifactJson.v1",
+  "artifact_id": "synthetic-holdpoint-artifact-a3",
+  "source": {
+    "type": "holdpoint_artifact",
+    "ref": "tests/fixtures/live-capture/holdpoint/holdpoint-artifact.sample.json"
+  },
+  "project": {
+    "project_id": "synthetic-civic-project-a3",
+    "name": "Synthetic Civic Project A3"
+  },
+  "meeting": {
+    "meeting_id": "synthetic-meeting-a3",
+    "title": "Synthetic Local A3 Meeting",
+    "occurred_at": "2026-04-24T09:00:00.000Z",
+    "source_ref": "synthetic-local-meeting-a3.json#meeting"
+  },
+  "decisions": [
+    {
+      "row_id": "decision-row-1",
+      "summary": "Synthetic committee accepted the corridor staging recommendation for local review.",
+      "source_ref": "synthetic-local-meeting-a3.json#decisions[0]",
+      "status": "proposed",
+      "confidence": 0.91,
+      "evidence": {
+        "quote": "Synthetic chair stated the staging recommendation is accepted for local review.",
+        "source_ref": "synthetic-local-meeting-a3.json#quote-D1",
+        "timestamp_start": "00:01:00",
+        "timestamp_end": "00:01:18"
+      }
+    },
+    {
+      "row_id": "decision-row-2",
+      "summary": "Synthetic staff was directed to keep the public notice packet attached to the review file.",
+      "source_ref": "synthetic-local-meeting-a3.json#decisions[1]",
+      "status": "proposed",
+      "confidence": 0.84,
+      "evidence": {
+        "quote": "Synthetic staff direction: keep the public notice packet attached to the review file.",
+        "source_ref": "synthetic-local-meeting-a3.json#quote-D2",
+        "timestamp_start": "00:02:10",
+        "timestamp_end": "00:02:34"
+      }
+    }
+  ],
+  "holds": [
+    {
+      "row_id": "hold-row-1",
+      "summary": "Synthetic utility clearance remains open before any field action proceeds.",
+      "source_ref": "synthetic-local-meeting-a3.json#holds[0]",
+      "status": "active",
+      "severity": "HOLD",
+      "evidence": {
+        "quote": "Synthetic note: utility clearance remains open before field action.",
+        "source_ref": "synthetic-local-meeting-a3.json#quote-H1",
+        "timestamp_start": "00:03:05",
+        "timestamp_end": "00:03:21"
+      }
+    },
+    {
+      "row_id": "hold-row-2",
+      "summary": "Synthetic right-of-way confirmation remains unresolved for the staging area.",
+      "source_ref": "synthetic-local-meeting-a3.json#holds[1]",
+      "status": "active",
+      "severity": "HOLD",
+      "evidence": {
+        "quote": "Synthetic confirmation needed: right-of-way status for the staging area.",
+        "source_ref": "synthetic-local-meeting-a3.json#quote-H2",
+        "timestamp_start": null,
+        "timestamp_end": null
+      }
+    }
+  ],
+  "action_requests": [
+    {
+      "row_id": "action-row-1",
+      "summary": "Synthetic action request for staff to prepare the bounded evidence packet.",
+      "source_ref": "synthetic-local-meeting-a3.json#action_requests[0]",
+      "status": "requested",
+      "priority": "normal",
+      "owner": "synthetic_staff_role",
+      "evidence": {
+        "quote": "Synthetic request: prepare the bounded evidence packet for review.",
+        "source_ref": "synthetic-local-meeting-a3.json#quote-A1",
+        "timestamp_start": "00:04:00",
+        "timestamp_end": "00:04:16"
+      }
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "version": "holdpointArtifactJson.v1",
+  "artifact_id": "synthetic-holdpoint-artifact-invalid-a3",
+  "source": {
+    "type": "holdpoint_artifact"
+  },
+  "project": {
+    "project_id": "synthetic-civic-project-a3",
+    "name": "Synthetic Civic Project A3"
+  },
+  "meeting": {
+    "meeting_id": "synthetic-meeting-invalid-a3",
+    "title": "Synthetic Invalid A3 Meeting",
+    "occurred_at": "2026-04-24T09:00:00.000Z",
+    "source_ref": "synthetic-invalid-meeting-a3.json#meeting"
+  },
+  "decisions": [
+    {
+      "row_id": "decision-row-invalid-1",
+      "summary": "Synthetic invalid decision row without required evidence.",
+      "source_ref": "synthetic-invalid-meeting-a3.json#decisions[0]"
+    }
+  ],
+  "holds": [
+    {
+      "row_id": "hold-row-invalid-1",
+      "summary": "",
+      "source_ref": "synthetic-invalid-meeting-a3.json#holds[0]",
+      "evidence": {
+        "quote": "",
+        "source_ref": "synthetic-invalid-meeting-a3.json#quote-H1",
+        "timestamp_start": null,
+        "timestamp_end": null
+      }
+    }
+  ],
+  "action_requests": []
+}
