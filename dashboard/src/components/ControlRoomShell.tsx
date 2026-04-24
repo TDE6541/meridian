@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import { adaptAbsenceSignals } from "../adapters/absenceSignalAdapter.ts";
 import {
   adaptStepSkinPayloads,
   getDashboardSkinView,
 } from "../adapters/skinPayloadAdapter.ts";
+import { buildDirectorScene } from "../director/directorScript.ts";
+import { resolveDirectorBookmarks } from "../director/directorBookmarks.ts";
 import { DemoHeader } from "./DemoHeader.tsx";
 import { KeyboardShortcutsHelp } from "./KeyboardShortcutsHelp.tsx";
 import { adaptCascadeChoreography } from "../adapters/cascadeChoreographyAdapter.ts";
@@ -25,6 +28,12 @@ import { SkinPanel } from "./SkinPanel.tsx";
 import { SkinSwitcher } from "./SkinSwitcher.tsx";
 import { StatusBar } from "./StatusBar.tsx";
 import { TimelinePanel } from "./TimelinePanel.tsx";
+import { AbsenceLensOverlay } from "./director/AbsenceLensOverlay.tsx";
+import { AbsenceSignalRail } from "./director/AbsenceSignalRail.tsx";
+import { DirectorCueCard } from "./director/DirectorCueCard.tsx";
+import { DirectorModeToggle } from "./director/DirectorModeToggle.tsx";
+import { JudgeCuePanel } from "./director/JudgeCuePanel.tsx";
+import { PreventedActionCard } from "./director/PreventedActionCard.tsx";
 import {
   advancePlayback,
   buildTimelineSteps,
@@ -38,6 +47,7 @@ import {
   resetControlRoom,
   resolveScenarioDataVersion,
   selectScenario,
+  type ControlRoomState,
   selectSkinTab,
   selectStep,
   startPlayback,
@@ -47,6 +57,8 @@ import type { ControlRoomScenarioRecord } from "../state/controlRoomState.ts";
 const PLAYBACK_INTERVAL_MS = 2400;
 
 export interface ControlRoomShellProps {
+  initialControlState?: Partial<ControlRoomState>;
+  initialDirectorModeEnabled?: boolean;
   records: readonly ControlRoomScenarioRecord[];
 }
 
@@ -82,9 +94,17 @@ function formatSkinLabel(skinKey: string): string {
   return skinKey.slice(0, 1).toUpperCase() + skinKey.slice(1);
 }
 
-export function ControlRoomShell({ records }: ControlRoomShellProps) {
-  const [controlState, setControlState] = useState(() =>
-    createInitialControlRoomState(records[0]?.entry.key ?? "routine")
+export function ControlRoomShell({
+  initialControlState,
+  initialDirectorModeEnabled = false,
+  records,
+}: ControlRoomShellProps) {
+  const [controlState, setControlState] = useState(() => ({
+    ...createInitialControlRoomState(records[0]?.entry.key ?? "routine"),
+    ...initialControlState,
+  }));
+  const [directorModeEnabled, setDirectorModeEnabled] = useState(
+    initialDirectorModeEnabled
   );
 
   const selectedRecord =
@@ -110,6 +130,21 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
     forensicChainView,
     skinViews
   );
+  const absenceLensView = adaptAbsenceSignals({
+    activeSkinView,
+    currentStep,
+    forensicChain: forensicChainView,
+    skinViews,
+  });
+  const directorBookmarks = resolveDirectorBookmarks(
+    controlState.selectedScenarioKey,
+    timelineSteps
+  );
+  const directorScene = buildDirectorScene({
+    bookmarks: directorBookmarks,
+    currentStep,
+    signals: absenceLensView.signals,
+  });
   const dataVersion = resolveScenarioDataVersion(selectedRecord);
   const scenarioId =
     selectedRecord?.status === "ready"
@@ -267,6 +302,31 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
         </div>
       </div>
 
+      <DirectorModeToggle
+        bookmarks={directorBookmarks}
+        enabled={directorModeEnabled}
+        onSelectBookmark={(bookmark) =>
+          setControlState((current) => selectStep(current, bookmark.stepIndex, totalSteps))
+        }
+        onToggle={() => setDirectorModeEnabled((current) => !current)}
+        selectedBookmarkId={directorScene.activeBookmark?.id ?? null}
+      />
+
+      {directorModeEnabled ? (
+        <>
+          <div className="director-grid">
+            <DirectorCueCard cue={directorScene.cueCard} />
+            <JudgeCuePanel panel={directorScene.judgePanel} />
+            <PreventedActionCard card={directorScene.preventedAction} />
+          </div>
+
+          <AbsenceSignalRail
+            familyStates={absenceLensView.familyStates}
+            signals={absenceLensView.signals}
+          />
+        </>
+      ) : null}
+
       <div className="control-room-grid">
         <TimelinePanel
           activeStepIndex={controlState.activeStepIndex}
@@ -279,11 +339,17 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
         />
 
         <div className="control-room-detail">
-          <GovernanceStatePanel
-            currentStep={currentStep}
-            message={getShellMessage(selectedRecord)}
-            status={selectedRecord?.status ?? "loading"}
-          />
+          <AbsenceLensOverlay
+            active={directorModeEnabled}
+            highlights={absenceLensView.highlights}
+            panel="governance"
+          >
+            <GovernanceStatePanel
+              currentStep={currentStep}
+              message={getShellMessage(selectedRecord)}
+              status={selectedRecord?.status ?? "loading"}
+            />
+          </AbsenceLensOverlay>
 
           <SkinSwitcher
             activeSkinTab={controlState.activeSkinTab}
@@ -295,40 +361,66 @@ export function ControlRoomShell({ records }: ControlRoomShellProps) {
             views={skinViews}
           />
 
-          <SkinPanel
-            activeStepLabel={activeStepLabel}
-            message={getShellMessage(selectedRecord)}
-            skinView={activeSkinView}
-            status={selectedRecord?.status ?? "loading"}
-          />
+          <AbsenceLensOverlay
+            active={directorModeEnabled}
+            highlights={absenceLensView.highlights}
+            panel="skin"
+          >
+            <SkinPanel
+              activeStepLabel={activeStepLabel}
+              message={getShellMessage(selectedRecord)}
+              skinView={activeSkinView}
+              status={selectedRecord?.status ?? "loading"}
+            />
+          </AbsenceLensOverlay>
         </div>
       </div>
 
       <div className="packet4-grid">
-        <ForensicChainPanel
-          chainView={forensicChainView}
-          message={getShellMessage(selectedRecord)}
-          status={selectedRecord?.status ?? "loading"}
-        />
+        <AbsenceLensOverlay
+          active={directorModeEnabled}
+          highlights={absenceLensView.highlights}
+          panel="forensic"
+        >
+          <ForensicChainPanel
+            chainView={forensicChainView}
+            message={getShellMessage(selectedRecord)}
+            status={selectedRecord?.status ?? "loading"}
+          />
+        </AbsenceLensOverlay>
 
         <div className="packet4-sidecar">
-          <EntityRelationshipStrip
-            message={getShellMessage(selectedRecord)}
-            status={selectedRecord?.status ?? "loading"}
-            view={entityRelationshipView}
-          />
+          <AbsenceLensOverlay
+            active={directorModeEnabled}
+            highlights={absenceLensView.highlights}
+            panel="relationships"
+          >
+            <div className="absence-overlay__stack">
+              <EntityRelationshipStrip
+                message={getShellMessage(selectedRecord)}
+                status={selectedRecord?.status ?? "loading"}
+                view={entityRelationshipView}
+              />
 
-          <EntityRelationshipGraph
-            message={getShellMessage(selectedRecord)}
-            status={selectedRecord?.status ?? "loading"}
-            view={entityRelationshipView}
-          />
+              <EntityRelationshipGraph
+                message={getShellMessage(selectedRecord)}
+                status={selectedRecord?.status ?? "loading"}
+                view={entityRelationshipView}
+              />
+            </div>
+          </AbsenceLensOverlay>
 
-          <CascadeChoreography
-            message={getShellMessage(selectedRecord)}
-            status={selectedRecord?.status ?? "loading"}
-            view={choreographyView}
-          />
+          <AbsenceLensOverlay
+            active={directorModeEnabled}
+            highlights={absenceLensView.highlights}
+            panel="choreography"
+          >
+            <CascadeChoreography
+              message={getShellMessage(selectedRecord)}
+              status={selectedRecord?.status ?? "loading"}
+              view={choreographyView}
+            />
+          </AbsenceLensOverlay>
         </div>
       </div>
 

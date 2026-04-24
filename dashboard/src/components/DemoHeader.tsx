@@ -22,11 +22,11 @@ export function DemoHeader({
   return (
     <section className="panel demo-header" data-demo-header="local">
       <div className="demo-header__copy">
-        <p className="panel-eyebrow">Wave 9 Packet 5</p>
+        <p className="panel-eyebrow">Wave 9 Packet 6</p>
         <h1 className="demo-header__title">Local demo control room</h1>
         <p className="demo-header__summary">
-          Committed Wave 8 snapshots only. No env vars, secrets, or live network are
-          required for this run.
+          Committed Wave 8 snapshots only. Director Mode stays view-only, and no env
+          vars, secrets, or live network are required for this run.
         </p>
         <p className="demo-header__description">
           <strong>{scenarioLabel}</strong> {scenarioDescription}
