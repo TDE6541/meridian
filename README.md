@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), and a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures). This repo is still not a runnable application.
+Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures), and a Wave 9 local dashboard proof under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots. This repo is still not a production application; the dashboard is a local-only demo package.
 
 ## Agent Start Here
 
@@ -11,7 +11,7 @@ Meridian is a governed city digital twin intelligence repo. The repo contains th
 
 ## Current Status
 
-Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned with `origin/main`. Wave 7 Packets 1-4 and Wave 8 Packets 1-5 are present in-repo as bounded local lanes.
+Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned with `origin/main`. Wave 7 Packets 1-4 and Wave 8 Packets 1-5 are present in-repo as bounded local lanes. Wave 9 Packets 1-6 are landed locally as a bounded dashboard lane; Packet 7 records local finish-lane truth only.
 
 ## What This Is
 
@@ -53,17 +53,25 @@ Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned wi
   - single-state composition plus multi-step cascade over frozen fixture sets (`routine`, `contested`, `emergency`)
   - runner report contract (`wave8.packet5.runnerReport.v1`) local to the runner script
   - integration proof at `tests/integration/*.test.js` and frozen scenario fixtures under `tests/fixtures/scenarios/**`
+- A Wave 9 local dashboard proof under `dashboard/` with:
+  - committed Wave 8 runner payload snapshots under `dashboard/public/scenarios/*.json`
+  - local Vite/React/TypeScript control-room shell
+  - actual skin payload consumption from `step.skins.outputs`
+  - forensic, relationship, and cascade choreography views over committed snapshots
+  - Director Mode / Absence Lens as view-only overlays over source-bounded payload truth
+  - local demo command `npm --prefix dashboard run dev` at `http://localhost:5173/`
 - A single external runtime dependency surface in `package.json`: `nats`.
 
 ## What This Is Not
 
-- Not a runnable application.
+- Not a production application.
+- Not a hosted dashboard; Wave 9 is a local-only dashboard proof.
 - Not live broker proof or production Constellation compatibility proof.
 - Not general event-side governance routing or generalized publisher widening.
 - Not live/networked authority services, DB-backed forensic persistence, or legal/tamper-proof immutability guarantees.
 - Not live broker proof for forensic publication; Wave 6 publication behavior remains synthetic/local seam proof.
-- Not dashboard/UI runtime.
 - Not a public portal.
+- Not auth-integrated.
 - Not a legal compliance workflow.
 - Not LLM-driven redaction.
 - Not meeting-capture-to-skin routing.
@@ -76,6 +84,7 @@ Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned wi
 - Not live Auth0/OpenFGA wiring.
 - Not live Whisper/audio ingestion.
 - Not real TPIA legal sufficiency or TRAIGA 2.0 compliance claims.
+- Not new governance computation inside the dashboard.
 
 ## Repo Structure
 
@@ -107,6 +116,11 @@ tests/
   pipeline/**/*.py
 scripts/
   run-corridor-scenario.js
+dashboard/
+  public/scenarios/*.json
+  src/**/*.ts*
+  tests/**/*.ts*
+  README.md
 docs/
   INDEX.md
   ENGINE_INDEX.md
@@ -115,7 +129,7 @@ docs/
   specs/*.md
 ```
 
-## Deferred After Wave 8
+## Deferred After Wave 9
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
 - Generalized event routing and authority-topology widening beyond the bounded lanes.
@@ -123,7 +137,7 @@ docs/
 - DB-backed forensic persistence, cryptographic hash-linking, and legal immutability posture.
 - Meeting-capture-to-skin and forensic-entry-to-skin routing.
 - Governance-truth computation inside skins.
-- UI/dashboard surfaces.
+- Dashboard deployment/hosting/auth/live integration beyond the local Wave 9 proof.
 - Multi-corridor routing in one scenario run.
 - Persistent match-result storage.
 - Chain replay engine.

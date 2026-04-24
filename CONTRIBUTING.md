@@ -25,6 +25,9 @@
 - Treat Wave 4B capture artifacts and handoff payloads as bounded local seam outputs, not generalized runtime/publication completion.
 - Treat Wave 5 authority outputs as bounded runtime-only projections (`runtimeSubset.civic.authority_resolution` and `runtimeSubset.civic.revocation`), not top-level request/publication/entity widening.
 - Treat Wave 6 forensic outputs as bounded local forensic-chain and additive publication-receipt seams, not live broker proof, legal immutability, top-level request/publication widening, or DB-backed persistence.
+- Treat Wave 7 civic skins as rendering-only `src/skins/**` surfaces, not dashboard/UI runtime or legal/public-portal behavior.
+- Treat Wave 8 corridor scenario outputs as integration-local `src/integration/**` and runner-local proof surfaces, not live broker/auth/audio/legal behavior.
+- Treat Wave 9 dashboard work as local-only `dashboard/**` snapshot consumption over committed payloads, not hosted deployment, auth, live broker, live network dependency, new governance computation, or legal/TPIA/TRAIGA compliance behavior.
 
 ## Canon Vs Reference Boundaries
 
@@ -49,3 +52,4 @@
 - When touching the Wave 5 authority-topology lane, sync `docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`, `docs/closeouts/WAVE5_CLOSEOUT.md`, `MIGRATIONS.md`, and current-truth front doors in the same session.
 - When touching the Wave 6 forensic-chain lane, sync `docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`, `docs/closeouts/WAVE6_CLOSEOUT.md`, `MIGRATIONS.md`, and current-truth front doors in the same session.
 - When touching the Wave 7 civic skins lane, sync `docs/specs/WAVE7_CIVIC_SKINS.md`, `docs/closeouts/WAVE7_CLOSEOUT.md`, `MIGRATIONS.md`, and current-truth front doors in the same session.
+- When touching the Wave 9 dashboard lane, sync `docs/specs/WAVE9_DASHBOARD.md`, `docs/closeouts/WAVE9_CLOSEOUT.md`, `dashboard/README.md`, and current-truth front doors in the same session; update `MIGRATIONS.md` only if a real shared contract changes.

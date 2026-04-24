@@ -6,7 +6,7 @@ This is the front-door navigation index for Meridian. It points agents and maint
 
 ## Wave Scope Status
 
-Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. Wave 4.5 closes the calibration lane with frozen corpus posture, historical baseline truth/pre-Block-C comparison artifacts, and a locked final replay artifact family/report. Shipped Wave 5 Packets 1-3 add a bounded authority-topology lane in `src/governance/runtime/` with additive entity validator widening, static Fort Worth topology declaration, bounded authority evaluation, bounded REVOKE activation, and projection-only propagation. Shipped Wave 6 Packets 1-2 add a bounded forensic-chain lane under `src/governance/forensic/` plus an additive post-evaluation publication seam in `src/bridge/governanceTransportAdapter.js`. Wave 7 Packets 1-4 add a bounded civic skins rendering lane under `src/skins/` with five shipped skins, deterministic public disclosure boundary, and five-skin structural integration proof. Wave 8 Packets 1-5 add a bounded corridor scenario integration lane under `src/integration/` with deterministic replay bridge output, deterministic matching, single-state scenario composition, resolution cascade replay, and runner verification over frozen scenario fixtures.
+Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. Wave 4.5 closes the calibration lane with frozen corpus posture, historical baseline truth/pre-Block-C comparison artifacts, and a locked final replay artifact family/report. Shipped Wave 5 Packets 1-3 add a bounded authority-topology lane in `src/governance/runtime/` with additive entity validator widening, static Fort Worth topology declaration, bounded authority evaluation, bounded REVOKE activation, and projection-only propagation. Shipped Wave 6 Packets 1-2 add a bounded forensic-chain lane under `src/governance/forensic/` plus an additive post-evaluation publication seam in `src/bridge/governanceTransportAdapter.js`. Wave 7 Packets 1-4 add a bounded civic skins rendering lane under `src/skins/` with five shipped skins, deterministic public disclosure boundary, and five-skin structural integration proof. Wave 8 Packets 1-5 add a bounded corridor scenario integration lane under `src/integration/` with deterministic replay bridge output, deterministic matching, single-state scenario composition, resolution cascade replay, and runner verification over frozen scenario fixtures. Wave 9 Packets 1-6 add a bounded local dashboard lane under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots and remains local-only.
 
 ## Canonical Root Files
 
@@ -27,6 +27,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - `tests/` (structural proof suite + bridge/runtime proof suite + pipeline proof suite)
 - `docs/` (specs, schemas, notes, indexes, closeouts)
 - `scripts/` (synthetic bridge proof harness + corridor scenario runner proof harness)
+- `dashboard/` (Wave 9 local dashboard proof package)
 
 ## Current Primary Sources
 
@@ -48,6 +49,9 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Wave 7 closeout: `docs/closeouts/WAVE7_CLOSEOUT.md`
 - Wave 8 corridor scenario spec: `docs/specs/WAVE8_CORRIDOR_SCENARIO.md`
 - Wave 8 closeout: `docs/closeouts/WAVE8_CLOSEOUT.md`
+- Wave 9 dashboard spec: `docs/specs/WAVE9_DASHBOARD.md`
+- Wave 9 closeout: `docs/closeouts/WAVE9_CLOSEOUT.md`
+- Wave 9 dashboard package/runbook: `dashboard/`, `dashboard/README.md`
 - Wave 6 forensic substrate: `src/governance/forensic/*.js`
 - Wave 7 skins lane: `src/skins/**/*.js`
 - Wave 8 integration lane: `src/integration/*.js`
@@ -63,6 +67,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned with `origin/main`.
 - Wave 7 Packets 1-4 are landed in-repo as a bounded civic skins rendering lane.
 - Wave 8 Packets 1-5 are landed in-repo as a bounded integration lane under `src/integration/`.
+- Wave 9 Packets 1-6 are landed locally as a bounded dashboard lane under `dashboard/`.
 - Wave 7 ships five skins (`civic.permitting`, `civic.council`, `civic.operations`, `civic.dispatch`, `civic.public`) with deterministic public disclosure boundaries in `src/skins/redaction.js`.
 - `tests/skins.integration.test.js` proves five-skin structural integration on shared governance input with truth-fingerprint parity.
 - Wave 7 keeps framework public guard intact for framework consumers (`renderDefaultSkin` public rendering remains reserved).
@@ -71,8 +76,11 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Wave 8 frozen scenario sets are `routine`, `contested`, and `emergency` under `tests/fixtures/scenarios/**`.
 - `tests/integration/*.test.js` prove deterministic replay, structured live missing-env HOLD posture, single-state composition, multi-step cascade continuity, and five-skin rendering at each cascade step.
 - Wave 8 treats expected scenario-level `HOLD`/`BLOCK`/`REVOKE` outcomes as matched governed outcomes when frozen expectations match.
-- No UI ships in this repo today.
-- No runnable application ships in this repo today.
+- A local-only dashboard proof ships under `dashboard/`; it is not a production application.
+- The dashboard local demo command is `npm --prefix dashboard run dev` and the expected local URL is `http://localhost:5173/`.
+- Dashboard scenario snapshots are committed under `dashboard/public/scenarios/*.json`.
+- Dashboard skin payload consumption is bounded to `step.skins.outputs`; `step.skins.renders` is not used.
+- Director Mode and Absence Lens are view-only overlays over committed snapshot truth.
 - No live broker proof or production runtime compatibility proof ships in this repo today.
 - `package.json` declares only `nats` as a runtime dependency.
 - `src/config/constellation.js` remains the read-only Meridian publisher/config substrate.
@@ -114,6 +122,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - No generalized authority-topology widening ships in Wave 4B/Wave 5, and no Wave 6 claim implies live broker proof, legal/tamper-proof immutability, meeting-capture forensic recording, permit/inspection/obligation forensic recording, or per-helper chain spam.
 - Wave 7 remains rendering-only and does not ship dashboard/UI runtime, public portal behavior, legal compliance workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins.
 - Wave 8 remains integration-lane proof only and does not ship dashboard/UI, deployment/hosting, live broker wiring, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, entity validator changes, governance/authority/forensic/skin logic rewrites, legal sufficiency claims, TRAIGA compliance claims, multi-corridor routing in one run, persistent match-result storage, or chain replay engine.
+- Wave 9 remains a local dashboard proof only and does not ship hosted deployment, auth, live broker wiring, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, live network dependency, new governance computation, Wave 1-8 substrate edits, root package pollution, legal sufficiency claims, TPIA compliance claims, or TRAIGA compliance claims.
 - Ontology filename seam remains unresolved and out of scope here.
 
 ## Where To Change X (Quick Pointers)
@@ -129,6 +138,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Wave 6 forensic-chain truth surfaces: `docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`, `docs/closeouts/WAVE6_CLOSEOUT.md`, `src/governance/forensic/*.js`, `tests/governance.forensicChain.test.js`, `tests/governance.chainWriter.test.js`, `tests/governance.chainPersistence.test.js`, `tests/bridge.chainPublisher.test.js`, `tests/governance.forensicIntegration.test.js`, `tests/bridge.governanceTransportAdapter.test.js`
 - Wave 7 civic skins truth surfaces: `docs/specs/WAVE7_CIVIC_SKINS.md`, `docs/closeouts/WAVE7_CLOSEOUT.md`, `src/skins/**/*.js`, `tests/skins*.test.js`, `tests/skins.integration.test.js`
 - Wave 8 corridor scenario truth surfaces: `docs/specs/WAVE8_CORRIDOR_SCENARIO.md`, `docs/closeouts/WAVE8_CLOSEOUT.md`, `src/integration/*.js`, `tests/integration/*.test.js`, `tests/fixtures/scenarios/**/*`, `scripts/run-corridor-scenario.js`
+- Wave 9 dashboard truth surfaces: `docs/specs/WAVE9_DASHBOARD.md`, `docs/closeouts/WAVE9_CLOSEOUT.md`, `dashboard/README.md`, `dashboard/**/*.ts*`, `dashboard/public/scenarios/*.json`
 - Bridge/runtime/pipeline tests and fixtures: `tests/bridge*.test.js`, `tests/governance.runtime.test.js`, `tests/governance.policyPack.test.js`, `tests/governance.runtimeSubset.test.js`, `tests/governance.promiseConfidence.test.js`, `tests/governance.sweep.test.js`, `tests/governance.demoProof.test.js`, `tests/governance.pipelineHandoffProof.test.js`, `tests/pipeline/*.py`, `tests/pipeline/fixtures/*`, `tests/fixtures/governance/*.json`, `tests/fixtures/nats/*.json`, `scripts/synthetic-constellation.js`
 - Governance shadows: `src/governance/shadows.js`
 - Entity scaffolds: `src/entities/*.js`

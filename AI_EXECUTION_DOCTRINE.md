@@ -83,6 +83,8 @@ docs/
   closeouts/WAVE5_CLOSEOUT.md
   closeouts/WAVE6_CLOSEOUT.md
   closeouts/WAVE7_CLOSEOUT.md
+  closeouts/WAVE8_CLOSEOUT.md
+  closeouts/WAVE9_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
   specs/NATS_EVENT_COMMAND_TRANSLATION.md
   specs/WAVE4A_GOVERNANCE_RUNTIME.md
@@ -91,9 +93,19 @@ docs/
   specs/WAVE5_AUTHORITY_TOPOLOGY.md
   specs/WAVE6_FORENSICCHAIN_CIVIC.md
   specs/WAVE7_CIVIC_SKINS.md
+  specs/WAVE8_CORRIDOR_SCENARIO.md
+  specs/WAVE9_DASHBOARD.md
   specs/WAVE3_NATS_BRIDGE.md
 scripts/
   synthetic-constellation.js
+  run-corridor-scenario.js
+dashboard/
+  README.md
+  package.json
+  index.html
+  public/scenarios/*.json
+  src/**/*.ts*
+  tests/**/*.ts*
 ```
 
 ## Operating Rules
@@ -110,6 +122,8 @@ scripts/
 - Describe Wave 5 only as bounded local authority-topology surfaces (additive entity validator widening, static Fort Worth topology declaration, bounded domain/actor evaluation, bounded REVOKE activation, additive runtimeSubset projections, and projection-only read-only propagation), not as hosted authority integration, persistent graph topology service, event-side routing, publisher widening, scheduler behavior, or civic-chain writes.
 - Describe Wave 6 only as bounded local forensic-chain surfaces (narrow civic entry vocabulary, DI-only writer/publisher seams, demo JSON persistence, and additive post-evaluation synthetic evidence publication over existing subject families), not as live broker proof, legal/tamper-proof immutability, meeting/permit/inspection/obligation forensic recording, DB persistence, or per-helper chain fan-out.
 - Describe Wave 7 only as rendering-only civic skins surfaces (five bounded skins, deterministic public disclosure boundary, and five-skin structural integration proof), not as dashboard/UI runtime, public portal behavior, legal compliance workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins.
+- Describe Wave 8 only as bounded corridor scenario integration surfaces, not as dashboard/UI runtime, deployment/hosting, live broker proof, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, legal sufficiency, TRAIGA compliance, persistent match-result storage, chain replay engine, or multi-corridor routing in one run.
+- Describe Wave 9 only as a local dashboard proof over committed snapshots, not as production application behavior, hosted deployment, auth, live broker proof, live network dependency, public portal behavior, new governance computation, legal sufficiency, TPIA compliance, TRAIGA compliance, official disclosure approval, or real city runtime behavior.
 
 ## Planning Gate
 
@@ -129,6 +143,7 @@ scripts/
 - Do not overstate local/uncommitted Wave 5 substrate as merged/pushed ship state.
 - Do not overstate local/uncommitted Wave 6 substrate as merged/pushed ship state.
 - Do not overstate Wave 7 rendering surfaces as runtime/bridge/pipeline/entity/forensic/config/package widening.
+- Do not overstate Wave 9 local dashboard proof as hosted, auth-wired, live-networked, or legally sufficient behavior.
 - Stop if repo truth conflicts with the approved task.
 
 ## Verification Rules
@@ -150,6 +165,8 @@ scripts/
 - Wave 5 does not widen top-level `GovernanceEvaluationRequest`, `GovernancePublication`, or typed `signal_tree`; it adds bounded runtime-only authority/revocation projections and optional nested propagation input.
 - Wave 6 does not widen top-level `GovernanceEvaluationRequest`, `GovernancePublication`, bridge envelope families, or evaluator/runtime helper contracts; it adds bounded forensic-chain substrate and additive publication receipts through existing `publications`.
 - Wave 7 does not widen top-level governance/bridge/pipeline/forensic/entity/config/package contracts; it adds rendering-only skins-local contracts and proof surfaces under `src/skins/**` and `tests/skins*.test.js`.
+- Wave 8 adds integration-local contracts only under `src/integration/**` plus runner-local report output in `scripts/run-corridor-scenario.js`.
+- Wave 9 adds dashboard-local package and committed snapshot consumption only; it does not widen root runtime, governance, bridge, pipeline, forensic, skin, entity, config, or package contracts.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 

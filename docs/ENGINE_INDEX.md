@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, shipped Wave 7 civic skins rendering/proof surfaces, and shipped Wave 8 corridor scenario integration/proof surfaces.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, shipped Wave 7 civic skins rendering/proof surfaces, shipped Wave 8 corridor scenario integration/proof surfaces, and Wave 9 local dashboard proof surfaces.
 
 ## Bridge Substrate
 
@@ -88,6 +88,17 @@ Purpose: bounded Wave 8 integration surfaces for deterministic replay bridge out
 - `src/integration/resolutionCascade.js`
 - `scripts/run-corridor-scenario.js`
 
+## Local Dashboard Lane
+
+Purpose: bounded Wave 9 local dashboard proof over committed Wave 8 runner payload snapshots. The dashboard consumes `dashboard/public/scenarios/*.json`, uses `step.skins.outputs` as the canonical skin payload seam, and keeps Director Mode / Absence Lens view-only. It does not import `src/skins/**` in the browser and does not recompute governance, matching, forensic, or cascade truth.
+
+- `dashboard/package.json`
+- `dashboard/index.html`
+- `dashboard/README.md`
+- `dashboard/src/**/*.ts*`
+- `dashboard/tests/**/*.ts*`
+- `dashboard/public/scenarios/*.json`
+
 ## Governance Substrate
 
 Purpose: shared governance shadow fields and validation substrate for entity scaffolds.
@@ -120,7 +131,7 @@ Purpose: read-only Meridian publisher subject builders and connection config imp
 
 ## Proof Surfaces
 
-Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, Wave 5 authority-topology proof surfaces, Wave 6 forensic-chain proof surfaces, Wave 7 civic skins proof surfaces, and Wave 8 corridor scenario integration proof surfaces.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, Wave 5 authority-topology proof surfaces, Wave 6 forensic-chain proof surfaces, Wave 7 civic skins proof surfaces, Wave 8 corridor scenario integration proof surfaces, and Wave 9 dashboard-local proof surfaces.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
@@ -200,3 +211,5 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runti
 - `tests/fixtures/nats/commands.fixture.json`
 - `tests/fixtures/nats/publications.fixture.json`
 - `scripts/synthetic-constellation.js`
+- `dashboard/tests/*.ts`
+- `dashboard/tests/*.tsx`

@@ -17,6 +17,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 - Wave 6 forensic-chain spec: [`docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`](specs/WAVE6_FORENSICCHAIN_CIVIC.md)
 - Wave 7 civic skins spec: [`docs/specs/WAVE7_CIVIC_SKINS.md`](specs/WAVE7_CIVIC_SKINS.md)
 - Wave 8 corridor scenario spec: [`docs/specs/WAVE8_CORRIDOR_SCENARIO.md`](specs/WAVE8_CORRIDOR_SCENARIO.md)
+- Wave 9 dashboard spec: [`docs/specs/WAVE9_DASHBOARD.md`](specs/WAVE9_DASHBOARD.md)
 - Schemas lane: [`docs/schemas/`](schemas/)
 - Learning notes lane: [`docs/learning-notes/`](learning-notes/)
 - Closeouts lane: [`docs/closeouts/README.md`](closeouts/README.md)
@@ -26,6 +27,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 - Wave 6 closeout: [`docs/closeouts/WAVE6_CLOSEOUT.md`](closeouts/WAVE6_CLOSEOUT.md)
 - Wave 7 closeout: [`docs/closeouts/WAVE7_CLOSEOUT.md`](closeouts/WAVE7_CLOSEOUT.md)
 - Wave 8 closeout: [`docs/closeouts/WAVE8_CLOSEOUT.md`](closeouts/WAVE8_CLOSEOUT.md)
+- Wave 9 closeout: [`docs/closeouts/WAVE9_CLOSEOUT.md`](closeouts/WAVE9_CLOSEOUT.md)
 - Engine surface index: [`docs/ENGINE_INDEX.md`](ENGINE_INDEX.md)
 - UI surface index: [`docs/UI_INDEX.md`](UI_INDEX.md)
 - Change mapping: [`docs/WHERE_TO_CHANGE_X.md`](WHERE_TO_CHANGE_X.md)
@@ -37,3 +39,4 @@ Wave 5 authority-topology surfaces listed above reflect shipped in-repo Packet 1
 Wave 6 forensic-chain surfaces listed above reflect shipped in-repo Packet 1-2 substrate and are committed on `main`.
 Wave 7 civic skins surfaces listed above reflect shipped in-repo Packet 1-4 rendering/proof substrate.
 Wave 8 corridor scenario surfaces listed above reflect shipped in-repo Packet 1-5 integration/proof substrate.
+Wave 9 dashboard surfaces listed above reflect a local-only dashboard proof over committed Wave 8 payload snapshots.
