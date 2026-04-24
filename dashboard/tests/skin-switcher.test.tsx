@@ -4,6 +4,7 @@ import {
   adaptStepSkinPayloads,
   getDashboardSkinView,
 } from "../src/adapters/skinPayloadAdapter.ts";
+import { LiveCapturePanel } from "../src/components/LiveCapturePanel.tsx";
 import { SkinPanel } from "../src/components/SkinPanel.tsx";
 import { SkinSwitcher } from "../src/components/SkinSwitcher.tsx";
 import {
@@ -14,6 +15,7 @@ import {
   selectStep,
 } from "../src/state/controlRoomState.ts";
 import {
+  createTestLiveProjection,
   loadAllScenarioRecords,
   loadScenarioRecord,
   renderMarkup,
@@ -121,6 +123,58 @@ const tests = [
         publicView?.truthFingerprint?.digest,
         activeStep.step.skins.outputs?.public?.truthFingerprint?.digest
       );
+    },
+  },
+  {
+    name: "snapshot skin seam remains step.skins.outputs without step.skins.renders",
+    run: async () => {
+      const records = await loadAllScenarioRecords();
+
+      for (const record of records) {
+        for (const step of record.scenario.steps) {
+          assert.equal(Object.hasOwn(step.skins, "outputs"), true);
+          assert.equal(Object.hasOwn(step.skins, "renders"), false);
+          assert.equal(adaptStepSkinPayloads(step).every((view) => view.hasPayload), true);
+        }
+      }
+    },
+  },
+  {
+    name: "live capture panel renders latest fields and projection.skins.outputs",
+    run: () => {
+      const projection = createTestLiveProjection();
+      const markup = renderMarkup(<LiveCapturePanel projection={projection} />);
+
+      assert.equal(markup.includes('data-live-latest-field="capture"'), true);
+      assert.equal(markup.includes('data-live-latest-field="governance"'), true);
+      assert.equal(markup.includes('data-live-latest-field="absence"'), true);
+      assert.equal(markup.includes("holdpoint://artifact/a"), true);
+      assert.equal(markup.includes("absence-ref-1"), true);
+      assert.equal(markup.includes("projection.skins.outputs.public"), true);
+      assert.equal(markup.includes("Live public skin payload projected."), true);
+    },
+  },
+  {
+    name: "live capture panel handles null latest fields without computing replacements",
+    run: () => {
+      const projection = createTestLiveProjection({
+        latest: {
+          absence: null,
+          authority: null,
+          capture: null,
+          forensic: null,
+          governance: null,
+        },
+        skins: {
+          outputs: {},
+        },
+      });
+      const markup = renderMarkup(<LiveCapturePanel projection={projection} />);
+
+      assert.equal(markup.includes("No live capture payload projected."), true);
+      assert.equal(markup.includes("No live governance payload projected."), true);
+      assert.equal(markup.includes("No live absence payload projected."), true);
+      assert.equal(markup.includes("No live skin outputs projected."), true);
     },
   },
 ];

@@ -1078,6 +1078,224 @@ kbd {
   color: #fff8f2;
 }
 
+.live-mode-toggle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(16rem, 0.55fr);
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.live-mode-toggle .panel-heading {
+  margin-bottom: 0;
+}
+
+.live-mode-toggle__controls {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.live-mode-toggle__copy {
+  margin: 0;
+  color: #405467;
+  font-size: 0.9rem;
+}
+
+.live-mode-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.live-mode-grid > * {
+  min-width: 0;
+}
+
+.live-connection-banner {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.live-connection-banner h2 {
+  margin: 0.2rem 0 0;
+  font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-size: 1.25rem;
+  line-height: 1.15;
+}
+
+.live-connection-banner--hold {
+  border-color: rgba(154, 54, 42, 0.26);
+  background: rgba(255, 244, 237, 0.9);
+}
+
+.live-connection-banner--connected {
+  border-color: rgba(33, 103, 70, 0.22);
+  background: rgba(242, 250, 246, 0.9);
+}
+
+.live-event-rail__list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: clamp(20rem, 42vh, 31rem);
+  overflow: auto;
+}
+
+.live-event-card {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.95rem;
+  border: 1px solid rgba(23, 36, 50, 0.1);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.live-event-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.live-event-card__kind,
+.live-latest-card__label {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  color: #57697b;
+}
+
+.live-event-card h3 {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.live-event-card__summary,
+.live-latest-card__empty,
+.foreman-mount-point__copy {
+  margin: 0;
+  color: #405467;
+}
+
+.live-event-card__severity {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0.32rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(86, 105, 123, 0.12);
+  color: #4d6174;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.live-event-card__severity--hold,
+.live-event-card__severity--gap {
+  background: rgba(168, 112, 26, 0.16);
+  color: #8b5b12;
+}
+
+.live-event-card__severity--block,
+.live-event-card__severity--revoke {
+  background: rgba(154, 54, 42, 0.14);
+  color: #8f3025;
+}
+
+.live-event-card__severity--info,
+.live-event-card__severity--watch {
+  background: rgba(31, 78, 114, 0.12);
+  color: #214e72;
+}
+
+.live-event-card__facts,
+.foreman-mount-point__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.live-event-card__facts div,
+.foreman-mount-point__facts div {
+  min-width: 0;
+}
+
+.live-event-card__facts dt,
+.foreman-mount-point__facts dt {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  color: #627485;
+}
+
+.live-event-card__facts dd,
+.foreman-mount-point__facts dd {
+  margin: 0.25rem 0 0;
+  font-size: 0.84rem;
+  word-break: break-word;
+}
+
+.live-capture-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.live-capture-panel__latest {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.live-latest-card,
+.live-skin-output-list li {
+  min-width: 0;
+  padding: 0.85rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(23, 36, 50, 0.09);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.live-skin-output-list {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.live-skin-output-list strong {
+  display: block;
+  margin-bottom: 0.45rem;
+}
+
+.live-json {
+  margin: 0.55rem 0 0;
+  max-height: 13rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  background: #14212c;
+  color: #f4f8fa;
+  font-size: 0.76rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.foreman-mount-point {
+  display: grid;
+  gap: 0.75rem;
+}
+
 .director-toggle__bookmarks {
   margin-top: 1rem;
 }
@@ -1268,6 +1486,8 @@ kbd {
   .control-room-toolbar,
   .control-room-grid,
   .packet4-grid,
+  .live-mode-grid,
+  .live-mode-toggle,
   .director-grid,
   .director-toggle__row {
     grid-template-columns: 1fr;
@@ -1275,16 +1495,20 @@ kbd {
 
   .timeline-list,
   .runtime-excerpt,
+  .live-event-rail__list,
   .forensic-panel__entries {
     max-height: none;
   }
 
   .skin-switcher__tablist,
   .skin-panel__header,
-  .demo-header__facts,
-  .director-toggle__bookmark-list,
-  .absence-rail__list,
-  .skin-view__hero,
+    .demo-header__facts,
+    .live-capture-panel__latest,
+    .live-event-card__facts,
+    .foreman-mount-point__facts,
+    .director-toggle__bookmark-list,
+    .absence-rail__list,
+    .skin-view__hero,
   .skin-briefing,
   .skin-view__columns--permit,
   .skin-view__columns--council,
@@ -1323,6 +1547,7 @@ kbd {
 
   .timeline-list,
   .runtime-excerpt,
+  .live-event-rail__list,
   .forensic-panel__entries {
     max-height: clamp(12rem, 30vh, 18rem);
   }
@@ -1341,17 +1566,22 @@ kbd {
   .scenario-selector__options,
   .demo-header__facts,
   .keyboard-shortcuts-help__list,
-  .hero-facts,
-  .governance-panel__facts,
-  .forensic-panel__summary dl,
-  .forensic-entry__facts,
-  .relationship-graph__nodes,
-  .status-bar {
+    .hero-facts,
+    .governance-panel__facts,
+    .forensic-panel__summary dl,
+    .forensic-entry__facts,
+    .live-capture-panel__latest,
+    .live-event-card__facts,
+    .foreman-mount-point__facts,
+    .relationship-graph__nodes,
+    .status-bar {
     grid-template-columns: 1fr;
   }
 
   .timeline-step__header,
   .governance-panel__header,
+  .live-connection-banner,
+  .live-event-card__header,
   .demo-header__badge,
   .control-room-hero__status {
     flex-direction: column;

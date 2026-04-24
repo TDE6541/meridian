@@ -12,6 +12,12 @@ import {
   ScenarioValidationError,
   validateScenarioPayload,
 } from "../src/data/validateScenario.ts";
+import {
+  buildLiveProjectionPath,
+  fetchLiveProjection,
+  isLocalLiveProjectionPath,
+} from "../src/live/liveClient.ts";
+import { createTestLiveProjection } from "./scenarioTestUtils.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -170,6 +176,88 @@ const tests: TestCase[] = [
           fetch: originalFetch,
         });
       }
+    },
+  },
+  {
+    name: "live client fetches a local dashboard projection with injected fetch",
+    run: async () => {
+      const projection = createTestLiveProjection();
+      const requestedPaths: string[] = [];
+      const result = await fetchLiveProjection({
+        fetcher: async (url) => {
+          requestedPaths.push(String(url));
+          return new Response(JSON.stringify(projection), {
+            status: 200,
+            headers: {
+              "content-type": "application/json",
+            },
+          });
+        },
+        sessionId: "session-a5",
+      });
+
+      assert.equal(result.ok, true);
+      assert.equal(result.connection.status, "connected");
+      assert.equal(result.projection?.version, "meridian.v2.dashboardLiveProjection.v1");
+      assert.deepEqual(requestedPaths, ["/live/sessions/session-a5/dashboard"]);
+    },
+  },
+  {
+    name: "live client returns disconnected HOLD posture on failed local fetch",
+    run: async () => {
+      const result = await fetchLiveProjection({
+        fetcher: async () =>
+          new Response(JSON.stringify({ ok: false }), {
+            status: 503,
+            statusText: "Unavailable",
+          }),
+        sessionId: "session-a5",
+      });
+
+      assert.equal(result.ok, false);
+      assert.equal(result.projection, null);
+      assert.equal(result.connection.status, "disconnected");
+      assert.equal(result.connection.holdMessage?.startsWith("HOLD:"), true);
+    },
+  },
+  {
+    name: "live client rejects external projection paths before fetch",
+    run: async () => {
+      let fetchCount = 0;
+      const externalPath = ["https:", "", "example.invalid", "live"].join("/");
+      const result = await fetchLiveProjection({
+        fetcher: async () => {
+          fetchCount += 1;
+          return new Response(JSON.stringify(createTestLiveProjection()));
+        },
+        path: externalPath,
+      });
+
+      assert.equal(result.ok, false);
+      assert.equal(fetchCount, 0);
+      assert.equal(result.connection.status, "disconnected");
+      assert.equal(result.connection.holdMessage?.includes("external"), true);
+      assert.equal(isLocalLiveProjectionPath("//example.invalid/live"), false);
+      assert.equal(isLocalLiveProjectionPath(buildLiveProjectionPath("safe")), true);
+    },
+  },
+  {
+    name: "live client holds malformed projection payloads without raw UI throw",
+    run: async () => {
+      const result = await fetchLiveProjection({
+        fetcher: async () =>
+          new Response(JSON.stringify({ version: "wrong" }), {
+            status: 200,
+            headers: {
+              "content-type": "application/json",
+            },
+          }),
+      });
+
+      assert.equal(result.ok, false);
+      assert.equal(result.projection, null);
+      assert.equal(result.connection.status, "holding");
+      assert.equal(result.connection.holdMessage?.startsWith("HOLD:"), true);
     },
   },
 ];

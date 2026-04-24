@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import React from "react";
 import { ControlRoomShell } from "../src/components/ControlRoomShell.tsx";
+import { ForemanMountPoint } from "../src/foremanGuide/ForemanMountPoint.tsx";
 import { resolveDirectorBookmarks } from "../src/director/directorBookmarks.ts";
 import { buildTimelineSteps } from "../src/state/controlRoomState.ts";
 import {
+  createTestLiveProjection,
   loadAllScenarioRecords,
   renderMarkup,
   runTests,
@@ -69,6 +71,25 @@ const tests = [
       assert.equal(offMarkup.includes("Active absence signals"), false);
       assert.equal(onMarkup.includes("Active absence signals"), true);
       assert.equal(onMarkup.includes("Authority revoked"), true);
+    },
+  },
+  {
+    name: "Foreman mount point accepts context seed and renders inert seam only",
+    run: () => {
+      const projection = createTestLiveProjection();
+      const markup = renderMarkup(
+        <ForemanMountPoint
+          foremanContextSeed={projection.foreman_context_seed}
+        />
+      );
+
+      assert.equal(markup.includes('data-foreman-mount="inert"'), true);
+      assert.equal(markup.includes("Foreman mount point disabled"), true);
+      assert.equal(markup.includes("session-a5"), true);
+      assert.equal(markup.includes("Context seam only."), true);
+      assert.equal(markup.includes("chat"), false);
+      assert.equal(markup.includes(["vo", "ice"].join("")), false);
+      assert.equal(markup.includes(["ava", "tar"].join("")), false);
     },
   },
 ];

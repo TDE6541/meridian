@@ -22,6 +22,13 @@ import { EntityRelationshipGraph } from "./EntityRelationshipGraph.tsx";
 import { EntityRelationshipStrip } from "./EntityRelationshipStrip.tsx";
 import { ForensicChainPanel } from "./ForensicChainPanel.tsx";
 import { GovernanceStatePanel } from "./GovernanceStatePanel.tsx";
+import { LiveCapturePanel } from "./LiveCapturePanel.tsx";
+import { LiveConnectionBanner } from "./LiveConnectionBanner.tsx";
+import { LiveEventRail } from "./LiveEventRail.tsx";
+import {
+  LiveModeToggle,
+  type DashboardMode,
+} from "./LiveModeToggle.tsx";
 import { PlaybackControls } from "./PlaybackControls.tsx";
 import { ScenarioSelector } from "./ScenarioSelector.tsx";
 import { SkinPanel } from "./SkinPanel.tsx";
@@ -34,6 +41,9 @@ import { DirectorCueCard } from "./director/DirectorCueCard.tsx";
 import { DirectorModeToggle } from "./director/DirectorModeToggle.tsx";
 import { JudgeCuePanel } from "./director/JudgeCuePanel.tsx";
 import { PreventedActionCard } from "./director/PreventedActionCard.tsx";
+import { ForemanMountPoint } from "../foremanGuide/ForemanMountPoint.tsx";
+import type { LiveProjectionClient } from "../live/liveClient.ts";
+import { useLiveProjection } from "../live/useLiveProjection.ts";
 import {
   advancePlayback,
   buildTimelineSteps,
@@ -58,7 +68,10 @@ const PLAYBACK_INTERVAL_MS = 2400;
 
 export interface ControlRoomShellProps {
   initialControlState?: Partial<ControlRoomState>;
+  initialDashboardMode?: DashboardMode;
   initialDirectorModeEnabled?: boolean;
+  liveClient?: LiveProjectionClient;
+  liveSessionId?: string;
   records: readonly ControlRoomScenarioRecord[];
 }
 
@@ -96,13 +109,18 @@ function formatSkinLabel(skinKey: string): string {
 
 export function ControlRoomShell({
   initialControlState,
+  initialDashboardMode = "snapshot",
   initialDirectorModeEnabled = false,
+  liveClient,
+  liveSessionId = "latest",
   records,
 }: ControlRoomShellProps) {
   const [controlState, setControlState] = useState(() => ({
     ...createInitialControlRoomState(records[0]?.entry.key ?? "routine"),
     ...initialControlState,
   }));
+  const [dashboardMode, setDashboardMode] =
+    useState<DashboardMode>(initialDashboardMode);
   const [directorModeEnabled, setDirectorModeEnabled] = useState(
     initialDirectorModeEnabled
   );
@@ -150,6 +168,12 @@ export function ControlRoomShell({
     selectedRecord?.status === "ready"
       ? selectedRecord.scenario.scenarioId
       : selectedRecord?.entry.key ?? "unavailable";
+  const liveProjection = useLiveProjection({
+    client: liveClient,
+    enabled: dashboardMode === "live",
+    pollIntervalMs: 5000,
+    sessionId: liveSessionId,
+  });
   const scenarioMeta = getDemoScenarioMeta(controlState.selectedScenarioKey);
   const activeStepLabel = currentStep
     ? `${currentStep.stepId} (${currentStep.index + 1}/${timelineSteps.length})`
@@ -270,6 +294,8 @@ export function ControlRoomShell({
         scenarioStatus={getScenarioStatusLabel(selectedRecord)}
       />
 
+      <LiveModeToggle mode={dashboardMode} onModeChange={setDashboardMode} />
+
       <div className="control-room-toolbar">
         <ScenarioSelector
           records={records}
@@ -311,6 +337,29 @@ export function ControlRoomShell({
         onToggle={() => setDirectorModeEnabled((current) => !current)}
         selectedBookmarkId={directorScene.activeBookmark?.id ?? null}
       />
+
+      {dashboardMode === "live" ? (
+        <div className="live-mode-grid" data-live-mode="enabled">
+          <LiveConnectionBanner
+            holdMessage={liveProjection.holdMessage}
+            loading={liveProjection.loading}
+            onRefresh={() => {
+              void liveProjection.refresh();
+            }}
+            status={liveProjection.connectionStatus}
+          />
+
+          {liveProjection.projection ? (
+            <>
+              <LiveEventRail events={liveProjection.projection.events} />
+              <LiveCapturePanel projection={liveProjection.projection} />
+              <ForemanMountPoint
+                foremanContextSeed={liveProjection.projection.foreman_context_seed}
+              />
+            </>
+          ) : null}
+        </div>
+      ) : null}
 
       {directorModeEnabled ? (
         <>

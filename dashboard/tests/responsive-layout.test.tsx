@@ -1,9 +1,33 @@
 import assert from "node:assert/strict";
 import React from "react";
+import { LiveConnectionBanner } from "../src/components/LiveConnectionBanner.tsx";
+import {
+  LiveModeToggle,
+  type DashboardMode,
+} from "../src/components/LiveModeToggle.tsx";
 import { ControlRoomShell } from "../src/components/ControlRoomShell.tsx";
 import { demoShortcutGroups } from "../src/demo/demoShortcuts.ts";
 import { demoScenarioOrder, getDemoScenarioMeta } from "../src/demo/demoScenarios.ts";
 import { loadAllScenarioRecords, renderMarkup, runTests } from "./scenarioTestUtils.ts";
+
+function collectButtons(node: React.ReactNode): React.ReactElement[] {
+  if (!React.isValidElement(node)) {
+    return [];
+  }
+
+  const children = React.Children.toArray(
+    (node.props as { children?: React.ReactNode }).children
+  );
+  const nested = children.flatMap((child) => collectButtons(child));
+
+  return node.type === "button" ? [node, ...nested] : nested;
+}
+
+function getElementText(element: React.ReactElement): string {
+  return React.Children.toArray(
+    (element.props as { children?: React.ReactNode }).children
+  ).join("");
+}
 
 const tests = [
   {
@@ -44,6 +68,77 @@ const tests = [
         markup.includes("Suggested flow: Routine -&gt; Contested -&gt; Emergency."),
         true
       );
+    },
+  },
+  {
+    name: "snapshot mode is the default and live panels stay unmounted",
+    run: async () => {
+      const records = await loadAllScenarioRecords();
+      const markup = renderMarkup(<ControlRoomShell records={records} />);
+
+      assert.equal(markup.includes("Local demo control room"), true);
+      assert.equal(markup.includes("Snapshot / Live"), true);
+      assert.equal(markup.includes('data-live-mode="enabled"'), false);
+      assert.equal(markup.includes("Committed Wave 8 snapshots only."), true);
+      assert.equal(markup.includes("routine-lancaster-avenue-corridor-reconstruction"), true);
+    },
+  },
+  {
+    name: "live mode toggle renders both modes and can request a mode change",
+    run: () => {
+      const selectedModes: DashboardMode[] = [];
+      const element = LiveModeToggle({
+        mode: "snapshot",
+        onModeChange: (mode) => selectedModes.push(mode),
+      });
+      const markup = renderMarkup(element);
+      const buttons = collectButtons(element);
+      const liveButton = buttons.find((button) => getElementText(button) === "Live");
+
+      assert.equal(markup.includes("Snapshot"), true);
+      assert.equal(markup.includes("Live"), true);
+      assert.equal(markup.includes('aria-pressed="true"'), true);
+      assert.ok(liveButton);
+      liveButton.props.onClick();
+      assert.deepEqual(selectedModes, ["live"]);
+    },
+  },
+  {
+    name: "live mode enabled preserves snapshot shell and renders HOLD banner when unavailable",
+    run: async () => {
+      const records = await loadAllScenarioRecords();
+      const markup = renderMarkup(
+        <ControlRoomShell records={records} initialDashboardMode="live" />
+      );
+
+      assert.equal(markup.includes('data-live-mode="enabled"'), true);
+      assert.equal(markup.includes('data-live-connection-status="disconnected"'), true);
+      assert.equal(markup.includes("HOLD:"), true);
+      assert.equal(markup.includes("Local demo control room"), true);
+      assert.equal(markup.includes("routine-lancaster-avenue-corridor-reconstruction"), true);
+    },
+  },
+  {
+    name: "live connection banner displays connected, disconnected, and holding states",
+    run: () => {
+      const connected = renderMarkup(
+        <LiveConnectionBanner status="connected" holdMessage={null} />
+      );
+      const disconnected = renderMarkup(
+        <LiveConnectionBanner
+          status="disconnected"
+          holdMessage="HOLD: disconnected for test"
+        />
+      );
+      const holding = renderMarkup(
+        <LiveConnectionBanner status="holding" holdMessage="HOLD: held for test" />
+      );
+
+      assert.equal(connected.includes("Live projection connected."), true);
+      assert.equal(disconnected.includes('data-live-connection-status="disconnected"'), true);
+      assert.equal(disconnected.includes("HOLD: disconnected for test"), true);
+      assert.equal(holding.includes('data-live-connection-status="holding"'), true);
+      assert.equal(holding.includes("HOLD: held for test"), true);
     },
   },
 ];

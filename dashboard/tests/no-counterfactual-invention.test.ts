@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import path from "node:path";
+import { readFile } from "node:fs/promises";
 import React from "react";
 import { adaptAbsenceSignals } from "../src/adapters/absenceSignalAdapter.ts";
 import { adaptForensicChain } from "../src/adapters/forensicAdapter.ts";
@@ -92,6 +94,31 @@ const tests = [
         ),
         true
       );
+    },
+  },
+  {
+    name: "live components render projection fields without root runtime imports",
+    run: async () => {
+      const files = [
+        "src/components/LiveCapturePanel.tsx",
+        "src/components/LiveEventRail.tsx",
+        "src/components/LiveConnectionBanner.tsx",
+        "src/foremanGuide/ForemanMountPoint.tsx",
+      ];
+      const source = (
+        await Promise.all(
+          files.map((file) => readFile(path.resolve(process.cwd(), file), "utf8"))
+        )
+      ).join("\n");
+      const rootLiveImport = ["../..", "src", "live"].join("/");
+      const rootSkinsImport = ["../..", "src", "skins"].join("/");
+
+      assert.equal(source.includes(rootLiveImport), false);
+      assert.equal(source.includes(rootSkinsImport), false);
+      assert.equal(source.includes("evaluateGovernanceRequest"), false);
+      assert.equal(source.includes("evaluateLiveAbsence"), false);
+      assert.equal(source.includes("createLiveGovernanceGateway"), false);
+      assert.equal(source.includes("createDashboardLiveProjectionV1"), false);
     },
   },
 ];
