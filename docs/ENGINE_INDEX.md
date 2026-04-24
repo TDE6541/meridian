@@ -2,7 +2,14 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, shipped Wave 7 civic skins rendering/proof surfaces, shipped Wave 8 corridor scenario integration/proof surfaces, and Wave 9 local dashboard proof surfaces.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, shipped Wave 7 civic skins rendering/proof surfaces, shipped Wave 8 corridor scenario integration/proof surfaces, and Wave 9 local dashboard proof surfaces. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
+
+## V1 Closure Reference
+
+- `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`
+- `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
+- V1 remains local/proof infrastructure, not a deployed production city system.
+- Future expansion begins as Meridian V2 only under a new approved envelope.
 
 ## Bridge Substrate
 

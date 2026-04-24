@@ -6,7 +6,9 @@ This is the front-door navigation index for Meridian. It points agents and maint
 
 ## Wave Scope Status
 
-Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. Wave 4.5 closes the calibration lane with frozen corpus posture, historical baseline truth/pre-Block-C comparison artifacts, and a locked final replay artifact family/report. Shipped Wave 5 Packets 1-3 add a bounded authority-topology lane in `src/governance/runtime/` with additive entity validator widening, static Fort Worth topology declaration, bounded authority evaluation, bounded REVOKE activation, and projection-only propagation. Shipped Wave 6 Packets 1-2 add a bounded forensic-chain lane under `src/governance/forensic/` plus an additive post-evaluation publication seam in `src/bridge/governanceTransportAdapter.js`. Wave 7 Packets 1-4 add a bounded civic skins rendering lane under `src/skins/` with five shipped skins, deterministic public disclosure boundary, and five-skin structural integration proof. Wave 8 Packets 1-5 add a bounded corridor scenario integration lane under `src/integration/` with deterministic replay bridge output, deterministic matching, single-state scenario composition, resolution cascade replay, and runner verification over frozen scenario fixtures. Wave 9 Packets 1-6 add a bounded local dashboard lane under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots and remains local-only.
+Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. Future expansion begins as Meridian V2 only under a new approved envelope.
+
+Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. Wave 4.5 closes the calibration lane with frozen corpus posture, historical baseline truth/pre-Block-C comparison artifacts, and a locked final replay artifact family/report. Shipped Wave 5 Packets 1-3 add a bounded authority-topology lane in `src/governance/runtime/` with additive entity validator widening, static Fort Worth topology declaration, bounded authority evaluation, bounded REVOKE activation, and projection-only propagation. Shipped Wave 6 Packets 1-2 add a bounded forensic-chain lane under `src/governance/forensic/` plus an additive post-evaluation publication seam in `src/bridge/governanceTransportAdapter.js`. Wave 7 Packets 1-4 add a bounded civic skins rendering lane under `src/skins/` with five shipped skins, deterministic public disclosure boundary, and five-skin structural integration proof. Wave 8 Packets 1-5 add a bounded corridor scenario integration lane under `src/integration/` with deterministic replay bridge output, deterministic matching, single-state scenario composition, resolution cascade replay, and runner verification over frozen scenario fixtures. Wave 9 adds a bounded local dashboard lane under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots and remains local-only.
 
 ## Canonical Root Files
 
@@ -33,6 +35,8 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 
 - Posture and operating rules: `CLAUDE.md`, `TEAM_CHARTER.md`, `AI_EXECUTION_DOCTRINE.md`
 - Repo identity and front door: `README.md`
+- V1 final truth: `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`
+- V1 master closeout: `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - Bridge runtime substrate: `src/bridge/*.js`
 - Governance runtime landing zone, sweep facade, subset, and policy pack: `src/governance/runtime/*.js`
 - Wave 4B capture substrate: `src/pipeline/*.py`
@@ -67,7 +71,12 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned with `origin/main`.
 - Wave 7 Packets 1-4 are landed in-repo as a bounded civic skins rendering lane.
 - Wave 8 Packets 1-5 are landed in-repo as a bounded integration lane under `src/integration/`.
-- Wave 9 Packets 1-6 are landed locally as a bounded dashboard lane under `dashboard/`.
+- Meridian V1 is complete through Wave 9.
+- Wave 9 is the final V1 wave.
+- There is no Wave 10 in V1.
+- Future expansion begins as Meridian V2 only under a new approved envelope.
+- Final V1 implementation baseline commit is `3374d0f4ad7d410cdd37a765db8d473b36f92482`.
+- Wave 9 is landed as a bounded local dashboard lane under `dashboard/`.
 - Wave 7 ships five skins (`civic.permitting`, `civic.council`, `civic.operations`, `civic.dispatch`, `civic.public`) with deterministic public disclosure boundaries in `src/skins/redaction.js`.
 - `tests/skins.integration.test.js` proves five-skin structural integration on shared governance input with truth-fingerprint parity.
 - Wave 7 keeps framework public guard intact for framework consumers (`renderDefaultSkin` public rendering remains reserved).
@@ -81,6 +90,9 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Dashboard scenario snapshots are committed under `dashboard/public/scenarios/*.json`.
 - Dashboard skin payload consumption is bounded to `step.skins.outputs`; `step.skins.renders` is not used.
 - Director Mode and Absence Lens are view-only overlays over committed snapshot truth.
+- Final V1 dashboard verification posture is `36` passing / `0` failing across `14` dashboard test files.
+- Final V1 repo-wide JS verification posture is `511` passing / `0` failing.
+- 1920x1080 and 1280x720 screenshot-level visual proof remain HOLD.
 - No live broker proof or production runtime compatibility proof ships in this repo today.
 - `package.json` declares only `nats` as a runtime dependency.
 - `src/config/constellation.js` remains the read-only Meridian publisher/config substrate.
@@ -139,10 +151,11 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Wave 7 civic skins truth surfaces: `docs/specs/WAVE7_CIVIC_SKINS.md`, `docs/closeouts/WAVE7_CLOSEOUT.md`, `src/skins/**/*.js`, `tests/skins*.test.js`, `tests/skins.integration.test.js`
 - Wave 8 corridor scenario truth surfaces: `docs/specs/WAVE8_CORRIDOR_SCENARIO.md`, `docs/closeouts/WAVE8_CLOSEOUT.md`, `src/integration/*.js`, `tests/integration/*.test.js`, `tests/fixtures/scenarios/**/*`, `scripts/run-corridor-scenario.js`
 - Wave 9 dashboard truth surfaces: `docs/specs/WAVE9_DASHBOARD.md`, `docs/closeouts/WAVE9_CLOSEOUT.md`, `dashboard/README.md`, `dashboard/**/*.ts*`, `dashboard/public/scenarios/*.json`
+- V1 final truth surfaces: `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`, `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - Bridge/runtime/pipeline tests and fixtures: `tests/bridge*.test.js`, `tests/governance.runtime.test.js`, `tests/governance.policyPack.test.js`, `tests/governance.runtimeSubset.test.js`, `tests/governance.promiseConfidence.test.js`, `tests/governance.sweep.test.js`, `tests/governance.demoProof.test.js`, `tests/governance.pipelineHandoffProof.test.js`, `tests/pipeline/*.py`, `tests/pipeline/fixtures/*`, `tests/fixtures/governance/*.json`, `tests/fixtures/nats/*.json`, `scripts/synthetic-constellation.js`
 - Governance shadows: `src/governance/shadows.js`
 - Entity scaffolds: `src/entities/*.js`
 - Entity ontology spec: `docs/specs/ENTITY_ONTOLOGY.md`
 - Constellation config: `src/config/constellation.js`
-- Closeouts: `docs/closeouts/README.md`, `docs/closeouts/WAVE1_CLOSEOUT.md`, `docs/closeouts/WAVE2_CLOSEOUT.md`, `docs/closeouts/WAVE3_CLOSEOUT.md`, `docs/closeouts/WAVE4A_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_A_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_B_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_C_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_E_CLOSEOUT.md`, `docs/closeouts/WAVE4B_CLOSEOUT.md`, `docs/closeouts/WAVE4_5_CLOSEOUT.md`, `docs/closeouts/WAVE5_CLOSEOUT.md`, `docs/closeouts/WAVE6_CLOSEOUT.md`, `docs/closeouts/WAVE7_CLOSEOUT.md`, `docs/closeouts/WAVE8_CLOSEOUT.md`
+- Closeouts: `docs/closeouts/README.md`, `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`, `docs/closeouts/WAVE1_CLOSEOUT.md`, `docs/closeouts/WAVE2_CLOSEOUT.md`, `docs/closeouts/WAVE3_CLOSEOUT.md`, `docs/closeouts/WAVE4A_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_A_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_B_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_C_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_D_CLOSEOUT.md`, `docs/closeouts/WAVE4A_BLOCK_E_CLOSEOUT.md`, `docs/closeouts/WAVE4B_CLOSEOUT.md`, `docs/closeouts/WAVE4_5_CLOSEOUT.md`, `docs/closeouts/WAVE5_CLOSEOUT.md`, `docs/closeouts/WAVE6_CLOSEOUT.md`, `docs/closeouts/WAVE7_CLOSEOUT.md`, `docs/closeouts/WAVE8_CLOSEOUT.md`, `docs/closeouts/WAVE9_CLOSEOUT.md`
 - Detailed mapping: `docs/WHERE_TO_CHANGE_X.md`

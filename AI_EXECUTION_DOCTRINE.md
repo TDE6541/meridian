@@ -85,7 +85,9 @@ docs/
   closeouts/WAVE7_CLOSEOUT.md
   closeouts/WAVE8_CLOSEOUT.md
   closeouts/WAVE9_CLOSEOUT.md
+  closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
+  specs/MERIDIAN_V1_FINAL_TRUTH.md
   specs/NATS_EVENT_COMMAND_TRANSLATION.md
   specs/WAVE4A_GOVERNANCE_RUNTIME.md
   specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md
@@ -111,6 +113,10 @@ dashboard/
 ## Operating Rules
 
 - Work from evidence that exists in the repo or approved session input.
+- Treat Meridian V1 as complete through Wave 9.
+- Treat Wave 9 as the final V1 wave.
+- Do not create or describe Wave 10 as active V1 scope; there is no Wave 10 in V1.
+- Treat future expansion as Meridian V2 only under a new approved envelope.
 - Keep scope locked to the approved block.
 - Preserve canon alignment across root documents.
 - Treat upstream references as references unless their contents are available in this repo.
@@ -124,6 +130,7 @@ dashboard/
 - Describe Wave 7 only as rendering-only civic skins surfaces (five bounded skins, deterministic public disclosure boundary, and five-skin structural integration proof), not as dashboard/UI runtime, public portal behavior, legal compliance workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins.
 - Describe Wave 8 only as bounded corridor scenario integration surfaces, not as dashboard/UI runtime, deployment/hosting, live broker proof, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, legal sufficiency, TRAIGA compliance, persistent match-result storage, chain replay engine, or multi-corridor routing in one run.
 - Describe Wave 9 only as a local dashboard proof over committed snapshots, not as production application behavior, hosted deployment, auth, live broker proof, live network dependency, public portal behavior, new governance computation, legal sufficiency, TPIA compliance, TRAIGA compliance, official disclosure approval, or real city runtime behavior.
+- Describe Meridian V1 only as completed local/proof infrastructure, not as a deployed production city system or legal compliance certification.
 
 ## Planning Gate
 
@@ -144,6 +151,7 @@ dashboard/
 - Do not overstate local/uncommitted Wave 6 substrate as merged/pushed ship state.
 - Do not overstate Wave 7 rendering surfaces as runtime/bridge/pipeline/entity/forensic/config/package widening.
 - Do not overstate Wave 9 local dashboard proof as hosted, auth-wired, live-networked, or legally sufficient behavior.
+- Do not describe a Wave 10 as part of V1.
 - Stop if repo truth conflicts with the approved task.
 
 ## Verification Rules
@@ -167,6 +175,7 @@ dashboard/
 - Wave 7 does not widen top-level governance/bridge/pipeline/forensic/entity/config/package contracts; it adds rendering-only skins-local contracts and proof surfaces under `src/skins/**` and `tests/skins*.test.js`.
 - Wave 8 adds integration-local contracts only under `src/integration/**` plus runner-local report output in `scripts/run-corridor-scenario.js`.
 - Wave 9 adds dashboard-local package and committed snapshot consumption only; it does not widen root runtime, governance, bridge, pipeline, forensic, skin, entity, config, or package contracts.
+- V1 closure docs do not change shared contracts; they route to final V1 truth and carry remaining HOLDs.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 

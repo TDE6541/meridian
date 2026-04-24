@@ -18,6 +18,8 @@ Expected local URL:
 http://localhost:5173/
 ```
 
+Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. The dashboard remains local/proof infrastructure, not a deployed production city system.
+
 ## UI Surfaces
 
 - `dashboard/index.html`
@@ -50,5 +52,11 @@ http://localhost:5173/
 
 ## Visual Proof Status
 
-- 1920x1080 visual proof: HOLD unless Packet 7 records new evidence.
-- 1280x720 visual proof: HOLD unless Packet 7 records new evidence.
+- 1920x1080 visual proof: HOLD; screenshot-level proof remains not verified.
+- 1280x720 visual proof: HOLD; screenshot-level proof remains not verified.
+
+## Final V1 Verification Posture
+
+- Dashboard tests: `36` passing / `0` failing across `14` dashboard test files.
+- Repo-wide JS tests: `511` passing / `0` failing.
+- Remaining visual HOLDs: 1920x1080 and 1280x720 screenshot-level proof remain not screenshot-verified.

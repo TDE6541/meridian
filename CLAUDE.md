@@ -2,7 +2,7 @@
 
 ## Repo Identity
 
-Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, a bounded Wave 5 authority-topology lane, a bounded Wave 6 forensic-chain lane, a bounded Wave 7 civic skins rendering lane, a bounded Wave 8 corridor scenario integration lane, and a Wave 9 local dashboard proof lane.
+Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, a bounded Wave 5 authority-topology lane, a bounded Wave 6 forensic-chain lane, a bounded Wave 7 civic skins rendering lane, a bounded Wave 8 corridor scenario integration lane, and a Wave 9 local dashboard proof lane. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
 
 ## Agent Start Here / Read First
 
@@ -11,20 +11,27 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 3. [`docs/INDEX.md`](docs/INDEX.md)
 4. [`docs/ENGINE_INDEX.md`](docs/ENGINE_INDEX.md)
 5. [`docs/WHERE_TO_CHANGE_X.md`](docs/WHERE_TO_CHANGE_X.md)
-6. [`docs/closeouts/README.md`](docs/closeouts/README.md)
-7. [`docs/specs/WAVE3_NATS_BRIDGE.md`](docs/specs/WAVE3_NATS_BRIDGE.md)
-8. [`docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`](docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md)
-9. [`docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`](docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md)
-10. [`docs/specs/WAVE4_5_CALIBRATION.md`](docs/specs/WAVE4_5_CALIBRATION.md)
-11. [`docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`](docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md)
-12. [`docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`](docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md)
-13. [`docs/specs/WAVE7_CIVIC_SKINS.md`](docs/specs/WAVE7_CIVIC_SKINS.md)
-14. [`docs/specs/WAVE8_CORRIDOR_SCENARIO.md`](docs/specs/WAVE8_CORRIDOR_SCENARIO.md)
-15. [`docs/specs/WAVE9_DASHBOARD.md`](docs/specs/WAVE9_DASHBOARD.md)
+6. [`docs/UI_INDEX.md`](docs/UI_INDEX.md)
+7. [`docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`](docs/specs/MERIDIAN_V1_FINAL_TRUTH.md)
+8. [`docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md)
+9. [`docs/closeouts/README.md`](docs/closeouts/README.md)
+10. [`docs/specs/WAVE3_NATS_BRIDGE.md`](docs/specs/WAVE3_NATS_BRIDGE.md)
+11. [`docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`](docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md)
+12. [`docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`](docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md)
+13. [`docs/specs/WAVE4_5_CALIBRATION.md`](docs/specs/WAVE4_5_CALIBRATION.md)
+14. [`docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`](docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md)
+15. [`docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`](docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md)
+16. [`docs/specs/WAVE7_CIVIC_SKINS.md`](docs/specs/WAVE7_CIVIC_SKINS.md)
+17. [`docs/specs/WAVE8_CORRIDOR_SCENARIO.md`](docs/specs/WAVE8_CORRIDOR_SCENARIO.md)
+18. [`docs/specs/WAVE9_DASHBOARD.md`](docs/specs/WAVE9_DASHBOARD.md)
 
 ## Session Posture
 
 - Treat repo truth as the working perimeter.
+- Treat Meridian V1 as complete through Wave 9.
+- Treat Wave 9 as the final V1 wave.
+- Do not create or describe Wave 10 as active V1 scope; there is no Wave 10 in V1.
+- Treat future expansion as Meridian V2 only under a new approved envelope.
 - Keep all claims bounded to visible files and approved inputs.
 - Surface uncertainty as HOLD instead of filling gaps.
 - Keep root canon synchronized when substrate truth changes.
@@ -38,6 +45,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Do not describe Wave 7 as dashboard/UI runtime, public portal behavior, legal compliance workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins.
 - Do not describe Wave 8 as dashboard/UI runtime, deployment/hosting, live broker proof, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, legal sufficiency, TRAIGA compliance, persistent match-result storage, chain replay engine, or multi-corridor routing in one run.
 - Do not describe Wave 9 as production application behavior, hosted deployment, auth, live broker proof, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, new governance computation, public portal behavior, legal sufficiency, TPIA compliance, TRAIGA compliance, official disclosure approval, or real city runtime behavior.
+- Do not describe Meridian V1 as a deployed production city system or legal compliance certification.
 
 ## Non-Negotiables
 
@@ -126,6 +134,7 @@ Edit(/**/*.config.*)
 - `docs/specs/WAVE7_CIVIC_SKINS.md`
 - `docs/specs/WAVE8_CORRIDOR_SCENARIO.md`
 - `docs/specs/WAVE9_DASHBOARD.md`
+- `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`
 - `docs/INDEX.md`
 - `docs/ENGINE_INDEX.md`
 - `docs/UI_INDEX.md`
@@ -147,6 +156,7 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE7_CLOSEOUT.md`
 - `docs/closeouts/WAVE8_CLOSEOUT.md`
 - `docs/closeouts/WAVE9_CLOSEOUT.md`
+- `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - `dashboard/README.md`
 - `dashboard/package.json`
 - `dashboard/index.html`
@@ -165,6 +175,7 @@ Edit(/**/*.config.*)
 - Wave 7 truth: five bounded civic skins are shipped (`civic.permitting`, `civic.council`, `civic.operations`, `civic.dispatch`, `civic.public`), deterministic public disclosure boundary ships in `src/skins/redaction.js`, and five-skin structural integration proof ships in `tests/skins.integration.test.js`; framework public guard remains intact, Wave 7 remains rendering-only, and no runtime/bridge/pipeline/forensic/entity/config/package widening, dashboard/UI runtime, portal behavior, legal compliance workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins ships.
 - Wave 8 truth: bounded integration surfaces ship under `src/integration/` plus `scripts/run-corridor-scenario.js` with additive integration-layer contracts (`wave8.pipelineBridgeOutput.v1`, `wave8.matchResult.v1`, `wave8.scenarioResult.v1`, `wave8.cascadeResult.v1`) and a runner-local report contract (`wave8.packet5.runnerReport.v1`); frozen scenario fixtures (`routine`, `contested`, `emergency`) and `tests/integration/*.test.js` prove deterministic replay, structured live missing-env HOLD posture, single-state composition, multi-step cascade continuity, and five-skin re-rendering at each cascade step; no Wave 1-7 runtime/module widening, no dashboard/deployment claim, no live broker/auth/audio claim, and no legal/TRAIGA sufficiency claim ship.
 - Wave 9 truth: a local dashboard proof ships under `dashboard/` with committed snapshots in `dashboard/public/scenarios/*.json`, local demo command `npm --prefix dashboard run dev`, canonical URL `http://localhost:5173/`, skin payload consumption from `step.skins.outputs`, view-only Director Mode / Absence Lens overlays, and no Wave 1-8 substrate edits, root package pollution, auth, deployment, live broker, live network dependency, new governance computation, legal sufficiency, TPIA compliance, or TRAIGA compliance claim.
+- V1 final truth: Meridian V1 is complete through Wave 9; Wave 9 is the final V1 wave; there is no Wave 10 in V1; future expansion begins as Meridian V2 only under a new approved envelope. Final V1 verification posture records dashboard `36` passing / `0` failing across `14` dashboard test files and repo-wide JS `511` passing / `0` failing, with 1920x1080 and 1280x720 visual proof HOLDs carried honestly.
 
 ## Required Sync Surfaces
 
@@ -188,6 +199,7 @@ Edit(/**/*.config.*)
 - `docs/specs/WAVE7_CIVIC_SKINS.md`
 - `docs/specs/WAVE8_CORRIDOR_SCENARIO.md`
 - `docs/specs/WAVE9_DASHBOARD.md`
+- `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`
 - `docs/closeouts/README.md`
 - `docs/closeouts/WAVE3_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_CLOSEOUT.md`
@@ -203,6 +215,7 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE7_CLOSEOUT.md`
 - `docs/closeouts/WAVE8_CLOSEOUT.md`
 - `docs/closeouts/WAVE9_CLOSEOUT.md`
+- `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - `dashboard/README.md`
 
 ## Closeout Requirements

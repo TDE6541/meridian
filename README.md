@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures), and a Wave 9 local dashboard proof under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots. This repo is still not a production application; the dashboard is a local-only demo package.
+Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures), and a Wave 9 local dashboard proof under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. This repo is still not a production application; the dashboard is a local-only demo package.
 
 ## Agent Start Here
 
@@ -8,10 +8,22 @@ Meridian is a governed city digital twin intelligence repo. The repo contains th
 2. [CLAUDE.md](CLAUDE.md)
 3. [REPO_INDEX.md](REPO_INDEX.md)
 4. [docs/INDEX.md](docs/INDEX.md)
+5. [docs/specs/MERIDIAN_V1_FINAL_TRUTH.md](docs/specs/MERIDIAN_V1_FINAL_TRUTH.md)
+6. [docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md](docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md)
 
 ## Current Status
 
-Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned with `origin/main`. Wave 7 Packets 1-4 and Wave 8 Packets 1-5 are present in-repo as bounded local lanes. Wave 9 Packets 1-6 are landed locally as a bounded dashboard lane; Packet 7 records local finish-lane truth only.
+Meridian V1 is complete through Wave 9. The final V1 implementation baseline commit is `3374d0f4ad7d410cdd37a765db8d473b36f92482` (`docs(dashboard): close wave9 local dashboard lane`). Wave 9 is the final V1 wave. There is no Wave 10 in V1. Future expansion begins as Meridian V2 only under a new approved envelope.
+
+## V1 Final Truth
+
+- V1 master closeout: `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
+- V1 final truth spec: `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`
+- Dashboard verification posture: `36` passing / `0` failing across `14` dashboard test files.
+- Repo-wide JS verification posture: `511` passing / `0` failing.
+- Remaining visual HOLDs: 1920x1080 and 1280x720 screenshot-level proof remain not screenshot-verified.
+- Local dashboard command: `npm --prefix dashboard run dev`
+- Local dashboard URL: `http://localhost:5173/`
 
 ## What This Is
 
@@ -65,6 +77,7 @@ Wave 5 Packets 1-3 and Wave 6 Packets 1-2 are committed on `main` and aligned wi
 ## What This Is Not
 
 - Not a production application.
+- Not a Wave 10 plan; no Wave 10 exists in V1.
 - Not a hosted dashboard; Wave 9 is a local-only dashboard proof.
 - Not live broker proof or production Constellation compatibility proof.
 - Not general event-side governance routing or generalized publisher widening.
@@ -129,7 +142,9 @@ docs/
   specs/*.md
 ```
 
-## Deferred After Wave 9
+## V2 Boundary / Deferred Beyond V1
+
+Future work starts as Meridian V2 only after a new approved envelope. This list is not a V2 plan.
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
 - Generalized event routing and authority-topology widening beyond the bounded lanes.

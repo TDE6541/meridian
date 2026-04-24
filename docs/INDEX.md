@@ -7,6 +7,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 ## Documentation Lanes
 
 - Specs lane: [`docs/specs/`](specs/)
+- Meridian V1 final truth: [`docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`](specs/MERIDIAN_V1_FINAL_TRUTH.md)
 - Entity ontology spec: [`docs/specs/ENTITY_ONTOLOGY.md`](specs/ENTITY_ONTOLOGY.md)
 - Wave 3 bridge spec: [`docs/specs/WAVE3_NATS_BRIDGE.md`](specs/WAVE3_NATS_BRIDGE.md)
 - Wave 3 translation spec: [`docs/specs/NATS_EVENT_COMMAND_TRANSLATION.md`](specs/NATS_EVENT_COMMAND_TRANSLATION.md)
@@ -21,6 +22,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 - Schemas lane: [`docs/schemas/`](schemas/)
 - Learning notes lane: [`docs/learning-notes/`](learning-notes/)
 - Closeouts lane: [`docs/closeouts/README.md`](closeouts/README.md)
+- Meridian V1 master closeout: [`docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`](closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md)
 - Wave 4B closeout: [`docs/closeouts/WAVE4B_CLOSEOUT.md`](closeouts/WAVE4B_CLOSEOUT.md)
 - Wave 4.5 closeout: [`docs/closeouts/WAVE4_5_CLOSEOUT.md`](closeouts/WAVE4_5_CLOSEOUT.md)
 - Wave 5 closeout: [`docs/closeouts/WAVE5_CLOSEOUT.md`](closeouts/WAVE5_CLOSEOUT.md)
@@ -40,3 +42,4 @@ Wave 6 forensic-chain surfaces listed above reflect shipped in-repo Packet 1-2 s
 Wave 7 civic skins surfaces listed above reflect shipped in-repo Packet 1-4 rendering/proof substrate.
 Wave 8 corridor scenario surfaces listed above reflect shipped in-repo Packet 1-5 integration/proof substrate.
 Wave 9 dashboard surfaces listed above reflect a local-only dashboard proof over committed Wave 8 payload snapshots.
+Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. Future expansion begins as Meridian V2 only under a new approved envelope.
