@@ -114,6 +114,12 @@ function collectLatest(records) {
         record.payload.forensic_receipt || record.payload
       );
     }
+
+    if (record.type === "absence.finding.created") {
+      latest.absence = cloneJsonValue(
+        record.payload.absence_finding || record.payload
+      );
+    }
   }
 
   return latest;
@@ -216,7 +222,11 @@ function createDashboardLiveProjectionV1(input = {}) {
         "governance.evaluated",
         "governance_ref"
       ),
-      latest_absence_refs: [],
+      latest_absence_refs: getLatestEventRefs(
+        events,
+        "absence.finding.created",
+        "absence_refs"
+      ),
       latest_forensic_refs: getLatestEventRefs(
         events,
         "forensic.receipt",

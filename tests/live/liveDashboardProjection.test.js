@@ -127,6 +127,108 @@ test("dashboard projection: shape matches meridian.v2.dashboardLiveProjection.v1
   }
 });
 
+test("dashboard projection: latest absence populates from absence.finding.created", () => {
+  const { tempRoot, store } = createSessionWithGatewayRecords();
+  try {
+    const appended = store.appendRecord("session-projection", {
+      type: "absence.finding.created",
+      source: {
+        type: "absence_rule",
+        ref: "projection-test-rule",
+      },
+      dashboard_visible: true,
+      payload: {
+        absence_finding: {
+          version: "meridian.v2.liveAbsenceFinding.v1",
+          finding_id: "finding-projection-a4",
+          session_id: "session-projection",
+          rule_id: "projection_test_rule",
+          expected_signal: "projection_test_signal",
+          observed_state: {
+            source_bounded: true,
+          },
+          missing_evidence: ["projection_test_signal"],
+          severity: "HOLD",
+          entity_refs: ["inspection-a2-projection"],
+          source_refs: ["record:projection-a4"],
+          resolution_path: "Attach observed projection test evidence.",
+          origin: "live_computed",
+          why_this_matters:
+            "Live absence findings are event-sourced and distinct from snapshot absence overlays.",
+        },
+        live_feed_event: {
+          kind: "absence.finding.created",
+          severity: "HOLD",
+          title: "Live absence finding",
+          summary: "Projection test absence finding.",
+          refs: {
+            entity_ids: ["inspection-a2-projection"],
+            evidence_ids: [],
+            governance_ref: null,
+            authority_ref: null,
+            forensic_refs: [],
+            absence_refs: ["finding-projection-a4"],
+            skin_ref: null,
+          },
+          visibility: "internal",
+          foreman_hints: {
+            narration_eligible: false,
+            priority: 0,
+            reason: "not_requested",
+          },
+        },
+      },
+    });
+    assert.equal(appended.ok, true, appended.issues.join("\n"));
+
+    const session = store.loadSession("session-projection").session;
+    const projection = createDashboardLiveProjectionV1({ session }).projection;
+
+    assert.equal(projection.latest.absence.finding_id, "finding-projection-a4");
+    assert.equal(projection.latest.absence.origin, "live_computed");
+    assert.deepEqual(projection.foreman_context_seed.latest_absence_refs, [
+      "finding-projection-a4",
+    ]);
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("dashboard projection: no absence remains null and skins outputs remain preserved", () => {
+  const { tempRoot, session } = createSessionWithGatewayRecords();
+  try {
+    const projection = createDashboardLiveProjectionV1({
+      session,
+      skins: {
+        outputs: {
+          public: {
+            label: "Public snapshot",
+          },
+        },
+      },
+    }).projection;
+
+    assert.equal(projection.latest.absence, null);
+    assert.deepEqual(projection.skins.outputs, {
+      public: {
+        label: "Public snapshot",
+      },
+    });
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("dashboard projection: source does not compute absence", () => {
+  const source = readFileSync(
+    path.join(__dirname, "../../src/live/liveDashboardProjection.js"),
+    "utf8"
+  );
+
+  assert.equal(/liveAbsence|evaluateLiveAbsence|absence_inputs/.test(source), false);
+  assert.equal(/record\.type === "absence\.finding\.created"/.test(source), true);
+});
+
 test("dashboard projection: includes session, connection, current, entities, latest, events, and skins.outputs", () => {
   const { tempRoot, session } = createSessionWithGatewayRecords();
   try {
