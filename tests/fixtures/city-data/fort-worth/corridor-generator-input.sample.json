@@ -1,0 +1,27 @@
+{
+  "seed_classification": "source-manifested local demo seed",
+  "not_live_city_integration": true,
+  "not_official_city_record": true,
+  "no_accela_automation": true,
+  "no_gis_automation": true,
+  "session_id": "session-a6-fort-worth-demo",
+  "corridor_name": "Fort Worth Local Demo Utility Corridor",
+  "scenario_kind": "emergency",
+  "utility_conflict": true,
+  "emergency": true,
+  "public_visibility": true,
+  "franchise_asset_conflict": true,
+  "obligation_owner_present": false,
+  "source_ref_ids": [
+    "repo.wave8.corridor_scenarios",
+    "repo.fort_worth_proof_fixtures",
+    "repo.ontology",
+    "manual.demo_seed_placeholder"
+  ],
+  "limitations": [
+    "Synthetic local demo corridor input only.",
+    "Not live Fort Worth integration and not official city data.",
+    "No permit, parcel, accela, gis, inspection, or utility-system identifier is asserted.",
+    "Designed to produce visible HOLD posture where authority, evidence, ownership, or disclosure boundary is missing."
+  ]
+}

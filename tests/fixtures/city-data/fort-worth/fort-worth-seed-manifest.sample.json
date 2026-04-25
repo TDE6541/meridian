@@ -1,0 +1,99 @@
+{
+  "version": "meridian.v2.citySeedManifest.v1",
+  "manifest_id": "fort-worth-local-demo-seed-manifest-v1",
+  "compiled_at": "2026-04-24T00:00:00.000Z",
+  "seed_classification": "source-manifested local demo seed",
+  "not_live_city_integration": true,
+  "not_official_city_record": true,
+  "no_accela_automation": true,
+  "no_gis_automation": true,
+  "source_refs": [
+    {
+      "ref_id": "repo.wave8.corridor_scenarios",
+      "category": "repo.wave8.corridor_scenarios",
+      "source_type": "repo_fixture",
+      "label": "Wave 8 corridor scenario fixtures and spec",
+      "paths": [
+        "docs/specs/WAVE8_CORRIDOR_SCENARIO.md",
+        "tests/fixtures/scenarios"
+      ],
+      "retrieval_date": null,
+      "reference_date": "2026-04-21",
+      "limitations": [
+        "Wave 8 corridor scenarios are frozen repo fixtures, not live source pulls.",
+        "Scenario data is synthetic and hand-curated for Meridian proof behavior."
+      ]
+    },
+    {
+      "ref_id": "repo.wave9.dashboard_snapshots",
+      "category": "repo.wave9.dashboard_snapshots",
+      "source_type": "repo_fixture",
+      "label": "Wave 9 dashboard snapshot fixtures",
+      "paths": [
+        "dashboard/public/scenarios"
+      ],
+      "retrieval_date": null,
+      "reference_date": "2026-04-24",
+      "limitations": [
+        "Dashboard snapshots are committed local artifacts.",
+        "Snapshots do not imply browser-side city-data generation or live integration."
+      ]
+    },
+    {
+      "ref_id": "repo.fort_worth_proof_fixtures",
+      "category": "repo.fort_worth_proof_fixtures",
+      "source_type": "repo_fixture",
+      "label": "Fort Worth proof fixtures already present in repo",
+      "paths": [
+        "tests/pipeline/fixtures/fort_worth_proof/fort_worth_official_agenda_excerpt.txt",
+        "tests/pipeline/fixtures/fort_worth_proof/fort_worth_official_agenda_provenance.json",
+        "tests/pipeline/fixtures/fort_worth_proof/fort_worth_motion_video_excerpt.txt",
+        "tests/pipeline/fixtures/fort_worth_proof/fort_worth_motion_video_provenance.json"
+      ],
+      "retrieval_date": "2026-04-16",
+      "reference_date": "2025-09-30",
+      "limitations": [
+        "Repo fixtures are bounded excerpts and provenance records.",
+        "Motion-video proof remains a local reconstructed fixture where marked by provenance.",
+        "No fresh external source refresh is performed in Packet A6."
+      ]
+    },
+    {
+      "ref_id": "repo.ontology",
+      "category": "repo.ontology",
+      "source_type": "repo_contract",
+      "label": "Meridian entity ontology and validators",
+      "paths": [
+        "docs/specs/ENTITY_ONTOLOGY.md",
+        "tests/entities.test.js",
+        "src/entities"
+      ],
+      "retrieval_date": null,
+      "reference_date": "2026-04-24",
+      "limitations": [
+        "Ontology refs describe local entity validation shape only.",
+        "Ontology refs do not supply official city-system field values."
+      ]
+    },
+    {
+      "ref_id": "manual.demo_seed_placeholder",
+      "category": "manual.demo_seed_placeholder",
+      "source_type": "manual_placeholder",
+      "label": "Manual local demo placeholder for missing official source expansion",
+      "paths": [],
+      "retrieval_date": null,
+      "reference_date": "2026-04-24",
+      "limitations": [
+        "Manual placeholder values are synthetic local demo values.",
+        "Placeholder values must not be treated as official Fort Worth records."
+      ]
+    }
+  ],
+  "limitations": [
+    "Local demo seed only; not a live Fort Worth city integration.",
+    "Not an official city record and not a permit, parcel, or utility system of record.",
+    "No accela automation, lookup, import, or sync is performed.",
+    "No gis automation, coordinates, parcel lookup, or geometry import is performed.",
+    "Source expansion for official permit and utility records is intentionally deferred."
+  ]
+}
