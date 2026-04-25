@@ -14,6 +14,7 @@ This lane stores durable wave/session closeout records.
 ## Available Closeouts
 
 - [`MERIDIAN_V1_MASTER_CLOSEOUT.md`](MERIDIAN_V1_MASTER_CLOSEOUT.md)
+- [`MERIDIAN_V2A_CLOSEOUT.md`](MERIDIAN_V2A_CLOSEOUT.md)
 - [`WAVE1_CLOSEOUT.md`](WAVE1_CLOSEOUT.md)
 - [`WAVE2_CLOSEOUT.md`](WAVE2_CLOSEOUT.md)
 - [`WAVE3_CLOSEOUT.md`](WAVE3_CLOSEOUT.md)
@@ -31,4 +32,4 @@ This lane stores durable wave/session closeout records.
 - [`WAVE8_CLOSEOUT.md`](WAVE8_CLOSEOUT.md)
 - [`WAVE9_CLOSEOUT.md`](WAVE9_CLOSEOUT.md)
 
-Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. Future expansion begins as Meridian V2 only under a new approved envelope.
+Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. V2-A is a local/demo-day extension closeout only; V2-B remains gated on supplied and inspected Foreman concept and Bronze prototype sources.

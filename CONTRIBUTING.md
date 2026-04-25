@@ -13,7 +13,7 @@
 - Work from repo truth and approved inputs.
 - Treat Meridian V1 as complete through Wave 9.
 - Treat Wave 9 as the final V1 wave; there is no Wave 10 in V1.
-- Treat future expansion as Meridian V2 only under a new approved envelope.
+- Treat V2-A as a local/demo-day Meridian V2 extension; V2-B remains gated on supplied and inspected Foreman concept and Bronze prototype sources.
 - Keep diffs minimal and within approved scope.
 - Surface uncertainty as HOLD.
 - Do not add adjacent changes without a new scoped session.
@@ -32,6 +32,7 @@
 - Treat Wave 8 corridor scenario outputs as integration-local `src/integration/**` and runner-local proof surfaces, not live broker/auth/audio/legal behavior.
 - Treat Wave 9 dashboard work as local-only `dashboard/**` snapshot consumption over committed payloads, not hosted deployment, auth, live broker, live network dependency, new governance computation, or legal/TPIA/TRAIGA compliance behavior.
 - Treat V1 closure docs as truth-surface routing only; they do not change shared contracts and do not require a migration row.
+- Treat V2-A live work as local/demo-day `src/live/**`, local script, and dashboard-local Live Mode truth. V2-A does not claim production behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, Auth0/OpenFGA integration, live Whisper/audio, legal compliance certification, dashboard-side truth computation, Foreman behavior, or V2-B behavior.
 
 ## Canon Vs Reference Boundaries
 
@@ -58,3 +59,4 @@
 - When touching the Wave 7 civic skins lane, sync `docs/specs/WAVE7_CIVIC_SKINS.md`, `docs/closeouts/WAVE7_CLOSEOUT.md`, `MIGRATIONS.md`, and current-truth front doors in the same session.
 - When touching the Wave 9 dashboard lane, sync `docs/specs/WAVE9_DASHBOARD.md`, `docs/closeouts/WAVE9_CLOSEOUT.md`, `dashboard/README.md`, and current-truth front doors in the same session; update `MIGRATIONS.md` only if a real shared contract changes.
 - When touching V1 final truth, sync `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`, `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`, and current-truth front doors without editing runtime, test, package, scenario, or historical Wave 1-9 closeout surfaces.
+- When touching the V2-A live lane, sync `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`, `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`, `MIGRATIONS.md`, `dashboard/README.md`, and current-truth front doors in the same session; do not modify runtime/test/dashboard source unless a later approved structural packet opens that scope.

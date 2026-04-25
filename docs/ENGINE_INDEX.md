@@ -2,14 +2,15 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, shipped Wave 7 civic skins rendering/proof surfaces, shipped Wave 8 corridor scenario integration/proof surfaces, and Wave 9 local dashboard proof surfaces. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, shipped Wave 7 civic skins rendering/proof surfaces, shipped Wave 8 corridor scenario integration/proof surfaces, Wave 9 local dashboard proof surfaces, and V2-A local/demo-day live civic nervous system surfaces. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
 
 ## V1 Closure Reference
 
 - `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`
 - `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - V1 remains local/proof infrastructure, not a deployed production city system.
-- Future expansion begins as Meridian V2 only under a new approved envelope.
+- V2-A is recorded separately in `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`.
+- V2-B remains gated on V2-A green closeout plus supplied and inspected Foreman concept and Bronze prototype sources.
 
 ## Bridge Substrate
 
@@ -95,14 +96,41 @@ Purpose: bounded Wave 8 integration surfaces for deterministic replay bridge out
 - `src/integration/resolutionCascade.js`
 - `scripts/run-corridor-scenario.js`
 
+## V2-A Local Live Lane
+
+Purpose: bounded local/demo-day live civic nervous system surfaces for local live sessions, local governance projection, JSON-only HoldPoint ingest, live absence, optional dashboard Live Mode, local seed/corridor generation, Constellation-compatible replay, and inert Foreman seams. V2-A does not ship production behavior, live city integration, legal compliance certification, live broker proof, Auth0/OpenFGA integration, live Whisper/audio, or Foreman behavior.
+
+- `src/live/contracts.js`
+- `src/live/liveFeedEvent.js`
+- `src/live/liveHashChain.js`
+- `src/live/liveSessionStore.js`
+- `src/live/liveEntityDelta.js`
+- `src/live/liveGovernanceGateway.js`
+- `src/live/liveDashboardProjection.js`
+- `src/live/liveEventBus.js`
+- `src/live/adapters/holdpointArtifactAdapter.js`
+- `src/live/adapters/captureToEntityDelta.js`
+- `src/live/adapters/holdpointArtifactIngest.js`
+- `src/live/absence/liveAbsenceProfiles.js`
+- `src/live/absence/liveAbsenceRules.js`
+- `src/live/absence/liveAbsenceEvaluator.js`
+- `src/live/cityData/fortWorthSeedManifest.js`
+- `src/live/cityData/fortWorthSeedPack.js`
+- `src/live/corridorGenerator.js`
+- `src/live/adapters/constellationReplayAdapter.js`
+- `scripts/run-live-governance.js`
+- `scripts/replay-constellation-stream.js`
+
 ## Local Dashboard Lane
 
-Purpose: bounded Wave 9 local dashboard proof over committed Wave 8 runner payload snapshots. The dashboard consumes `dashboard/public/scenarios/*.json`, uses `step.skins.outputs` as the canonical skin payload seam, and keeps Director Mode / Absence Lens view-only. It does not import `src/skins/**` in the browser and does not recompute governance, matching, forensic, or cascade truth.
+Purpose: bounded Wave 9 local dashboard proof over committed Wave 8 runner payload snapshots plus V2-A optional local Live Mode. The dashboard consumes `dashboard/public/scenarios/*.json`, uses `step.skins.outputs` as the canonical skin payload seam, keeps Director Mode / Absence Lens view-only, keeps snapshot mode default, and consumes `DashboardLiveProjectionV1` only when Live Mode is enabled. It does not import `src/skins/**` or root `src/live/**` in the browser and does not recompute governance, authority, matching, forensic, absence, skin, city, or cascade truth.
 
 - `dashboard/package.json`
 - `dashboard/index.html`
 - `dashboard/README.md`
 - `dashboard/src/**/*.ts*`
+- `dashboard/src/live/**/*.ts`
+- `dashboard/src/foremanGuide/**/*.tsx`
 - `dashboard/tests/**/*.ts*`
 - `dashboard/public/scenarios/*.json`
 
@@ -138,7 +166,7 @@ Purpose: read-only Meridian publisher subject builders and connection config imp
 
 ## Proof Surfaces
 
-Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, Wave 5 authority-topology proof surfaces, Wave 6 forensic-chain proof surfaces, Wave 7 civic skins proof surfaces, Wave 8 corridor scenario integration proof surfaces, and Wave 9 dashboard-local proof surfaces.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, Wave 5 authority-topology proof surfaces, Wave 6 forensic-chain proof surfaces, Wave 7 civic skins proof surfaces, Wave 8 corridor scenario integration proof surfaces, Wave 9 dashboard-local proof surfaces, and V2-A local live proof surfaces.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
@@ -182,6 +210,7 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runti
 - `tests/integration/corridorScenario.test.js`
 - `tests/integration/corridorCascade.test.js`
 - `tests/integration/corridorRunner.test.js`
+- `tests/live/*.test.js`
 - `tests/fixtures/scenarios/**/*`
 - `tests/pipeline/test_models.py`
 - `tests/pipeline/test_transcript_cache.py`
@@ -218,5 +247,7 @@ Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runti
 - `tests/fixtures/nats/commands.fixture.json`
 - `tests/fixtures/nats/publications.fixture.json`
 - `scripts/synthetic-constellation.js`
+- `scripts/run-live-governance.js`
+- `scripts/replay-constellation-stream.js`
 - `dashboard/tests/*.ts`
 - `dashboard/tests/*.tsx`

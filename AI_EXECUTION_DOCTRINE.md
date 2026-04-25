@@ -34,6 +34,7 @@ src/
   governance/shadows.js
   pipeline/*.py
   skins/**/*.js
+  live/**/*.js
 tests/
   bridge.chainPublisher.test.js
   bridge*.test.js
@@ -57,6 +58,7 @@ tests/
   governance.runtimeSubset.test.js
   governance.sweep.test.js
   skins*.test.js
+  live/*.test.js
   pipeline/*.py
   pipeline/calibration/*.py
   pipeline/calibration/**/*.json
@@ -86,8 +88,10 @@ docs/
   closeouts/WAVE8_CLOSEOUT.md
   closeouts/WAVE9_CLOSEOUT.md
   closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md
+  closeouts/MERIDIAN_V2A_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
   specs/MERIDIAN_V1_FINAL_TRUTH.md
+  specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md
   specs/NATS_EVENT_COMMAND_TRANSLATION.md
   specs/WAVE4A_GOVERNANCE_RUNTIME.md
   specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md
@@ -101,11 +105,15 @@ docs/
 scripts/
   synthetic-constellation.js
   run-corridor-scenario.js
+  run-live-governance.js
+  replay-constellation-stream.js
 dashboard/
   README.md
   package.json
   index.html
   public/scenarios/*.json
+  src/live/**/*.ts
+  src/foremanGuide/**/*.tsx
   src/**/*.ts*
   tests/**/*.ts*
 ```
@@ -116,7 +124,8 @@ dashboard/
 - Treat Meridian V1 as complete through Wave 9.
 - Treat Wave 9 as the final V1 wave.
 - Do not create or describe Wave 10 as active V1 scope; there is no Wave 10 in V1.
-- Treat future expansion as Meridian V2 only under a new approved envelope.
+- Treat V2-A as a local/demo-day Meridian V2 extension with truth surfaces in `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`.
+- Treat V2-B as gated on V2-A green closeout plus supplied and inspected Foreman concept and Bronze prototype sources.
 - Keep scope locked to the approved block.
 - Preserve canon alignment across root documents.
 - Treat upstream references as references unless their contents are available in this repo.
@@ -131,6 +140,7 @@ dashboard/
 - Describe Wave 8 only as bounded corridor scenario integration surfaces, not as dashboard/UI runtime, deployment/hosting, live broker proof, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, legal sufficiency, TRAIGA compliance, persistent match-result storage, chain replay engine, or multi-corridor routing in one run.
 - Describe Wave 9 only as a local dashboard proof over committed snapshots, not as production application behavior, hosted deployment, auth, live broker proof, live network dependency, public portal behavior, new governance computation, legal sufficiency, TPIA compliance, TRAIGA compliance, official disclosure approval, or real city runtime behavior.
 - Describe Meridian V1 only as completed local/proof infrastructure, not as a deployed production city system or legal compliance certification.
+- Describe V2-A only as local/demo-day live session, gateway/projection, JSON-only HoldPoint adapter, live absence, optional local Live Mode, local seed/corridor, and replay surfaces. Do not describe V2-A as production behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, live Auth0/OpenFGA integration, live Whisper/audio ingestion, legal compliance certification, dashboard-side truth computation, Foreman behavior, or V2-B behavior.
 
 ## Planning Gate
 
@@ -152,6 +162,7 @@ dashboard/
 - Do not overstate Wave 7 rendering surfaces as runtime/bridge/pipeline/entity/forensic/config/package widening.
 - Do not overstate Wave 9 local dashboard proof as hosted, auth-wired, live-networked, or legally sufficient behavior.
 - Do not describe a Wave 10 as part of V1.
+- Do not overstate V2-A local/demo-day surfaces as deployed, official, legally certified, live-broker-backed, auth-wired, audio-backed, Foreman-enabled, or V2-B behavior.
 - Stop if repo truth conflicts with the approved task.
 
 ## Verification Rules
@@ -176,6 +187,8 @@ dashboard/
 - Wave 8 adds integration-local contracts only under `src/integration/**` plus runner-local report output in `scripts/run-corridor-scenario.js`.
 - Wave 9 adds dashboard-local package and committed snapshot consumption only; it does not widen root runtime, governance, bridge, pipeline, forensic, skin, entity, config, or package contracts.
 - V1 closure docs do not change shared contracts; they route to final V1 truth and carry remaining HOLDs.
+- V2-A adds a shared local live contract family recorded in `MIGRATIONS.md` and keeps adapter-local `holdpointArtifactJson.v1` plus dashboard-local TypeScript mirrors out of shared contract source unless a later approved packet promotes them.
+- V2-A does not widen V1 contracts, Wave 6 forensic-chain contracts, `BridgeEnvelope`, `GovernancePublication`, NATS, package dependencies, auth/config/security surfaces, or legal/live-system claims.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 

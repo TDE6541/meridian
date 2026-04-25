@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures), and a Wave 9 local dashboard proof under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. This repo is still not a production application; the dashboard is a local-only demo package.
+Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures), a Wave 9 local dashboard proof under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots, and a V2-A local/demo-day live civic nervous system extension. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. This repo is still not a production application; the dashboard is a local-only demo package with snapshot default and optional local Live Mode.
 
 ## Agent Start Here
 
@@ -10,10 +10,14 @@ Meridian is a governed city digital twin intelligence repo. The repo contains th
 4. [docs/INDEX.md](docs/INDEX.md)
 5. [docs/specs/MERIDIAN_V1_FINAL_TRUTH.md](docs/specs/MERIDIAN_V1_FINAL_TRUTH.md)
 6. [docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md](docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md)
+7. [docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md](docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md)
+8. [docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md)
 
 ## Current Status
 
-Meridian V1 is complete through Wave 9. The final V1 implementation baseline commit is `3374d0f4ad7d410cdd37a765db8d473b36f92482` (`docs(dashboard): close wave9 local dashboard lane`). Wave 9 is the final V1 wave. There is no Wave 10 in V1. Future expansion begins as Meridian V2 only under a new approved envelope.
+Meridian V1 is complete through Wave 9. The final V1 implementation baseline commit is `3374d0f4ad7d410cdd37a765db8d473b36f92482` (`docs(dashboard): close wave9 local dashboard lane`). Wave 9 is the final V1 wave. There is no Wave 10 in V1.
+
+Meridian V2-A is the local/demo-day extension now recorded by `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`. V2-A ships local live session records, local governance projection, JSON-only HoldPoint ingest, live-computed absence findings, optional dashboard Live Mode, local demo seed/corridor generation, and Constellation-compatible replay. V2-A does not ship production behavior, live city integration, legal compliance certification, live broker proof, Auth0/OpenFGA integration, live Whisper/audio, or Foreman behavior.
 
 ## V1 Final Truth
 
@@ -24,6 +28,16 @@ Meridian V1 is complete through Wave 9. The final V1 implementation baseline com
 - Remaining visual HOLDs: 1920x1080 and 1280x720 screenshot-level proof remain not screenshot-verified.
 - Local dashboard command: `npm --prefix dashboard run dev`
 - Local dashboard URL: `http://localhost:5173/`
+
+## V2-A Local Demo-Day Extension
+
+- V2-A spec: `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`
+- V2-A closeout: `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`
+- Shared V2-A local live contract family: `meridian.v2.liveSession.v1`, `meridian.v2.liveSessionRecord.v1`, `meridian.v2.liveFeedEvent.v1`, `meridian.v2.entityDelta.v1`, `meridian.v2.liveGovernanceEvaluation.v1`, `meridian.v2.dashboardLiveProjection.v1`, `meridian.v2.liveAbsenceFinding.v1`, `meridian.v2.citySeedManifest.v1`, and `meridian.v2.constellationReplay.v1`.
+- Generated local live session state: `.meridian/live-sessions/` (ignored).
+- Dashboard posture: snapshot mode remains default; Live Mode is optional/local and emits HOLD messaging when disconnected or invalid.
+- Foreman posture: `foreman_hints`, `foreman_context_seed`, and the dashboard mount are preserved as inert seams only.
+- V2-B gate: remains HOLD until Foreman concept source, Bronze prototype source, and V2-A green closeout evidence are supplied and inspected.
 
 ## What This Is
 
@@ -72,6 +86,14 @@ Meridian V1 is complete through Wave 9. The final V1 implementation baseline com
   - forensic, relationship, and cascade choreography views over committed snapshots
   - Director Mode / Absence Lens as view-only overlays over source-bounded payload truth
   - local demo command `npm --prefix dashboard run dev` at `http://localhost:5173/`
+- A V2-A local/demo-day live civic nervous system extension under `src/live/**`, `scripts/run-live-governance.js`, `scripts/replay-constellation-stream.js`, and dashboard-local Live Mode surfaces with:
+  - local hash-linked live session persistence under `.meridian/live-sessions/`
+  - local live governance evaluation and dashboard projection
+  - JSON-only HoldPoint artifact ingest
+  - live-computed absence findings distinct from the Wave 9 snapshot Absence Lens
+  - source-manifested local demo Fort Worth seed data and parameterized corridor generation
+  - Constellation-compatible replay with structured HOLD for missing live broker proof
+  - inert Foreman seams only
 - A single external runtime dependency surface in `package.json`: `nats`.
 
 ## What This Is Not
@@ -98,6 +120,11 @@ Meridian V1 is complete through Wave 9. The final V1 implementation baseline com
 - Not live Whisper/audio ingestion.
 - Not real TPIA legal sufficiency or TRAIGA 2.0 compliance claims.
 - Not new governance computation inside the dashboard.
+- Not live Fort Worth city integration.
+- Not full Accela/GIS automation.
+- Not live Constellation broker proof.
+- Not Foreman behavior, Foreman API, Foreman model call, voice/avatar, narration, chat panel, or autonomous Foreman action.
+- Not V2-B ship scope.
 
 ## Repo Structure
 
@@ -113,10 +140,12 @@ src/
   integration/*.js
   pipeline/*.py
   skins/**/*.js
+  live/**/*.js
 tests/
   bridge*.test.js
   bridge.chainPublisher.test.js
   integration/*.test.js
+  live/*.test.js
   governance*.test.js
   governance.forensic*.test.js
   governance.chainWriter.test.js
@@ -129,8 +158,12 @@ tests/
   pipeline/**/*.py
 scripts/
   run-corridor-scenario.js
+  run-live-governance.js
+  replay-constellation-stream.js
 dashboard/
   public/scenarios/*.json
+  src/live/**/*.ts
+  src/foremanGuide/**/*.tsx
   src/**/*.ts*
   tests/**/*.ts*
   README.md
@@ -142,9 +175,9 @@ docs/
   specs/*.md
 ```
 
-## V2 Boundary / Deferred Beyond V1
+## V2 Boundary / Deferred Beyond V2-A
 
-Future work starts as Meridian V2 only after a new approved envelope. This list is not a V2 plan.
+V2-A is the bounded local/demo-day V2 extension recorded in this repo. Later V2 work remains gated by a new approved envelope. This list is not a V2-B plan.
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
 - Generalized event routing and authority-topology widening beyond the bounded lanes.
@@ -156,6 +189,7 @@ Future work starts as Meridian V2 only after a new approved envelope. This list 
 - Multi-corridor routing in one scenario run.
 - Persistent match-result storage.
 - Chain replay engine.
+- Foreman behavior beyond the inert V2-A seams remains gated on supplied and inspected Foreman concept and Bronze prototype sources.
 
 ## Upstream References
 
