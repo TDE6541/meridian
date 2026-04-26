@@ -30,6 +30,7 @@ import {
   type DashboardMode,
 } from "./LiveModeToggle.tsx";
 import { PlaybackControls } from "./PlaybackControls.tsx";
+import { RoleSessionPanel } from "./RoleSessionPanel.tsx";
 import { ScenarioSelector } from "./ScenarioSelector.tsx";
 import { SkinPanel } from "./SkinPanel.tsx";
 import { SkinSwitcher } from "./SkinSwitcher.tsx";
@@ -42,8 +43,10 @@ import { DirectorModeToggle } from "./director/DirectorModeToggle.tsx";
 import { JudgeCuePanel } from "./director/JudgeCuePanel.tsx";
 import { PreventedActionCard } from "./director/PreventedActionCard.tsx";
 import { ForemanMountPoint } from "../foremanGuide/ForemanMountPoint.tsx";
+import { useMeridianAuth } from "../auth/MeridianAuthProvider.tsx";
 import type { LiveProjectionClient } from "../live/liveClient.ts";
 import { useLiveProjection } from "../live/useLiveProjection.ts";
+import { resolveDashboardRoleSession } from "../roleSession/resolveRoleSession.ts";
 import {
   advancePlayback,
   buildTimelineSteps,
@@ -124,6 +127,12 @@ export function ControlRoomShell({
   const [directorModeEnabled, setDirectorModeEnabled] = useState(
     initialDirectorModeEnabled
   );
+  const authState = useMeridianAuth();
+  const roleSession = resolveDashboardRoleSession({
+    activeSkin: controlState.activeSkinTab,
+    auth: authState,
+  });
+  const activeSkinTab = roleSession.active_skin;
 
   const selectedRecord =
     getScenarioRecord(records, controlState.selectedScenarioKey) ?? records[0];
@@ -139,7 +148,7 @@ export function ControlRoomShell({
   );
   const skinViews = currentStep ? adaptStepSkinPayloads(currentStep.step) : [];
   const activeSkinView =
-    getDashboardSkinView(skinViews, controlState.activeSkinTab) ??
+    getDashboardSkinView(skinViews, activeSkinTab) ??
     skinViews[0] ??
     null;
   const entityRelationshipView = adaptEntityRelationships(currentStep);
@@ -181,7 +190,7 @@ export function ControlRoomShell({
       ? `${controlState.activeStepIndex + 1}/${totalSteps}`
       : "Unavailable";
   const activeSkinLabel =
-    activeSkinView?.label ?? formatSkinLabel(controlState.activeSkinTab);
+    activeSkinView?.label ?? formatSkinLabel(activeSkinTab);
 
   useEffect(() => {
     if (controlState.playbackState !== "playing" || totalSteps === 0) {
@@ -196,6 +205,18 @@ export function ControlRoomShell({
       window.clearInterval(timer);
     };
   }, [controlState.playbackState, totalSteps, controlState.selectedScenarioKey]);
+
+  useEffect(() => {
+    if (controlState.activeSkinTab === roleSession.active_skin) {
+      return;
+    }
+
+    setControlState((current) =>
+      current.activeSkinTab === roleSession.active_skin
+        ? current
+        : selectSkinTab(current, roleSession.active_skin)
+    );
+  }, [controlState.activeSkinTab, roleSession.active_skin]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -223,6 +244,9 @@ export function ControlRoomShell({
       const selectedShortcutSkin = resolveSkinShortcutKey(event.key);
       if (selectedShortcutSkin) {
         event.preventDefault();
+        if (!roleSession.allowed_skins.includes(selectedShortcutSkin)) {
+          return;
+        }
         setControlState((current) =>
           current.activeSkinTab === selectedShortcutSkin
             ? current
@@ -277,7 +301,7 @@ export function ControlRoomShell({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [records]);
+  }, [records, roleSession.allowed_skins]);
 
   return (
     <section
@@ -295,6 +319,8 @@ export function ControlRoomShell({
       />
 
       <LiveModeToggle mode={dashboardMode} onModeChange={setDashboardMode} />
+
+      <RoleSessionPanel auth={authState} roleSession={roleSession} />
 
       <div className="control-room-toolbar">
         <ScenarioSelector
@@ -401,11 +427,14 @@ export function ControlRoomShell({
           </AbsenceLensOverlay>
 
           <SkinSwitcher
-            activeSkinTab={controlState.activeSkinTab}
+            activeSkinTab={activeSkinTab}
+            allowedSkins={roleSession.allowed_skins}
             message={getShellMessage(selectedRecord)}
-            onSelect={(skinKey) =>
-              setControlState((current) => selectSkinTab(current, skinKey))
-            }
+            onSelect={(skinKey) => {
+              if (roleSession.allowed_skins.includes(skinKey)) {
+                setControlState((current) => selectSkinTab(current, skinKey));
+              }
+            }}
             status={selectedRecord?.status ?? "loading"}
             views={skinViews}
           />

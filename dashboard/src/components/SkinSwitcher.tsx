@@ -6,6 +6,7 @@ import type { ControlRoomScenarioRecord } from "../state/controlRoomState.ts";
 
 export interface SkinSwitcherProps {
   activeSkinTab: DashboardSkinKey;
+  allowedSkins?: readonly DashboardSkinKey[];
   message?: string;
   onSelect: (key: DashboardSkinKey) => void;
   status: ControlRoomScenarioRecord["status"];
@@ -14,6 +15,7 @@ export interface SkinSwitcherProps {
 
 export function SkinSwitcher({
   activeSkinTab,
+  allowedSkins,
   message,
   onSelect,
   status,
@@ -36,32 +38,47 @@ export function SkinSwitcher({
           role="tablist"
           aria-label="Audience views"
         >
-          {views.map((view) => (
-            <button
-              type="button"
-              key={view.key}
-              id={`skin-tab-${view.key}`}
-              role="tab"
-              aria-selected={view.key === activeSkinTab}
-              aria-controls={`skin-panel-${view.key}`}
-              className={[
-                "skin-tab",
-                view.key === activeSkinTab ? "skin-tab--active" : "",
-                view.isMissing ? "skin-tab--missing" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              data-skin-tab={view.key}
-              onClick={() => onSelect(view.key)}
-            >
-              <span className="skin-tab__eyebrow">{view.key}</span>
-              <strong>{view.label}</strong>
-              <span className="skin-tab__description">{view.description}</span>
-              {view.isMissing ? (
-                <span className="skin-tab__status">Payload unavailable</span>
-              ) : null}
-            </button>
-          ))}
+          {views.map((view) => {
+            const isAllowed = allowedSkins ? allowedSkins.includes(view.key) : true;
+
+            return (
+              <button
+                type="button"
+                key={view.key}
+                id={`skin-tab-${view.key}`}
+                role="tab"
+                aria-selected={view.key === activeSkinTab}
+                aria-controls={`skin-panel-${view.key}`}
+                aria-disabled={!isAllowed}
+                className={[
+                  "skin-tab",
+                  view.key === activeSkinTab ? "skin-tab--active" : "",
+                  view.isMissing ? "skin-tab--missing" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                data-skin-tab={view.key}
+                disabled={!isAllowed}
+                onClick={() => {
+                  if (isAllowed) {
+                    onSelect(view.key);
+                  }
+                }}
+              >
+                <span className="skin-tab__eyebrow">{view.key}</span>
+                <strong>{view.label}</strong>
+                <span className="skin-tab__description">{view.description}</span>
+                {!isAllowed ? (
+                  <span className="skin-tab__status">
+                    Local dashboard role boundary
+                  </span>
+                ) : null}
+                {view.isMissing ? (
+                  <span className="skin-tab__status">Payload unavailable</span>
+                ) : null}
+              </button>
+            );
+          })}
         </div>
       )}
     </section>
