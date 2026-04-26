@@ -121,6 +121,21 @@ function validateRequiredNullableStringField(object, fieldName, issues) {
   validateNullableStringField(object[fieldName], fieldName, issues);
 }
 
+function validateOptionalStringArrayField(object, fieldName, issues) {
+  if (!Object.prototype.hasOwnProperty.call(object, fieldName)) {
+    return;
+  }
+
+  if (!Array.isArray(object[fieldName])) {
+    issues.push(`${fieldName} must be an array when present.`);
+    return;
+  }
+
+  if (!object[fieldName].every(isNonEmptyString)) {
+    issues.push(`${fieldName} must contain only non-empty strings.`);
+  }
+}
+
 function createAuthorityHold({
   code,
   reason,
@@ -200,6 +215,12 @@ function validateAuthorityResolutionRequestV1(request) {
       issues
     );
   }
+
+  validateOptionalStringArrayField(
+    request,
+    "consumed_action_token_hashes",
+    issues
+  );
 
   return createValidationResult(issues);
 }

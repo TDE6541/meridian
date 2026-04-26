@@ -52,6 +52,23 @@ test("authority contracts: invalid status fails", () => {
   assert.match(validation.issues.join("\n"), /status is not allowed/);
 });
 
+test("authority contracts: consumed action token hashes are optional but validated", () => {
+  const valid = validateAuthorityResolutionRequestV1(
+    createValidRequest({
+      consumed_action_token_hashes: ["abc123"],
+    })
+  );
+  const invalid = validateAuthorityResolutionRequestV1(
+    createValidRequest({
+      consumed_action_token_hashes: ["abc123", ""],
+    })
+  );
+
+  assert.equal(valid.valid, true, valid.issues.join("\n"));
+  assert.equal(invalid.valid, false);
+  assert.match(invalid.issues.join("\n"), /consumed_action_token_hashes/);
+});
+
 test("authority contracts: blank required authority role fails", () => {
   const validation = validateAuthorityResolutionRequestV1(
     createValidRequest({ required_authority_role: " " })

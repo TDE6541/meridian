@@ -90,6 +90,35 @@ test("authority request store: returns pending by source absence id", () => {
   );
 });
 
+test("authority request store: updates request status and consumed token hashes", () => {
+  const store = createAuthorityRequestStore([createValidRequest()]);
+  const updated = store.updateRequestById("ARR-0001", (request) => ({
+    ...request,
+    status: "approved",
+    consumed_action_token_hashes: ["hash-1"],
+  }));
+
+  assert.equal(updated.ok, true, updated.issues.join("\n"));
+  assert.equal(updated.previous_request.status, "pending");
+  assert.equal(updated.request.status, "approved");
+  assert.deepEqual(
+    store.getRequestById("ARR-0001").consumed_action_token_hashes,
+    ["hash-1"]
+  );
+});
+
+test("authority request store: update rejects request id mutation", () => {
+  const store = createAuthorityRequestStore([createValidRequest()]);
+  const updated = store.updateRequestById("ARR-0001", (request) => ({
+    ...request,
+    request_id: "ARR-0002",
+  }));
+
+  assert.equal(updated.ok, false);
+  assert.deepEqual(updated.issues, ["request_id cannot be changed."]);
+  assert.equal(store.getRequestById("ARR-0001").request_id, "ARR-0001");
+});
+
 test("authority request store: exports deterministic snapshot", () => {
   const store = createAuthorityRequestStore([
     createValidRequest({ request_id: "ARR-0001", source_absence_id: "absence-1" }),
