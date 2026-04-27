@@ -51,6 +51,7 @@ import { DirectorModeToggle } from "./director/DirectorModeToggle.tsx";
 import { GARPStatusIndicator } from "./GARPStatusIndicator.tsx";
 import { JudgeCuePanel } from "./director/JudgeCuePanel.tsx";
 import { PreventedActionCard } from "./director/PreventedActionCard.tsx";
+import { buildForemanGuideContext } from "../foremanGuide/foremanGuideContext.ts";
 import { ForemanMountPoint } from "../foremanGuide/ForemanMountPoint.tsx";
 import { useMeridianAuth } from "../auth/MeridianAuthProvider.tsx";
 import type { LiveProjectionClient } from "../live/liveClient.ts";
@@ -223,6 +224,40 @@ export function ControlRoomShell({
     garpHandoffContext,
     report: disclosurePreviewReport,
     roleSession,
+  });
+  const foremanGuideContext = buildForemanGuideContext({
+    activePanel: dashboardMode === "live"
+      ? "live"
+      : directorModeEnabled
+        ? "director"
+        : "snapshot",
+    authorityState,
+    disclosurePreviewReport,
+    garpHandoffContext,
+    liveProjection: liveProjection.projection,
+    roleSession,
+    snapshot: {
+      activePanel: dashboardMode === "live" ? "live" : "snapshot",
+      activeSkin: activeSkinTab,
+      currentStep,
+      scenarioId,
+      sessionId:
+        selectedRecord?.status === "ready"
+          ? `snapshot:${selectedRecord.entry.key}`
+          : null,
+      sourceRefs:
+        selectedRecord?.status === "ready"
+          ? [
+              {
+                evidence_id: scenarioId,
+                label: "committed scenario snapshot",
+                path: `dashboard/public/scenarios/${selectedRecord.entry.fileName}`,
+                source_kind: "snapshot.file",
+                source_ref: `snapshot.file:dashboard/public/scenarios/${selectedRecord.entry.fileName}`,
+              },
+            ]
+          : [],
+    },
   });
 
   useEffect(() => {
@@ -412,13 +447,15 @@ export function ControlRoomShell({
             <>
               <LiveEventRail events={liveProjection.projection.events} />
               <LiveCapturePanel projection={liveProjection.projection} />
-              <ForemanMountPoint
-                foremanContextSeed={liveProjection.projection.foreman_context_seed}
-              />
             </>
           ) : null}
         </div>
       ) : null}
+
+      <ForemanMountPoint
+        foremanContextSeed={liveProjection.projection?.foreman_context_seed ?? null}
+        guideContext={foremanGuideContext}
+      />
 
       {directorModeEnabled ? (
         <>

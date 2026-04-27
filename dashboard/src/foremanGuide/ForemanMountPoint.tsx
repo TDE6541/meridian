@@ -1,12 +1,20 @@
 import type { ForemanContextSeedV1 } from "../live/liveTypes.ts";
+import { ForemanGuidePanel } from "../components/ForemanGuidePanel.tsx";
+import type { ForemanGuideContextV1 } from "./foremanGuideTypes.ts";
 
 export interface ForemanMountPointProps {
-  foremanContextSeed: ForemanContextSeedV1 | null;
+  foremanContextSeed?: ForemanContextSeedV1 | null;
+  guideContext?: ForemanGuideContextV1 | null;
 }
 
 export function ForemanMountPoint({
-  foremanContextSeed,
+  foremanContextSeed = null,
+  guideContext = null,
 }: ForemanMountPointProps) {
+  if (guideContext) {
+    return <ForemanGuidePanel context={guideContext} />;
+  }
+
   return (
     <section
       className="panel foreman-mount-point"
