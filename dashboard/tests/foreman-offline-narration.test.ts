@@ -172,8 +172,9 @@ const tests = [
         await createGuideContext()
       );
 
-      assert.equal(response.response_kind, "authority_summary");
-      assert.equal(response.answer.includes("GARP counts"), true);
+      assert.equal(response.response_kind, "authority_lifecycle");
+      assert.equal(response.answer.includes("Authority lifecycle"), true);
+      assert.equal(response.answer.includes("pending"), true);
       assert.equal(response.source_refs.some((ref) => ref.source_kind.includes("authority")), true);
     },
   },
@@ -185,7 +186,7 @@ const tests = [
         await createGuideContext()
       );
 
-      assert.equal(response.response_kind, "disclosure_boundary");
+      assert.equal(response.response_kind, "public_boundary");
       assert.equal(response.answer.includes("Demo disclosure preview only"), true);
       assert.equal(response.answer.toLowerCase().includes("redaction"), true);
     },

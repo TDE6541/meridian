@@ -3,16 +3,24 @@ import type {
   ForemanGuideHold,
   ForemanGuideSourceRef,
 } from "./foremanGuideTypes.ts";
+import {
+  answerAuthorityNarration,
+  type AuthorityNarrationKind,
+} from "./authorityNarration.ts";
 
 export const FOREMAN_GUIDE_RESPONSE_VERSION =
   "meridian.v2.foremanGuideResponse.v1" as const;
 
 export type ForemanGuideResponseKind =
   | "architecture_difference"
+  | "authority_challenge"
+  | "authority_lifecycle"
   | "authority_summary"
   | "disclosure_boundary"
+  | "garp_handoff"
   | "hold"
   | "hold_doctrine"
+  | "public_boundary"
   | "role_session"
   | "walk_summary"
   | "absence_summary";
@@ -135,14 +143,20 @@ function normalizeQuestion(question: string): string {
 
 function isRestrictedQuestion(question: string): boolean {
   return [
+    "ciba",
     "code line",
     "compliance",
     "deployed",
     "fort worth live",
+    "forensicchain",
+    "forensic chain write",
     "legal",
     "line number",
+    "notification delivery",
     "official city",
+    "openfga",
     "production",
+    "public portal",
     "source line",
     "tpia",
   ].some((term) => question.includes(term));
@@ -152,9 +166,72 @@ function includesAny(question: string, terms: readonly string[]): boolean {
   return terms.some((term) => question.includes(term));
 }
 
-function classifyQuestion(question: string): ForemanGuideResponseKind | "unsupported" {
+function classifyQuestion(
+  question: string
+): ForemanGuideResponseKind | AuthorityNarrationKind | "unsupported" {
   if (question.length === 0 || isRestrictedQuestion(question)) {
     return "unsupported";
+  }
+
+  if (includesAny(question, ["challenge", "what could go wrong", "what is missing"])) {
+    return "authority_challenge";
+  }
+
+  if (
+    includesAny(question, [
+      "does not approve",
+      "doesn't approve",
+      "not approved",
+      "not approve",
+      "what just happened with authority",
+      "authority request",
+      "pending authority",
+      "approved authority",
+      "denied authority",
+    ])
+  ) {
+    return "authority_lifecycle";
+  }
+
+  if (
+    includesAny(question, [
+      "garp",
+      "foreman making",
+      "foreman make",
+      "foreman deciding",
+      "foreman decide",
+      "foreman resolve",
+      "making the decision",
+    ])
+  ) {
+    return "garp_handoff";
+  }
+
+  if (
+    includesAny(question, [
+      "who am i",
+      "logged in",
+      "login",
+      "role",
+      "session",
+      "auth0",
+      "authenticated",
+      "public viewer",
+      "field inspector",
+      "department director",
+      "operations lead",
+      "what can my role",
+    ])
+  ) {
+    return "role_session";
+  }
+
+  if (includesAny(question, ["public", "disclosure", "redaction", "boundary"])) {
+    return "public_boundary";
+  }
+
+  if (includesAny(question, ["authority", "approval", "resolution"])) {
+    return "authority_lifecycle";
   }
 
   if (includesAny(question, ["walk", "proof", "current", "state", "status"])) {
@@ -169,19 +246,7 @@ function classifyQuestion(question: string): ForemanGuideResponseKind | "unsuppo
     return "absence_summary";
   }
 
-  if (includesAny(question, ["authority", "garp", "approval", "resolution"])) {
-    return "authority_summary";
-  }
-
-  if (includesAny(question, ["public", "disclosure", "redaction", "boundary"])) {
-    return "disclosure_boundary";
-  }
-
-  if (includesAny(question, ["role", "session", "auth", "login"])) {
-    return "role_session";
-  }
-
-  if (includesAny(question, ["different", "challenge", "architecture", "prototype"])) {
+  if (includesAny(question, ["different", "architecture", "prototype"])) {
     return "architecture_difference";
   }
 
@@ -345,6 +410,20 @@ function answerArchitecture(context: ForemanGuideContextV1): ForemanGuideRespons
   });
 }
 
+function answerB3Narration(
+  responseKind: AuthorityNarrationKind,
+  context: ForemanGuideContextV1
+): ForemanGuideResponseV1 {
+  const draft = answerAuthorityNarration(responseKind, context);
+
+  return makeResponse({
+    answer: draft.answer,
+    holds: draft.holds,
+    responseKind: draft.responseKind,
+    sourceRefs: draft.sourceRefs,
+  });
+}
+
 export function answerForemanGuideOffline(
   question: string,
   context: ForemanGuideContextV1 | null
@@ -363,8 +442,9 @@ export function answerForemanGuideOffline(
     return createUnsupportedForemanResponse(
       [
         "supported B2 category",
+        "supported B3 authority narration category",
         "current B1 context source refs",
-        "Architect-approved wider source if this is outside B2",
+        "Architect-approved wider source if this is outside B2/B3",
       ],
       "foreman.offline.question"
     );
@@ -391,7 +471,16 @@ export function answerForemanGuideOffline(
   }
 
   if (responseKind === "role_session") {
-    return answerRoleSession(context);
+    return answerB3Narration(responseKind, context);
+  }
+
+  if (
+    responseKind === "authority_lifecycle" ||
+    responseKind === "garp_handoff" ||
+    responseKind === "public_boundary" ||
+    responseKind === "authority_challenge"
+  ) {
+    return answerB3Narration(responseKind, context);
   }
 
   return answerArchitecture(context);

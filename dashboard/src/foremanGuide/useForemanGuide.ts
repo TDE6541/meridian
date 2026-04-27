@@ -12,9 +12,9 @@ export const FOREMAN_QUICK_ACTIONS = [
     prompt: "Walk the proof",
   },
   {
-    id: "hold-guess",
-    label: "What is HOLD > GUESS?",
-    prompt: "What is HOLD > GUESS?",
+    id: "role-capabilities",
+    label: "What can my role do?",
+    prompt: "What can my role do?",
   },
   {
     id: "show-absence",

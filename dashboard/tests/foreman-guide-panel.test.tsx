@@ -82,7 +82,7 @@ const tests = [
 
       for (const label of [
         "Walk the proof",
-        "What is HOLD &gt; GUESS?",
+        "What can my role do?",
         "Show me an absence",
         "Explain authority",
         "Public view",
