@@ -16,12 +16,17 @@ export type ForemanGuideResponseKind =
   | "authority_challenge"
   | "authority_lifecycle"
   | "authority_summary"
+  | "absence_mode"
   | "disclosure_boundary"
   | "garp_handoff"
   | "hold"
   | "hold_doctrine"
+  | "challenge_mode"
+  | "judge_mode"
+  | "public_mode"
   | "public_boundary"
   | "role_session"
+  | "walk_mode"
   | "walk_summary"
   | "absence_summary";
 

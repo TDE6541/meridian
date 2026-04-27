@@ -8,6 +8,7 @@ import type { ForemanGuideSignalV1 } from "../foremanGuide/foremanSignals.ts";
 import { getForemanPanelLabel } from "../foremanGuide/panelRegistry.ts";
 import {
   useForemanGuide,
+  type ForemanGuideModeId,
   type ForemanQuickActionId,
 } from "../foremanGuide/useForemanGuide.ts";
 
@@ -101,12 +102,17 @@ export function ForemanGuidePanel({
     clearProactiveSignals,
     loading,
     messages,
+    modes,
     pauseProactiveNarration,
     proactivePaused,
     proactiveSignalCount,
     proactiveSignals,
     quickActions,
     resumeProactiveNarration,
+    selectedMode,
+    selectedModeId,
+    selectMode,
+    submitMode,
     submitQuestion,
     submitQuickAction,
   } = useForemanGuide(context, {
@@ -219,6 +225,43 @@ export function ForemanGuidePanel({
           </div>
 
           {renderProactiveSignals(proactiveSignals)}
+
+          <div
+            className="foreman-guide-panel__mode-controls"
+            aria-label="Foreman Gold modes"
+          >
+            <div className="foreman-guide-panel__mode-status">
+              <span className="fact-label">Active mode</span>
+              <strong>{selectedMode.label} Mode</strong>
+              <span className="detail-copy">
+                {selectedMode.disabled_reason ?? selectedMode.summary}
+              </span>
+            </div>
+            <div className="foreman-guide-panel__mode-buttons">
+              {modes.map((mode) => (
+                <button
+                  aria-disabled={mode.eligible ? "false" : "true"}
+                  aria-pressed={mode.mode_id === selectedModeId}
+                  className={`foreman-guide-panel__mode-button${mode.mode_id === selectedModeId ? " foreman-guide-panel__mode-button--active" : ""}`}
+                  data-foreman-mode-id={mode.mode_id}
+                  data-foreman-mode-eligible={mode.eligible ? "true" : "false"}
+                  key={mode.mode_id}
+                  title={mode.disabled_reason ?? mode.summary}
+                  type="button"
+                  onClick={() => selectMode(mode.mode_id as ForemanGuideModeId)}
+                >
+                  {mode.label}
+                </button>
+              ))}
+              <button
+                className="control-button control-button--primary"
+                type="button"
+                onClick={() => submitMode(selectedModeId)}
+              >
+                Run mode
+              </button>
+            </div>
+          </div>
 
           <div
             className="foreman-guide-panel__quick-actions"

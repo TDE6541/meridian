@@ -9,6 +9,13 @@ import {
   answerForemanGuideOffline,
   type ForemanGuideResponseV1,
 } from "./offlineNarration.ts";
+import {
+  answerForemanGuideMode,
+  type ForemanGuideModeId,
+} from "./foremanModes.ts";
+import { useForemanModes } from "./useForemanModes.ts";
+
+export type { ForemanGuideModeId };
 
 export const FOREMAN_QUICK_ACTIONS = [
   {
@@ -111,6 +118,24 @@ export function appendForemanGuideExchange(
   ];
 }
 
+export function appendForemanGuideModeResponse(
+  messages: readonly ForemanGuideMessage[],
+  modeId: ForemanGuideModeId,
+  context: ForemanGuideContextV1 | null
+): ForemanGuideMessage[] {
+  const response = answerForemanGuideMode(modeId, context);
+
+  return [
+    ...messages,
+    {
+      content: response.answer,
+      id: nextMessageId(messages, `${modeId}-mode`),
+      response,
+      speaker: "foreman",
+    },
+  ];
+}
+
 export function appendProactiveForemanSignals({
   context,
   messages,
@@ -179,6 +204,7 @@ export function useForemanGuide(
   >(() =>
     (options.proactiveSignals ?? []).slice(0, MAX_VISIBLE_PROACTIVE_SIGNALS)
   );
+  const foremanModes = useForemanModes(context);
   const seenProactiveDedupeKeysRef = useRef(new Set<string>());
   const proactiveSignalKey = (options.proactiveSignals ?? [])
     .map((signal) => signal.dedupe_key)
@@ -203,6 +229,23 @@ export function useForemanGuide(
       }
     },
     [submitQuestion]
+  );
+
+  const submitMode = useCallback(
+    (modeId: ForemanGuideModeId = foremanModes.activeModeId) => {
+      const mode = foremanModes.modes.find((entry) => entry.mode_id === modeId);
+
+      options.onPanelHighlightChange?.(mode?.primary_panel_id ?? null);
+      setMessages((current) =>
+        appendForemanGuideModeResponse(current, modeId, context)
+      );
+    },
+    [
+      context,
+      foremanModes.activeModeId,
+      foremanModes.modes,
+      options.onPanelHighlightChange,
+    ]
   );
 
   const pauseProactiveNarration = useCallback(() => {
@@ -261,12 +304,17 @@ export function useForemanGuide(
     clearProactiveSignals,
     loading,
     messages,
+    modes: foremanModes.modes,
     pauseProactiveNarration,
     proactivePaused,
     proactiveSignalCount: visibleProactiveSignals.length,
     proactiveSignals: visibleProactiveSignals,
     quickActions: FOREMAN_QUICK_ACTIONS,
     resumeProactiveNarration,
+    selectedMode: foremanModes.activeMode,
+    selectedModeId: foremanModes.activeModeId,
+    selectMode: foremanModes.selectMode,
+    submitMode,
     submitQuestion,
     submitQuickAction,
   };
