@@ -121,6 +121,82 @@ const tests = [
       assert.equal(source.includes("createDashboardLiveProjectionV1"), false);
     },
   },
+  {
+    name: "authority cockpit stays dashboard-local without root runtime imports or token generation",
+    run: async () => {
+      const files = [
+        "src/authority/authorityDashboardTypes.ts",
+        "src/authority/authorityStateAdapter.ts",
+        "src/authority/authorityTimeline.ts",
+        "src/authority/disclosurePreviewReport.ts",
+        "src/components/AuthorityNotificationDemo.tsx",
+        "src/components/AuthorityResolutionPanel.tsx",
+        "src/components/AuthorityTimeline.tsx",
+        "src/components/DisclosurePreviewPanel.tsx",
+        "src/components/GARPStatusIndicator.tsx",
+        "src/components/ControlRoomShell.tsx",
+      ];
+      const source = (
+        await Promise.all(
+          files.map((file) => readFile(path.resolve(process.cwd(), file), "utf8"))
+        )
+      ).join("\n");
+
+      assert.equal(source.includes("../../src/live/authority"), false);
+      assert.equal(source.includes("../../src/live"), false);
+      assert.equal(source.includes("buildAuthorityNotificationPayload"), false);
+      assert.equal(source.includes("createAuthorityActionToken"), false);
+      assert.equal(source.includes("resolveAuthorityRequestAction"), false);
+      assert.equal(source.includes("serviceWorker"), false);
+      assert.equal(source.includes("PushManager"), false);
+      assert.equal(source.includes("Date.now"), false);
+      assert.equal(source.includes("fetch("), false);
+    },
+  },
+  {
+    name: "authority cockpit avoids forbidden claim labels",
+    run: async () => {
+      const files = [
+        "src/authority/authorityDashboardTypes.ts",
+        "src/authority/authorityStateAdapter.ts",
+        "src/authority/authorityTimeline.ts",
+        "src/authority/disclosurePreviewReport.ts",
+        "src/components/AuthorityNotificationDemo.tsx",
+        "src/components/AuthorityResolutionPanel.tsx",
+        "src/components/AuthorityTimeline.tsx",
+        "src/components/DisclosurePreviewPanel.tsx",
+        "src/components/GARPStatusIndicator.tsx",
+        "src/components/ControlRoomShell.tsx",
+      ];
+      const source = (
+        await Promise.all(
+          files.map((file) => readFile(path.resolve(process.cwd(), file), "utf8"))
+        )
+      ).join("\n").toLowerCase();
+      const forbiddenClaims = [
+        "production auth",
+        "live openfga",
+        "legal access control",
+        "public portal",
+        "fort worth live login",
+        "official city identity",
+        "compliance-ready",
+        "secure production authorization",
+        "live city deployment",
+        "auth0 enterprise",
+        "ciba shipped",
+        "tpia compliant",
+        "legal sufficiency",
+      ];
+
+      for (const claim of forbiddenClaims) {
+        assert.equal(source.includes(claim), false, claim);
+      }
+
+      assert.equal(source.includes("ciba status"), false);
+      assert.equal(source.includes("garp authority state"), true);
+    },
+  },
 ];
 
 async function main() {

@@ -4,6 +4,8 @@ import {
   adaptStepSkinPayloads,
   getDashboardSkinView,
 } from "../adapters/skinPayloadAdapter.ts";
+import { buildAuthorityDashboardState } from "../authority/authorityStateAdapter.ts";
+import { buildDisclosurePreviewReport } from "../authority/disclosurePreviewReport.ts";
 import { buildDirectorScene } from "../director/directorScript.ts";
 import { resolveDirectorBookmarks } from "../director/directorBookmarks.ts";
 import { DemoHeader } from "./DemoHeader.tsx";
@@ -38,8 +40,13 @@ import { StatusBar } from "./StatusBar.tsx";
 import { TimelinePanel } from "./TimelinePanel.tsx";
 import { AbsenceLensOverlay } from "./director/AbsenceLensOverlay.tsx";
 import { AbsenceSignalRail } from "./director/AbsenceSignalRail.tsx";
+import { AuthorityNotificationDemo } from "./AuthorityNotificationDemo.tsx";
+import { AuthorityResolutionPanel } from "./AuthorityResolutionPanel.tsx";
+import { AuthorityTimeline } from "./AuthorityTimeline.tsx";
 import { DirectorCueCard } from "./director/DirectorCueCard.tsx";
+import { DisclosurePreviewPanel } from "./DisclosurePreviewPanel.tsx";
 import { DirectorModeToggle } from "./director/DirectorModeToggle.tsx";
+import { GARPStatusIndicator } from "./GARPStatusIndicator.tsx";
 import { JudgeCuePanel } from "./director/JudgeCuePanel.tsx";
 import { PreventedActionCard } from "./director/PreventedActionCard.tsx";
 import { ForemanMountPoint } from "../foremanGuide/ForemanMountPoint.tsx";
@@ -151,6 +158,7 @@ export function ControlRoomShell({
     getDashboardSkinView(skinViews, activeSkinTab) ??
     skinViews[0] ??
     null;
+  const publicSkinView = getDashboardSkinView(skinViews, "public") ?? null;
   const entityRelationshipView = adaptEntityRelationships(currentStep);
   const choreographyView = adaptCascadeChoreography(
     currentStep,
@@ -191,6 +199,19 @@ export function ControlRoomShell({
       : "Unavailable";
   const activeSkinLabel =
     activeSkinView?.label ?? formatSkinLabel(activeSkinTab);
+  const authorityState = buildAuthorityDashboardState({
+    currentStep,
+    liveProjection: liveProjection.projection,
+    roleSession,
+  });
+  const disclosurePreviewReport = buildDisclosurePreviewReport({
+    authorityState,
+    generatedAt: liveProjection.projection?.session.updated_at ?? null,
+    publicSkinView,
+    roleSession,
+    scenarioLabel: scenarioMeta.displayLabel,
+    sessionLabel: liveProjection.projection?.session.session_id ?? scenarioId,
+  });
 
   useEffect(() => {
     if (controlState.playbackState !== "playing" || totalSteps === 0) {
@@ -401,6 +422,19 @@ export function ControlRoomShell({
           />
         </>
       ) : null}
+
+      <div className="packet4-grid" data-authority-cockpit="true">
+        <div className="packet4-sidecar">
+          <GARPStatusIndicator state={authorityState} />
+          <AuthorityResolutionPanel state={authorityState} />
+        </div>
+
+        <div className="packet4-sidecar">
+          <AuthorityTimeline state={authorityState} />
+          <AuthorityNotificationDemo state={authorityState} />
+          <DisclosurePreviewPanel report={disclosurePreviewReport} />
+        </div>
+      </div>
 
       <div className="control-room-grid">
         <TimelinePanel
