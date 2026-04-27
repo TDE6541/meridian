@@ -52,6 +52,45 @@ Expected local URL:
 http://localhost:5173/
 ```
 
+## Vercel and Auth0 Demo Setup
+
+AUTH-4 prepares deployment configuration only. It does not deploy, prove production hosting, or change the local/demo-day truth boundary.
+
+Vercel project settings for Tim:
+
+- import the GitHub repo into Vercel
+- set the project root to `dashboard`
+- set the build command to `npm run build`
+- set the output directory to `dist`
+- set Vercel environment variables:
+  - `VITE_AUTH0_DOMAIN`
+  - `VITE_AUTH0_CLIENT_ID`
+  - `VITE_AUTH0_CALLBACK_URL`
+
+Auth0 Application URI values:
+
+- local callback URL: `http://localhost:5173/callback`
+- local logout URL: `http://localhost:5173`
+- local web origin: `http://localhost:5173`
+- Vercel callback URL: `https://<vercel-url>/callback`
+- Vercel logout URL: `https://<vercel-url>`
+- Vercel web origin: `https://<vercel-url>`
+
+Demo Day readiness checks after Tim configures Vercel and Auth0:
+
+- verify login with eval accounts
+- verify snapshot mode still works while logged out
+- verify the public role cannot approve authority requests
+- verify an inspector role can submit an authority request
+- verify a director or operations role can approve and deny an authority request
+
+Config boundaries:
+
+- no secrets are committed here
+- no Vercel deployment is attempted here
+- no Auth0 Management API, database, WebSocket, realtime push, notification delivery, OpenFGA, CIBA, public portal, legal compliance, production identity, live-city integration, or Foreman behavior is added here
+- model-provider secrets are outside this lane; any future model API mode requires an approved server-side/serverless proxy with server-side environment only
+
 ## Demo Posture
 
 - Demo playback reads committed local files only.
