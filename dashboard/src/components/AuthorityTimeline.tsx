@@ -2,8 +2,14 @@ import type {
   AuthorityDashboardSourceRef,
   AuthorityDashboardStateV1,
 } from "../authority/authorityDashboardTypes.ts";
+import { buildSharedAuthorityDisplayState } from "../authority/sharedAuthorityEvents.ts";
+import {
+  useSharedAuthorityRequests,
+  type UseSharedAuthorityRequestsResult,
+} from "../authority/useSharedAuthorityRequests.ts";
 
 export interface AuthorityTimelineProps {
+  sharedAuthority?: UseSharedAuthorityRequestsResult;
   state: AuthorityDashboardStateV1;
 }
 
@@ -15,23 +21,41 @@ function displaySourceRef(ref: AuthorityDashboardSourceRef): string {
   return [ref.source_kind, ref.path, ref.evidence_id].filter(Boolean).join(":");
 }
 
-export function AuthorityTimeline({ state }: AuthorityTimelineProps) {
+export function AuthorityTimeline({
+  sharedAuthority,
+  state,
+}: AuthorityTimelineProps) {
+  const hookSharedAuthority = useSharedAuthorityRequests({
+    enabled: sharedAuthority === undefined,
+    pollIntervalMs: 5000,
+  });
+  const shared = sharedAuthority ?? hookSharedAuthority;
+  const sharedView = buildSharedAuthorityDisplayState(state, shared);
+  const displayState = sharedView.state;
+
   return (
     <section className="timeline-panel" data-authority-timeline="true">
       <div className="panel-heading">
         <div>
-          <p className="eyebrow">{state.timeline.contract}</p>
+          <p className="eyebrow">{displayState.timeline.contract}</p>
           <h2>Authority Timeline</h2>
         </div>
       </div>
 
-      {state.timeline.records.length === 0 ? (
+      {sharedView.advisory ? (
+        <div className="signal-card signal-card--hold">
+          <strong>HOLD: {sharedView.advisory.code}</strong>
+          <span>{sharedView.advisory.message}</span>
+        </div>
+      ) : null}
+
+      {displayState.timeline.records.length === 0 ? (
         <p className="empty-state">
           No lifecycle records are available from explicit authority inputs.
         </p>
       ) : (
         <ol className="timeline-list">
-          {state.timeline.records.map((record) => (
+          {displayState.timeline.records.map((record) => (
             <li className="timeline-step" key={record.record_id}>
               <div className="timeline-step__marker" />
               <div className="timeline-step__body">
@@ -40,7 +64,7 @@ export function AuthorityTimeline({ state }: AuthorityTimelineProps) {
                   <span>{formatTime(record.occurred_at)}</span>
                 </div>
                 <p>
-                  {state.redaction_mode === "public"
+                  {displayState.redaction_mode === "public"
                     ? "Public-safe lifecycle summary."
                     : record.detail ?? record.summary}
                 </p>
