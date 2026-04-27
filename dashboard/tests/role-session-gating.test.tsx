@@ -12,11 +12,13 @@ import {
   adaptStepSkinPayloads,
 } from "../src/adapters/skinPayloadAdapter.ts";
 import { buildAuthorityDashboardState } from "../src/authority/authorityStateAdapter.ts";
+import { buildGarpHandoffContext } from "../src/authority/garpHandoffContext.ts";
 import { AuthorityNotificationDemo } from "../src/components/AuthorityNotificationDemo.tsx";
 import { AuthorityResolutionPanel } from "../src/components/AuthorityResolutionPanel.tsx";
 import { AuthorityTimeline } from "../src/components/AuthorityTimeline.tsx";
 import { ControlRoomShell } from "../src/components/ControlRoomShell.tsx";
 import { GARPStatusIndicator } from "../src/components/GARPStatusIndicator.tsx";
+import { GARP_HANDOFF_CONTEXT_CONTRACT } from "../src/authority/authorityDashboardTypes.ts";
 import type { JsonObject } from "../src/live/liveTypes.ts";
 import { RoleSessionPanel } from "../src/components/RoleSessionPanel.tsx";
 import { SkinSwitcher } from "../src/components/SkinSwitcher.tsx";
@@ -582,6 +584,132 @@ const tests = [
       assert.equal(markup.includes("Simulated authority-device preview"), true);
       assert.equal(markup.includes("No explicit simulated authority-device payload"), true);
       assert.equal(markup.includes("garp-action-v1"), false);
+    },
+  },
+  {
+    name: "garp handoff context pins contract and holds unavailable authority state",
+    run: () => {
+      const state = buildAuthorityDashboardState({
+        currentStep: null,
+        liveProjection: null,
+        roleSession: createPublicRoleSession(),
+      });
+      const context = buildGarpHandoffContext({
+        authorityState: state,
+        disclosurePreviewReport: null,
+      });
+      const serialized = JSON.stringify(context);
+
+      assert.equal(context.contract, GARP_HANDOFF_CONTEXT_CONTRACT);
+      assert.equal(context.authority_status, "unavailable");
+      assert.equal(context.unresolved_holds.length > 0, true);
+      assert.equal(
+        context.unresolved_holds.some((hold) =>
+          hold.includes("no snapshot step or live projection")
+        ),
+        true
+      );
+      assert.equal(context.foreman_ready, false);
+      assert.equal(context.foreman_gate_reason.length > 0, true);
+      assert.equal(serialized.includes("narration"), false);
+      assert.equal(serialized.includes("answer_text"), false);
+    },
+  },
+  {
+    name: "garp handoff context preserves counts source refs and public boundary",
+    run: () => {
+      const state = buildAuthorityDashboardState({
+        currentStep: null,
+        liveProjection: createAuthorityProjection({
+          generated_requests: [
+            createAuthorityRequest("pending"),
+            createAuthorityRequest("approved"),
+            createAuthorityRequest("denied"),
+            createAuthorityRequest("expired"),
+            createAuthorityRequest("holding"),
+          ],
+          lifecycle_records: [
+            {
+              kind: "approved",
+              label: "Approved",
+              occurred_at: "2026-04-27T15:00:00.000Z",
+              reason: "explicit lifecycle proof",
+              request_id: "ARR-approved",
+              to_status: "approved",
+              token_hash: "sha256:explicit-token-hash",
+            },
+          ],
+        }),
+        roleSession: createPublicRoleSession(),
+      });
+      const context = buildGarpHandoffContext({ authorityState: state });
+      const serialized = JSON.stringify(context);
+
+      assert.deepEqual(context.counts, {
+        approved: 1,
+        denied: 1,
+        expired: 1,
+        holding: 1,
+        pending: 1,
+      });
+      assert.equal(context.public_boundary.role, "public");
+      assert.equal(context.public_boundary.redaction_mode, "public");
+      assert.equal(context.public_boundary.public_safe, true);
+      assert.equal(context.public_boundary.restricted_detail_available, false);
+      assert.equal(
+        context.authority_request_refs.some((ref) =>
+          ref.source_refs.some(
+            (sourceRef) => sourceRef.path === "authority_context.required_approvals"
+          )
+        ),
+        true
+      );
+      assert.equal(context.lifecycle_refs[0]?.summary.includes("Approved"), true);
+      assert.equal(serialized.includes("Binding context keys"), false);
+      assert.equal(serialized.includes("restricted-demo-trace"), false);
+    },
+  },
+  {
+    name: "garp handoff context exposes judge demo explicit detail only inside judge boundary",
+    run: () => {
+      const projection = createAuthorityProjection({
+        generated_requests: [createAuthorityRequest("pending")],
+        lifecycle_records: [
+          {
+            kind: "approved",
+            label: "Approved",
+            occurred_at: "2026-04-27T15:00:00.000Z",
+            reason: "explicit lifecycle proof",
+            request_id: "ARR-pending",
+            to_status: "approved",
+            token_hash: "sha256:explicit-token-hash",
+          },
+        ],
+      });
+      const publicContext = buildGarpHandoffContext({
+        authorityState: buildAuthorityDashboardState({
+          currentStep: null,
+          liveProjection: projection,
+          roleSession: createPublicRoleSession(),
+        }),
+      });
+      const judgeContext = buildGarpHandoffContext({
+        authorityState: buildAuthorityDashboardState({
+          currentStep: null,
+          liveProjection: projection,
+          roleSession: createJudgeRoleSession(),
+        }),
+      });
+      const publicSerialized = JSON.stringify(publicContext);
+      const judgeSerialized = JSON.stringify(judgeContext);
+
+      assert.equal(publicContext.explicit_demo_details.length, 0);
+      assert.equal(publicSerialized.includes("Binding context keys"), false);
+      assert.equal(judgeContext.public_boundary.redaction_mode, "judge_demo");
+      assert.equal(judgeContext.public_boundary.restricted_detail_available, true);
+      assert.equal(judgeContext.explicit_demo_details.length > 0, true);
+      assert.equal(judgeSerialized.includes("Binding context keys"), true);
+      assert.equal(judgeSerialized.includes("public_works / public_works_director"), true);
     },
   },
 ];

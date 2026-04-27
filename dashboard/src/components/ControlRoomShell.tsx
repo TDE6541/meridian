@@ -4,8 +4,10 @@ import {
   adaptStepSkinPayloads,
   getDashboardSkinView,
 } from "../adapters/skinPayloadAdapter.ts";
+import { buildDisclosurePreviewActionBundle } from "../authority/disclosurePreviewActions.ts";
 import { buildAuthorityDashboardState } from "../authority/authorityStateAdapter.ts";
 import { buildDisclosurePreviewReport } from "../authority/disclosurePreviewReport.ts";
+import { buildGarpHandoffContext } from "../authority/garpHandoffContext.ts";
 import { buildDirectorScene } from "../director/directorScript.ts";
 import { resolveDirectorBookmarks } from "../director/directorBookmarks.ts";
 import { DemoHeader } from "./DemoHeader.tsx";
@@ -211,6 +213,16 @@ export function ControlRoomShell({
     roleSession,
     scenarioLabel: scenarioMeta.displayLabel,
     sessionLabel: liveProjection.projection?.session.session_id ?? scenarioId,
+  });
+  const garpHandoffContext = buildGarpHandoffContext({
+    activeSkin: activeSkinTab,
+    authorityState,
+    disclosurePreviewReport,
+  });
+  const disclosurePreviewActionBundle = buildDisclosurePreviewActionBundle({
+    garpHandoffContext,
+    report: disclosurePreviewReport,
+    roleSession,
   });
 
   useEffect(() => {
@@ -432,7 +444,10 @@ export function ControlRoomShell({
         <div className="packet4-sidecar">
           <AuthorityTimeline state={authorityState} />
           <AuthorityNotificationDemo state={authorityState} />
-          <DisclosurePreviewPanel report={disclosurePreviewReport} />
+          <DisclosurePreviewPanel
+            actionBundle={disclosurePreviewActionBundle}
+            report={disclosurePreviewReport}
+          />
         </div>
       </div>
 

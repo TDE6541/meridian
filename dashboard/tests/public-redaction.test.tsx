@@ -4,14 +4,26 @@ import {
   adaptStepSkinPayloads,
   getDashboardSkinView,
 } from "../src/adapters/skinPayloadAdapter.ts";
+import { buildDisclosurePreviewActionBundle } from "../src/authority/disclosurePreviewActions.ts";
 import { buildAuthorityDashboardState } from "../src/authority/authorityStateAdapter.ts";
 import { buildDisclosurePreviewReport } from "../src/authority/disclosurePreviewReport.ts";
+import { buildGarpHandoffContext } from "../src/authority/garpHandoffContext.ts";
+import {
+  DISCLOSURE_PREVIEW_ACTION_BUNDLE_CONTRACT,
+  DISCLOSURE_PREVIEW_DEMO_DISCLAIMER,
+} from "../src/authority/authorityDashboardTypes.ts";
 import { resolveAuth0DashboardConfig } from "../src/auth/authConfig.ts";
 import type { MeridianAuthState } from "../src/auth/MeridianAuthProvider.tsx";
 import { DisclosurePreviewPanel } from "../src/components/DisclosurePreviewPanel.tsx";
+import type { JsonObject } from "../src/live/liveTypes.ts";
 import { SkinPanel } from "../src/components/SkinPanel.tsx";
 import { resolveDashboardRoleSession } from "../src/roleSession/resolveRoleSession.ts";
-import { loadScenarioRecord, renderMarkup, runTests } from "./scenarioTestUtils.ts";
+import {
+  createTestLiveProjection,
+  loadScenarioRecord,
+  renderMarkup,
+  runTests,
+} from "./scenarioTestUtils.ts";
 
 function createAuthState(user: Record<string, unknown> | null = null): MeridianAuthState {
   const config = resolveAuth0DashboardConfig({
@@ -36,6 +48,45 @@ function createPublicRoleSession() {
   return resolveDashboardRoleSession({
     activeSkin: "public",
     auth: createAuthState(),
+  });
+}
+
+function createJudgeRoleSession() {
+  return resolveDashboardRoleSession({
+    activeSkin: "public",
+    auth: createAuthState({
+      role: "judge_demo_operator",
+      sub: "auth0|judge-demo",
+    }),
+  });
+}
+
+function createAuthorityRequest(status = "pending"): JsonObject {
+  return {
+    binding_context: {
+      actor_trace: "restricted-demo-trace",
+      source_refs: ["authority_context.required_approvals"],
+    },
+    contract: "meridian.v2.garpAuthorityRequest.v1",
+    request_id: `ARR-${status}`,
+    required_authority_department: "public_works",
+    required_authority_role: "public_works_director",
+    resolution_type: "approval",
+    source_absence_id: "absence-ref-1",
+    source_governance_evaluation: "governance-ref-1",
+    status,
+  };
+}
+
+function createAuthorityProjection(authority: JsonObject) {
+  const base = createTestLiveProjection();
+
+  return createTestLiveProjection({
+    events: [],
+    latest: {
+      ...base.latest,
+      authority,
+    },
   });
 }
 
@@ -182,6 +233,161 @@ const tests = [
       assert.equal(lowerMarkup.includes("tpia compliant"), false);
       assert.equal(lowerMarkup.includes("legal sufficiency"), false);
       assert.equal(lowerMarkup.includes("public portal"), false);
+    },
+  },
+  {
+    name: "disclosure preview action bundle pins contract and prepares metadata",
+    run: async () => {
+      const record = await loadScenarioRecord("routine");
+      const publicView = getDashboardSkinView(
+        adaptStepSkinPayloads(record.scenario.steps[0]),
+        "public"
+      );
+      const roleSession = createPublicRoleSession();
+      const authorityState = buildAuthorityDashboardState({
+        currentStep: null,
+        liveProjection: null,
+        roleSession,
+      });
+      const report = buildDisclosurePreviewReport({
+        authorityState,
+        generatedAt: "2026-04-27T15:00:00.000Z",
+        publicSkinView: publicView,
+        roleSession,
+        scenarioLabel: "Routine",
+        sessionLabel: "session-public",
+      });
+      const context = buildGarpHandoffContext({
+        authorityState,
+        disclosurePreviewReport: report,
+      });
+      const bundle = buildDisclosurePreviewActionBundle({
+        garpHandoffContext: context,
+        report,
+        roleSession,
+      });
+      const markup = renderMarkup(
+        <DisclosurePreviewPanel actionBundle={bundle} report={report} />
+      );
+
+      assert.equal(bundle.contract, DISCLOSURE_PREVIEW_ACTION_BUNDLE_CONTRACT);
+      assert.equal(bundle.disclaimer, DISCLOSURE_PREVIEW_DEMO_DISCLAIMER);
+      assert.equal(bundle.filename, "routine-disclosure-preview.json");
+      assert.equal(bundle.mime_type, "application/json");
+      assert.equal(bundle.print_title, "Routine disclosure preview");
+      assert.equal(bundle.text_content.includes(report.public_safe_summary), true);
+      assert.equal(bundle.prepared_actions.map((action) => action.action).join(","), "copy,download,print");
+      assert.equal(markup.includes("Preview action"), true);
+      assert.equal(markup.includes("routine-disclosure-preview.json"), true);
+      assert.equal(markup.includes("application/json"), true);
+    },
+  },
+  {
+    name: "disclosure preview action bundle holds when report is missing",
+    run: () => {
+      const roleSession = createPublicRoleSession();
+      const bundle = buildDisclosurePreviewActionBundle({
+        report: null,
+        roleSession,
+      });
+      const markup = renderMarkup(
+        <DisclosurePreviewPanel actionBundle={bundle} report={null} />
+      );
+
+      assert.equal(bundle.status, "holding");
+      assert.equal(bundle.holds[0]?.includes("report unavailable"), true);
+      assert.equal(markup.includes("HOLD: disclosure preview report is unavailable."), true);
+      assert.equal(markup.includes("Preview action holding"), true);
+    },
+  },
+  {
+    name: "public disclosure action bundle excludes restricted authority detail and raw tokens",
+    run: async () => {
+      const record = await loadScenarioRecord("contested");
+      const publicView = getDashboardSkinView(
+        adaptStepSkinPayloads(record.scenario.steps[3]),
+        "public"
+      );
+      const roleSession = createPublicRoleSession();
+      const authorityState = buildAuthorityDashboardState({
+        currentStep: null,
+        liveProjection: createAuthorityProjection({
+          generated_requests: [createAuthorityRequest("pending")],
+          notification_payload: {
+            actions: [
+              {
+                label: "Approve",
+                response_token: "garp-action-v1-explicit-token",
+              },
+            ],
+          },
+        }),
+        roleSession,
+      });
+      const report = buildDisclosurePreviewReport({
+        authorityState,
+        generatedAt: "2026-04-27T15:00:00.000Z",
+        publicSkinView: publicView,
+        roleSession,
+        scenarioLabel: "Contested",
+        sessionLabel: "session-public",
+      });
+      const context = buildGarpHandoffContext({
+        authorityState,
+        disclosurePreviewReport: report,
+      });
+      const bundle = buildDisclosurePreviewActionBundle({
+        garpHandoffContext: context,
+        report,
+        roleSession,
+      });
+      const text = bundle.text_content.toLowerCase();
+
+      assert.equal(text.includes("restricted-demo-trace"), false);
+      assert.equal(text.includes("garp-action-v1-explicit-token"), false);
+      assert.equal(text.includes("binding context keys"), false);
+      assert.equal(text.includes("tpia compliant"), false);
+      assert.equal(text.includes("legal sufficiency"), false);
+      assert.equal(text.includes("public portal"), false);
+      assert.equal(text.includes("official disclosure workflow"), false);
+    },
+  },
+  {
+    name: "judge disclosure action bundle may include explicit demo authority detail",
+    run: async () => {
+      const record = await loadScenarioRecord("routine");
+      const publicView = getDashboardSkinView(
+        adaptStepSkinPayloads(record.scenario.steps[0]),
+        "public"
+      );
+      const roleSession = createJudgeRoleSession();
+      const authorityState = buildAuthorityDashboardState({
+        currentStep: null,
+        liveProjection: createAuthorityProjection({
+          generated_requests: [createAuthorityRequest("pending")],
+        }),
+        roleSession,
+      });
+      const report = buildDisclosurePreviewReport({
+        authorityState,
+        generatedAt: "2026-04-27T15:00:00.000Z",
+        publicSkinView: publicView,
+        roleSession,
+        scenarioLabel: "Routine",
+        sessionLabel: "session-judge",
+      });
+      const context = buildGarpHandoffContext({
+        authorityState,
+        disclosurePreviewReport: report,
+      });
+      const bundle = buildDisclosurePreviewActionBundle({
+        garpHandoffContext: context,
+        report,
+        roleSession,
+      });
+
+      assert.equal(bundle.text_content.includes("Binding context keys"), true);
+      assert.equal(bundle.text_content.includes("public_works / public_works_director"), true);
     },
   },
 ];

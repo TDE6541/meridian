@@ -1,10 +1,95 @@
-import type { DisclosurePreviewReportV1 } from "../authority/authorityDashboardTypes.ts";
+import type {
+  DisclosurePreviewActionBundleV1,
+  DisclosurePreviewReportV1,
+} from "../authority/authorityDashboardTypes.ts";
 
 export interface DisclosurePreviewPanelProps {
-  report: DisclosurePreviewReportV1;
+  actionBundle?: DisclosurePreviewActionBundleV1 | null;
+  report: DisclosurePreviewReportV1 | null;
 }
 
-export function DisclosurePreviewPanel({ report }: DisclosurePreviewPanelProps) {
+function renderActionBundle(actionBundle: DisclosurePreviewActionBundleV1 | null | undefined) {
+  if (!actionBundle) {
+    return (
+      <div className="signal-card signal-card--hold">
+        <strong>Preview action holding</strong>
+        <span>HOLD: disclosure preview action bundle is unavailable.</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="signal-list" data-disclosure-preview-actions="prepared">
+      <div className="signal-card">
+        <strong>
+          {actionBundle.status === "prepared"
+            ? "Preview action prepared"
+            : "Preview action holding"}
+        </strong>
+        <span>{actionBundle.contract}</span>
+      </div>
+      <div className="signal-card">
+        <strong>Filename</strong>
+        <span>{actionBundle.filename}</span>
+      </div>
+      <div className="signal-card">
+        <strong>MIME type</strong>
+        <span>{actionBundle.mime_type}</span>
+      </div>
+      <div className="signal-card">
+        <strong>Print title</strong>
+        <span>{actionBundle.print_title}</span>
+      </div>
+      <div className="signal-card">
+        <strong>Role boundary</strong>
+        <span>{actionBundle.role_boundary_summary}</span>
+      </div>
+
+      {actionBundle.prepared_actions.map((action) => (
+        <div className="signal-card" key={action.action}>
+          <strong>{action.label}</strong>
+          <span>{action.side_effect}</span>
+        </div>
+      ))}
+
+      {actionBundle.holds.map((hold) => (
+        <div className="signal-card signal-card--hold" key={hold}>
+          <strong>Action HOLD</strong>
+          <span>{hold}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function DisclosurePreviewPanel({
+  actionBundle = null,
+  report,
+}: DisclosurePreviewPanelProps) {
+  if (!report) {
+    return (
+      <section className="governance-card" data-disclosure-preview-panel="true">
+        <div className="panel-heading">
+          <div>
+            <p className="eyebrow">
+              {actionBundle?.contract ?? "meridian.v2.disclosurePreviewReport.v1"}
+            </p>
+            <h2>Disclosure preview</h2>
+          </div>
+          <span className="live-status-badge live-status-badge--holding">
+            holding
+          </span>
+        </div>
+
+        <p className="empty-state">
+          HOLD: disclosure preview report is unavailable.
+        </p>
+
+        {renderActionBundle(actionBundle)}
+      </section>
+    );
+  }
+
   return (
     <section className="governance-card" data-disclosure-preview-panel="true">
       <div className="panel-heading">
@@ -69,6 +154,8 @@ export function DisclosurePreviewPanel({ report }: DisclosurePreviewPanelProps) 
           ))}
         </div>
       ) : null}
+
+      {renderActionBundle(actionBundle)}
     </section>
   );
 }

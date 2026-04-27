@@ -126,9 +126,11 @@ const tests = [
     run: async () => {
       const files = [
         "src/authority/authorityDashboardTypes.ts",
+        "src/authority/disclosurePreviewActions.ts",
         "src/authority/authorityStateAdapter.ts",
         "src/authority/authorityTimeline.ts",
         "src/authority/disclosurePreviewReport.ts",
+        "src/authority/garpHandoffContext.ts",
         "src/components/AuthorityNotificationDemo.tsx",
         "src/components/AuthorityResolutionPanel.tsx",
         "src/components/AuthorityTimeline.tsx",
@@ -158,9 +160,11 @@ const tests = [
     run: async () => {
       const files = [
         "src/authority/authorityDashboardTypes.ts",
+        "src/authority/disclosurePreviewActions.ts",
         "src/authority/authorityStateAdapter.ts",
         "src/authority/authorityTimeline.ts",
         "src/authority/disclosurePreviewReport.ts",
+        "src/authority/garpHandoffContext.ts",
         "src/components/AuthorityNotificationDemo.tsx",
         "src/components/AuthorityResolutionPanel.tsx",
         "src/components/AuthorityTimeline.tsx",
@@ -187,6 +191,13 @@ const tests = [
         "ciba shipped",
         "tpia compliant",
         "legal sufficiency",
+        "official disclosure workflow",
+        "notification delivery",
+        "live browser push",
+        "live email sending",
+        "foreman answer",
+        "foreman narration",
+        "foreman mode",
       ];
 
       for (const claim of forbiddenClaims) {
@@ -195,6 +206,62 @@ const tests = [
 
       assert.equal(source.includes("ciba status"), false);
       assert.equal(source.includes("garp authority state"), true);
+    },
+  },
+  {
+    name: "g5 prepared actions and handoff context do not ship Foreman behavior",
+    run: async () => {
+      const files = [
+        "src/authority/disclosurePreviewActions.ts",
+        "src/authority/garpHandoffContext.ts",
+        "src/components/ControlRoomShell.tsx",
+        "src/components/DisclosurePreviewPanel.tsx",
+        "src/foremanGuide/ForemanMountPoint.tsx",
+      ];
+      const source = (
+        await Promise.all(
+          files.map((file) => readFile(path.resolve(process.cwd(), file), "utf8"))
+        )
+      ).join("\n");
+      const lowerSource = source.toLowerCase();
+
+      for (const fragment of [
+        "navigator.clipboard",
+        "window.print",
+        "createobjecturl",
+        "document.createelement(\"a\")",
+        "fetch(",
+        "axios",
+        "xmlhttprequest",
+        "serviceworker",
+        "pushmanager",
+        "notification.requestpermission",
+        "resend",
+        "sendgrid",
+        "openfga",
+        "date.now",
+        "foreman_prompt",
+        "foreman_mode",
+        "answer_text",
+        "narration_text",
+        "voice/avatar",
+        "proactive_foreman",
+        ".pdf",
+        "../../src/live",
+        "../../src/skins",
+      ]) {
+        assert.equal(lowerSource.includes(fragment), false, fragment);
+      }
+
+      const foremanMount = await readFile(
+        path.resolve(process.cwd(), "src/foremanGuide/ForemanMountPoint.tsx"),
+        "utf8"
+      );
+
+      assert.equal(foremanMount.includes("data-foreman-mount=\"inert\""), true);
+      assert.equal(foremanMount.includes("GarpHandoff"), false);
+      assert.equal(foremanMount.includes("garpHandoff"), false);
+      assert.equal(foremanMount.includes("disclosurePreviewAction"), false);
     },
   },
 ];
