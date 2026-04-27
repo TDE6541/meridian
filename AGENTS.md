@@ -15,8 +15,10 @@ Meridian is a governed city digital twin intelligence repo.
 7. [`docs/WHERE_TO_CHANGE_X.md`](docs/WHERE_TO_CHANGE_X.md)
 8. [`docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`](docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md)
 9. [`docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md)
-10. Relevant active-task specs in `docs/specs/`
-11. Relevant active-task closeouts in `docs/closeouts/`
+10. [`docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`](docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md)
+11. [`docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md)
+12. Relevant active-task specs in `docs/specs/`
+13. Relevant active-task closeouts in `docs/closeouts/`
 
 ## Operating Posture
 
@@ -29,6 +31,8 @@ Meridian is a governed city digital twin intelligence repo.
 - Keep root canon synchronized when tracked truth changes.
 - Treat Meridian V1 as closed through Wave 9; there is no Wave 10 in V1.
 - Treat V2-A as local/demo-day extension truth only unless a later approved envelope widens it.
+- Treat V2-B/GARP Authority Runway as a local G1-G5 sublane only; it does not close full V2-B Foreman.
+- Treat Foreman behavior as gated until the Foreman concept/prototype source is inspected and Tim approves Foreman packet cutting.
 
 ## Codex Scope Note
 
@@ -42,3 +46,4 @@ Meridian is a governed city digital twin intelligence repo.
 - Do not claim runtime behavior that is not proven in repo truth.
 - Do not touch auth/config/security surfaces without explicit scope approval.
 - Do not claim production, live city integration, legal compliance, live broker proof, Auth0/OpenFGA, live Whisper/audio, or Foreman behavior without explicit shipped proof.
+- Do not claim live OpenFGA, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, official Fort Worth workflow, or full V2-B Foreman closure from the GARP Authority Runway.

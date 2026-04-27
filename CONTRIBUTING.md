@@ -13,7 +13,7 @@
 - Work from repo truth and approved inputs.
 - Treat Meridian V1 as complete through Wave 9.
 - Treat Wave 9 as the final V1 wave; there is no Wave 10 in V1.
-- Treat V2-A as a local/demo-day Meridian V2 extension; V2-B remains gated on supplied and inspected Foreman concept and Bronze prototype sources.
+- Treat V2-A as a local/demo-day Meridian V2 extension; V2-B/GARP Authority Runway is a local G1-G5 sublane only; full V2-B Foreman remains gated on supplied and inspected Foreman concept and Bronze prototype sources.
 - Keep diffs minimal and within approved scope.
 - Surface uncertainty as HOLD.
 - Do not add adjacent changes without a new scoped session.
@@ -33,6 +33,7 @@
 - Treat Wave 9 dashboard work as local-only `dashboard/**` snapshot consumption over committed payloads, not hosted deployment, auth, live broker, live network dependency, new governance computation, or legal/TPIA/TRAIGA compliance behavior.
 - Treat V1 closure docs as truth-surface routing only; they do not change shared contracts and do not require a migration row.
 - Treat V2-A live work as local/demo-day `src/live/**`, local script, and dashboard-local Live Mode truth. V2-A does not claim production behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, Auth0/OpenFGA integration, live Whisper/audio, legal compliance certification, dashboard-side truth computation, Foreman behavior, or V2-B behavior.
+- Treat V2-B/GARP work as local authority-runway truth only: dashboard-local Auth0 Universal Login role-session proof, deterministic authority request/evaluation/store contracts, local lifecycle/action record behavior, dashboard authority cockpit, payload-only notification builder, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. It does not claim full V2-B Foreman closure, Foreman behavior, production auth, live OpenFGA behavior, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
 
 ## Canon Vs Reference Boundaries
 
@@ -60,3 +61,4 @@
 - When touching the Wave 9 dashboard lane, sync `docs/specs/WAVE9_DASHBOARD.md`, `docs/closeouts/WAVE9_CLOSEOUT.md`, `dashboard/README.md`, and current-truth front doors in the same session; update `MIGRATIONS.md` only if a real shared contract changes.
 - When touching V1 final truth, sync `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`, `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`, and current-truth front doors without editing runtime, test, package, scenario, or historical Wave 1-9 closeout surfaces.
 - When touching the V2-A live lane, sync `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`, `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`, `MIGRATIONS.md`, `dashboard/README.md`, and current-truth front doors in the same session; do not modify runtime/test/dashboard source unless a later approved structural packet opens that scope.
+- When touching the V2-B/GARP Authority Runway finish lane, sync `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`, `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`, `MIGRATIONS.md`, `dashboard/README.md`, and current-truth front doors without editing runtime, dashboard source, tests, package files, V1 final truth, V1 master closeout, or V2-A truth files unless a later approved structural packet opens that scope.

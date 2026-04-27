@@ -2,7 +2,7 @@
 
 ## Repo Identity
 
-Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, a bounded Wave 5 authority-topology lane, a bounded Wave 6 forensic-chain lane, a bounded Wave 7 civic skins rendering lane, a bounded Wave 8 corridor scenario integration lane, a Wave 9 local dashboard proof lane, and a V2-A local/demo-day live civic nervous system extension. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
+Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, a bounded Wave 5 authority-topology lane, a bounded Wave 6 forensic-chain lane, a bounded Wave 7 civic skins rendering lane, a bounded Wave 8 corridor scenario integration lane, a Wave 9 local dashboard proof lane, a V2-A local/demo-day live civic nervous system extension, and a V2-B/GARP Authority Runway local sublane. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
 
 ## Agent Start Here / Read First
 
@@ -17,15 +17,17 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 9. [`docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`](docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md)
 10. [`docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md)
 11. [`docs/closeouts/README.md`](docs/closeouts/README.md)
-12. [`docs/specs/WAVE3_NATS_BRIDGE.md`](docs/specs/WAVE3_NATS_BRIDGE.md)
-13. [`docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`](docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md)
-14. [`docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`](docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md)
-15. [`docs/specs/WAVE4_5_CALIBRATION.md`](docs/specs/WAVE4_5_CALIBRATION.md)
-16. [`docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`](docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md)
-17. [`docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`](docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md)
-18. [`docs/specs/WAVE7_CIVIC_SKINS.md`](docs/specs/WAVE7_CIVIC_SKINS.md)
-19. [`docs/specs/WAVE8_CORRIDOR_SCENARIO.md`](docs/specs/WAVE8_CORRIDOR_SCENARIO.md)
-20. [`docs/specs/WAVE9_DASHBOARD.md`](docs/specs/WAVE9_DASHBOARD.md)
+12. [`docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`](docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md)
+13. [`docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md)
+14. [`docs/specs/WAVE3_NATS_BRIDGE.md`](docs/specs/WAVE3_NATS_BRIDGE.md)
+15. [`docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`](docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md)
+16. [`docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`](docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md)
+17. [`docs/specs/WAVE4_5_CALIBRATION.md`](docs/specs/WAVE4_5_CALIBRATION.md)
+18. [`docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`](docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md)
+19. [`docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`](docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md)
+20. [`docs/specs/WAVE7_CIVIC_SKINS.md`](docs/specs/WAVE7_CIVIC_SKINS.md)
+21. [`docs/specs/WAVE8_CORRIDOR_SCENARIO.md`](docs/specs/WAVE8_CORRIDOR_SCENARIO.md)
+22. [`docs/specs/WAVE9_DASHBOARD.md`](docs/specs/WAVE9_DASHBOARD.md)
 
 ## Session Posture
 
@@ -34,7 +36,8 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Treat Wave 9 as the final V1 wave.
 - Do not create or describe Wave 10 as active V1 scope; there is no Wave 10 in V1.
 - Treat V2-A as a local/demo-day Meridian V2 extension with shipped truth recorded in `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`.
-- Treat V2-B prompt cutting as gated on V2-A green closeout plus supplied and inspected Foreman concept and Bronze prototype sources.
+- Treat V2-B/GARP Authority Runway as a local G1-G5 sublane recorded in `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md` and `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`.
+- Treat full V2-B Foreman prompt cutting as gated on supplied and inspected Foreman concept and Bronze prototype sources plus Tim approval.
 - Keep all claims bounded to visible files and approved inputs.
 - Surface uncertainty as HOLD instead of filling gaps.
 - Keep root canon synchronized when substrate truth changes.
@@ -50,6 +53,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Do not describe Wave 9 as production application behavior, hosted deployment, auth, live broker proof, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, new governance computation, public portal behavior, legal sufficiency, TPIA compliance, TRAIGA compliance, official disclosure approval, or real city runtime behavior.
 - Do not describe Meridian V1 as a deployed production city system or legal compliance certification.
 - Do not describe V2-A as production app behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, live Auth0/OpenFGA integration, live Whisper/audio ingestion, legal compliance certification, dashboard-side truth computation, Foreman behavior, or V2-B ship scope.
+- Do not describe the V2-B/GARP Authority Runway as full V2-B Foreman closure, Foreman behavior, production auth, live OpenFGA behavior, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
 
 ## Non-Negotiables
 
@@ -142,6 +146,7 @@ Edit(/**/*.config.*)
 - `docs/specs/WAVE9_DASHBOARD.md`
 - `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`
 - `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`
+- `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`
 - `docs/INDEX.md`
 - `docs/ENGINE_INDEX.md`
 - `docs/UI_INDEX.md`
@@ -165,6 +170,7 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE9_CLOSEOUT.md`
 - `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`
+- `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`
 - `dashboard/README.md`
 - `dashboard/package.json`
 - `dashboard/index.html`
@@ -188,6 +194,7 @@ Edit(/**/*.config.*)
 - Wave 8 truth: bounded integration surfaces ship under `src/integration/` plus `scripts/run-corridor-scenario.js` with additive integration-layer contracts (`wave8.pipelineBridgeOutput.v1`, `wave8.matchResult.v1`, `wave8.scenarioResult.v1`, `wave8.cascadeResult.v1`) and a runner-local report contract (`wave8.packet5.runnerReport.v1`); frozen scenario fixtures (`routine`, `contested`, `emergency`) and `tests/integration/*.test.js` prove deterministic replay, structured live missing-env HOLD posture, single-state composition, multi-step cascade continuity, and five-skin re-rendering at each cascade step; no Wave 1-7 runtime/module widening, no dashboard/deployment claim, no live broker/auth/audio claim, and no legal/TRAIGA sufficiency claim ship.
 - Wave 9 truth: a local dashboard proof ships under `dashboard/` with committed snapshots in `dashboard/public/scenarios/*.json`, local demo command `npm --prefix dashboard run dev`, canonical URL `http://localhost:5173/`, skin payload consumption from `step.skins.outputs`, view-only Director Mode / Absence Lens overlays, and no Wave 1-8 substrate edits, root package pollution, auth, deployment, live broker, live network dependency, new governance computation, legal sufficiency, TPIA compliance, or TRAIGA compliance claim.
 - V2-A truth: a local/demo-day live civic nervous system extension ships under `src/live/**`, `scripts/run-live-governance.js`, `scripts/replay-constellation-stream.js`, and dashboard-local Live Mode surfaces. It records local live session contracts, local governance projection, JSON-only HoldPoint ingest, live-computed absence findings, source-manifested local demo Fort Worth seed/corridor generation, Constellation-compatible replay, snapshot-default dashboard Live Mode, and inert Foreman seams. It does not ship production behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, Auth0/OpenFGA integration, live Whisper/audio, legal compliance certification, dashboard-side truth computation, Foreman behavior, or V2-B behavior.
+- V2-B/GARP truth: a local G1-G5 Authority Runway ships dashboard-local Auth0 Universal Login role-session proof, deterministic local authority request/evaluation/store contracts, local lifecycle/action record behavior, dashboard authority cockpit, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. It does not close full V2-B Foreman, ship Foreman behavior, prove Auth0 tenant connectivity, ship OpenFGA behavior, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
 - V1 final truth: Meridian V1 is complete through Wave 9; Wave 9 is the final V1 wave; there is no Wave 10 in V1; V2 work stays outside V1 under approved envelopes. Final V1 verification posture records dashboard `36` passing / `0` failing across `14` dashboard test files and repo-wide JS `511` passing / `0` failing, with 1920x1080 and 1280x720 visual proof HOLDs carried honestly.
 
 ## Required Sync Surfaces
@@ -230,6 +237,7 @@ Edit(/**/*.config.*)
 - `docs/closeouts/WAVE9_CLOSEOUT.md`
 - `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`
+- `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`
 - `dashboard/README.md`
 
 ## Closeout Requirements

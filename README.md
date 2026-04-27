@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures), a Wave 9 local dashboard proof under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots, and a V2-A local/demo-day live civic nervous system extension. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. This repo is still not a production application; the dashboard is a local-only demo package with snapshot default and optional local Live Mode.
+Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures), a Wave 9 local dashboard proof under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots, a V2-A local/demo-day live civic nervous system extension, and a V2-B/GARP Authority Runway local sublane. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. This repo is still not a production application; the dashboard is a local-only demo package with snapshot default, optional local Live Mode, dashboard-local Auth0 Universal Login role-session proof, OpenFGA deferred, payload-only notification builder, and prepared disclosure preview actions.
 
 ## Agent Start Here
 
@@ -12,12 +12,16 @@ Meridian is a governed city digital twin intelligence repo. The repo contains th
 6. [docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md](docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md)
 7. [docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md](docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md)
 8. [docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md)
+9. [docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md](docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md)
+10. [docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md)
 
 ## Current Status
 
 Meridian V1 is complete through Wave 9. The final V1 implementation baseline commit is `3374d0f4ad7d410cdd37a765db8d473b36f92482` (`docs(dashboard): close wave9 local dashboard lane`). Wave 9 is the final V1 wave. There is no Wave 10 in V1.
 
 Meridian V2-A is the local/demo-day extension now recorded by `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`. V2-A ships local live session records, local governance projection, JSON-only HoldPoint ingest, live-computed absence findings, optional dashboard Live Mode, local demo seed/corridor generation, and Constellation-compatible replay. V2-A does not ship production behavior, live city integration, legal compliance certification, live broker proof, Auth0/OpenFGA integration, live Whisper/audio, or Foreman behavior.
+
+Meridian V2-B/GARP Authority Runway is the local G1-G5 runway recorded by `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md` and `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`. It ships dashboard-local Auth0 Universal Login role-session proof, deterministic authority resolution request/evaluation/store contracts, local authority lifecycle/action record behavior, the GARP authority cockpit, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. It does not close full V2-B Foreman, ship Foreman behavior, ship OpenFGA behavior, prove Auth0 tenant connectivity, ship CIBA, deliver notifications, create a public portal, or claim legal/TPIA compliance or official Fort Worth workflow status.
 
 ## V1 Final Truth
 
@@ -38,6 +42,15 @@ Meridian V2-A is the local/demo-day extension now recorded by `docs/specs/MERIDI
 - Dashboard posture: snapshot mode remains default; Live Mode is optional/local and emits HOLD messaging when disconnected or invalid.
 - Foreman posture: `foreman_hints`, `foreman_context_seed`, and the dashboard mount are preserved as inert seams only.
 - V2-B gate: remains HOLD until Foreman concept source, Bronze prototype source, and V2-A green closeout evidence are supplied and inspected.
+
+## V2-B/GARP Authority Runway
+
+- GARP spec: `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`
+- GARP closeout: `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`
+- Literal contract strings: `meridian.v2.roleSessionProof.v1`, `meridian.v2.authorityResolutionRequest.v1`, `meridian.v2.authorityResolutionEvaluation.v1`, `meridian.v2.authorityRequestStore.v1`, `meridian.v2.authorityDashboardState.v1`, `meridian.v2.authorityTimelineView.v1`, `meridian.v2.disclosurePreviewReport.v1`, `meridian.v2.garpHandoffContext.v1`, and `meridian.v2.disclosurePreviewActionBundle.v1`.
+- G3 lifecycle/token/notification/result behavior is a local GARP lifecycle/action record family where the repo does not contain additional literal `meridian.v2.*` contract strings.
+- Dashboard posture: snapshot mode and Live Mode remain preserved; `step.skins.outputs` remains active; `step.skins.renders` remains absent; Director Mode and Absence Lens remain view-only overlays.
+- Foreman posture: handoff context carries `foreman_ready: false`; Foreman behavior remains gated.
 
 ## What This Is
 
@@ -94,6 +107,13 @@ Meridian V2-A is the local/demo-day extension now recorded by `docs/specs/MERIDI
   - source-manifested local demo Fort Worth seed data and parameterized corridor generation
   - Constellation-compatible replay with structured HOLD for missing live broker proof
   - inert Foreman seams only
+- A V2-B/GARP Authority Runway local sublane with:
+  - dashboard-local Auth0 Universal Login role-session proof and public fallback
+  - deterministic local authority request/evaluation/store behavior
+  - local action-token, payload-only notification builder, and authority lifecycle handling
+  - dashboard-local authority cockpit and timeline
+  - Foreman handoff context with `foreman_ready: false`
+  - prepared disclosure preview actions only
 - A single external runtime dependency surface in `package.json`: `nats`.
 
 ## What This Is Not
@@ -117,14 +137,19 @@ Meridian V2-A is the local/demo-day extension now recorded by `docs/specs/MERIDI
 - Not a persistent match-result store.
 - Not a chain replay engine.
 - Not live Auth0/OpenFGA wiring.
+- Not live OpenFGA behavior; OpenFGA remains deferred.
+- Not Auth0 tenant connectivity proof.
+- Not CIBA.
+- Not notification delivery, live browser push, live email sending, or service worker behavior.
+- Not clipboard write, browser download trigger, print trigger, or PDF generation from disclosure preview actions.
 - Not live Whisper/audio ingestion.
 - Not real TPIA legal sufficiency or TRAIGA 2.0 compliance claims.
 - Not new governance computation inside the dashboard.
 - Not live Fort Worth city integration.
 - Not full Accela/GIS automation.
 - Not live Constellation broker proof.
-- Not Foreman behavior, Foreman API, Foreman model call, voice/avatar, narration, chat panel, or autonomous Foreman action.
-- Not V2-B ship scope.
+- Not Foreman behavior, API, model call, voice/avatar, narration, chat panel, or autonomous Foreman action.
+- Not full V2-B Foreman closeout.
 
 ## Repo Structure
 
@@ -162,6 +187,9 @@ scripts/
   replay-constellation-stream.js
 dashboard/
   public/scenarios/*.json
+  src/auth/**/*.ts*
+  src/roleSession/**/*.ts
+  src/authority/**/*.ts
   src/live/**/*.ts
   src/foremanGuide/**/*.tsx
   src/**/*.ts*
@@ -177,7 +205,7 @@ docs/
 
 ## V2 Boundary / Deferred Beyond V2-A
 
-V2-A is the bounded local/demo-day V2 extension recorded in this repo. Later V2 work remains gated by a new approved envelope. This list is not a V2-B plan.
+V2-A is the bounded local/demo-day V2 extension recorded in this repo. V2-B/GARP Authority Runway is a local G1-G5 sublane and prerequisite only. Later full V2-B Foreman work remains gated by a new approved envelope and inspected Foreman concept/prototype source.
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
 - Generalized event routing and authority-topology widening beyond the bounded lanes.
@@ -186,6 +214,7 @@ V2-A is the bounded local/demo-day V2 extension recorded in this repo. Later V2 
 - Meeting-capture-to-skin and forensic-entry-to-skin routing.
 - Governance-truth computation inside skins.
 - Dashboard deployment/hosting/auth/live integration beyond the local Wave 9 proof.
+- OpenFGA behavior, Auth0 tenant connectivity proof, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, and official disclosure workflow remain unshipped.
 - Multi-corridor routing in one scenario run.
 - Persistent match-result storage.
 - Chain replay engine.

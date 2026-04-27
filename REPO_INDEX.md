@@ -6,9 +6,9 @@ This is the front-door navigation index for Meridian. It points agents and maint
 
 ## Wave Scope Status
 
-Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. Meridian V2-A now records a local/demo-day live civic nervous system extension under an approved V2 envelope.
+Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. Meridian V2-A records a local/demo-day live civic nervous system extension under an approved V2 envelope. Meridian V2-B/GARP Authority Runway records a local G1-G5 authority sublane and does not close full V2-B Foreman.
 
-Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. Wave 4.5 closes the calibration lane with frozen corpus posture, historical baseline truth/pre-Block-C comparison artifacts, and a locked final replay artifact family/report. Shipped Wave 5 Packets 1-3 add a bounded authority-topology lane in `src/governance/runtime/` with additive entity validator widening, static Fort Worth topology declaration, bounded authority evaluation, bounded REVOKE activation, and projection-only propagation. Shipped Wave 6 Packets 1-2 add a bounded forensic-chain lane under `src/governance/forensic/` plus an additive post-evaluation publication seam in `src/bridge/governanceTransportAdapter.js`. Wave 7 Packets 1-4 add a bounded civic skins rendering lane under `src/skins/` with five shipped skins, deterministic public disclosure boundary, and five-skin structural integration proof. Wave 8 Packets 1-5 add a bounded corridor scenario integration lane under `src/integration/` with deterministic replay bridge output, deterministic matching, single-state scenario composition, resolution cascade replay, and runner verification over frozen scenario fixtures. Wave 9 adds a bounded local dashboard lane under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots and remains local-only. V2-A adds bounded local live surfaces under `src/live/**`, `scripts/run-live-governance.js`, `scripts/replay-constellation-stream.js`, and dashboard-local Live Mode surfaces while preserving snapshot default and inert Foreman seams.
+Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipeline/` onto the previously shipped Wave 1 foundation, Wave 2 ontology extension, Wave 3 transport bridge substrate, and Wave 4A bounded governance runtime lane. Wave 4.5 closes the calibration lane with frozen corpus posture, historical baseline truth/pre-Block-C comparison artifacts, and a locked final replay artifact family/report. Shipped Wave 5 Packets 1-3 add a bounded authority-topology lane in `src/governance/runtime/` with additive entity validator widening, static Fort Worth topology declaration, bounded authority evaluation, bounded REVOKE activation, and projection-only propagation. Shipped Wave 6 Packets 1-2 add a bounded forensic-chain lane under `src/governance/forensic/` plus an additive post-evaluation publication seam in `src/bridge/governanceTransportAdapter.js`. Wave 7 Packets 1-4 add a bounded civic skins rendering lane under `src/skins/` with five shipped skins, deterministic public disclosure boundary, and five-skin structural integration proof. Wave 8 Packets 1-5 add a bounded corridor scenario integration lane under `src/integration/` with deterministic replay bridge output, deterministic matching, single-state scenario composition, resolution cascade replay, and runner verification over frozen scenario fixtures. Wave 9 adds a bounded local dashboard lane under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots and remains local-only. V2-A adds bounded local live surfaces under `src/live/**`, `scripts/run-live-governance.js`, `scripts/replay-constellation-stream.js`, and dashboard-local Live Mode surfaces while preserving snapshot default and inert Foreman seams. V2-B/GARP adds local authority runway surfaces under `src/live/authority/**` plus dashboard-local auth, role-session, authority cockpit, handoff, and prepared action surfaces while preserving Foreman as gated.
 
 ## Canonical Root Files
 
@@ -26,12 +26,13 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 ## Canonical Directories
 
 - `src/` (bridge + governance + pipeline + skins + integration + entity + config substrate)
-- `src/live/` (V2-A local live contracts, gateway, adapters, absence, seed, corridor, and replay surfaces)
+- `src/live/` (V2-A local live contracts, gateway, adapters, absence, seed, corridor, replay, and V2-B/GARP local authority runway surfaces)
 - `tests/` (structural proof suite + bridge/runtime proof suite + pipeline proof suite)
 - `docs/` (specs, schemas, notes, indexes, closeouts)
 - `scripts/` (synthetic bridge proof harness + corridor scenario runner proof harness)
 - `dashboard/` (Wave 9 local dashboard proof package)
-- `dashboard/src/live/` and `dashboard/src/foremanGuide/` (V2-A dashboard-local Live Mode mirror and inert Foreman mount)
+- `dashboard/src/auth/`, `dashboard/src/roleSession/`, and `dashboard/src/authority/` (V2-B/GARP dashboard-local role-session proof, authority cockpit, handoff, and prepared action surfaces)
+- `dashboard/src/live/` and `dashboard/src/foremanGuide/` (V2-A dashboard-local Live Mode mirror and inert Foreman mount; GARP handoff keeps `foreman_ready: false`)
 
 ## Current Primary Sources
 
@@ -41,6 +42,8 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - V1 master closeout: `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - V2-A live civic nervous system spec: `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`
 - V2-A closeout: `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`
+- V2-B/GARP Authority Runway spec: `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`
+- V2-B/GARP Authority Runway closeout: `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`
 - Bridge runtime substrate: `src/bridge/*.js`
 - Governance runtime landing zone, sweep facade, subset, and policy pack: `src/governance/runtime/*.js`
 - Wave 4B capture substrate: `src/pipeline/*.py`
@@ -67,6 +70,8 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - V2-A local seed/corridor generator: `src/live/cityData/*.js`, `src/live/corridorGenerator.js`
 - V2-A Constellation-compatible replay: `src/live/adapters/constellationReplayAdapter.js`, `scripts/replay-constellation-stream.js`
 - V2-A dashboard Live Mode surfaces: `dashboard/src/live/**`, `dashboard/src/components/LiveEventRail.tsx`, `dashboard/src/components/LiveCapturePanel.tsx`, `dashboard/src/foremanGuide/ForemanMountPoint.tsx`
+- V2-B/GARP local authority core/lifecycle surfaces: `src/live/authority/**`
+- V2-B/GARP dashboard authority surfaces: `dashboard/src/auth/**`, `dashboard/src/roleSession/**`, `dashboard/src/authority/**`, `dashboard/src/components/GARPStatusIndicator.tsx`, `dashboard/src/components/AuthorityResolutionPanel.tsx`, `dashboard/src/components/AuthorityTimeline.tsx`, `dashboard/src/components/AuthorityNotificationDemo.tsx`, `dashboard/src/components/DisclosurePreviewPanel.tsx`, `dashboard/src/components/RoleSessionPanel.tsx`
 - Wave 6 forensic substrate: `src/governance/forensic/*.js`
 - Wave 7 skins lane: `src/skins/**/*.js`
 - Wave 8 integration lane: `src/integration/*.js`
@@ -86,7 +91,8 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Wave 9 is the final V1 wave.
 - There is no Wave 10 in V1.
 - V2-A is landed locally as a bounded local/demo-day V2 extension.
-- V2-B remains gated on V2-A green closeout plus supplied and inspected Foreman concept and Bronze prototype sources.
+- V2-B/GARP Authority Runway is landed locally as a bounded G1-G5 authority sublane.
+- Full V2-B Foreman remains gated on supplied and inspected Foreman concept and Bronze prototype sources plus Tim approval.
 - Final V1 implementation baseline commit is `3374d0f4ad7d410cdd37a765db8d473b36f92482`.
 - Wave 9 is landed as a bounded local dashboard lane under `dashboard/`.
 - Wave 7 ships five skins (`civic.permitting`, `civic.council`, `civic.operations`, `civic.dispatch`, `civic.public`) with deterministic public disclosure boundaries in `src/skins/redaction.js`.
@@ -107,6 +113,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - 1920x1080 and 1280x720 screenshot-level visual proof remain HOLD.
 - No live broker proof or production runtime compatibility proof ships in this repo today.
 - No live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, Auth0/OpenFGA live integration, live Whisper/audio ingestion, legal compliance certification, dashboard-side truth computation, or Foreman behavior ships in V2-A.
+- GARP ships dashboard-local Auth0 Universal Login role-session proof only; no Auth0 tenant connectivity proof, OpenFGA behavior, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, official Fort Worth workflow, ForensicChain vocabulary widening, LiveFeedEvent kind widening, or Foreman behavior ships in GARP.
 - `package.json` declares only `nats` as a runtime dependency.
 - `src/config/constellation.js` remains the read-only Meridian publisher/config substrate.
 - The governance transport adapter now delegates `command_request` evaluation into `src/governance/runtime/` and may return `ALLOW`, `SUPERVISE`, `HOLD`, or `BLOCK`.
@@ -148,6 +155,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Wave 7 remains rendering-only and does not ship dashboard/UI runtime, public portal behavior, legal compliance workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins.
 - Wave 8 remains integration-lane proof only and does not ship dashboard/UI, deployment/hosting, live broker wiring, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, entity validator changes, governance/authority/forensic/skin logic rewrites, legal sufficiency claims, TRAIGA compliance claims, multi-corridor routing in one run, persistent match-result storage, or chain replay engine.
 - Wave 9 remains a local dashboard proof only and does not ship hosted deployment, auth, live broker wiring, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, live network dependency, new governance computation, Wave 1-8 substrate edits, root package pollution, legal sufficiency claims, TPIA compliance claims, or TRAIGA compliance claims.
+- V2-B/GARP remains a local Authority Runway only and does not close full V2-B Foreman, ship Foreman behavior, production auth, OpenFGA behavior, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
 - Ontology filename seam remains unresolved and out of scope here.
 
 ## Where To Change X (Quick Pointers)
@@ -165,6 +173,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Wave 8 corridor scenario truth surfaces: `docs/specs/WAVE8_CORRIDOR_SCENARIO.md`, `docs/closeouts/WAVE8_CLOSEOUT.md`, `src/integration/*.js`, `tests/integration/*.test.js`, `tests/fixtures/scenarios/**/*`, `scripts/run-corridor-scenario.js`
 - Wave 9 dashboard truth surfaces: `docs/specs/WAVE9_DASHBOARD.md`, `docs/closeouts/WAVE9_CLOSEOUT.md`, `dashboard/README.md`, `dashboard/**/*.ts*`, `dashboard/public/scenarios/*.json`
 - V2-A local live truth surfaces: `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`, `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`, `MIGRATIONS.md`, `src/live/**`, `scripts/run-live-governance.js`, `scripts/replay-constellation-stream.js`, `dashboard/src/live/**`, `dashboard/src/foremanGuide/**`, `dashboard/README.md`
+- V2-B/GARP Authority Runway truth surfaces: `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`, `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`, `MIGRATIONS.md`, `src/live/authority/**`, `dashboard/src/auth/**`, `dashboard/src/roleSession/**`, `dashboard/src/authority/**`, `dashboard/README.md`
 - V1 final truth surfaces: `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`, `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - Bridge/runtime/pipeline tests and fixtures: `tests/bridge*.test.js`, `tests/governance.runtime.test.js`, `tests/governance.policyPack.test.js`, `tests/governance.runtimeSubset.test.js`, `tests/governance.promiseConfidence.test.js`, `tests/governance.sweep.test.js`, `tests/governance.demoProof.test.js`, `tests/governance.pipelineHandoffProof.test.js`, `tests/pipeline/*.py`, `tests/pipeline/fixtures/*`, `tests/fixtures/governance/*.json`, `tests/fixtures/nats/*.json`, `scripts/synthetic-constellation.js`
 - Governance shadows: `src/governance/shadows.js`

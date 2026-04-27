@@ -89,9 +89,11 @@ docs/
   closeouts/WAVE9_CLOSEOUT.md
   closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md
   closeouts/MERIDIAN_V2A_CLOSEOUT.md
+  closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
   specs/MERIDIAN_V1_FINAL_TRUTH.md
   specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md
+  specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md
   specs/NATS_EVENT_COMMAND_TRANSLATION.md
   specs/WAVE4A_GOVERNANCE_RUNTIME.md
   specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md
@@ -125,7 +127,8 @@ dashboard/
 - Treat Wave 9 as the final V1 wave.
 - Do not create or describe Wave 10 as active V1 scope; there is no Wave 10 in V1.
 - Treat V2-A as a local/demo-day Meridian V2 extension with truth surfaces in `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`.
-- Treat V2-B as gated on V2-A green closeout plus supplied and inspected Foreman concept and Bronze prototype sources.
+- Treat V2-B/GARP Authority Runway as a local G1-G5 sublane only.
+- Treat full V2-B Foreman as gated on supplied and inspected Foreman concept and Bronze prototype sources plus Tim approval.
 - Keep scope locked to the approved block.
 - Preserve canon alignment across root documents.
 - Treat upstream references as references unless their contents are available in this repo.
@@ -141,6 +144,7 @@ dashboard/
 - Describe Wave 9 only as a local dashboard proof over committed snapshots, not as production application behavior, hosted deployment, auth, live broker proof, live network dependency, public portal behavior, new governance computation, legal sufficiency, TPIA compliance, TRAIGA compliance, official disclosure approval, or real city runtime behavior.
 - Describe Meridian V1 only as completed local/proof infrastructure, not as a deployed production city system or legal compliance certification.
 - Describe V2-A only as local/demo-day live session, gateway/projection, JSON-only HoldPoint adapter, live absence, optional local Live Mode, local seed/corridor, and replay surfaces. Do not describe V2-A as production behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, live Auth0/OpenFGA integration, live Whisper/audio ingestion, legal compliance certification, dashboard-side truth computation, Foreman behavior, or V2-B behavior.
+- Describe V2-B/GARP only as local Authority Runway surfaces: dashboard-local Auth0 Universal Login role-session proof, deterministic local authority request/evaluation/store contracts, local lifecycle/action record behavior, dashboard authority cockpit, payload-only notification builder, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. Do not describe it as full V2-B Foreman closure, Foreman behavior, production auth, live OpenFGA behavior, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
 
 ## Planning Gate
 
@@ -163,6 +167,7 @@ dashboard/
 - Do not overstate Wave 9 local dashboard proof as hosted, auth-wired, live-networked, or legally sufficient behavior.
 - Do not describe a Wave 10 as part of V1.
 - Do not overstate V2-A local/demo-day surfaces as deployed, official, legally certified, live-broker-backed, auth-wired, audio-backed, Foreman-enabled, or V2-B behavior.
+- Do not overstate V2-B/GARP local runway surfaces as Foreman-enabled, production, legally sufficient, OpenFGA-backed, CIBA-backed, notification-delivering, or official city workflow behavior.
 - Stop if repo truth conflicts with the approved task.
 
 ## Verification Rules
@@ -189,6 +194,8 @@ dashboard/
 - V1 closure docs do not change shared contracts; they route to final V1 truth and carry remaining HOLDs.
 - V2-A adds a shared local live contract family recorded in `MIGRATIONS.md` and keeps adapter-local `holdpointArtifactJson.v1` plus dashboard-local TypeScript mirrors out of shared contract source unless a later approved packet promotes them.
 - V2-A does not widen V1 contracts, Wave 6 forensic-chain contracts, `BridgeEnvelope`, `GovernancePublication`, NATS, package dependencies, auth/config/security surfaces, or legal/live-system claims.
+- V2-B/GARP adds a local authority contract family recorded in `MIGRATIONS.md`; literal contract strings must only be claimed when present in source.
+- V2-B/GARP does not widen V1 contracts, V2-A contracts, LiveFeedEvent kinds, ForensicChain vocabulary, root package dependencies, OpenFGA behavior, production auth posture, notification delivery, public portal behavior, or legal/TPIA claims.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 
