@@ -3,6 +3,8 @@ import {
   type DashboardSkinKey,
 } from "../adapters/skinPayloadAdapter.ts";
 import {
+  AUTH0_EVAL_ROLE_IDS,
+  type Auth0EvalRoleId,
   MERIDIAN_DASHBOARD_ROLES,
   type MeridianDashboardRole,
 } from "./roleSessionTypes.ts";
@@ -22,6 +24,30 @@ export const ROLE_SKIN_POLICY: Record<
   public: ["public"],
   public_works_director: ["operations", "permitting", "council"],
 };
+
+export const AUTH0_EVAL_ROLE_TO_DASHBOARD_ROLE: Record<
+  Auth0EvalRoleId,
+  MeridianDashboardRole
+> = {
+  council_member: "council_member",
+  department_director: "public_works_director",
+  field_inspector: "permitting_staff",
+  operations_lead: "public_works_director",
+  public_viewer: "public",
+};
+
+export function isAuth0EvalRoleId(value: unknown): value is Auth0EvalRoleId {
+  return (
+    typeof value === "string" &&
+    (AUTH0_EVAL_ROLE_IDS as readonly string[]).includes(value)
+  );
+}
+
+export function mapAuth0EvalRoleToDashboardRole(
+  role: Auth0EvalRoleId
+): MeridianDashboardRole {
+  return AUTH0_EVAL_ROLE_TO_DASHBOARD_ROLE[role];
+}
 
 export function isMeridianDashboardRole(
   value: unknown

@@ -27,6 +27,7 @@ import {
 
 function createAuthState(user: Record<string, unknown> | null = null): MeridianAuthState {
   const config = resolveAuth0DashboardConfig({
+    VITE_AUTH0_CALLBACK_URL: "http://localhost:5173",
     VITE_AUTH0_CLIENT_ID: "client-a",
     VITE_AUTH0_DOMAIN: "tenant.example.auth0.com",
   });

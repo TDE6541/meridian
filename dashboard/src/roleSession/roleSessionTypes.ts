@@ -16,6 +16,16 @@ export const MERIDIAN_DASHBOARD_ROLES = [
 
 export type MeridianDashboardRole = (typeof MERIDIAN_DASHBOARD_ROLES)[number];
 
+export const AUTH0_EVAL_ROLE_IDS = [
+  "field_inspector",
+  "department_director",
+  "council_member",
+  "operations_lead",
+  "public_viewer",
+] as const;
+
+export type Auth0EvalRoleId = (typeof AUTH0_EVAL_ROLE_IDS)[number];
+
 export type RoleSessionAuthStatus =
   | "authenticated"
   | "error"

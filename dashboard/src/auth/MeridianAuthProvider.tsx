@@ -100,7 +100,7 @@ function Auth0SessionBridge({
     logout: () => {
       void logout({
         logoutParams: {
-          returnTo: getRedirectUri(),
+          returnTo: config.callbackUrl ?? getRedirectUri(),
         },
       });
     },
@@ -121,7 +121,7 @@ export function MeridianAuthProvider({
   children: ReactNode;
   config?: Auth0DashboardConfig;
 }) {
-  if (!config.isConfigured || !config.domain || !config.clientId) {
+  if (!config.isConfigured || !config.domain || !config.clientId || !config.callbackUrl) {
     const value: MeridianAuthState = {
       authStatus: "unavailable",
       config,
@@ -145,7 +145,7 @@ export function MeridianAuthProvider({
     <Auth0Provider
       authorizationParams={{
         audience: config.audience ?? undefined,
-        redirect_uri: getRedirectUri(),
+        redirect_uri: config.callbackUrl,
       }}
       clientId={config.clientId}
       domain={config.domain}

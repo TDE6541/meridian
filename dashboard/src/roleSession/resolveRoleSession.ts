@@ -7,10 +7,14 @@ import type { DashboardSkinKey } from "../adapters/skinPayloadAdapter.ts";
 import {
   getAllowedSkinsForRole,
   getFirstAllowedSkin,
+  isAuth0EvalRoleId,
   isMeridianDashboardRole,
   isSkinAllowedForRole,
+  mapAuth0EvalRoleToDashboardRole,
 } from "./roleSkinPolicy.ts";
 import {
+  AUTH0_EVAL_ROLE_IDS,
+  MERIDIAN_DASHBOARD_ROLES,
   ROLE_SESSION_PROOF_CONTRACT,
   type DashboardRoleSessionProofV1,
   type MeridianDashboardRole,
@@ -33,6 +37,18 @@ function asString(value: unknown): string | null {
     : null;
 }
 
+function asStringValues(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => asString(item))
+      .filter((item): item is string => Boolean(item));
+  }
+
+  const stringValue = asString(value);
+
+  return stringValue ? [stringValue] : [];
+}
+
 function readClaim(
   user: Record<string, unknown> | null,
   claimNames: readonly string[]
@@ -47,6 +63,63 @@ function readClaim(
     if (value) {
       return { claimName, value };
     }
+  }
+
+  return null;
+}
+
+function mapRoleClaimValues(
+  values: readonly string[]
+): { role: MeridianDashboardRole; sourceRole: string } | null {
+  for (const auth0Role of AUTH0_EVAL_ROLE_IDS) {
+    if (values.includes(auth0Role) && isAuth0EvalRoleId(auth0Role)) {
+      return {
+        role: mapAuth0EvalRoleToDashboardRole(auth0Role),
+        sourceRole: auth0Role,
+      };
+    }
+  }
+
+  for (const dashboardRole of MERIDIAN_DASHBOARD_ROLES) {
+    if (values.includes(dashboardRole) && isMeridianDashboardRole(dashboardRole)) {
+      return {
+        role: dashboardRole,
+        sourceRole: dashboardRole,
+      };
+    }
+  }
+
+  return null;
+}
+
+function readRoleClaim(
+  user: Record<string, unknown> | null,
+  claimNames: readonly string[]
+):
+  | {
+      claimName: string;
+      role: MeridianDashboardRole | null;
+      sourceRole: string;
+    }
+  | null {
+  if (!user) {
+    return null;
+  }
+
+  for (const claimName of claimNames) {
+    const values = asStringValues(user[claimName]);
+
+    if (values.length === 0) {
+      continue;
+    }
+
+    const mappedRole = mapRoleClaimValues(values);
+
+    return {
+      claimName,
+      role: mappedRole?.role ?? null,
+      sourceRole: mappedRole?.sourceRole ?? values[0],
+    };
   }
 
   return null;
@@ -157,7 +230,7 @@ export function resolveDashboardRoleSession({
     );
   }
 
-  const roleClaim = readClaim(
+  const roleClaim = readRoleClaim(
     user,
     unique([auth.config.roleClaim, ...AUTH0_ROLE_CLAIM_FALLBACKS])
   );
@@ -185,14 +258,14 @@ export function resolveDashboardRoleSession({
     );
   }
 
-  if (!isMeridianDashboardRole(roleClaim.value)) {
+  if (!roleClaim.role) {
     return resolvePublicSession(
       "authenticated",
       activeSkin,
       [
         createHold(
           "role_claim_unrecognized",
-          "HOLD: Authenticated role claim is not recognized; public mode active.",
+          `HOLD: Authenticated role claim is not recognized (${roleClaim.sourceRole}); public mode active.`,
           roleClaim.claimName
         ),
       ],
@@ -203,7 +276,7 @@ export function resolveDashboardRoleSession({
     );
   }
 
-  const role: MeridianDashboardRole = roleClaim.value;
+  const role = roleClaim.role;
   const allowedSkins = getAllowedSkinsForRole(role);
   const active_skin = isSkinAllowedForRole(activeSkin, allowedSkins)
     ? activeSkin

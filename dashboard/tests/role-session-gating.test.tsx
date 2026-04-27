@@ -6,7 +6,10 @@ import {
   MeridianAuthProvider,
   type MeridianAuthState,
 } from "../src/auth/MeridianAuthProvider.tsx";
-import { resolveAuth0DashboardConfig } from "../src/auth/authConfig.ts";
+import {
+  AUTH0_ROLES_CLAIM_NAMESPACE,
+  resolveAuth0DashboardConfig,
+} from "../src/auth/authConfig.ts";
 import {
   DASHBOARD_SKIN_ORDER,
   adaptStepSkinPayloads,
@@ -37,6 +40,7 @@ function createAuthState(
   overrides: Partial<MeridianAuthState> = {}
 ): MeridianAuthState {
   const config = resolveAuth0DashboardConfig({
+    VITE_AUTH0_CALLBACK_URL: "http://localhost:5173",
     VITE_AUTH0_CLIENT_ID: "client-a",
     VITE_AUTH0_DOMAIN: "tenant.example.auth0.com",
   });
@@ -138,6 +142,27 @@ const tests = [
     },
   },
   {
+    name: "Auth0 config reads domain client and callback env names",
+    run: () => {
+      const config = resolveAuth0DashboardConfig({
+        VITE_AUTH0_CALLBACK_URL: "http://localhost:5173/auth/callback",
+        VITE_AUTH0_CLIENT_ID: "client-a",
+        VITE_AUTH0_DOMAIN: "tenant.example.auth0.com",
+      });
+      const missingCallback = resolveAuth0DashboardConfig({
+        VITE_AUTH0_CLIENT_ID: "client-a",
+        VITE_AUTH0_DOMAIN: "tenant.example.auth0.com",
+      });
+
+      assert.equal(config.domain, "tenant.example.auth0.com");
+      assert.equal(config.clientId, "client-a");
+      assert.equal(config.callbackUrl, "http://localhost:5173/auth/callback");
+      assert.equal(config.isConfigured, true);
+      assert.equal(missingCallback.isConfigured, false);
+      assert.equal(missingCallback.holds[0]?.includes("public mode active"), true);
+    },
+  },
+  {
     name: "unauthenticated state resolves to public role",
     run: () => {
       const roleSession = resolveDashboardRoleSession({
@@ -150,6 +175,41 @@ const tests = [
       assert.equal(roleSession.role, "public");
       assert.deepEqual(roleSession.allowed_skins, ["public"]);
       assert.equal(roleSession.active_skin, "public");
+    },
+  },
+  {
+    name: "role session panel renders login and logout state without redirect",
+    run: () => {
+      const loginMarkup = renderMarkup(
+        <RoleSessionPanel
+          auth={createAuthState()}
+          roleSession={resolveDashboardRoleSession({
+            activeSkin: "public",
+            auth: createAuthState(),
+          })}
+        />
+      );
+      const logoutAuth = createAuthState({
+        authStatus: "authenticated",
+        isAuthenticated: true,
+        user: {
+          [AUTH0_ROLES_CLAIM_NAMESPACE]: ["public_viewer"],
+          sub: "auth0|public-viewer",
+        },
+      });
+      const logoutMarkup = renderMarkup(
+        <RoleSessionPanel
+          auth={logoutAuth}
+          roleSession={resolveDashboardRoleSession({
+            activeSkin: "public",
+            auth: logoutAuth,
+          })}
+        />
+      );
+
+      assert.equal(loginMarkup.includes("Login"), true);
+      assert.equal(logoutMarkup.includes("Logout"), true);
+      assert.equal(logoutMarkup.includes("public · public"), true);
     },
   },
   {
@@ -179,6 +239,77 @@ const tests = [
     },
   },
   {
+    name: "Auth0 Meridian roles namespace maps eval roles into proof shape",
+    run: () => {
+      const fieldInspector = resolveDashboardRoleSession({
+        activeSkin: "permitting",
+        auth: createAuthState({
+          authStatus: "authenticated",
+          isAuthenticated: true,
+          user: {
+            [AUTH0_ROLES_CLAIM_NAMESPACE]: ["field_inspector"],
+            department: "Inspections",
+            name: "Inspector A",
+            sub: "auth0|field-inspector",
+          },
+        }),
+      });
+      const departmentDirector = resolveDashboardRoleSession({
+        activeSkin: "operations",
+        auth: createAuthState({
+          authStatus: "authenticated",
+          isAuthenticated: true,
+          user: {
+            [AUTH0_ROLES_CLAIM_NAMESPACE]: ["department_director"],
+            sub: "auth0|department-director",
+          },
+        }),
+      });
+      const councilMember = resolveDashboardRoleSession({
+        activeSkin: "council",
+        auth: createAuthState({
+          authStatus: "authenticated",
+          isAuthenticated: true,
+          user: {
+            [AUTH0_ROLES_CLAIM_NAMESPACE]: ["council_member"],
+            sub: "auth0|council-member",
+          },
+        }),
+      });
+      const operationsLead = resolveDashboardRoleSession({
+        activeSkin: "operations",
+        auth: createAuthState({
+          authStatus: "authenticated",
+          isAuthenticated: true,
+          user: {
+            [AUTH0_ROLES_CLAIM_NAMESPACE]: ["operations_lead"],
+            sub: "auth0|operations-lead",
+          },
+        }),
+      });
+      const publicViewer = resolveDashboardRoleSession({
+        activeSkin: "public",
+        auth: createAuthState({
+          authStatus: "authenticated",
+          isAuthenticated: true,
+          user: {
+            [AUTH0_ROLES_CLAIM_NAMESPACE]: ["public_viewer"],
+            sub: "auth0|public-viewer",
+          },
+        }),
+      });
+
+      assert.equal(fieldInspector.contract, ROLE_SESSION_PROOF_CONTRACT);
+      assert.equal(fieldInspector.role, "permitting_staff");
+      assert.deepEqual(fieldInspector.allowed_skins, ["permitting", "operations"]);
+      assert.equal(fieldInspector.department, "Inspections");
+      assert.equal(departmentDirector.role, "public_works_director");
+      assert.equal(councilMember.role, "council_member");
+      assert.equal(operationsLead.role, "public_works_director");
+      assert.equal(publicViewer.role, "public");
+    },
+  },
+  {
     name: "unknown or missing role claim falls back to public with visible advisory",
     run: () => {
       const unknownRoleSession = resolveDashboardRoleSession({
@@ -203,6 +334,17 @@ const tests = [
           },
         }),
       });
+      const unknownNamespacedRoleSession = resolveDashboardRoleSession({
+        activeSkin: "public",
+        auth: createAuthState({
+          authStatus: "authenticated",
+          isAuthenticated: true,
+          user: {
+            [AUTH0_ROLES_CLAIM_NAMESPACE]: ["tenant_admin"],
+            sub: "auth0|unknown-namespaced",
+          },
+        }),
+      });
       const markup = renderMarkup(
         <RoleSessionPanel
           auth={createAuthState({ authStatus: "authenticated", isAuthenticated: true })}
@@ -214,6 +356,11 @@ const tests = [
       assert.equal(unknownRoleSession.holds[0]?.code, "role_claim_unrecognized");
       assert.equal(missingRoleSession.role, "public");
       assert.equal(missingRoleSession.holds[0]?.code, "role_claim_missing");
+      assert.equal(unknownNamespacedRoleSession.role, "public");
+      assert.equal(
+        unknownNamespacedRoleSession.holds[0]?.source_ref,
+        AUTH0_ROLES_CLAIM_NAMESPACE
+      );
       assert.equal(markup.includes("HOLD: Authenticated role claim is not recognized"), true);
     },
   },
