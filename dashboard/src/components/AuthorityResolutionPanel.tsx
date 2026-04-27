@@ -19,6 +19,7 @@ import {
 } from "../authority/useSharedAuthorityRequests.ts";
 
 export interface AuthorityResolutionPanelProps {
+  foremanHighlighted?: boolean;
   sharedAuthority?: UseSharedAuthorityRequestsResult;
   state: AuthorityDashboardStateV1;
 }
@@ -67,6 +68,7 @@ function sharedStatusClass(status: string): string {
 }
 
 export function AuthorityResolutionPanel({
+  foremanHighlighted = false,
   sharedAuthority,
   state,
 }: AuthorityResolutionPanelProps) {
@@ -154,7 +156,12 @@ export function AuthorityResolutionPanel({
   }
 
   return (
-    <section className="governance-card" data-authority-resolution-panel="true">
+    <section
+      className={`governance-card${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
+      data-authority-resolution-panel="true"
+      data-foreman-panel-id="authority-resolution"
+      data-foreman-highlighted={foremanHighlighted ? "true" : "false"}
+    >
       <div className="panel-heading">
         <div>
           <p className="eyebrow">Dashboard-local authority cockpit</p>

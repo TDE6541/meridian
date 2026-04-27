@@ -5,6 +5,7 @@ import type {
 
 export interface DisclosurePreviewPanelProps {
   actionBundle?: DisclosurePreviewActionBundleV1 | null;
+  foremanHighlighted?: boolean;
   report: DisclosurePreviewReportV1 | null;
 }
 
@@ -64,11 +65,17 @@ function renderActionBundle(actionBundle: DisclosurePreviewActionBundleV1 | null
 
 export function DisclosurePreviewPanel({
   actionBundle = null,
+  foremanHighlighted = false,
   report,
 }: DisclosurePreviewPanelProps) {
   if (!report) {
     return (
-      <section className="governance-card" data-disclosure-preview-panel="true">
+      <section
+        className={`governance-card${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
+        data-disclosure-preview-panel="true"
+        data-foreman-panel-id="disclosure-preview"
+        data-foreman-highlighted={foremanHighlighted ? "true" : "false"}
+      >
         <div className="panel-heading">
           <div>
             <p className="eyebrow">
@@ -91,7 +98,12 @@ export function DisclosurePreviewPanel({
   }
 
   return (
-    <section className="governance-card" data-disclosure-preview-panel="true">
+    <section
+      className={`governance-card${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
+      data-disclosure-preview-panel="true"
+      data-foreman-panel-id="disclosure-preview"
+      data-foreman-highlighted={foremanHighlighted ? "true" : "false"}
+    >
       <div className="panel-heading">
         <div>
           <p className="eyebrow">{report.contract}</p>

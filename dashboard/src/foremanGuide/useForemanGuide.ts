@@ -1,5 +1,10 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { ForemanGuideContextV1 } from "./foremanGuideTypes.ts";
+import {
+  createProactiveForemanResponse,
+  dedupeForemanGuideSignals,
+  type ForemanGuideSignalV1,
+} from "./foremanSignals.ts";
 import {
   answerForemanGuideOffline,
   type ForemanGuideResponseV1,
@@ -47,6 +52,29 @@ export interface ForemanGuideMessage {
   speaker: "foreman" | "user";
 }
 
+export interface UseForemanGuideOptions {
+  onPanelHighlightChange?: (panelId: string | null) => void;
+  proactiveSignals?: readonly ForemanGuideSignalV1[];
+}
+
+export interface AppendProactiveForemanSignalsInput {
+  context: ForemanGuideContextV1 | null;
+  messages: readonly ForemanGuideMessage[];
+  paused: boolean;
+  seenDedupeKeys?: ReadonlySet<string>;
+  signals: readonly ForemanGuideSignalV1[];
+}
+
+export interface AppendProactiveForemanSignalsResult {
+  highlightedPanelId: string | null;
+  messages: ForemanGuideMessage[];
+  processedSignals: ForemanGuideSignalV1[];
+  seenDedupeKeys: Set<string>;
+}
+
+const MAX_VISIBLE_PROACTIVE_SIGNALS = 6;
+const MAX_PROACTIVE_MESSAGES_PER_BATCH = 3;
+
 function nextMessageId(
   messages: readonly ForemanGuideMessage[],
   suffix: string
@@ -83,17 +111,87 @@ export function appendForemanGuideExchange(
   ];
 }
 
-export function useForemanGuide(context: ForemanGuideContextV1 | null) {
+export function appendProactiveForemanSignals({
+  context,
+  messages,
+  paused,
+  seenDedupeKeys = new Set(),
+  signals,
+}: AppendProactiveForemanSignalsInput): AppendProactiveForemanSignalsResult {
+  const newSignals = dedupeForemanGuideSignals(signals, seenDedupeKeys);
+  const nextSeen = new Set(seenDedupeKeys);
+  let nextMessages = [...messages];
+
+  newSignals.forEach((signal) => {
+    nextSeen.add(signal.dedupe_key);
+  });
+
+  if (!paused) {
+    newSignals
+      .filter((signal) => signal.eligible_for_proactive_narration)
+      .slice(0, MAX_PROACTIVE_MESSAGES_PER_BATCH)
+      .forEach((signal) => {
+        const response = createProactiveForemanResponse(signal, context);
+
+        nextMessages = [
+          ...nextMessages,
+          {
+            content: response.answer,
+            id: nextMessageId(nextMessages, "proactive"),
+            response,
+            speaker: "foreman",
+          },
+        ];
+      });
+  }
+
+  return {
+    highlightedPanelId:
+      newSignals.find((signal) => signal.panel_id !== null)?.panel_id ?? null,
+    messages: nextMessages,
+    processedSignals: newSignals,
+    seenDedupeKeys: nextSeen,
+  };
+}
+
+function mergeVisibleProactiveSignals(
+  current: readonly ForemanGuideSignalV1[],
+  incoming: readonly ForemanGuideSignalV1[]
+): ForemanGuideSignalV1[] {
+  const byKey = new Map<string, ForemanGuideSignalV1>();
+
+  [...incoming, ...current].forEach((signal) => {
+    byKey.set(signal.dedupe_key, signal);
+  });
+
+  return [...byKey.values()].slice(0, MAX_VISIBLE_PROACTIVE_SIGNALS);
+}
+
+export function useForemanGuide(
+  context: ForemanGuideContextV1 | null,
+  options: UseForemanGuideOptions = {}
+) {
   const [messages, setMessages] = useState<ForemanGuideMessage[]>([]);
   const [loading] = useState(false);
+  const [proactivePaused, setProactivePaused] = useState(false);
+  const [visibleProactiveSignals, setVisibleProactiveSignals] = useState<
+    ForemanGuideSignalV1[]
+  >(() =>
+    (options.proactiveSignals ?? []).slice(0, MAX_VISIBLE_PROACTIVE_SIGNALS)
+  );
+  const seenProactiveDedupeKeysRef = useRef(new Set<string>());
+  const proactiveSignalKey = (options.proactiveSignals ?? [])
+    .map((signal) => signal.dedupe_key)
+    .join("|");
 
   const submitQuestion = useCallback(
     (question: string) => {
+      options.onPanelHighlightChange?.(null);
       setMessages((current) =>
         appendForemanGuideExchange(current, question, context)
       );
     },
-    [context]
+    [context, options.onPanelHighlightChange]
   );
 
   const submitQuickAction = useCallback(
@@ -107,10 +205,68 @@ export function useForemanGuide(context: ForemanGuideContextV1 | null) {
     [submitQuestion]
   );
 
+  const pauseProactiveNarration = useCallback(() => {
+    setProactivePaused(true);
+  }, []);
+
+  const resumeProactiveNarration = useCallback(() => {
+    setProactivePaused(false);
+  }, []);
+
+  const clearProactiveSignals = useCallback(() => {
+    setVisibleProactiveSignals([]);
+    options.onPanelHighlightChange?.(null);
+  }, [options.onPanelHighlightChange]);
+
+  useEffect(() => {
+    const proactiveSignals = options.proactiveSignals ?? [];
+
+    if (proactiveSignals.length === 0) {
+      return;
+    }
+
+    const result = appendProactiveForemanSignals({
+      context,
+      messages,
+      paused: proactivePaused,
+      seenDedupeKeys: seenProactiveDedupeKeysRef.current,
+      signals: proactiveSignals,
+    });
+
+    if (result.processedSignals.length === 0) {
+      return;
+    }
+
+    seenProactiveDedupeKeysRef.current = result.seenDedupeKeys;
+    setVisibleProactiveSignals((current) =>
+      mergeVisibleProactiveSignals(current, result.processedSignals)
+    );
+
+    if (result.messages.length !== messages.length) {
+      setMessages(result.messages);
+    }
+
+    if (result.highlightedPanelId) {
+      options.onPanelHighlightChange?.(result.highlightedPanelId);
+    }
+  }, [
+    context,
+    messages,
+    options,
+    proactivePaused,
+    proactiveSignalKey,
+  ]);
+
   return {
+    clearProactiveSignals,
     loading,
     messages,
+    pauseProactiveNarration,
+    proactivePaused,
+    proactiveSignalCount: visibleProactiveSignals.length,
+    proactiveSignals: visibleProactiveSignals,
     quickActions: FOREMAN_QUICK_ACTIONS,
+    resumeProactiveNarration,
     submitQuestion,
     submitQuickAction,
   };

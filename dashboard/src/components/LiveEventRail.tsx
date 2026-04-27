@@ -6,6 +6,7 @@ import {
 
 export interface LiveEventRailProps {
   events: readonly LiveFeedEventV1[];
+  foremanHighlighted?: boolean;
 }
 
 const EVENT_KIND_LABELS: Partial<Record<LiveEventKind, string>> = {
@@ -47,9 +48,17 @@ function getRefSummary(event: LiveFeedEventV1): string {
     .join(" | ");
 }
 
-export function LiveEventRail({ events }: LiveEventRailProps) {
+export function LiveEventRail({
+  events,
+  foremanHighlighted = false,
+}: LiveEventRailProps) {
   return (
-    <section className="panel live-event-rail" aria-labelledby="live-event-rail-title">
+    <section
+      className={`panel live-event-rail${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
+      aria-labelledby="live-event-rail-title"
+      data-foreman-panel-id="live-event-rail"
+      data-foreman-highlighted={foremanHighlighted ? "true" : "false"}
+    >
       <div className="panel-heading">
         <p className="panel-eyebrow">Live events</p>
         <h2 id="live-event-rail-title">Projection event rail</h2>

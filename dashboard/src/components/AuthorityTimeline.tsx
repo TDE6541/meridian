@@ -9,6 +9,7 @@ import {
 } from "../authority/useSharedAuthorityRequests.ts";
 
 export interface AuthorityTimelineProps {
+  foremanHighlighted?: boolean;
   sharedAuthority?: UseSharedAuthorityRequestsResult;
   state: AuthorityDashboardStateV1;
 }
@@ -22,6 +23,7 @@ function displaySourceRef(ref: AuthorityDashboardSourceRef): string {
 }
 
 export function AuthorityTimeline({
+  foremanHighlighted = false,
   sharedAuthority,
   state,
 }: AuthorityTimelineProps) {
@@ -34,7 +36,12 @@ export function AuthorityTimeline({
   const displayState = sharedView.state;
 
   return (
-    <section className="timeline-panel" data-authority-timeline="true">
+    <section
+      className={`timeline-panel${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
+      data-authority-timeline="true"
+      data-foreman-panel-id="authority-timeline"
+      data-foreman-highlighted={foremanHighlighted ? "true" : "false"}
+    >
       <div className="panel-heading">
         <div>
           <p className="eyebrow">{displayState.timeline.contract}</p>

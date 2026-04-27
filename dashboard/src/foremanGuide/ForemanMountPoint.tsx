@@ -1,18 +1,42 @@
 import type { ForemanContextSeedV1 } from "../live/liveTypes.ts";
 import { ForemanGuidePanel } from "../components/ForemanGuidePanel.tsx";
 import type { ForemanGuideContextV1 } from "./foremanGuideTypes.ts";
+import {
+  useForemanEventBinding,
+  type UseForemanEventBindingInput,
+} from "./useForemanEventBinding.ts";
 
 export interface ForemanMountPointProps {
+  eventBinding?: Omit<UseForemanEventBindingInput, "enabled" | "guideContext">;
   foremanContextSeed?: ForemanContextSeedV1 | null;
   guideContext?: ForemanGuideContextV1 | null;
+  highlightedPanelId?: string | null;
+  onPanelHighlightChange?: (panelId: string | null) => void;
 }
 
 export function ForemanMountPoint({
+  eventBinding,
   foremanContextSeed = null,
   guideContext = null,
+  highlightedPanelId = null,
+  onPanelHighlightChange,
 }: ForemanMountPointProps) {
+  const eventBindingResult = useForemanEventBinding({
+    ...(eventBinding ?? {}),
+    enabled: Boolean(guideContext),
+    guideContext,
+  });
+
   if (guideContext) {
-    return <ForemanGuidePanel context={guideContext} />;
+    return (
+      <ForemanGuidePanel
+        activePanelId={eventBinding?.activePanelId ?? guideContext.current.active_panel}
+        context={guideContext}
+        highlightedPanelId={highlightedPanelId}
+        onPanelHighlightChange={onPanelHighlightChange}
+        proactiveSignals={eventBindingResult.signals}
+      />
+    );
   }
 
   return (

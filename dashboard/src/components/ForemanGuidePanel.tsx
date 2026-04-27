@@ -4,13 +4,19 @@ import type {
   ForemanGuideHold,
   ForemanGuideSourceRef,
 } from "../foremanGuide/foremanGuideTypes.ts";
+import type { ForemanGuideSignalV1 } from "../foremanGuide/foremanSignals.ts";
+import { getForemanPanelLabel } from "../foremanGuide/panelRegistry.ts";
 import {
   useForemanGuide,
   type ForemanQuickActionId,
 } from "../foremanGuide/useForemanGuide.ts";
 
 export interface ForemanGuidePanelProps {
+  activePanelId?: string | null;
   context: ForemanGuideContextV1 | null;
+  highlightedPanelId?: string | null;
+  onPanelHighlightChange?: (panelId: string | null) => void;
+  proactiveSignals?: readonly ForemanGuideSignalV1[];
 }
 
 function formatSourceRef(ref: ForemanGuideSourceRef): string {
@@ -49,6 +55,29 @@ function renderHolds(holds: readonly ForemanGuideHold[]) {
   );
 }
 
+function renderProactiveSignals(signals: readonly ForemanGuideSignalV1[]) {
+  if (signals.length === 0) {
+    return null;
+  }
+
+  return (
+    <div
+      className="foreman-guide-panel__proactive-list"
+      data-foreman-proactive-signals="true"
+    >
+      {signals.map((signal) => (
+        <div className="signal-card" key={signal.signal_id}>
+          <strong>{signal.title}</strong>
+          <span>{signal.summary}</span>
+          <span className="detail-copy">
+            {signal.kind} / {signal.source_ref ?? "HOLD: source ref unavailable"}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function getRoleSessionLabel(context: ForemanGuideContextV1 | null): string {
   const roleSession = context?.state.role_session;
 
@@ -59,18 +88,34 @@ function getRoleSessionLabel(context: ForemanGuideContextV1 | null): string {
   return `${roleSession.role} / ${roleSession.auth_status}`;
 }
 
-export function ForemanGuidePanel({ context }: ForemanGuidePanelProps) {
+export function ForemanGuidePanel({
+  activePanelId = null,
+  context,
+  highlightedPanelId = null,
+  onPanelHighlightChange,
+  proactiveSignals: incomingProactiveSignals = [],
+}: ForemanGuidePanelProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [question, setQuestion] = useState("");
   const {
+    clearProactiveSignals,
     loading,
     messages,
+    pauseProactiveNarration,
+    proactivePaused,
+    proactiveSignalCount,
+    proactiveSignals,
     quickActions,
+    resumeProactiveNarration,
     submitQuestion,
     submitQuickAction,
-  } = useForemanGuide(context);
+  } = useForemanGuide(context, {
+    onPanelHighlightChange,
+    proactiveSignals: incomingProactiveSignals,
+  });
   const ready = context?.foreman_readiness.ready === true;
   const readinessLabel = ready ? "ready" : "holding";
+  const lookingAtLabel = getForemanPanelLabel(highlightedPanelId ?? activePanelId);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -80,8 +125,10 @@ export function ForemanGuidePanel({ context }: ForemanGuidePanelProps) {
 
   return (
     <section
-      className="panel foreman-guide-panel"
+      className={`panel foreman-guide-panel${highlightedPanelId === "foreman-guide" ? " foreman-panel-highlight" : ""}`}
       data-foreman-mount="active"
+      data-foreman-panel-id="foreman-guide"
+      data-foreman-highlighted={highlightedPanelId === "foreman-guide" ? "true" : "false"}
       aria-labelledby="foreman-guide-title"
     >
       <div className="panel-heading foreman-guide-panel__heading">
@@ -93,6 +140,15 @@ export function ForemanGuidePanel({ context }: ForemanGuidePanelProps) {
           <span className={`live-status-badge live-status-badge--${readinessLabel}`}>
             {readinessLabel}
           </span>
+          <button
+            className="control-button"
+            type="button"
+            onClick={
+              proactivePaused ? resumeProactiveNarration : pauseProactiveNarration
+            }
+          >
+            {proactivePaused ? "Resume proactive" : "Pause proactive"}
+          </button>
           <button
             className="control-button"
             type="button"
@@ -127,6 +183,14 @@ export function ForemanGuidePanel({ context }: ForemanGuidePanelProps) {
                   "HOLD: no active proof anchor"}
               </strong>
             </div>
+            <div>
+              <span className="fact-label">Proactive narration</span>
+              <strong>{proactivePaused ? "paused" : "on"}</strong>
+            </div>
+            <div>
+              <span className="fact-label">Looking at</span>
+              <strong>{lookingAtLabel ?? "Panel context unavailable"}</strong>
+            </div>
           </div>
 
           {context ? renderHolds(context.holds) : renderHolds([
@@ -139,6 +203,22 @@ export function ForemanGuidePanel({ context }: ForemanGuidePanelProps) {
               source_ref: "foreman.context",
             },
           ])}
+
+          <div className="foreman-guide-panel__proactive-row">
+            <span className="detail-copy">
+              {proactiveSignalCount} proactive signal{proactiveSignalCount === 1 ? "" : "s"} visible
+            </span>
+            <button
+              className="control-button"
+              disabled={proactiveSignalCount === 0}
+              type="button"
+              onClick={clearProactiveSignals}
+            >
+              Clear signals
+            </button>
+          </div>
+
+          {renderProactiveSignals(proactiveSignals)}
 
           <div
             className="foreman-guide-panel__quick-actions"

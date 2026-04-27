@@ -6,6 +6,7 @@ import {
 } from "../authority/useSharedAuthorityRequests.ts";
 
 export interface GARPStatusIndicatorProps {
+  foremanHighlighted?: boolean;
   sharedAuthority?: UseSharedAuthorityRequestsResult;
   state: AuthorityDashboardStateV1;
 }
@@ -27,6 +28,7 @@ function sharedStatusClass(status: string): string {
 }
 
 export function GARPStatusIndicator({
+  foremanHighlighted = false,
   sharedAuthority,
   state,
 }: GARPStatusIndicatorProps) {
@@ -39,7 +41,12 @@ export function GARPStatusIndicator({
   const displayState = sharedView.state;
 
   return (
-    <section className="live-capture-panel" data-garp-status="dashboard-local">
+    <section
+      className={`live-capture-panel${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
+      data-garp-status="dashboard-local"
+      data-foreman-panel-id="garp-status"
+      data-foreman-highlighted={foremanHighlighted ? "true" : "false"}
+    >
       <div className="panel-heading">
         <div>
           <p className="eyebrow">Local/demo dashboard state only</p>

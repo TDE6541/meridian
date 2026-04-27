@@ -8,6 +8,8 @@ import { buildDisclosurePreviewActionBundle } from "../authority/disclosurePrevi
 import { buildAuthorityDashboardState } from "../authority/authorityStateAdapter.ts";
 import { buildDisclosurePreviewReport } from "../authority/disclosurePreviewReport.ts";
 import { buildGarpHandoffContext } from "../authority/garpHandoffContext.ts";
+import { buildSharedAuthorityDisplayState } from "../authority/sharedAuthorityEvents.ts";
+import { useSharedAuthorityRequests } from "../authority/useSharedAuthorityRequests.ts";
 import { buildDirectorScene } from "../director/directorScript.ts";
 import { resolveDirectorBookmarks } from "../director/directorBookmarks.ts";
 import { DemoHeader } from "./DemoHeader.tsx";
@@ -137,6 +139,9 @@ export function ControlRoomShell({
   const [directorModeEnabled, setDirectorModeEnabled] = useState(
     initialDirectorModeEnabled
   );
+  const [foremanHighlightedPanelId, setForemanHighlightedPanelId] = useState<
+    string | null
+  >(null);
   const authState = useMeridianAuth();
   const roleSession = resolveDashboardRoleSession({
     activeSkin: controlState.activeSkinTab,
@@ -194,6 +199,9 @@ export function ControlRoomShell({
     pollIntervalMs: 5000,
     sessionId: liveSessionId,
   });
+  const sharedAuthority = useSharedAuthorityRequests({
+    pollIntervalMs: 5000,
+  });
   const scenarioMeta = getDemoScenarioMeta(controlState.selectedScenarioKey);
   const activeStepLabel = currentStep
     ? `${currentStep.stepId} (${currentStep.index + 1}/${timelineSteps.length})`
@@ -202,11 +210,24 @@ export function ControlRoomShell({
       : "Unavailable";
   const activeSkinLabel =
     activeSkinView?.label ?? formatSkinLabel(activeSkinTab);
-  const authorityState = buildAuthorityDashboardState({
+  const activeForemanPanelId =
+    dashboardMode === "live"
+      ? "live-event-rail"
+      : directorModeEnabled
+        ? "director-mode"
+        : activeSkinTab === "public"
+          ? "disclosure-preview"
+          : "skin-view";
+  const baseAuthorityState = buildAuthorityDashboardState({
     currentStep,
     liveProjection: liveProjection.projection,
     roleSession,
   });
+  const sharedAuthorityDisplay = buildSharedAuthorityDisplayState(
+    baseAuthorityState,
+    sharedAuthority
+  );
+  const authorityState = sharedAuthorityDisplay.state;
   const disclosurePreviewReport = buildDisclosurePreviewReport({
     authorityState,
     generatedAt: liveProjection.projection?.session.updated_at ?? null,
@@ -226,18 +247,14 @@ export function ControlRoomShell({
     roleSession,
   });
   const foremanGuideContext = buildForemanGuideContext({
-    activePanel: dashboardMode === "live"
-      ? "live"
-      : directorModeEnabled
-        ? "director"
-        : "snapshot",
+    activePanel: activeForemanPanelId,
     authorityState,
     disclosurePreviewReport,
     garpHandoffContext,
     liveProjection: liveProjection.projection,
     roleSession,
     snapshot: {
-      activePanel: dashboardMode === "live" ? "live" : "snapshot",
+      activePanel: activeForemanPanelId,
       activeSkin: activeSkinTab,
       currentStep,
       scenarioId,
@@ -371,6 +388,20 @@ export function ControlRoomShell({
     };
   }, [records, roleSession.allowed_skins]);
 
+  useEffect(() => {
+    if (!foremanHighlightedPanelId) {
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => {
+      setForemanHighlightedPanelId(null);
+    }, 4200);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [foremanHighlightedPanelId]);
+
   return (
     <section
       className="control-room-shell control-room-shell--projector"
@@ -445,7 +476,10 @@ export function ControlRoomShell({
 
           {liveProjection.projection ? (
             <>
-              <LiveEventRail events={liveProjection.projection.events} />
+              <LiveEventRail
+                events={liveProjection.projection.events}
+                foremanHighlighted={foremanHighlightedPanelId === "live-event-rail"}
+              />
               <LiveCapturePanel projection={liveProjection.projection} />
             </>
           ) : null}
@@ -453,8 +487,22 @@ export function ControlRoomShell({
       ) : null}
 
       <ForemanMountPoint
+        eventBinding={{
+          activePanelId: activeForemanPanelId,
+          activeScenarioId: scenarioId,
+          activeSkin: activeSkinTab,
+          activeStepId: currentStep?.stepId ?? null,
+          createdAt:
+            liveProjection.projection?.session.updated_at ?? "dashboard-local",
+          disclosurePreviewReport,
+          liveEvents: liveProjection.projection?.events ?? [],
+          roleSession,
+          sharedAuthority,
+        }}
         foremanContextSeed={liveProjection.projection?.foreman_context_seed ?? null}
         guideContext={foremanGuideContext}
+        highlightedPanelId={foremanHighlightedPanelId}
+        onPanelHighlightChange={setForemanHighlightedPanelId}
       />
 
       {directorModeEnabled ? (
@@ -474,15 +522,28 @@ export function ControlRoomShell({
 
       <div className="packet4-grid" data-authority-cockpit="true">
         <div className="packet4-sidecar">
-          <GARPStatusIndicator state={authorityState} />
-          <AuthorityResolutionPanel state={authorityState} />
+          <GARPStatusIndicator
+            foremanHighlighted={foremanHighlightedPanelId === "garp-status"}
+            sharedAuthority={sharedAuthority}
+            state={authorityState}
+          />
+          <AuthorityResolutionPanel
+            foremanHighlighted={foremanHighlightedPanelId === "authority-resolution"}
+            sharedAuthority={sharedAuthority}
+            state={authorityState}
+          />
         </div>
 
         <div className="packet4-sidecar">
-          <AuthorityTimeline state={authorityState} />
+          <AuthorityTimeline
+            foremanHighlighted={foremanHighlightedPanelId === "authority-timeline"}
+            sharedAuthority={sharedAuthority}
+            state={authorityState}
+          />
           <AuthorityNotificationDemo state={authorityState} />
           <DisclosurePreviewPanel
             actionBundle={disclosurePreviewActionBundle}
+            foremanHighlighted={foremanHighlightedPanelId === "disclosure-preview"}
             report={disclosurePreviewReport}
           />
         </div>
