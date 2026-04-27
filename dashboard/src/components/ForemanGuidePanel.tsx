@@ -5,12 +5,48 @@ import type {
   ForemanGuideSourceRef,
 } from "../foremanGuide/foremanGuideTypes.ts";
 import type { ForemanGuideSignalV1 } from "../foremanGuide/foremanSignals.ts";
+import type { ForemanGuideResponseV1 } from "../foremanGuide/offlineNarration.ts";
 import { getForemanPanelLabel } from "../foremanGuide/panelRegistry.ts";
 import {
   useForemanGuide,
   type ForemanGuideModeId,
   type ForemanQuickActionId,
 } from "../foremanGuide/useForemanGuide.ts";
+
+type ForemanPresenceState =
+  | "idle"
+  | "explaining"
+  | "holding"
+  | "warning"
+  | "blocked"
+  | "live"
+  | "public-boundary";
+
+interface ForemanPresenceBadge {
+  reason: string;
+  state: ForemanPresenceState;
+}
+
+interface PanelSpeechRecognitionEvent {
+  results?: ArrayLike<ArrayLike<{ transcript?: string }>>;
+}
+
+interface PanelSpeechRecognition {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onerror: ((event: unknown) => void) | null;
+  onresult: ((event: PanelSpeechRecognitionEvent) => void) | null;
+  start: () => void;
+}
+
+type PanelSpeechRecognitionCtor = new () => PanelSpeechRecognition;
+
+type PanelSpeechWindow = Window & {
+  SpeechRecognition?: PanelSpeechRecognitionCtor;
+  SpeechSynthesisUtterance?: typeof SpeechSynthesisUtterance;
+  webkitSpeechRecognition?: PanelSpeechRecognitionCtor;
+};
 
 export interface ForemanGuidePanelProps {
   activePanelId?: string | null;
@@ -89,6 +125,113 @@ function getRoleSessionLabel(context: ForemanGuideContextV1 | null): string {
   return `${roleSession.role} / ${roleSession.auth_status}`;
 }
 
+function getPanelSpeechWindow(): PanelSpeechWindow | null {
+  return typeof window === "undefined" ? null : (window as PanelSpeechWindow);
+}
+
+function hasPanelSpeechOutput(): boolean {
+  const target = getPanelSpeechWindow();
+
+  return Boolean(target?.speechSynthesis && target.SpeechSynthesisUtterance);
+}
+
+function getPanelSpeechRecognitionCtor(): PanelSpeechRecognitionCtor | null {
+  const target = getPanelSpeechWindow();
+
+  return target?.SpeechRecognition ?? target?.webkitSpeechRecognition ?? null;
+}
+
+function selectedSpeechText(): string | null {
+  const selected = getPanelSpeechWindow()?.getSelection?.()?.toString().trim();
+
+  return selected && selected.length > 0 ? selected : null;
+}
+
+function transcriptFromSpeechEvent(
+  event: PanelSpeechRecognitionEvent
+): string | null {
+  const transcript = event.results?.[0]?.[0]?.transcript?.trim();
+
+  return transcript && transcript.length > 0 ? transcript : null;
+}
+
+function hasHoldResponse(response: ForemanGuideResponseV1 | null): boolean {
+  return Boolean(
+    response?.response_kind === "hold" ||
+      response?.holds.some((hold) => hold.severity === "HOLD")
+  );
+}
+
+function derivePresenceBadge({
+  context,
+  latestResponse,
+  latestSignal,
+  selectedModeId,
+}: {
+  context: ForemanGuideContextV1 | null;
+  latestResponse: ForemanGuideResponseV1 | null;
+  latestSignal: ForemanGuideSignalV1 | null;
+  selectedModeId: ForemanGuideModeId;
+}): ForemanPresenceBadge {
+  if (
+    latestResponse?.holds.some((hold) => hold.severity === "BLOCK") ||
+    context?.holds.some((hold) => hold.severity === "BLOCK") ||
+    latestSignal?.kind === "endpoint.hold"
+  ) {
+    return {
+      reason: "A blocked or endpoint HOLD context is visible.",
+      state: "blocked",
+    };
+  }
+
+  if (hasHoldResponse(latestResponse) || context?.holds.some((hold) => hold.severity === "HOLD")) {
+    return {
+      reason: "Foreman has a HOLD to keep visible.",
+      state: "holding",
+    };
+  }
+
+  if (
+    selectedModeId === "public" ||
+    latestResponse?.response_kind === "public_boundary" ||
+    latestResponse?.response_kind === "public_mode" ||
+    latestResponse?.response_kind === "disclosure_boundary" ||
+    latestSignal?.kind === "public.view.selected" ||
+    latestSignal?.kind === "disclosure.boundary.observed"
+  ) {
+    return {
+      reason: "Public or disclosure boundary context is active.",
+      state: "public-boundary",
+    };
+  }
+
+  if (latestSignal?.priority === "high") {
+    return {
+      reason: "A high-priority source-bounded signal is active.",
+      state: "warning",
+    };
+  }
+
+  if (context?.source_mode === "live" || latestSignal?.kind === "live.event.observed") {
+    return {
+      reason: "Dashboard-supplied live context is active.",
+      state: "live",
+    };
+  }
+
+  if (latestResponse) {
+    return {
+      reason: "Foreman has produced an offline explanation.",
+      state: "explaining",
+    };
+  }
+
+  return {
+    reason: "Waiting for typed input, a mode action, or a source-bounded signal.",
+    state: "idle",
+  };
+}
+
 export function ForemanGuidePanel({
   activePanelId = null,
   context,
@@ -98,6 +241,7 @@ export function ForemanGuidePanel({
 }: ForemanGuidePanelProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [question, setQuestion] = useState("");
+  const [speechStatus, setSpeechStatus] = useState<string | null>(null);
   const {
     clearProactiveSignals,
     loading,
@@ -122,11 +266,124 @@ export function ForemanGuidePanel({
   const ready = context?.foreman_readiness.ready === true;
   const readinessLabel = ready ? "ready" : "holding";
   const lookingAtLabel = getForemanPanelLabel(highlightedPanelId ?? activePanelId);
+  const latestForemanMessage =
+    [...messages].reverse().find((message) => message.speaker === "foreman") ??
+    null;
+  const latestForemanText = latestForemanMessage?.content ?? "";
+  const latestSignal = proactiveSignals[0] ?? incomingProactiveSignals[0] ?? null;
+  const speechOutputSupported = hasPanelSpeechOutput();
+  const speechInputSupported = Boolean(getPanelSpeechRecognitionCtor());
+  const presenceBadge = derivePresenceBadge({
+    context,
+    latestResponse: latestForemanMessage?.response ?? null,
+    latestSignal,
+    selectedModeId,
+  });
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     submitQuestion(question);
     setQuestion("");
+  }
+
+  function handleSpeakLatest() {
+    const target = getPanelSpeechWindow();
+    const text = selectedSpeechText() ?? latestForemanText;
+
+    if (!target?.speechSynthesis || !target.SpeechSynthesisUtterance) {
+      setSpeechStatus(
+        "HOLD: browser speech synthesis is unavailable; typed response remains primary."
+      );
+      return;
+    }
+
+    if (!text.trim()) {
+      setSpeechStatus("HOLD: no Foreman answer is available to speak yet.");
+      return;
+    }
+
+    try {
+      const utterance = new target.SpeechSynthesisUtterance(text.trim());
+
+      utterance.onerror = () => {
+        setSpeechStatus(
+          "HOLD: browser speech output failed; typed response remains visible."
+        );
+      };
+      utterance.onend = () => {
+        setSpeechStatus("Speech output finished.");
+      };
+      target.speechSynthesis.speak(utterance);
+      setSpeechStatus("Speaking latest Foreman response.");
+    } catch {
+      setSpeechStatus(
+        "HOLD: browser speech output failed; typed response remains visible."
+      );
+    }
+  }
+
+  function handleStopSpeech() {
+    const target = getPanelSpeechWindow();
+
+    if (!target?.speechSynthesis) {
+      setSpeechStatus(
+        "HOLD: browser speech synthesis is unavailable; typed response remains primary."
+      );
+      return;
+    }
+
+    try {
+      target.speechSynthesis.cancel();
+      setSpeechStatus("Speech output stopped.");
+    } catch {
+      setSpeechStatus(
+        "HOLD: browser speech output failed; typed response remains visible."
+      );
+    }
+  }
+
+  function handleStartDictation() {
+    const RecognitionCtor = getPanelSpeechRecognitionCtor();
+
+    if (!RecognitionCtor) {
+      setSpeechStatus(
+        "HOLD: browser speech recognition is unavailable; type the question instead."
+      );
+      return;
+    }
+
+    try {
+      const recognition = new RecognitionCtor();
+
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = "en-US";
+      recognition.onerror = () => {
+        setSpeechStatus(
+          "HOLD: browser speech input failed; type the question instead."
+        );
+      };
+      recognition.onresult = (event) => {
+        const transcript = transcriptFromSpeechEvent(event);
+
+        if (!transcript) {
+          setSpeechStatus(
+            "HOLD: browser speech input returned no transcript; type the question instead."
+          );
+          return;
+        }
+
+        submitQuestion(transcript);
+        setQuestion("");
+        setSpeechStatus("Dictation routed through the typed question path.");
+      };
+      recognition.start();
+      setSpeechStatus("Listening for dictation.");
+    } catch {
+      setSpeechStatus(
+        "HOLD: browser speech input failed; type the question instead."
+      );
+    }
   }
 
   return (
@@ -196,6 +453,53 @@ export function ForemanGuidePanel({
             <div>
               <span className="fact-label">Looking at</span>
               <strong>{lookingAtLabel ?? "Panel context unavailable"}</strong>
+            </div>
+          </div>
+
+          <div
+            className="foreman-guide-panel__presence-row"
+            data-foreman-presence-state={presenceBadge.state}
+          >
+            <div className="foreman-guide-panel__presence-badge">
+              <span className="fact-label">Foreman state</span>
+              <strong>{presenceBadge.state}</strong>
+              <span className="detail-copy">{presenceBadge.reason}</span>
+            </div>
+            <div
+              className="foreman-guide-panel__speech-controls"
+              aria-label="Foreman speech controls"
+            >
+              <span className="fact-label">Speech output</span>
+              <button
+                className="control-button"
+                disabled={!speechOutputSupported || !latestForemanText}
+                type="button"
+                onClick={handleSpeakLatest}
+              >
+                Speak latest response
+              </button>
+              <button
+                className="control-button"
+                disabled={!speechOutputSupported}
+                type="button"
+                onClick={handleStopSpeech}
+              >
+                Stop speaking
+              </button>
+              <button
+                className="control-button"
+                disabled={!speechInputSupported}
+                type="button"
+                onClick={handleStartDictation}
+              >
+                {speechInputSupported ? "Start dictation" : "Dictation unavailable"}
+              </button>
+              <span className="detail-copy">
+                {speechStatus ??
+                  (speechOutputSupported
+                    ? "Typed fallback remains primary."
+                    : "HOLD: browser speech synthesis unavailable; typed fallback remains primary.")}
+              </span>
             </div>
           </div>
 
