@@ -135,6 +135,7 @@ export function AuthorityResolutionPanel({
           className="control-button control-button--primary"
           disabled={actionDisabled}
           type="button"
+          aria-label={`Approve dashboard-local authority request ${item.request_id}`}
           onClick={() => {
             void handleResolveSharedRequest(item.request_id, "approved");
           }}
@@ -145,6 +146,7 @@ export function AuthorityResolutionPanel({
           className="control-button"
           disabled={actionDisabled}
           type="button"
+          aria-label={`Deny dashboard-local authority request ${item.request_id}`}
           onClick={() => {
             void handleResolveSharedRequest(item.request_id, "denied");
           }}
@@ -157,7 +159,7 @@ export function AuthorityResolutionPanel({
 
   return (
     <section
-      className={`governance-card${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
+      className={`panel governance-card${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
       data-authority-resolution-panel="true"
       data-foreman-panel-id="authority-resolution"
       data-foreman-highlighted={foremanHighlighted ? "true" : "false"}
@@ -179,6 +181,7 @@ export function AuthorityResolutionPanel({
           className="control-button"
           disabled={shared.loading}
           type="button"
+          aria-label="Refresh dashboard-local shared authority endpoint"
           onClick={() => {
             void shared.refresh();
           }}
@@ -189,6 +192,7 @@ export function AuthorityResolutionPanel({
           className="control-button control-button--primary"
           disabled={!permissions.canSubmit || actionDisabled}
           type="button"
+          aria-label="Submit dashboard-local shared authority request"
           onClick={() => {
             void handleSubmitSharedRequest();
           }}

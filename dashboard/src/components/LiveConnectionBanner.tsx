@@ -42,7 +42,12 @@ export function LiveConnectionBanner({
         <h2>{loading ? "Checking live projection" : getBannerCopy(status, holdMessage)}</h2>
       </div>
       {onRefresh ? (
-        <button type="button" className="control-button" onClick={onRefresh}>
+        <button
+          type="button"
+          className="control-button"
+          aria-label="Refresh Live Mode projection status"
+          onClick={onRefresh}
+        >
           Refresh
         </button>
       ) : null}

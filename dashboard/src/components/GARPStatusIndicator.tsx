@@ -42,7 +42,7 @@ export function GARPStatusIndicator({
 
   return (
     <section
-      className={`live-capture-panel${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
+      className={`panel live-capture-panel${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
       data-garp-status="dashboard-local"
       data-foreman-panel-id="garp-status"
       data-foreman-highlighted={foremanHighlighted ? "true" : "false"}

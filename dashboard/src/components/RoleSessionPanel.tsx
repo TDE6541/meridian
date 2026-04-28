@@ -20,7 +20,11 @@ export function RoleSessionPanel({
     : "Auth0 login unavailable; public mode active";
 
   return (
-    <section className="panel" aria-labelledby="role-session-title">
+    <section
+      className="panel"
+      data-role-session-panel="true"
+      aria-labelledby="role-session-title"
+    >
       <div className="panel-heading">
         <p className="panel-eyebrow">Local dashboard role boundary</p>
         <h2 id="role-session-title">Role session proof</h2>
@@ -59,6 +63,7 @@ export function RoleSessionPanel({
           <button
             className="control-button"
             type="button"
+            aria-label="Log out of the dashboard role session"
             onClick={auth.logout}
           >
             Logout
@@ -67,6 +72,11 @@ export function RoleSessionPanel({
           <button
             className="control-button control-button--primary"
             type="button"
+            aria-label={
+              auth.isConfigured
+                ? "Open Auth0 login for dashboard role proof"
+                : "Auth0 login unavailable; public mode remains active"
+            }
             disabled={!auth.isConfigured}
             onClick={auth.login}
           >

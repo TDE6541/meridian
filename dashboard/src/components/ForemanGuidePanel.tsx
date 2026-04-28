@@ -406,6 +406,11 @@ export function ForemanGuidePanel({
           <button
             className="control-button"
             type="button"
+            aria-label={
+              proactivePaused
+                ? "Resume Foreman proactive narration"
+                : "Pause Foreman proactive narration"
+            }
             onClick={
               proactivePaused ? resumeProactiveNarration : pauseProactiveNarration
             }
@@ -415,6 +420,7 @@ export function ForemanGuidePanel({
           <button
             className="control-button"
             type="button"
+            aria-label={collapsed ? "Open Foreman panel" : "Collapse Foreman panel"}
             aria-expanded={!collapsed}
             onClick={() => setCollapsed((current) => !current)}
           >
@@ -474,6 +480,7 @@ export function ForemanGuidePanel({
                 className="control-button"
                 disabled={!speechOutputSupported || !latestForemanText}
                 type="button"
+                aria-label="Speak the latest Foreman response"
                 onClick={handleSpeakLatest}
               >
                 Speak latest response
@@ -482,6 +489,7 @@ export function ForemanGuidePanel({
                 className="control-button"
                 disabled={!speechOutputSupported}
                 type="button"
+                aria-label="Stop Foreman speech output"
                 onClick={handleStopSpeech}
               >
                 Stop speaking
@@ -490,6 +498,7 @@ export function ForemanGuidePanel({
                 className="control-button"
                 disabled={!speechInputSupported}
                 type="button"
+                aria-label="Start Foreman dictation input"
                 onClick={handleStartDictation}
               >
                 {speechInputSupported ? "Start dictation" : "Dictation unavailable"}
@@ -522,6 +531,7 @@ export function ForemanGuidePanel({
               className="control-button"
               disabled={proactiveSignalCount === 0}
               type="button"
+              aria-label="Clear visible Foreman proactive signals"
               onClick={clearProactiveSignals}
             >
               Clear signals
@@ -545,6 +555,7 @@ export function ForemanGuidePanel({
               {modes.map((mode) => (
                 <button
                   aria-disabled={mode.eligible ? "false" : "true"}
+                  aria-label={`Select Foreman ${mode.label} mode`}
                   aria-pressed={mode.mode_id === selectedModeId}
                   className={`foreman-guide-panel__mode-button${mode.mode_id === selectedModeId ? " foreman-guide-panel__mode-button--active" : ""}`}
                   data-foreman-mode-id={mode.mode_id}
@@ -560,6 +571,7 @@ export function ForemanGuidePanel({
               <button
                 className="control-button control-button--primary"
                 type="button"
+                aria-label={`Run Foreman ${selectedMode.label} mode`}
                 onClick={() => submitMode(selectedModeId)}
               >
                 Run mode
@@ -576,6 +588,7 @@ export function ForemanGuidePanel({
                 className="foreman-guide-panel__chip"
                 key={action.id}
                 type="button"
+                aria-label={`Ask Foreman to ${action.label.toLowerCase()}`}
                 onClick={() => submitQuickAction(action.id as ForemanQuickActionId)}
               >
                 {action.label}

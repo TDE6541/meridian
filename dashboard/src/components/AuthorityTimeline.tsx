@@ -37,7 +37,7 @@ export function AuthorityTimeline({
 
   return (
     <section
-      className={`timeline-panel${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
+      className={`panel timeline-panel${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
       data-authority-timeline="true"
       data-foreman-panel-id="authority-timeline"
       data-foreman-highlighted={foremanHighlighted ? "true" : "false"}

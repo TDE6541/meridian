@@ -9,7 +9,7 @@ export function AuthorityNotificationDemo({ state }: AuthorityNotificationDemoPr
   const tokenHashes = Object.entries(preview.token_hashes);
 
   return (
-    <section className="live-capture-panel" data-authority-notification-demo="true">
+    <section className="panel live-capture-panel" data-authority-notification-demo="true">
       <div className="panel-heading">
         <div>
           <p className="eyebrow">Dashboard-only payload display</p>

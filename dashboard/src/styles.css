@@ -26,6 +26,15 @@ select {
   font: inherit;
 }
 
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="tab"]:focus-visible {
+  outline: 3px solid rgba(190, 89, 59, 0.72);
+  outline-offset: 3px;
+}
+
 code,
 pre {
   font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
@@ -336,12 +345,18 @@ pre {
 }
 
 .control-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.72rem 1rem;
   border: 1px solid rgba(23, 36, 50, 0.16);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.9);
   color: inherit;
   cursor: pointer;
+  line-height: 1.15;
+  min-height: 2.75rem;
+  text-align: center;
 }
 
 .control-button--primary {
@@ -750,6 +765,147 @@ pre {
   flex-wrap: wrap;
   gap: 0.45rem;
   margin-top: 0.55rem;
+}
+
+.governance-card,
+.timeline-panel {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.governance-card .panel-heading,
+.timeline-panel .panel-heading,
+.live-capture-panel .panel-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.detail-copy {
+  margin: 0;
+  color: #405467;
+  font-size: 0.92rem;
+  overflow-wrap: anywhere;
+}
+
+.fact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.fact-grid--compact {
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+
+.fact-grid > div {
+  min-width: 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid rgba(23, 36, 50, 0.08);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.fact-grid strong {
+  display: block;
+  margin-top: 0.22rem;
+  overflow-wrap: anywhere;
+}
+
+.signal-list,
+.forensic-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.signal-card {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(23, 36, 50, 0.09);
+  border-radius: 0.95rem;
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.signal-card strong,
+.signal-card span {
+  overflow-wrap: anywhere;
+}
+
+.signal-card--hold {
+  border-color: rgba(154, 54, 42, 0.2);
+  background: rgba(255, 244, 237, 0.9);
+  color: #8f3025;
+}
+
+.source-ref-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.65rem;
+}
+
+.source-ref-list span {
+  display: inline-flex;
+  max-width: 100%;
+  padding: 0.32rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(33, 78, 114, 0.08);
+  color: #214e72;
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.live-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid rgba(23, 36, 50, 0.12);
+  border-radius: 999px;
+  background: rgba(86, 105, 123, 0.12);
+  color: #4d6174;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.live-status-badge--connected,
+.live-status-badge--ready,
+.live-status-badge--prepared,
+.live-status-badge--approved {
+  border-color: rgba(33, 103, 70, 0.18);
+  background: rgba(33, 103, 70, 0.12);
+  color: #216746;
+}
+
+.live-status-badge--holding,
+.live-status-badge--hold,
+.live-status-badge--unavailable,
+.live-status-badge--disconnected,
+.live-status-badge--empty,
+.live-status-badge--pending {
+  border-color: rgba(168, 112, 26, 0.22);
+  background: rgba(168, 112, 26, 0.14);
+  color: #8b5b12;
+}
+
+.live-status-badge--denied,
+.live-status-badge--expired,
+.live-status-badge--blocked {
+  border-color: rgba(154, 54, 42, 0.2);
+  background: rgba(154, 54, 42, 0.12);
+  color: #8f3025;
 }
 
 .runtime-excerpt {
@@ -1776,6 +1932,7 @@ kbd {
   .scenario-selector__options,
   .demo-header__facts,
   .keyboard-shortcuts-help__list,
+  .fact-grid,
     .hero-facts,
     .governance-panel__facts,
     .forensic-panel__summary dl,
@@ -1798,5 +1955,82 @@ kbd {
   .control-room-hero__status {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .governance-card .panel-heading,
+  .timeline-panel .panel-heading,
+  .live-capture-panel .panel-heading {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .app-shell {
+    width: min(100vw - 0.5rem, 1680px);
+    padding-top: 0.5rem;
+  }
+
+  .panel,
+  .hero,
+  .status-bar {
+    border-radius: 1rem;
+  }
+
+  .panel-heading,
+  .foreman-guide-panel__heading,
+  .foreman-guide-panel__proactive-row,
+  .foreman-guide-panel__presence-row,
+  .foreman-guide-panel__input-row,
+  .foreman-guide-panel__response-meta,
+  .live-mode-toggle__controls,
+  .playback-controls__buttons {
+    align-items: stretch;
+  }
+
+  .control-button,
+  .foreman-guide-panel__chip,
+  .foreman-guide-panel__mode-button {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .foreman-guide-panel__heading-actions,
+  .foreman-guide-panel__quick-actions,
+  .foreman-guide-panel__input-row,
+  .foreman-guide-panel__response-meta,
+  .live-mode-toggle__controls,
+  .playback-controls__buttons {
+    flex-direction: column;
+  }
+
+  .foreman-guide-panel__input-row input {
+    flex-basis: 100%;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .skin-tab {
+    min-height: auto;
+    padding: 0.75rem;
+  }
+
+  .outcome-badge,
+  .live-status-badge {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .source-ref-list span,
+  .forensic-entry__refs span {
+    flex: 1 1 100%;
+  }
+
+  .runtime-excerpt,
+  .live-json {
+    font-size: 0.72rem;
+  }
+
+  .status-bar {
+    position: static;
   }
 }

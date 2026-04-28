@@ -71,7 +71,7 @@ export function DisclosurePreviewPanel({
   if (!report) {
     return (
       <section
-        className={`governance-card${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
+        className={`panel governance-card${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
         data-disclosure-preview-panel="true"
         data-foreman-panel-id="disclosure-preview"
         data-foreman-highlighted={foremanHighlighted ? "true" : "false"}
@@ -99,7 +99,7 @@ export function DisclosurePreviewPanel({
 
   return (
     <section
-      className={`governance-card${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
+      className={`panel governance-card${foremanHighlighted ? " foreman-panel-highlight" : ""}`}
       data-disclosure-preview-panel="true"
       data-foreman-panel-id="disclosure-preview"
       data-foreman-highlighted={foremanHighlighted ? "true" : "false"}

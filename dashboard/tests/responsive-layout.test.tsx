@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import React from "react";
 import { LiveConnectionBanner } from "../src/components/LiveConnectionBanner.tsx";
 import {
@@ -42,6 +43,28 @@ const tests = [
       assert.equal(markup.includes("Local demo control room"), true);
       assert.equal(markup.includes("Committed Wave 8 snapshots only."), true);
       assert.equal(markup.includes("control-room-driver-stack"), true);
+      assert.equal(markup.includes('data-role-session-panel="true"'), true);
+      assert.equal(
+        markup.includes(
+          'aria-label="Auth0 login unavailable; public mode remains active"'
+        ),
+        true
+      );
+    },
+  },
+  {
+    name: "responsive CSS protects 375px judge demo panels without package dependencies",
+    run: async () => {
+      const styles = await readFile("src/styles.css", "utf8");
+
+      assert.equal(styles.includes("@media (max-width: 520px)"), true);
+      assert.equal(styles.includes("button:focus-visible"), true);
+      assert.equal(styles.includes(".governance-card .panel-heading"), true);
+      assert.equal(styles.includes(".source-ref-list span"), true);
+      assert.equal(styles.includes(".foreman-guide-panel__input-row input"), true);
+      assert.equal(styles.includes(".live-connection-banner"), true);
+      assert.equal(styles.includes(".skin-tab"), true);
+      assert.equal(styles.includes(".control-button,"), true);
     },
   },
   {
@@ -133,12 +156,23 @@ const tests = [
       const holding = renderMarkup(
         <LiveConnectionBanner status="holding" holdMessage="HOLD: held for test" />
       );
+      const refreshable = renderMarkup(
+        <LiveConnectionBanner
+          status="disconnected"
+          holdMessage="HOLD: disconnected for test"
+          onRefresh={() => undefined}
+        />
+      );
 
       assert.equal(connected.includes("Live projection connected."), true);
       assert.equal(disconnected.includes('data-live-connection-status="disconnected"'), true);
       assert.equal(disconnected.includes("HOLD: disconnected for test"), true);
       assert.equal(holding.includes('data-live-connection-status="holding"'), true);
       assert.equal(holding.includes("HOLD: held for test"), true);
+      assert.equal(
+        refreshable.includes('aria-label="Refresh Live Mode projection status"'),
+        true
+      );
     },
   },
 ];
