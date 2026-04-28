@@ -144,6 +144,7 @@ V2-C is recorded in:
 
 - `../docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md`
 - `../docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`
+- `../docs/closeouts/MERIDIAN_V2C_OPTIONAL_DEMO_PACKETS_CLOSEOUT.md`
 
 Shipped dashboard-local surfaces:
 
@@ -160,6 +161,10 @@ Demo support artifacts:
 
 - `public/demo/reliability-runbook.md`
 - `public/demo/print-instructions.md`
+- `public/demo/adversarial-qa-sealed-envelopes.md`
+- `public/demo/lens-matched-judge-cards.md`
+- `public/demo/doctrine-poster-stage-setup.md`
+- `public/demo/overclaim-trap-rehearsal-card.md`
 - `public/audio/foreman/README.md`
 
 Current V2-C floor:
@@ -170,6 +175,8 @@ Current V2-C floor:
 - dashboard build green
 
 V2-C does not widen root/shared contracts, does not add a `MIGRATIONS.md` row, and does not modify root governance/forensic/authority/live absence/root skins, dashboard scenarios, package, Auth0, Vercel, env, deploy, config, secret, or security surfaces.
+
+Optional DEMO-11 through DEMO-14 artifacts are static print/operator support only. They do not add runtime behavior, live Q&A, speech detection, autonomous overclaim detection, fake QR, production proof, legal sufficiency, official Fort Worth workflow, or shared contract widening.
 
 Remaining V2-C HOLDs:
 

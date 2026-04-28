@@ -25,6 +25,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 - Wave 9 dashboard spec: [`docs/specs/WAVE9_DASHBOARD.md`](specs/WAVE9_DASHBOARD.md)
 - Schemas lane: [`docs/schemas/`](schemas/)
 - Learning notes lane: [`docs/learning-notes/`](learning-notes/)
+- Demo artifacts lane: [`docs/demo/V2C_OPTIONAL_DEMO_ARTIFACTS.md`](demo/V2C_OPTIONAL_DEMO_ARTIFACTS.md)
 - Closeouts lane: [`docs/closeouts/README.md`](closeouts/README.md)
 - Meridian V1 master closeout: [`docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`](closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md)
 - Meridian V2-A closeout: [`docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`](closeouts/MERIDIAN_V2A_CLOSEOUT.md)
@@ -34,6 +35,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 - Meridian V2-B Code Quality + Demo Hardening FAST closeout: [`docs/closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md`](closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md)
 - Meridian V2-B disclosure print polish closeout: [`docs/closeouts/MERIDIAN_V2B_DISCLOSURE_PRINT_POLISH_CLOSEOUT.md`](closeouts/MERIDIAN_V2B_DISCLOSURE_PRINT_POLISH_CLOSEOUT.md)
 - Meridian V2-C Demo Presentation Layer closeout: [`docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`](closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md)
+- Meridian V2-C optional demo packets closeout: [`docs/closeouts/MERIDIAN_V2C_OPTIONAL_DEMO_PACKETS_CLOSEOUT.md`](closeouts/MERIDIAN_V2C_OPTIONAL_DEMO_PACKETS_CLOSEOUT.md)
 - Wave 4B closeout: [`docs/closeouts/WAVE4B_CLOSEOUT.md`](closeouts/WAVE4B_CLOSEOUT.md)
 - Wave 4.5 closeout: [`docs/closeouts/WAVE4_5_CLOSEOUT.md`](closeouts/WAVE4_5_CLOSEOUT.md)
 - Wave 5 closeout: [`docs/closeouts/WAVE5_CLOSEOUT.md`](closeouts/WAVE5_CLOSEOUT.md)
@@ -58,4 +60,5 @@ V2-B/GARP surfaces listed above reflect the local G1-G5 Authority Runway only: d
 V2-B Foreman/Auth surfaces listed above reflect local/pre-deployment proof cockpit truth plus AUTH-5 deployed Vercel/Auth0 demo proof only: deterministic Foreman context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native voice fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, shared local `/api/authority-requests` endpoint behavior, stable Vercel demo URL, Auth0 hosted login/callback return, and two eval-role session mappings.
 The V2-B Code Quality + Demo Hardening FAST closeout records Packet 0-2 hardening evidence, current dashboard/repo-wide JS floors, AUTH-5 proof preservation, carried HOLDs, and deferred audit backlog without changing shared contracts. The Optional Packet 4 disclosure print polish closeout records the browser-native disclosure preview print/save-to-PDF affordance without a generated PDF library, server-side report generation, legal/TPIA sufficiency, public portal behavior, or official city workflow claim.
 V2-C surfaces listed above reflect dashboard-local presentation/choreography/reliability truth only: Mission presentation skin, Mission Rail, Fictional Demo Permit #4471, HOLD Wall, Absence Lens presentation overlay, Decision Counter, Demo Audit Wall, Foreman audio identity, Disclosure Receipt, Doctrine Card, reliability panel/runbook/checklists, SyncPill, approval pulse, and vibration fallback. V2-C does not widen root/shared contracts or protected surfaces; dashboard `283/283`, repo-wide JS `719/719`, dashboard typecheck, and dashboard build are the current floor.
+V2-C optional demo artifacts listed above are static print/operator support only: adversarial Q&A sealed envelopes, lens-matched judge cards, doctrine poster/stage setup, and a rehearsal-gated overclaim trap card. They do not add runtime behavior, proof claims, live Q&A, speech detection, fake QR, legal sufficiency, production city behavior, official Fort Worth workflow, or shared contract widening.
 Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. Eval warm-tabs, phone smoke, mobile/judge smoke proof, Walk-mode MP4 proof, full authority choreography proof, clean logout proof, deploy hook cleanup proof, and final V2-B closeout remain HOLD.
