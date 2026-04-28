@@ -90,10 +90,12 @@ docs/
   closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md
   closeouts/MERIDIAN_V2A_CLOSEOUT.md
   closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md
+  closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
   specs/MERIDIAN_V1_FINAL_TRUTH.md
   specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md
   specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md
+  specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md
   specs/NATS_EVENT_COMMAND_TRANSLATION.md
   specs/WAVE4A_GOVERNANCE_RUNTIME.md
   specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md
@@ -111,6 +113,7 @@ scripts/
   replay-constellation-stream.js
 dashboard/
   README.md
+  api/authority-requests.js
   package.json
   index.html
   public/scenarios/*.json
@@ -128,7 +131,8 @@ dashboard/
 - Do not create or describe Wave 10 as active V1 scope; there is no Wave 10 in V1.
 - Treat V2-A as a local/demo-day Meridian V2 extension with truth surfaces in `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`.
 - Treat V2-B/GARP Authority Runway as a local G1-G5 sublane only.
-- Treat full V2-B Foreman as gated on supplied and inspected Foreman concept and Bronze prototype sources plus Tim approval.
+- Treat V2-B Foreman/Auth local proof cockpit as local/pre-deployment guide/explainer truth only.
+- Treat deployed URL proof, live Auth0 callback/login proof, AUTH-5, and final V2-B closeout as HOLD until Tim supplies manual proof.
 - Keep scope locked to the approved block.
 - Preserve canon alignment across root documents.
 - Treat upstream references as references unless their contents are available in this repo.
@@ -139,12 +143,13 @@ dashboard/
 - Describe Wave 4.5 only as calibration truth lock surfaces (frozen corpus, historical baseline truth/pre-Block-C comparison artifacts, final replay artifact family, and wave-level spec/closeout), not as structure reopening or runtime widening.
 - Describe Wave 5 only as bounded local authority-topology surfaces (additive entity validator widening, static Fort Worth topology declaration, bounded domain/actor evaluation, bounded REVOKE activation, additive runtimeSubset projections, and projection-only read-only propagation), not as hosted authority integration, persistent graph topology service, event-side routing, publisher widening, scheduler behavior, or civic-chain writes.
 - Describe Wave 6 only as bounded local forensic-chain surfaces (narrow civic entry vocabulary, DI-only writer/publisher seams, demo JSON persistence, and additive post-evaluation synthetic evidence publication over existing subject families), not as live broker proof, legal/tamper-proof immutability, meeting/permit/inspection/obligation forensic recording, DB persistence, or per-helper chain fan-out.
-- Describe Wave 7 only as rendering-only civic skins surfaces (five bounded skins, deterministic public disclosure boundary, and five-skin structural integration proof), not as dashboard/UI runtime, public portal behavior, legal compliance workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins.
+- Describe Wave 7 only as rendering-only civic skins surfaces (five bounded skins, deterministic public disclosure boundary, and five-skin structural integration proof), not as dashboard/UI runtime, public portal behavior, legal workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins.
 - Describe Wave 8 only as bounded corridor scenario integration surfaces, not as dashboard/UI runtime, deployment/hosting, live broker proof, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, legal sufficiency, TRAIGA compliance, persistent match-result storage, chain replay engine, or multi-corridor routing in one run.
 - Describe Wave 9 only as a local dashboard proof over committed snapshots, not as production application behavior, hosted deployment, auth, live broker proof, live network dependency, public portal behavior, new governance computation, legal sufficiency, TPIA compliance, TRAIGA compliance, official disclosure approval, or real city runtime behavior.
-- Describe Meridian V1 only as completed local/proof infrastructure, not as a deployed production city system or legal compliance certification.
-- Describe V2-A only as local/demo-day live session, gateway/projection, JSON-only HoldPoint adapter, live absence, optional local Live Mode, local seed/corridor, and replay surfaces. Do not describe V2-A as production behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, live Auth0/OpenFGA integration, live Whisper/audio ingestion, legal compliance certification, dashboard-side truth computation, Foreman behavior, or V2-B behavior.
-- Describe V2-B/GARP only as local Authority Runway surfaces: dashboard-local Auth0 Universal Login role-session proof, deterministic local authority request/evaluation/store contracts, local lifecycle/action record behavior, dashboard authority cockpit, payload-only notification builder, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. Do not describe it as full V2-B Foreman closure, Foreman behavior, production auth, live OpenFGA behavior, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
+- Describe Meridian V1 only as completed local/proof infrastructure, not as a deployed production city system or legal certification.
+- Describe V2-A only as local/demo-day live session, gateway/projection, JSON-only HoldPoint adapter, live absence, optional local Live Mode, local seed/corridor, and replay surfaces. Do not describe V2-A as production behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, live Auth0/OpenFGA integration, live Whisper/audio ingestion, legal certification, dashboard-side truth computation, Foreman behavior, or V2-B behavior.
+- Describe V2-B/GARP only as local Authority Runway surfaces: dashboard-local Auth0 Universal Login role-session proof, deterministic local authority request/evaluation/store contracts, local lifecycle/action record behavior, dashboard authority cockpit, payload-only notification builder, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. Do not describe it as full V2-B Foreman closure, Foreman behavior, production auth, live OpenFGA behavior, CIBA, delivered notifications, public portal behavior, legal/TPIA sufficiency, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
+- Describe V2-B Foreman/Auth only as local/pre-deployment dashboard proof cockpit behavior: deterministic guide context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native voice fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, and shared local `/api/authority-requests` endpoint behavior. Do not describe it as deployed, production-ready, live-city integrated, legally sufficient, public-portal backed, OpenFGA-backed, CIBA-backed, notification-sending, model/API-backed, externally voice-serviced, Whisper/audio-upload backed, or final V2-B closeout.
 
 ## Planning Gate
 
@@ -168,6 +173,7 @@ dashboard/
 - Do not describe a Wave 10 as part of V1.
 - Do not overstate V2-A local/demo-day surfaces as deployed, official, legally certified, live-broker-backed, auth-wired, audio-backed, Foreman-enabled, or V2-B behavior.
 - Do not overstate V2-B/GARP local runway surfaces as Foreman-enabled, production, legally sufficient, OpenFGA-backed, CIBA-backed, notification-delivering, or official city workflow behavior.
+- Do not overstate V2-B Foreman/Auth local proof cockpit surfaces as deployed, production, legally sufficient, OpenFGA-backed, CIBA-backed, notification-sending, model-backed, external-voice-backed, or official city workflow behavior.
 - Stop if repo truth conflicts with the approved task.
 
 ## Verification Rules
@@ -195,7 +201,8 @@ dashboard/
 - V2-A adds a shared local live contract family recorded in `MIGRATIONS.md` and keeps adapter-local `holdpointArtifactJson.v1` plus dashboard-local TypeScript mirrors out of shared contract source unless a later approved packet promotes them.
 - V2-A does not widen V1 contracts, Wave 6 forensic-chain contracts, `BridgeEnvelope`, `GovernancePublication`, NATS, package dependencies, auth/config/security surfaces, or legal/live-system claims.
 - V2-B/GARP adds a local authority contract family recorded in `MIGRATIONS.md`; literal contract strings must only be claimed when present in source.
-- V2-B/GARP does not widen V1 contracts, V2-A contracts, LiveFeedEvent kinds, ForensicChain vocabulary, root package dependencies, OpenFGA behavior, production auth posture, notification delivery, public portal behavior, or legal/TPIA claims.
+- V2-B/GARP does not widen V1 contracts, V2-A contracts, LiveFeedEvent kinds, ForensicChain vocabulary, root package dependencies, OpenFGA behavior, production auth posture, delivered notifications, public portal behavior, or legal/TPIA claims.
+- V2-B Foreman/Auth B1-B6 adds dashboard-local guide/explainer strings only. No B7 migration row is required unless a later approved packet promotes those strings into root/shared runtime contracts.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 

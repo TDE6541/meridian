@@ -17,8 +17,10 @@ Meridian is a governed city digital twin intelligence repo.
 9. [`docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md)
 10. [`docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`](docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md)
 11. [`docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md)
-12. Relevant active-task specs in `docs/specs/`
-13. Relevant active-task closeouts in `docs/closeouts/`
+12. [`docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`](docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md)
+13. [`docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md)
+14. Relevant active-task specs in `docs/specs/`
+15. Relevant active-task closeouts in `docs/closeouts/`
 
 ## Operating Posture
 
@@ -32,7 +34,8 @@ Meridian is a governed city digital twin intelligence repo.
 - Treat Meridian V1 as closed through Wave 9; there is no Wave 10 in V1.
 - Treat V2-A as local/demo-day extension truth only unless a later approved envelope widens it.
 - Treat V2-B/GARP Authority Runway as a local G1-G5 sublane only; it does not close full V2-B Foreman.
-- Treat Foreman behavior as gated until the Foreman concept/prototype source is inspected and Tim approves Foreman packet cutting.
+- Treat V2-B Foreman/Auth local proof cockpit as shipped local/pre-deployment guide/explainer truth only; deployment proof and live Auth0 callback/login proof remain HOLD.
+- Treat Foreman behavior beyond the shipped dashboard-local guide/explainer cockpit as gated until Tim approves a later widening packet.
 
 ## Codex Scope Note
 
@@ -45,5 +48,6 @@ Meridian is a governed city digital twin intelligence repo.
 - Do not widen scope without explicit approval.
 - Do not claim runtime behavior that is not proven in repo truth.
 - Do not touch auth/config/security surfaces without explicit scope approval.
-- Do not claim production, live city integration, legal compliance, live broker proof, Auth0/OpenFGA, live Whisper/audio, or Foreman behavior without explicit shipped proof.
-- Do not claim live OpenFGA, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, official Fort Worth workflow, or full V2-B Foreman closure from the GARP Authority Runway.
+- Do not claim production, live city integration, legal sufficiency, live broker proof, Auth0/OpenFGA, live Whisper/audio, or Foreman behavior without explicit shipped proof.
+- Do not claim live OpenFGA, CIBA, delivered notifications, public portal behavior, legal/TPIA sufficiency, official Fort Worth workflow, or full V2-B Foreman closure from the GARP Authority Runway.
+- Do not claim deployed Vercel proof, live Auth0 callback/login proof, mobile/judge device proof, final V2-B closeout, model/API calls, external voice service, Whisper/audio upload/transcription, or browser-exposed model API keys from the B7 local proof cockpit.

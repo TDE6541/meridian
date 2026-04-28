@@ -1,6 +1,6 @@
 # Meridian Dashboard
 
-Wave 9 keeps the dashboard local-only and snapshot-driven for demo use on Tim's machine. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions.
+Wave 9 keeps the dashboard local-only and snapshot-driven for demo use on Tim's machine. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, and shared local `/api/authority-requests` endpoint behavior.
 
 ## Scope
 
@@ -12,11 +12,15 @@ Wave 9 keeps the dashboard local-only and snapshot-driven for demo use on Tim's 
 - supports optional local Live Mode over `DashboardLiveProjectionV1`
 - renders the GARP authority cockpit from local authority state inputs
 - exposes dashboard-local Auth0 Universal Login role-session proof
+- maps Auth0 JWT roles from `https://meridian.city/roles`
+- exposes the dashboard-local shared authority endpoint at `/api/authority-requests`
 - builds payload-only authority notification previews
 - prepares disclosure preview action metadata without browser side effects
+- renders the Foreman guide/explainer panel with deterministic offline narration
+- supports Foreman guided event binding, spatial awareness, panel highlighting, Gold modes, browser-native voice fallback, and deterministic avatar state
 - emits visible HOLD messaging when Live Mode is disconnected, unavailable, or invalid
-- preserves `dashboard/src/foremanGuide/ForemanMountPoint.tsx` as an inert mount only
-- requires no env vars, secrets, live broker, or live network dependency at demo runtime after local dependencies are installed
+- preserves logged-out snapshot mode when Auth0 env is missing
+- requires no secrets, live broker, or live network dependency for logged-out local snapshot demo after local dependencies are installed
 
 ## Non-goals
 
@@ -31,7 +35,7 @@ Wave 9 keeps the dashboard local-only and snapshot-driven for demo use on Tim's 
 - no clipboard write, browser download trigger, print trigger, or PDF generation from disclosure preview actions
 - no governance, authority, matching, forensic, absence, skin, city, or cascade truth recomputation
 - no deployment, hosting, production identity or authorization behavior, live broker, live city integration, or live Constellation claim
-- no Foreman behavior, Foreman API, model call, voice/avatar, narration, chat panel, or autonomous action
+- no Foreman API, model call, external voice service, Whisper/audio upload/transcription, MediaRecorder/getUserMedia path, browser-exposed model API keys, or autonomous Foreman action
 - no legal determination, TPIA compliance, TRAIGA compliance, public-record completeness, public portal behavior, or official disclosure approval claim
 
 ## Local Commands
@@ -78,17 +82,21 @@ Auth0 Application URI values:
 
 Demo Day readiness checks after Tim configures Vercel and Auth0:
 
-- verify login with eval accounts
 - verify snapshot mode still works while logged out
+- verify Auth0 login with eval accounts
+- verify role session visibility after login
 - verify the public role cannot approve authority requests
-- verify an inspector role can submit an authority request
+- verify a field inspector role can submit an authority request
 - verify a director or operations role can approve and deny an authority request
+- verify Foreman explains the authority lifecycle
+- verify Foreman Gold modes work
+- verify unsupported voice paths keep typed fallback visible
 
 Config boundaries:
 
 - no secrets are committed here
 - no Vercel deployment is attempted here
-- no Auth0 Management API, database, WebSocket, realtime push, notification delivery, OpenFGA, CIBA, public portal, legal compliance, production identity, live-city integration, or Foreman behavior is added here
+- no Auth0 Management API, database, WebSocket, realtime push, delivered notifications, OpenFGA, CIBA, public portal, legal/TPIA sufficiency, production identity, live-city integration, model/API calls, external voice service, or autonomous Foreman action is added here
 - model-provider secrets are outside this lane; any future model API mode requires an approved server-side/serverless proxy with server-side environment only
 
 ## Demo Posture
@@ -96,7 +104,8 @@ Config boundaries:
 - Demo playback reads committed local files only.
 - Snapshot mode remains default.
 - Live Mode is optional/local and fail-closed.
-- No env vars are required.
+- No env vars are required for logged-out snapshot mode.
+- Auth0 login proof requires the documented `VITE_AUTH0_DOMAIN`, `VITE_AUTH0_CLIENT_ID`, and `VITE_AUTH0_CALLBACK_URL` values.
 - No secrets are required.
 - No live network is required by the demo runtime after local dependencies are installed.
 - Demo-driving shortcuts:
@@ -128,7 +137,35 @@ Required disclosure disclaimer:
 Demo disclosure preview only. Not legal advice, not a TPIA determination, and not an official Fort Worth disclosure workflow.
 ```
 
-Foreman remains gated. The handoff context may display `foreman_ready: false`, but no Foreman behavior ships here.
+GARP is the authority runway, not full Foreman. The handoff context may display `foreman_ready: false`; the later B1-B6 cockpit supplies dashboard-local guide/explainer behavior only.
+
+## V2-B Foreman/Auth Local Proof Cockpit Posture
+
+The Foreman/Auth cockpit is local/pre-deployment proof only. Current truth is recorded in:
+
+- `../docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`
+- `../docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`
+
+Shipped local behavior:
+
+- `meridian.v2.foremanGuideContext.v1`
+- `meridian.v2.foremanGuideResponse.v1`
+- `meridian.v2.foremanGuideSignal.v1`
+- `meridian.v2.foremanGuideMode.v1`
+- existing `meridian.v2.roleSessionProof.v1`
+- Auth0 role namespace `https://meridian.city/roles`
+- shared local endpoint `/api/authority-requests`
+- event-compatible payloads `AUTHORITY_RESOLUTION_REQUESTED`, `AUTHORITY_APPROVED`, and `AUTHORITY_DENIED`
+- Foreman panel, offline narration, authority narration, guided event binding, spatial awareness, visual-only panel highlighting, Gold modes, browser-native voice output/input fallback, typed fallback, and deterministic avatar state
+
+Remaining deployment proof HOLDs:
+
+- live deployed Vercel URL proof
+- Auth0 deployed callback/login proof
+- mobile/judge device proof
+- deployment smoke proof
+- AUTH-5 deployment proof/finish lane
+- final V2-B closeout after deployed URL and callback proof
 
 ## Snapshot Source
 

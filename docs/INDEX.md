@@ -10,6 +10,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 - Meridian V1 final truth: [`docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`](specs/MERIDIAN_V1_FINAL_TRUTH.md)
 - Meridian V2-A live civic nervous system spec: [`docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`](specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md)
 - Meridian V2-B/GARP Authority Runway spec: [`docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`](specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md)
+- Meridian V2-B Foreman guided proof cockpit spec: [`docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`](specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md)
 - Entity ontology spec: [`docs/specs/ENTITY_ONTOLOGY.md`](specs/ENTITY_ONTOLOGY.md)
 - Wave 3 bridge spec: [`docs/specs/WAVE3_NATS_BRIDGE.md`](specs/WAVE3_NATS_BRIDGE.md)
 - Wave 3 translation spec: [`docs/specs/NATS_EVENT_COMMAND_TRANSLATION.md`](specs/NATS_EVENT_COMMAND_TRANSLATION.md)
@@ -27,6 +28,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 - Meridian V1 master closeout: [`docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`](closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md)
 - Meridian V2-A closeout: [`docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`](closeouts/MERIDIAN_V2A_CLOSEOUT.md)
 - Meridian V2-B/GARP closeout: [`docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`](closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md)
+- Meridian V2-B Foreman Platinum local closeout: [`docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`](closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md)
 - Wave 4B closeout: [`docs/closeouts/WAVE4B_CLOSEOUT.md`](closeouts/WAVE4B_CLOSEOUT.md)
 - Wave 4.5 closeout: [`docs/closeouts/WAVE4_5_CLOSEOUT.md`](closeouts/WAVE4_5_CLOSEOUT.md)
 - Wave 5 closeout: [`docs/closeouts/WAVE5_CLOSEOUT.md`](closeouts/WAVE5_CLOSEOUT.md)
@@ -48,4 +50,5 @@ Wave 8 corridor scenario surfaces listed above reflect shipped in-repo Packet 1-
 Wave 9 dashboard surfaces listed above reflect a local-only dashboard proof over committed Wave 8 payload snapshots.
 V2-A surfaces listed above reflect local/demo-day live extension truth only: local sessions, local gateway/projection, JSON-only HoldPoint ingest, live absence, optional local Live Mode, local seed/corridor generation, Constellation-compatible replay, and inert Foreman seams.
 V2-B/GARP surfaces listed above reflect the local G1-G5 Authority Runway only: dashboard-local Auth0 Universal Login role-session proof, deterministic authority contracts, local lifecycle/action record behavior, dashboard authority cockpit, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions.
-Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. Full V2-B Foreman remains gated on supplied and inspected Foreman concept and Bronze prototype sources.
+V2-B Foreman/Auth surfaces listed above reflect local/pre-deployment proof cockpit truth only: deterministic Foreman context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native voice fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, and shared local `/api/authority-requests` endpoint behavior.
+Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. Deployed Vercel URL proof, live Auth0 callback/login proof, AUTH-5, and final V2-B closeout remain HOLD.

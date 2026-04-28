@@ -2,7 +2,7 @@
 
 ## Repo Identity
 
-Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, a bounded Wave 5 authority-topology lane, a bounded Wave 6 forensic-chain lane, a bounded Wave 7 civic skins rendering lane, a bounded Wave 8 corridor scenario integration lane, a Wave 9 local dashboard proof lane, a V2-A local/demo-day live civic nervous system extension, and a V2-B/GARP Authority Runway local sublane. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
+Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, a bounded Wave 5 authority-topology lane, a bounded Wave 6 forensic-chain lane, a bounded Wave 7 civic skins rendering lane, a bounded Wave 8 corridor scenario integration lane, a Wave 9 local dashboard proof lane, a V2-A local/demo-day live civic nervous system extension, a V2-B/GARP Authority Runway local sublane, and a V2-B Foreman/Auth local proof cockpit. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
 
 ## Agent Start Here / Read First
 
@@ -19,15 +19,17 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 11. [`docs/closeouts/README.md`](docs/closeouts/README.md)
 12. [`docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`](docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md)
 13. [`docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md)
-14. [`docs/specs/WAVE3_NATS_BRIDGE.md`](docs/specs/WAVE3_NATS_BRIDGE.md)
-15. [`docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`](docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md)
-16. [`docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`](docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md)
-17. [`docs/specs/WAVE4_5_CALIBRATION.md`](docs/specs/WAVE4_5_CALIBRATION.md)
-18. [`docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`](docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md)
-19. [`docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`](docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md)
-20. [`docs/specs/WAVE7_CIVIC_SKINS.md`](docs/specs/WAVE7_CIVIC_SKINS.md)
-21. [`docs/specs/WAVE8_CORRIDOR_SCENARIO.md`](docs/specs/WAVE8_CORRIDOR_SCENARIO.md)
-22. [`docs/specs/WAVE9_DASHBOARD.md`](docs/specs/WAVE9_DASHBOARD.md)
+14. [`docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`](docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md)
+15. [`docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md)
+16. [`docs/specs/WAVE3_NATS_BRIDGE.md`](docs/specs/WAVE3_NATS_BRIDGE.md)
+17. [`docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`](docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md)
+18. [`docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`](docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md)
+19. [`docs/specs/WAVE4_5_CALIBRATION.md`](docs/specs/WAVE4_5_CALIBRATION.md)
+20. [`docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`](docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md)
+21. [`docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`](docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md)
+22. [`docs/specs/WAVE7_CIVIC_SKINS.md`](docs/specs/WAVE7_CIVIC_SKINS.md)
+23. [`docs/specs/WAVE8_CORRIDOR_SCENARIO.md`](docs/specs/WAVE8_CORRIDOR_SCENARIO.md)
+24. [`docs/specs/WAVE9_DASHBOARD.md`](docs/specs/WAVE9_DASHBOARD.md)
 
 ## Session Posture
 
@@ -37,7 +39,8 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Do not create or describe Wave 10 as active V1 scope; there is no Wave 10 in V1.
 - Treat V2-A as a local/demo-day Meridian V2 extension with shipped truth recorded in `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`.
 - Treat V2-B/GARP Authority Runway as a local G1-G5 sublane recorded in `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md` and `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`.
-- Treat full V2-B Foreman prompt cutting as gated on supplied and inspected Foreman concept and Bronze prototype sources plus Tim approval.
+- Treat V2-B Foreman/Auth local proof cockpit as a shipped local/pre-deployment guide/explainer layer recorded in `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md` and `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`.
+- Treat deployed URL proof, live Auth0 callback/login proof, mobile/judge device proof, AUTH-5, and final V2-B closeout as HOLD until Tim supplies manual proof.
 - Keep all claims bounded to visible files and approved inputs.
 - Surface uncertainty as HOLD instead of filling gaps.
 - Keep root canon synchronized when substrate truth changes.
@@ -48,12 +51,13 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Do not describe Wave 4.5 as structure reopening, extraction retune reopening, or runtime/publication widening.
 - Do not describe Wave 5 as live Auth0/OpenFGA integration, persistent graph storage, event-side routing, publication widening, scheduler/daemon behavior, or civic-chain/ForensicChain runtime writes.
 - Do not describe Wave 6 as live broker proof, legal/tamper-proof immutability, meeting-capture forensic recording, permit/inspection/obligation forensic recording, full per-helper authority trace fanout, or production DB-backed forensic persistence.
-- Do not describe Wave 7 as dashboard/UI runtime, public portal behavior, legal compliance workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins.
+- Do not describe Wave 7 as dashboard/UI runtime, public portal behavior, legal workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins.
 - Do not describe Wave 8 as dashboard/UI runtime, deployment/hosting, live broker proof, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, legal sufficiency, TRAIGA compliance, persistent match-result storage, chain replay engine, or multi-corridor routing in one run.
 - Do not describe Wave 9 as production application behavior, hosted deployment, auth, live broker proof, live Auth0/OpenFGA wiring, live Whisper/audio ingestion, new governance computation, public portal behavior, legal sufficiency, TPIA compliance, TRAIGA compliance, official disclosure approval, or real city runtime behavior.
-- Do not describe Meridian V1 as a deployed production city system or legal compliance certification.
-- Do not describe V2-A as production app behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, live Auth0/OpenFGA integration, live Whisper/audio ingestion, legal compliance certification, dashboard-side truth computation, Foreman behavior, or V2-B ship scope.
-- Do not describe the V2-B/GARP Authority Runway as full V2-B Foreman closure, Foreman behavior, production auth, live OpenFGA behavior, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
+- Do not describe Meridian V1 as a deployed production city system or legal certification.
+- Do not describe V2-A as production app behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, live Auth0/OpenFGA integration, live Whisper/audio ingestion, legal certification, dashboard-side truth computation, Foreman behavior, or V2-B ship scope.
+- Do not describe the V2-B/GARP Authority Runway as full V2-B Foreman closure, Foreman behavior, production auth, live OpenFGA behavior, CIBA, delivered notifications, public portal behavior, legal/TPIA sufficiency, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
+- Do not describe the V2-B Foreman/Auth local proof cockpit as deployed, production-ready, live-city integrated, legally sufficient, public-portal backed, OpenFGA-backed, CIBA-backed, notification-sending, model/API-backed, externally voice-serviced, Whisper/audio-upload backed, or final V2-B closeout.
 
 ## Non-Negotiables
 
@@ -147,6 +151,7 @@ Edit(/**/*.config.*)
 - `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`
 - `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`
 - `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`
+- `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`
 - `docs/INDEX.md`
 - `docs/ENGINE_INDEX.md`
 - `docs/UI_INDEX.md`
@@ -190,11 +195,12 @@ Edit(/**/*.config.*)
 - Wave 4.5 truth: calibration corpus remains frozen; Block B baseline trio under `tests/pipeline/calibration/baselines/` is historical baseline truth and pre-Block-C comparison source; current calibrated truth is locked to `tests/pipeline/calibration/final/recorded_primary_runs.json`, `tests/pipeline/calibration/final/recorded_fallback_runs.json`, and `tests/pipeline/calibration/final/final_report.json` with final replay regression in `tests/pipeline/test_calibration_final.py`.
 - Wave 5 truth: Packet 1 adds additive `authority_grant`/`organization` validator widening and static Fort Worth authority topology; Packet 2 adds bounded domain/actor authority evaluation plus additive `runtimeSubset.civic.authority_resolution`; Packet 3 activates bounded `REVOKE` for `authority_revoked_mid_action`, `permit_superseded_by_overlap`, and `cross_jurisdiction_resolved_against_requester`, adds additive `runtimeSubset.civic.revocation`, and adds read-only projection-only propagation under optional nested `authority_context.propagation_context`; no top-level request-shape widening, publication widening, signal_tree widening, entity mutation, event-side routing, scheduler behavior, or persistent graph/runtime writes ship.
 - Wave 6 truth: Packet 1 ships bounded `src/governance/forensic/` civic-chain substrate (`CivicForensicChain`, `GovernanceChainWriter`, `ChainPersistence`) with active civic entry vocabulary narrowed to `GOVERNANCE_DECISION`/`AUTHORITY_EVALUATION`, explicit deferred civic type rejection for meeting/permit/inspection/obligation entries, DI-only writer posture, non-blocking persistence warnings, and demo JSON persistence under `.meridian/forensic-chain/`; Packet 2 ships DI-only `ChainPublisher` and additive post-evaluation forensic publication seam in `src/bridge/governanceTransportAdapter.js` that publishes only to existing `constellation.evidence.*` subjects on `CONSTELLATION_EVIDENCE` with non-blocking publication failures and receipts appended only through existing `publications`; no new subject family/stream, no top-level contract widening, no governance/authority logic rewrite, no meeting-capture forensic recording, no DB persistence, and no legal immutability/live-broker proof claim ship.
-- Wave 7 truth: five bounded civic skins are shipped (`civic.permitting`, `civic.council`, `civic.operations`, `civic.dispatch`, `civic.public`), deterministic public disclosure boundary ships in `src/skins/redaction.js`, and five-skin structural integration proof ships in `tests/skins.integration.test.js`; framework public guard remains intact, Wave 7 remains rendering-only, and no runtime/bridge/pipeline/forensic/entity/config/package widening, dashboard/UI runtime, portal behavior, legal compliance workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins ships.
+- Wave 7 truth: five bounded civic skins are shipped (`civic.permitting`, `civic.council`, `civic.operations`, `civic.dispatch`, `civic.public`), deterministic public disclosure boundary ships in `src/skins/redaction.js`, and five-skin structural integration proof ships in `tests/skins.integration.test.js`; framework public guard remains intact, Wave 7 remains rendering-only, and no runtime/bridge/pipeline/forensic/entity/config/package widening, dashboard/UI runtime, portal behavior, legal workflow, LLM-driven redaction, meeting-capture-to-skin routing, forensic-entry-to-skin routing, or governance-truth computation inside skins ships.
 - Wave 8 truth: bounded integration surfaces ship under `src/integration/` plus `scripts/run-corridor-scenario.js` with additive integration-layer contracts (`wave8.pipelineBridgeOutput.v1`, `wave8.matchResult.v1`, `wave8.scenarioResult.v1`, `wave8.cascadeResult.v1`) and a runner-local report contract (`wave8.packet5.runnerReport.v1`); frozen scenario fixtures (`routine`, `contested`, `emergency`) and `tests/integration/*.test.js` prove deterministic replay, structured live missing-env HOLD posture, single-state composition, multi-step cascade continuity, and five-skin re-rendering at each cascade step; no Wave 1-7 runtime/module widening, no dashboard/deployment claim, no live broker/auth/audio claim, and no legal/TRAIGA sufficiency claim ship.
 - Wave 9 truth: a local dashboard proof ships under `dashboard/` with committed snapshots in `dashboard/public/scenarios/*.json`, local demo command `npm --prefix dashboard run dev`, canonical URL `http://localhost:5173/`, skin payload consumption from `step.skins.outputs`, view-only Director Mode / Absence Lens overlays, and no Wave 1-8 substrate edits, root package pollution, auth, deployment, live broker, live network dependency, new governance computation, legal sufficiency, TPIA compliance, or TRAIGA compliance claim.
-- V2-A truth: a local/demo-day live civic nervous system extension ships under `src/live/**`, `scripts/run-live-governance.js`, `scripts/replay-constellation-stream.js`, and dashboard-local Live Mode surfaces. It records local live session contracts, local governance projection, JSON-only HoldPoint ingest, live-computed absence findings, source-manifested local demo Fort Worth seed/corridor generation, Constellation-compatible replay, snapshot-default dashboard Live Mode, and inert Foreman seams. It does not ship production behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, Auth0/OpenFGA integration, live Whisper/audio, legal compliance certification, dashboard-side truth computation, Foreman behavior, or V2-B behavior.
-- V2-B/GARP truth: a local G1-G5 Authority Runway ships dashboard-local Auth0 Universal Login role-session proof, deterministic local authority request/evaluation/store contracts, local lifecycle/action record behavior, dashboard authority cockpit, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. It does not close full V2-B Foreman, ship Foreman behavior, prove Auth0 tenant connectivity, ship OpenFGA behavior, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
+- V2-A truth: a local/demo-day live civic nervous system extension ships under `src/live/**`, `scripts/run-live-governance.js`, `scripts/replay-constellation-stream.js`, and dashboard-local Live Mode surfaces. It records local live session contracts, local governance projection, JSON-only HoldPoint ingest, live-computed absence findings, source-manifested local demo Fort Worth seed/corridor generation, Constellation-compatible replay, snapshot-default dashboard Live Mode, and inert Foreman seams. It does not ship production behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, Auth0/OpenFGA integration, live Whisper/audio, legal certification, dashboard-side truth computation, Foreman behavior, or V2-B behavior.
+- V2-B/GARP truth: a local G1-G5 Authority Runway ships dashboard-local Auth0 Universal Login role-session proof, deterministic local authority request/evaluation/store contracts, local lifecycle/action record behavior, dashboard authority cockpit, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. It is the authority runway, not full Foreman, and does not prove Auth0 tenant connectivity, ship OpenFGA behavior, CIBA, delivered notifications, public portal behavior, legal/TPIA sufficiency, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
+- V2-B Foreman/Auth truth: a local/pre-deployment dashboard proof cockpit ships deterministic Foreman context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native speech output/input fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, and shared local `/api/authority-requests` endpoint behavior. It remains pre-deployment; deployed Vercel URL proof, Auth0 deployed callback/login proof, mobile/judge device proof, AUTH-5, and final V2-B closeout remain HOLD.
 - V1 final truth: Meridian V1 is complete through Wave 9; Wave 9 is the final V1 wave; there is no Wave 10 in V1; V2 work stays outside V1 under approved envelopes. Final V1 verification posture records dashboard `36` passing / `0` failing across `14` dashboard test files and repo-wide JS `511` passing / `0` failing, with 1920x1080 and 1280x720 visual proof HOLDs carried honestly.
 
 ## Required Sync Surfaces
@@ -220,6 +226,7 @@ Edit(/**/*.config.*)
 - `docs/specs/WAVE8_CORRIDOR_SCENARIO.md`
 - `docs/specs/WAVE9_DASHBOARD.md`
 - `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`
+- `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`
 - `docs/closeouts/README.md`
 - `docs/closeouts/WAVE3_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_CLOSEOUT.md`
@@ -238,7 +245,9 @@ Edit(/**/*.config.*)
 - `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`
 - `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`
+- `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`
 - `dashboard/README.md`
+- `dashboard/api/authority-requests.js`
 
 ## Closeout Requirements
 

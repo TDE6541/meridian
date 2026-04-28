@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures), a Wave 9 local dashboard proof under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots, a V2-A local/demo-day live civic nervous system extension, and a V2-B/GARP Authority Runway local sublane. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. This repo is still not a production application; the dashboard is a local-only demo package with snapshot default, optional local Live Mode, dashboard-local Auth0 Universal Login role-session proof, OpenFGA deferred, payload-only notification builder, and prepared disclosure preview actions.
+Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures), a Wave 9 local dashboard proof under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots, a V2-A local/demo-day live civic nervous system extension, a V2-B/GARP Authority Runway local sublane, and a V2-B Foreman/Auth local proof cockpit. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. This repo is still not a production application; the dashboard is a local-only demo package with snapshot default, optional local Live Mode, dashboard-local Auth0 Universal Login role-session proof, local shared authority endpoint behavior, offline Foreman guide/explainer behavior, browser-native voice fallback, deterministic avatar state, OpenFGA deferred, payload-only notification preview, and prepared disclosure preview actions.
 
 ## Agent Start Here
 
@@ -14,14 +14,18 @@ Meridian is a governed city digital twin intelligence repo. The repo contains th
 8. [docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md)
 9. [docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md](docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md)
 10. [docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md)
+11. [docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md](docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md)
+12. [docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md)
 
 ## Current Status
 
 Meridian V1 is complete through Wave 9. The final V1 implementation baseline commit is `3374d0f4ad7d410cdd37a765db8d473b36f92482` (`docs(dashboard): close wave9 local dashboard lane`). Wave 9 is the final V1 wave. There is no Wave 10 in V1.
 
-Meridian V2-A is the local/demo-day extension now recorded by `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`. V2-A ships local live session records, local governance projection, JSON-only HoldPoint ingest, live-computed absence findings, optional dashboard Live Mode, local demo seed/corridor generation, and Constellation-compatible replay. V2-A does not ship production behavior, live city integration, legal compliance certification, live broker proof, Auth0/OpenFGA integration, live Whisper/audio, or Foreman behavior.
+Meridian V2-A is the local/demo-day extension now recorded by `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`. V2-A ships local live session records, local governance projection, JSON-only HoldPoint ingest, live-computed absence findings, optional dashboard Live Mode, local demo seed/corridor generation, and Constellation-compatible replay. V2-A does not ship production behavior, live city integration, legal certification, live broker proof, Auth0/OpenFGA integration, live Whisper/audio, or Foreman behavior.
 
-Meridian V2-B/GARP Authority Runway is the local G1-G5 runway recorded by `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md` and `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`. It ships dashboard-local Auth0 Universal Login role-session proof, deterministic authority resolution request/evaluation/store contracts, local authority lifecycle/action record behavior, the GARP authority cockpit, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. It does not close full V2-B Foreman, ship Foreman behavior, ship OpenFGA behavior, prove Auth0 tenant connectivity, ship CIBA, deliver notifications, create a public portal, or claim legal/TPIA compliance or official Fort Worth workflow status.
+Meridian V2-B/GARP Authority Runway is the local G1-G5 runway recorded by `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md` and `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`. It ships dashboard-local Auth0 Universal Login role-session proof, deterministic authority resolution request/evaluation/store contracts, local authority lifecycle/action record behavior, the GARP authority cockpit, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. It is the authority runway, not full Foreman, and does not ship OpenFGA behavior, prove Auth0 tenant connectivity, ship CIBA, deliver notifications, create a public portal, or claim legal/TPIA sufficiency or official Fort Worth workflow status.
+
+Meridian V2-B Foreman/Auth local proof cockpit is recorded by `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md` and `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`. It ships the dashboard-local guide/explainer layer through Foreman B1-B6 plus AUTH-1 through AUTH-4: deterministic Foreman context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native speech output/input fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, and the shared local `/api/authority-requests` endpoint. Deployment proof, live Auth0 callback/login proof, mobile/judge device proof, and final V2-B closeout remain HOLD.
 
 ## V1 Final Truth
 
@@ -50,7 +54,22 @@ Meridian V2-B/GARP Authority Runway is the local G1-G5 runway recorded by `docs/
 - Literal contract strings: `meridian.v2.roleSessionProof.v1`, `meridian.v2.authorityResolutionRequest.v1`, `meridian.v2.authorityResolutionEvaluation.v1`, `meridian.v2.authorityRequestStore.v1`, `meridian.v2.authorityDashboardState.v1`, `meridian.v2.authorityTimelineView.v1`, `meridian.v2.disclosurePreviewReport.v1`, `meridian.v2.garpHandoffContext.v1`, and `meridian.v2.disclosurePreviewActionBundle.v1`.
 - G3 lifecycle/token/notification/result behavior is a local GARP lifecycle/action record family where the repo does not contain additional literal `meridian.v2.*` contract strings.
 - Dashboard posture: snapshot mode and Live Mode remain preserved; `step.skins.outputs` remains active; `step.skins.renders` remains absent; Director Mode and Absence Lens remain view-only overlays.
-- Foreman posture: handoff context carries `foreman_ready: false`; Foreman behavior remains gated.
+- Foreman posture: GARP is the authority runway, not full Foreman; the later B1-B6 cockpit supplies the dashboard-local guide/explainer layer.
+
+## V2-B Foreman/Auth Local Proof Cockpit
+
+- Foreman cockpit spec: `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`
+- Foreman local closeout: `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`
+- Dashboard-local Foreman strings: `meridian.v2.foremanGuideContext.v1`, `meridian.v2.foremanGuideResponse.v1`, `meridian.v2.foremanGuideSignal.v1`, and `meridian.v2.foremanGuideMode.v1`.
+- Existing role-session string: `meridian.v2.roleSessionProof.v1`.
+- Auth0 role namespace: `https://meridian.city/roles`.
+- Shared local endpoint: `/api/authority-requests`.
+- Event-compatible authority payloads: `AUTHORITY_RESOLUTION_REQUESTED`, `AUTHORITY_APPROVED`, and `AUTHORITY_DENIED`.
+- Dashboard posture: Foreman is a guide/explainer layer over current dashboard-local context; it does not create governance, authority, legal, city, or deployment truth.
+- Voice posture: browser-native speech output/input is optional and keeps typed fallback; there is no external voice service, Whisper/audio upload/transcription, MediaRecorder/getUserMedia path, model/API call, or browser-exposed model API key.
+- Verification floor: dashboard suite `236` passing; repo-wide JS suite `717/717` passing.
+- Migration posture: no B7 `MIGRATIONS.md` row required because the B1-B6 Foreman guide strings are dashboard-local and do not widen root/shared runtime contracts; `meridian.v2.roleSessionProof.v1` is already covered by the V2-B/GARP row.
+- Remaining HOLDs: deployed Vercel URL proof, Auth0 deployed callback/login proof, mobile/judge device proof, deployment smoke proof, AUTH-5, and final V2-B closeout.
 
 ## What This Is
 
@@ -114,20 +133,27 @@ Meridian V2-B/GARP Authority Runway is the local G1-G5 runway recorded by `docs/
   - dashboard-local authority cockpit and timeline
   - Foreman handoff context with `foreman_ready: false`
   - prepared disclosure preview actions only
+- A V2-B Foreman/Auth local proof cockpit under `dashboard/` with:
+  - deterministic Foreman guide context and offline source-bounded narration
+  - authority-aware narration over GARP role/session, handoff, disclosure, and shared authority state
+  - guided event binding, registry-bounded spatial awareness, and visual-only panel highlighting
+  - Walk, Absence, Challenge, Public, and Judge modes
+  - browser-native speech output/input fallback and deterministic avatar state
+  - dashboard-local deploy-prep docs for Tim's later manual Vercel/Auth0 proof lane
 - A single external runtime dependency surface in `package.json`: `nats`.
 
 ## What This Is Not
 
 - Not a production application.
 - Not a Wave 10 plan; no Wave 10 exists in V1.
-- Not a hosted dashboard; Wave 9 is a local-only dashboard proof.
+- Not a hosted dashboard; Wave 9 and the B7 Foreman/Auth cockpit are local/pre-deployment dashboard proof surfaces.
 - Not live broker proof or production Constellation compatibility proof.
 - Not general event-side governance routing or generalized publisher widening.
 - Not live/networked authority services, DB-backed forensic persistence, or legal/tamper-proof immutability guarantees.
 - Not live broker proof for forensic publication; Wave 6 publication behavior remains synthetic/local seam proof.
 - Not a public portal.
-- Not auth-integrated.
-- Not a legal compliance workflow.
+- Not production-auth integrated.
+- Not a legal workflow.
 - Not LLM-driven redaction.
 - Not meeting-capture-to-skin routing.
 - Not forensic-entry-to-skin routing.
@@ -140,7 +166,7 @@ Meridian V2-B/GARP Authority Runway is the local G1-G5 runway recorded by `docs/
 - Not live OpenFGA behavior; OpenFGA remains deferred.
 - Not Auth0 tenant connectivity proof.
 - Not CIBA.
-- Not notification delivery, live browser push, live email sending, or service worker behavior.
+- Not delivered notifications, live browser push, live email sending, or service worker behavior.
 - Not clipboard write, browser download trigger, print trigger, or PDF generation from disclosure preview actions.
 - Not live Whisper/audio ingestion.
 - Not real TPIA legal sufficiency or TRAIGA 2.0 compliance claims.
@@ -148,8 +174,8 @@ Meridian V2-B/GARP Authority Runway is the local G1-G5 runway recorded by `docs/
 - Not live Fort Worth city integration.
 - Not full Accela/GIS automation.
 - Not live Constellation broker proof.
-- Not Foreman behavior, API, model call, voice/avatar, narration, chat panel, or autonomous Foreman action.
-- Not full V2-B Foreman closeout.
+- Not model-backed Foreman behavior, Foreman API, model call, external voice service, Whisper/audio upload/transcription, or autonomous Foreman action.
+- Not final V2-B deployed/demo closeout.
 
 ## Repo Structure
 
@@ -205,7 +231,7 @@ docs/
 
 ## V2 Boundary / Deferred Beyond V2-A
 
-V2-A is the bounded local/demo-day V2 extension recorded in this repo. V2-B/GARP Authority Runway is a local G1-G5 sublane and prerequisite only. Later full V2-B Foreman work remains gated by a new approved envelope and inspected Foreman concept/prototype source.
+V2-A is the bounded local/demo-day V2 extension recorded in this repo. V2-B/GARP Authority Runway is the local authority runway. V2-B Foreman/Auth local proof cockpit is the dashboard-local guide/explainer layer and remains pre-deployment. Final deployed/demo proof remains gated on Tim manual Vercel/Auth0 setup and AUTH-5 deployed URL/callback proof.
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
 - Generalized event routing and authority-topology widening beyond the bounded lanes.
@@ -213,12 +239,12 @@ V2-A is the bounded local/demo-day V2 extension recorded in this repo. V2-B/GARP
 - DB-backed forensic persistence, cryptographic hash-linking, and legal immutability posture.
 - Meeting-capture-to-skin and forensic-entry-to-skin routing.
 - Governance-truth computation inside skins.
-- Dashboard deployment/hosting/auth/live integration beyond the local Wave 9 proof.
-- OpenFGA behavior, Auth0 tenant connectivity proof, CIBA, notification delivery, public portal behavior, legal/TPIA compliance, and official disclosure workflow remain unshipped.
+- Dashboard deployment/hosting/live integration beyond the local/pre-deployment proof cockpit.
+- OpenFGA behavior, Auth0 deployed callback/login proof, CIBA, delivered notifications, public portal behavior, legal/TPIA sufficiency, and official disclosure workflow remain unshipped.
 - Multi-corridor routing in one scenario run.
 - Persistent match-result storage.
 - Chain replay engine.
-- Foreman behavior beyond the inert V2-A seams remains gated on supplied and inspected Foreman concept and Bronze prototype sources.
+- Foreman behavior beyond the shipped dashboard-local guide/explainer cockpit remains gated on a later approved envelope and proof.
 
 ## Upstream References
 

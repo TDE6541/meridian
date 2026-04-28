@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, shipped Wave 7 civic skins rendering/proof surfaces, shipped Wave 8 corridor scenario integration/proof surfaces, Wave 9 local dashboard proof surfaces, V2-A local/demo-day live civic nervous system surfaces, and V2-B/GARP local Authority Runway surfaces. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, shipped Wave 7 civic skins rendering/proof surfaces, shipped Wave 8 corridor scenario integration/proof surfaces, Wave 9 local dashboard proof surfaces, V2-A local/demo-day live civic nervous system surfaces, V2-B/GARP local Authority Runway surfaces, and V2-B Foreman/Auth local proof cockpit surfaces. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
 
 ## V1 Closure Reference
 
@@ -11,7 +11,8 @@ This file lists the current logic-bearing Meridian surfaces that exist in-repo f
 - V1 remains local/proof infrastructure, not a deployed production city system.
 - V2-A is recorded separately in `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`.
 - V2-B/GARP Authority Runway is recorded separately in `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md` and `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`.
-- Full V2-B Foreman remains gated on supplied and inspected Foreman concept and Bronze prototype sources.
+- V2-B Foreman/Auth local proof cockpit is recorded separately in `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md` and `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`.
+- Deployed Vercel URL proof, live Auth0 callback/login proof, AUTH-5, and final V2-B closeout remain HOLD.
 
 ## Bridge Substrate
 
@@ -99,7 +100,7 @@ Purpose: bounded Wave 8 integration surfaces for deterministic replay bridge out
 
 ## V2-A Local Live Lane
 
-Purpose: bounded local/demo-day live civic nervous system surfaces for local live sessions, local governance projection, JSON-only HoldPoint ingest, live absence, optional dashboard Live Mode, local seed/corridor generation, Constellation-compatible replay, and inert Foreman seams. V2-A does not ship production behavior, live city integration, legal compliance certification, live broker proof, Auth0/OpenFGA integration, live Whisper/audio, or Foreman behavior.
+Purpose: bounded local/demo-day live civic nervous system surfaces for local live sessions, local governance projection, JSON-only HoldPoint ingest, live absence, optional dashboard Live Mode, local seed/corridor generation, Constellation-compatible replay, and inert Foreman seams. V2-A does not ship production behavior, live city integration, legal certification, live broker proof, Auth0/OpenFGA integration, live Whisper/audio, or Foreman behavior.
 
 - `src/live/contracts.js`
 - `src/live/liveFeedEvent.js`
@@ -136,11 +137,12 @@ Purpose: bounded local V2-B/GARP authority surfaces for deterministic authority 
 
 ## Local Dashboard Lane
 
-Purpose: bounded Wave 9 local dashboard proof over committed Wave 8 runner payload snapshots, V2-A optional local Live Mode, and V2-B/GARP dashboard-local role-session/authority cockpit surfaces. The dashboard consumes `dashboard/public/scenarios/*.json`, uses `step.skins.outputs` as the canonical skin payload seam, keeps Director Mode / Absence Lens view-only, keeps snapshot mode default, consumes `DashboardLiveProjectionV1` only when Live Mode is enabled, and exposes dashboard-local Auth0 Universal Login role-session proof, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. It does not import `src/skins/**` or root `src/live/**` in the browser and does not recompute governance, authority, matching, forensic, absence, skin, city, or cascade truth.
+Purpose: bounded Wave 9 local dashboard proof over committed Wave 8 runner payload snapshots, V2-A optional local Live Mode, V2-B/GARP dashboard-local role-session/authority cockpit surfaces, and V2-B Foreman/Auth local guide/explainer cockpit surfaces. The dashboard consumes `dashboard/public/scenarios/*.json`, uses `step.skins.outputs` as the canonical skin payload seam, keeps Director Mode / Absence Lens view-only, keeps snapshot mode default, consumes `DashboardLiveProjectionV1` only when Live Mode is enabled, and exposes dashboard-local Auth0 Universal Login role-session proof, payload-only notification preview, Foreman guide/explainer narration, shared local authority endpoint behavior, browser-native voice fallback, deterministic avatar state, and prepared disclosure preview actions. It does not import `src/skins/**` or root `src/live/**` in the browser and does not recompute governance, authority, matching, forensic, absence, skin, city, or cascade truth.
 
 - `dashboard/package.json`
 - `dashboard/index.html`
 - `dashboard/README.md`
+- `dashboard/api/authority-requests.js`
 - `dashboard/src/**/*.ts*`
 - `dashboard/src/auth/**/*.ts*`
 - `dashboard/src/roleSession/**/*.ts*`
@@ -149,6 +151,18 @@ Purpose: bounded Wave 9 local dashboard proof over committed Wave 8 runner paylo
 - `dashboard/src/foremanGuide/**/*.tsx`
 - `dashboard/tests/**/*.ts*`
 - `dashboard/public/scenarios/*.json`
+
+## V2-B Foreman/Auth Local Proof Cockpit
+
+Purpose: bounded dashboard-local guide/explainer cockpit for deterministic Foreman context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native speech output/input fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, and shared local `/api/authority-requests` endpoint behavior. It is local/pre-deployment proof only and does not ship deployed URL proof, live Auth0 callback/login proof, model/API calls, external voice service, Whisper/audio upload/transcription, delivered notifications, OpenFGA behavior, public portal behavior, legal/TPIA sufficiency, or final V2-B closeout.
+
+- `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`
+- `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`
+- `dashboard/api/authority-requests.js`
+- `dashboard/src/foremanGuide/**/*.ts*`
+- `dashboard/src/components/ForemanGuidePanel.tsx`
+- `dashboard/tests/foreman*.test.ts`
+- `dashboard/tests/foreman*.test.tsx`
 
 ## Governance Substrate
 
