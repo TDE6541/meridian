@@ -23,6 +23,7 @@ import {
   shouldIgnoreDemoShortcutTarget,
 } from "../demo/demoShortcuts.ts";
 import { getDemoScenarioMeta } from "../demo/demoScenarios.ts";
+import { buildHoldWallView } from "../demo/holdWall.ts";
 import { buildMissionRailStages } from "../demo/missionRail.ts";
 import { CascadeChoreography } from "./CascadeChoreography.tsx";
 import { EntityRelationshipGraph } from "./EntityRelationshipGraph.tsx";
@@ -145,6 +146,8 @@ export function ControlRoomShell({
   const [directorModeEnabled, setDirectorModeEnabled] = useState(
     initialDirectorModeEnabled
   );
+  const [missionAbsenceLensEnabled, setMissionAbsenceLensEnabled] = useState(false);
+  const [holdWallOpen, setHoldWallOpen] = useState(false);
   const [presentationMode, setPresentationMode] =
     useState<ControlRoomPresentationMode>(initialPresentationMode);
   const [foremanHighlightedPanelId, setForemanHighlightedPanelId] = useState<
@@ -294,6 +297,13 @@ export function ControlRoomShell({
     publicSkinView,
     totalSteps,
   });
+  const holdWallView = buildHoldWallView({
+    absenceLens: absenceLensView,
+    authorityState,
+    currentStep,
+    forensicChain: forensicChainView,
+    publicSkinView,
+  });
 
   useEffect(() => {
     if (controlState.playbackState !== "playing" || totalSteps === 0) {
@@ -428,6 +438,7 @@ export function ControlRoomShell({
     >
       <MissionPresentationShell
         absenceLens={absenceLensView}
+        absenceLensEnabled={missionAbsenceLensEnabled}
         activeSkinLabel={activeSkinLabel}
         activeStepLabel={activeStepLabel}
         authorityState={authorityState}
@@ -437,10 +448,21 @@ export function ControlRoomShell({
         engineerMode={presentationMode === "engineer"}
         errorCount={errorCount}
         forensicChain={forensicChainView}
+        holdWallOpen={holdWallOpen}
+        holdWallView={holdWallView}
         missionRailStages={missionRailStages}
+        onAbsenceLensToggle={() =>
+          setMissionAbsenceLensEnabled((current) => !current)
+        }
         onEngineerModeChange={(enabled) =>
           setPresentationMode(enabled ? "engineer" : "mission")
         }
+        onHoldWallDismiss={() => setHoldWallOpen(false)}
+        onHoldWallOpen={() => {
+          if (holdWallView.triggered) {
+            setHoldWallOpen(true);
+          }
+        }}
         publicSkinView={publicSkinView}
         readyCount={readyCount}
         roleSession={roleSession}

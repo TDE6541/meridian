@@ -1922,6 +1922,13 @@ kbd {
   color: rgba(232, 237, 242, 0.78);
 }
 
+.mission-presentation__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: flex-end;
+}
+
 .mission-presentation__mode-toggle {
   min-height: 2.5rem;
   padding: 0.65rem 0.85rem;
@@ -1937,8 +1944,141 @@ kbd {
   color: var(--mission-dim-green-status);
 }
 
+.mission-presentation__mode-toggle--lens[aria-pressed="true"] {
+  border-color: rgba(61, 214, 140, 0.58);
+  color: var(--mission-dim-green-status);
+}
+
+.mission-presentation__mode-toggle--hold {
+  border-color: rgba(229, 72, 77, 0.64);
+  color: #ffb8bb;
+}
+
+.mission-presentation__mode-toggle--hold:disabled {
+  border-color: rgba(232, 237, 242, 0.18);
+  color: rgba(232, 237, 242, 0.42);
+  cursor: not-allowed;
+}
+
 .mission-presentation__mode-toggle:focus-visible {
   outline-color: var(--mission-fault-red);
+}
+
+.mission-permit-anchor {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 0.75rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(245, 181, 71, 0.38);
+  border-radius: 8px;
+  background: rgba(245, 181, 71, 0.08);
+}
+
+.mission-permit-anchor__story,
+.mission-permit-anchor__roles,
+.mission-absence-lens__findings {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.mission-permit-anchor__story p,
+.mission-permit-anchor__story em,
+.mission-permit-anchor__story small,
+.mission-permit-anchor__roles span,
+.mission-permit-anchor__roles strong,
+.mission-absence-lens__baseline span,
+.mission-absence-lens__baseline em,
+.mission-absence-lens__findings span,
+.mission-absence-lens__findings em,
+.mission-absence-lens__findings small,
+.mission-absence-lens__cap {
+  overflow-wrap: anywhere;
+}
+
+.mission-permit-anchor__story p,
+.mission-permit-anchor__roles span,
+.mission-absence-lens__baseline span,
+.mission-absence-lens__findings span {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  color: var(--mission-amber-warning);
+}
+
+.mission-permit-anchor h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.45rem;
+  line-height: 1.1;
+}
+
+.mission-permit-anchor__story span,
+.mission-permit-anchor__story em,
+.mission-permit-anchor__story small {
+  color: rgba(232, 237, 242, 0.78);
+  font-style: normal;
+}
+
+.mission-permit-anchor__roles {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.mission-permit-anchor__roles article,
+.mission-absence-lens__baseline,
+.mission-absence-lens__findings article {
+  min-width: 0;
+  padding: 0.68rem;
+  border: 1px solid rgba(232, 237, 242, 0.14);
+  border-radius: 8px;
+  background: rgba(10, 22, 40, 0.34);
+}
+
+.mission-permit-anchor__roles strong {
+  color: rgba(232, 237, 242, 0.86);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.mission-absence-lens {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.28fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(61, 214, 140, 0.34);
+  border-radius: 8px;
+  background: rgba(61, 214, 140, 0.07);
+}
+
+.mission-absence-lens__baseline {
+  opacity: 0.46;
+}
+
+.mission-absence-lens__baseline strong {
+  color: rgba(232, 237, 242, 0.82);
+}
+
+.mission-absence-lens__findings {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.mission-absence-lens__findings article {
+  border-color: rgba(245, 181, 71, 0.54);
+  background: rgba(245, 181, 71, 0.13);
+}
+
+.mission-absence-lens__findings strong {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.mission-absence-lens__findings em,
+.mission-absence-lens__findings small,
+.mission-absence-lens__cap {
+  margin: 0;
+  color: rgba(232, 237, 242, 0.72);
+  font-size: 0.76rem;
+  font-style: normal;
 }
 
 .mission-presentation__status-grid,
@@ -2051,6 +2191,119 @@ kbd {
   color: var(--mission-amber-warning);
 }
 
+.hold-wall {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+  gap: 1rem;
+  min-height: 100vh;
+  padding: clamp(1rem, 3vw, 2.25rem);
+  background: #0A1628;
+  color: #E8EDF2;
+}
+
+.hold-wall__chrome {
+  display: flex;
+  gap: 0.45rem;
+  color: #F5B547;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.hold-wall__header {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.hold-wall__eyebrow,
+.hold-wall__field span,
+.hold-wall__silence span {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #F5B547;
+  font-size: 0.78rem;
+}
+
+.hold-wall h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(2.5rem, 7vw, 6.5rem);
+  line-height: 0.95;
+}
+
+.hold-wall__header p,
+.hold-wall__chain-claim {
+  max-width: 78rem;
+  margin: 0;
+  color: rgba(232, 237, 242, 0.76);
+}
+
+.hold-wall__silence {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.hold-wall__silence span {
+  min-height: 3.5rem;
+  padding: 0.9rem;
+  border: 1px solid rgba(245, 181, 71, 0.38);
+  border-radius: 8px;
+  background: rgba(245, 181, 71, 0.08);
+}
+
+.hold-wall__fields {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.hold-wall__field {
+  display: grid;
+  align-content: start;
+  gap: 0.65rem;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid rgba(232, 237, 242, 0.16);
+  border-radius: 8px;
+  background: rgba(232, 237, 242, 0.055);
+}
+
+.hold-wall__field--sourced {
+  border-color: rgba(245, 181, 71, 0.58);
+}
+
+.hold-wall__field--unresolved {
+  border-color: rgba(229, 72, 77, 0.48);
+}
+
+.hold-wall__field strong {
+  color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.hold-wall__field em {
+  color: rgba(232, 237, 242, 0.62);
+  font-size: 0.75rem;
+  font-style: normal;
+  overflow-wrap: anywhere;
+}
+
+.hold-wall__dismiss {
+  justify-self: start;
+  min-height: 2.75rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(245, 181, 71, 0.64);
+  border-radius: 8px;
+  background: rgba(245, 181, 71, 0.12);
+  color: #F5B547;
+  cursor: pointer;
+}
+
 @media (max-width: 1380px) {
   .demo-header,
   .control-room-toolbar,
@@ -2075,6 +2328,11 @@ kbd {
   .mission-presentation__status-grid,
   .mission-presentation__telemetry,
   .mission-rail__list,
+  .mission-permit-anchor,
+  .mission-permit-anchor__roles,
+  .mission-absence-lens,
+  .mission-absence-lens__findings,
+  .hold-wall__fields,
     .demo-header__facts,
     .live-capture-panel__latest,
     .live-event-card__facts,
@@ -2168,6 +2426,10 @@ kbd {
 
   .mission-presentation__header {
     grid-template-columns: 1fr;
+  }
+
+  .mission-presentation__actions {
+    justify-content: flex-start;
   }
 
   .governance-card .panel-heading,

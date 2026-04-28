@@ -4,11 +4,16 @@ import type { AuthorityDashboardStateV1 } from "../authority/authorityDashboardT
 import type { AbsenceLensView } from "../adapters/absenceSignalAdapter.ts";
 import type { DashboardRoleSessionProofV1 } from "../roleSession/roleSessionTypes.ts";
 import type { ControlRoomTimelineStep } from "../state/controlRoomState.ts";
+import { fictionalPermitAnchor } from "../demo/fictionalPermitAnchor.ts";
+import type { HoldWallView } from "../demo/holdWall.ts";
+import { buildMissionAbsenceLensOverlay } from "../demo/missionAbsenceLens.ts";
 import type { MissionRailStage } from "../demo/missionRail.ts";
+import { HoldWall } from "./HoldWall.tsx";
 import { MissionRail } from "./MissionRail.tsx";
 
 export interface MissionPresentationShellProps {
   absenceLens: AbsenceLensView;
+  absenceLensEnabled: boolean;
   activeSkinLabel: string;
   activeStepLabel: string;
   authorityState: AuthorityDashboardStateV1;
@@ -18,8 +23,13 @@ export interface MissionPresentationShellProps {
   engineerMode: boolean;
   errorCount: number;
   forensicChain: DashboardForensicChainView;
+  holdWallOpen: boolean;
+  holdWallView: HoldWallView;
   missionRailStages: readonly MissionRailStage[];
+  onAbsenceLensToggle: () => void;
   onEngineerModeChange: (enabled: boolean) => void;
+  onHoldWallDismiss: () => void;
+  onHoldWallOpen: () => void;
   publicSkinView: DashboardSkinView | null;
   readyCount: number;
   roleSession: DashboardRoleSessionProofV1;
@@ -35,6 +45,7 @@ function formatCount(count: number, singular: string, plural = `${singular}s`) {
 
 export function MissionPresentationShell({
   absenceLens,
+  absenceLensEnabled,
   activeSkinLabel,
   activeStepLabel,
   authorityState,
@@ -44,8 +55,13 @@ export function MissionPresentationShell({
   engineerMode,
   errorCount,
   forensicChain,
+  holdWallOpen,
+  holdWallView,
   missionRailStages,
+  onAbsenceLensToggle,
   onEngineerModeChange,
+  onHoldWallDismiss,
+  onHoldWallOpen,
   publicSkinView,
   readyCount,
   roleSession,
@@ -55,6 +71,7 @@ export function MissionPresentationShell({
   totalSteps,
 }: MissionPresentationShellProps) {
   const activeDecision = currentStep?.decision ?? "pending";
+  const missionAbsenceLens = buildMissionAbsenceLensOverlay(absenceLens);
   const publicPayloadStatus = publicSkinView?.hasPayload
     ? "public skin payload present"
     : "public skin payload pending";
@@ -71,16 +88,58 @@ export function MissionPresentationShell({
           <p className="mission-presentation__summary">{scenarioDescription}</p>
         </div>
 
-        <button
-          aria-label={engineerMode ? "Return to Mission view" : "Reveal Engineer Mode cockpit"}
-          aria-pressed={engineerMode}
-          className="mission-presentation__mode-toggle"
-          onClick={() => onEngineerModeChange(!engineerMode)}
-          type="button"
-        >
-          {engineerMode ? "Mission View" : "Engineer Mode"}
-        </button>
+        <div className="mission-presentation__actions">
+          <button
+            aria-label={engineerMode ? "Return to Mission view" : "Reveal Engineer Mode cockpit"}
+            aria-pressed={engineerMode}
+            className="mission-presentation__mode-toggle"
+            onClick={() => onEngineerModeChange(!engineerMode)}
+            type="button"
+          >
+            {engineerMode ? "Mission View" : "Engineer Mode"}
+          </button>
+          <button
+            aria-label="Toggle Absence Lens"
+            aria-pressed={absenceLensEnabled}
+            className="mission-presentation__mode-toggle mission-presentation__mode-toggle--lens"
+            onClick={onAbsenceLensToggle}
+            type="button"
+          >
+            Absence Lens
+          </button>
+          <button
+            aria-label="Open HOLD Wall"
+            className="mission-presentation__mode-toggle mission-presentation__mode-toggle--hold"
+            data-hold-wall-trigger-state={holdWallView.triggered ? "available" : "unavailable"}
+            disabled={!holdWallView.triggered}
+            onClick={onHoldWallOpen}
+            type="button"
+          >
+            HOLD Wall
+          </button>
+        </div>
       </div>
+
+      <section
+        className="mission-permit-anchor"
+        data-fictional-permit-anchor={fictionalPermitAnchor.title}
+      >
+        <div className="mission-permit-anchor__story">
+          <p>{fictionalPermitAnchor.fictionLabel}</p>
+          <h2>{fictionalPermitAnchor.title}</h2>
+          <span>{fictionalPermitAnchor.context}</span>
+          <em>{fictionalPermitAnchor.boundary}</em>
+          <small>{fictionalPermitAnchor.foremanReference}</small>
+        </div>
+        <div className="mission-permit-anchor__roles">
+          {fictionalPermitAnchor.roleFrames.map((frame) => (
+            <article data-fictional-permit-role={frame.label} key={frame.label}>
+              <span>{frame.label}</span>
+              <strong>{frame.summary}</strong>
+            </article>
+          ))}
+        </div>
+      </section>
 
       <div className="mission-presentation__status-grid">
         <div className="mission-presentation__readout">
@@ -106,6 +165,52 @@ export function MissionPresentationShell({
       </div>
 
       <MissionRail stages={missionRailStages} />
+
+      {absenceLensEnabled ? (
+        <section
+          className="mission-absence-lens mission-absence-lens--active"
+          data-mission-absence-lens="active"
+          data-mission-absence-source-mode={missionAbsenceLens.sourceMode}
+          data-mission-absence-treatment="dims-existing-highlights-missing"
+        >
+          <div className="mission-absence-lens__baseline">
+            <span>Existing proof</span>
+            <strong>{activeStepLabel}</strong>
+            <em>{missionAbsenceLens.activeStepId ?? "HOLD: step unavailable"}</em>
+          </div>
+          <div className="mission-absence-lens__findings">
+            {missionAbsenceLens.findings.length > 0 ? (
+              missionAbsenceLens.findings.map((finding) => (
+                <article
+                  data-mission-absence-category={finding.category}
+                  data-mission-absence-finding={finding.id}
+                  key={finding.id}
+                >
+                  <span>{finding.category}</span>
+                  <strong>{finding.title}</strong>
+                  <em>{finding.summary}</em>
+                  <small>{finding.sourcePath}</small>
+                </article>
+              ))
+            ) : (
+              <article
+                data-mission-absence-category="evidence"
+                data-mission-absence-finding="unresolved"
+              >
+                <span>evidence</span>
+                <strong>HOLD: no existing absence output</strong>
+                <em>No dashboard-side absence truth is computed here.</em>
+                <small>absenceLens.signals</small>
+              </article>
+            )}
+          </div>
+          {missionAbsenceLens.truncatedCount > 0 ? (
+            <p className="mission-absence-lens__cap">
+              {formatCount(missionAbsenceLens.truncatedCount, "additional source-backed finding")}
+            </p>
+          ) : null}
+        </section>
+      ) : null}
 
       <div className="mission-presentation__telemetry">
         <div className="mission-presentation__card">
@@ -139,6 +244,12 @@ export function MissionPresentationShell({
           <em>{formatCount(errorCount, "error")}</em>
         </div>
       </div>
+
+      <HoldWall
+        onDismiss={onHoldWallDismiss}
+        open={holdWallOpen}
+        view={holdWallView}
+      />
     </section>
   );
 }

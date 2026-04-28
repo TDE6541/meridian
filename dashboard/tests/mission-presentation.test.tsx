@@ -9,8 +9,15 @@ import {
 } from "../src/adapters/skinPayloadAdapter.ts";
 import { buildAuthorityDashboardState } from "../src/authority/authorityStateAdapter.ts";
 import { ControlRoomShell } from "../src/components/ControlRoomShell.tsx";
+import { HoldWall } from "../src/components/HoldWall.tsx";
 import { MissionPresentationShell } from "../src/components/MissionPresentationShell.tsx";
 import { MissionRail } from "../src/components/MissionRail.tsx";
+import { fictionalPermitAnchor } from "../src/demo/fictionalPermitAnchor.ts";
+import {
+  buildHoldWallView,
+  HOLD_WALL_SILENCE_BEAT_MS,
+} from "../src/demo/holdWall.ts";
+import { buildMissionAbsenceLensOverlay } from "../src/demo/missionAbsenceLens.ts";
 import {
   buildMissionRailStages,
   MISSION_RAIL_LABELS,
@@ -85,6 +92,13 @@ async function buildSnapshotMissionFixture(activeStepIndex = 0) {
     liveProjection: null,
     roleSession,
   });
+  const holdWallView = buildHoldWallView({
+    absenceLens,
+    authorityState,
+    currentStep,
+    forensicChain,
+    publicSkinView,
+  });
   const missionRailStages = buildMissionRailStages({
     activeStepIndex,
     authorityState,
@@ -98,6 +112,7 @@ async function buildSnapshotMissionFixture(activeStepIndex = 0) {
 
   return {
     absenceLens,
+    absenceLensEnabled: false,
     activeSkinLabel: publicSkinView?.label ?? "Public",
     activeStepLabel: `${currentStep.stepId} (${activeStepIndex + 1}/${timelineSteps.length})`,
     authorityState,
@@ -106,7 +121,12 @@ async function buildSnapshotMissionFixture(activeStepIndex = 0) {
     dataVersion: record.payload.contractVersion,
     errorCount: 0,
     forensicChain,
+    holdWallOpen: false,
+    holdWallView,
     missionRailStages,
+    onAbsenceLensToggle: () => undefined,
+    onHoldWallDismiss: () => undefined,
+    onHoldWallOpen: () => undefined,
     publicSkinView,
     readyCount: 3,
     roleSession,
@@ -264,6 +284,212 @@ const tests = [
     },
   },
   {
+    name: "fictional permit anchor renders demo label role language and no city-record claim",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture();
+      const markup = renderMarkup(
+        <MissionPresentationShell
+          {...props}
+          engineerMode={false}
+          onEngineerModeChange={() => undefined}
+        />
+      );
+      const lowerMarkup = markup.toLowerCase();
+
+      assert.equal(markup.includes(fictionalPermitAnchor.title), true);
+      assert.equal(markup.includes("Fictional demo anchor"), true);
+      assert.equal(markup.includes("Fictional demo Foreman display reference"), true);
+      assert.equal(markup.includes("no private address"), true);
+      assert.equal(markup.includes("no city record"), true);
+
+      for (const label of ["Council", "Permitting", "Inspection", "Operations", "Public"]) {
+        assert.equal(markup.includes(`data-fictional-permit-role="${label}"`), true, label);
+      }
+
+      assert.equal(lowerMarkup.includes("official"), false);
+      assert.equal(lowerMarkup.includes("real permit"), false);
+    },
+  },
+  {
+    name: "mission Absence Lens toggle is controlled by dashboard state",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture();
+      const toggleRequests: string[] = [];
+      const element = MissionPresentationShell({
+        ...props,
+        engineerMode: false,
+        onAbsenceLensToggle: () => toggleRequests.push("toggle"),
+        onEngineerModeChange: () => undefined,
+      });
+      const lensButton = collectButtons(element).find(
+        (button) => getElementText(button) === "Absence Lens"
+      );
+
+      assert.ok(lensButton);
+      assert.equal(lensButton.props["aria-pressed"], false);
+      lensButton.props.onClick();
+      assert.deepEqual(toggleRequests, ["toggle"]);
+    },
+  },
+  {
+    name: "mission Absence Lens caps display at three source-backed findings",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture(3);
+      const overlay = buildMissionAbsenceLensOverlay(props.absenceLens);
+      const markup = renderMarkup(
+        <MissionPresentationShell
+          {...props}
+          absenceLensEnabled={true}
+          engineerMode={false}
+          onEngineerModeChange={() => undefined}
+        />
+      );
+      const renderedFindings = [
+        ...markup.matchAll(/data-mission-absence-finding="([^"]+)"/g),
+      ].map((match) => match[1]);
+
+      assert.equal(overlay.sourceMode, "mapped-from-existing-absence-signals");
+      assert.equal(overlay.findings.length, 3);
+      assert.equal(renderedFindings.length, 3);
+      assert.equal(overlay.truncatedCount > 0, true);
+      assert.equal(
+        overlay.findings.every((finding) => !finding.sourcePath.startsWith("HOLD:")),
+        true
+      );
+      assert.equal(markup.includes('data-mission-absence-category="authority"'), true);
+      assert.equal(
+        markup.includes('data-mission-absence-treatment="dims-existing-highlights-missing"'),
+        true
+      );
+    },
+  },
+  {
+    name: "mission Absence Lens mapper does not read scenario state or compute absence truth",
+    run: async () => {
+      const source = await readFile("src/demo/missionAbsenceLens.ts", "utf8");
+
+      assert.equal(source.includes("ControlRoomTimelineStep"), false);
+      assert.equal(source.includes("ScenarioStep"), false);
+      assert.equal(source.includes("currentStep"), false);
+      assert.equal(source.includes(".step."), false);
+    },
+  },
+  {
+    name: "HOLD Wall renders takeover from existing state with source-bounded fields",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture(0);
+      const view = props.holdWallView;
+      const markup = renderMarkup(
+        <HoldWall onDismiss={() => undefined} open={true} view={view} />
+      );
+
+      assert.equal(view.triggered, true);
+      assert.equal(markup.includes('data-hold-wall="open"'), true);
+      assert.equal(markup.includes("Meridian refused the action"), true);
+      assert.equal(markup.includes('data-hold-wall-field="missing_authority"'), true);
+      assert.equal(markup.includes('data-hold-wall-field="missing_evidence"'), true);
+      assert.equal(markup.includes('data-hold-wall-field="missing_public_boundary"'), true);
+      assert.equal(markup.includes('data-hold-wall-field="required_next_proof"'), true);
+      assert.equal(
+        markup.includes(
+          'data-hold-wall-field="missing_authority" data-hold-wall-field-status="sourced"'
+        ),
+        true
+      );
+      assert.equal(
+        markup.includes(
+          'data-hold-wall-field="missing_evidence" data-hold-wall-field-status="sourced"'
+        ),
+        true
+      );
+      assert.equal(
+        view.fields.every((field) => field.status === "sourced" || field.status === "unresolved"),
+        true
+      );
+      assert.equal(markup.includes("step.governance.result.hold.resolutionPath"), true);
+    },
+  },
+  {
+    name: "HOLD Wall renders unsupported fields as unresolved HOLD",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture(0);
+      const unresolvedView = {
+        ...props.holdWallView,
+        fields: props.holdWallView.fields.map((field) =>
+          field.key === "missing_public_boundary"
+            ? {
+                ...field,
+                sourceKind: null,
+                sourcePath: null,
+                status: "unresolved" as const,
+                value:
+                  "HOLD: Missing public boundary has no source-supported field in the current dashboard state.",
+              }
+            : field
+        ),
+      };
+      const markup = renderMarkup(
+        <HoldWall onDismiss={() => undefined} open={true} view={unresolvedView} />
+      );
+
+      assert.equal(
+        markup.includes(
+          'data-hold-wall-field="missing_public_boundary" data-hold-wall-field-status="unresolved"'
+        ),
+        true
+      );
+      assert.equal(markup.includes("HOLD: source unresolved"), true);
+      assert.equal(markup.includes("HOLD: Missing public boundary"), true);
+    },
+  },
+  {
+    name: "HOLD Wall silence is three timed beats with no audio",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture(0);
+      const markup = renderMarkup(
+        <HoldWall onDismiss={() => undefined} open={true} view={props.holdWallView} />
+      );
+
+      assert.equal(markup.includes('data-silence-beat-count="3"'), true);
+      assert.equal(
+        markup.includes(`data-silence-beat-ms="${HOLD_WALL_SILENCE_BEAT_MS}"`),
+        true
+      );
+      assert.equal(markup.includes('data-audio-cue="none"'), true);
+      assert.equal(markup.includes("Beat 1"), true);
+      assert.equal(markup.includes("Beat 2"), true);
+      assert.equal(markup.includes("Beat 3"), true);
+    },
+  },
+  {
+    name: "HOLD Wall dismisses without mutating ForensicChain state",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture(0);
+      const beforeEntryCount = props.forensicChain.totalEntryCount;
+      const dismissRequests: string[] = [];
+      const element = HoldWall({
+        onDismiss: () => dismissRequests.push("dismiss"),
+        open: true,
+        view: props.holdWallView,
+      });
+      const dismissButton = collectButtons(element).find(
+        (button) => getElementText(button) === "Return to Mission"
+      );
+      const markup = renderMarkup(
+        <HoldWall onDismiss={() => undefined} open={true} view={props.holdWallView} />
+      );
+
+      assert.ok(dismissButton);
+      dismissButton.props.onClick();
+      assert.deepEqual(dismissRequests, ["dismiss"]);
+      assert.equal(props.forensicChain.totalEntryCount, beforeEntryCount);
+      assert.equal(props.holdWallView.chainEntryCount, beforeEntryCount);
+      assert.equal(props.holdWallView.chainWriteClaimed, false);
+      assert.equal(markup.includes('data-chain-write-claimed="false"'), true);
+      assert.equal(markup.includes("HOLD Wall creates no entry"), true);
+    },
+  },
+  {
     name: "mission presentation CSS uses required local tokens and no bundled font rule",
     run: async () => {
       const styles = await readFile("src/styles.css", "utf8");
@@ -282,6 +508,10 @@ const tests = [
       const sourcePaths = [
         "src/components/ControlRoomShell.tsx",
         "src/components/MissionPresentationShell.tsx",
+        "src/components/HoldWall.tsx",
+        "src/demo/fictionalPermitAnchor.ts",
+        "src/demo/holdWall.ts",
+        "src/demo/missionAbsenceLens.ts",
         "src/components/MissionRail.tsx",
         "src/demo/missionRail.ts",
       ];
