@@ -1558,6 +1558,34 @@ kbd {
   flex: 1 0 100%;
 }
 
+.foreman-guide-panel__audio-controls {
+  flex: 1 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.7rem;
+  align-items: center;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(23, 36, 50, 0.09);
+}
+
+.foreman-guide-panel__audio-toggle,
+.foreman-guide-panel__audio-volume {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+  color: #43505c;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.foreman-guide-panel__audio-volume input {
+  width: min(9rem, 40vw);
+}
+
+.foreman-guide-panel__audio-element {
+  display: none;
+}
+
 .foreman-guide-panel__facts {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

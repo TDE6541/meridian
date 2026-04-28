@@ -1,4 +1,10 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  DEFAULT_FOREMAN_AUDIO_VOLUME,
+  getForemanAudioCueForPresenceState,
+  normalizeForemanAudioVolume,
+  shouldAttemptForemanAudioPlayback,
+} from "../foremanGuide/audioIdentity.ts";
 import type {
   ForemanGuideContextV1,
   ForemanGuideHold,
@@ -242,6 +248,10 @@ export function ForemanGuidePanel({
   const [collapsed, setCollapsed] = useState(false);
   const [question, setQuestion] = useState("");
   const [speechStatus, setSpeechStatus] = useState<string | null>(null);
+  const [audioMuted, setAudioMuted] = useState(true);
+  const [audioVolume, setAudioVolume] = useState(DEFAULT_FOREMAN_AUDIO_VOLUME);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const previousAudioSourceRef = useRef<string | null>(null);
   const {
     clearProactiveSignals,
     loading,
@@ -279,6 +289,42 @@ export function ForemanGuidePanel({
     latestSignal,
     selectedModeId,
   });
+  const audioCue = getForemanAudioCueForPresenceState(presenceBadge.state);
+  const audioSource = audioCue.source;
+
+  useEffect(() => {
+    const target = audioRef.current;
+
+    if (!target) {
+      return;
+    }
+
+    target.muted = audioMuted;
+    target.volume = audioVolume;
+
+    if (
+      !shouldAttemptForemanAudioPlayback({
+        muted: audioMuted,
+        previousSource: previousAudioSourceRef.current,
+        source: audioSource,
+      })
+    ) {
+      return;
+    }
+
+    previousAudioSourceRef.current = audioSource;
+
+    try {
+      target.currentTime = 0;
+      const playResult = target.play();
+
+      if (typeof playResult?.catch === "function") {
+        void playResult.catch(() => undefined);
+      }
+    } catch {
+      // Browser autoplay policies may reject cue playback; typed proof stays primary.
+    }
+  }, [audioMuted, audioSource, audioVolume]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -464,6 +510,8 @@ export function ForemanGuidePanel({
 
           <div
             className="foreman-guide-panel__presence-row"
+            data-foreman-audio-cue={audioCue.identity}
+            data-foreman-audio-source={audioSource}
             data-foreman-presence-state={presenceBadge.state}
           >
             <div className="foreman-guide-panel__presence-badge">
@@ -509,6 +557,53 @@ export function ForemanGuidePanel({
                     ? "Typed fallback remains primary."
                     : "HOLD: browser speech synthesis unavailable; typed fallback remains primary.")}
               </span>
+              <div
+                className="foreman-guide-panel__audio-controls"
+                aria-label="Foreman state audio cues"
+              >
+                <label className="foreman-guide-panel__audio-toggle">
+                  <input
+                    type="checkbox"
+                    checked={!audioMuted}
+                    onChange={(event) =>
+                      setAudioMuted(!event.currentTarget.checked)
+                    }
+                  />
+                  <span>State cues</span>
+                </label>
+                <label className="foreman-guide-panel__audio-volume">
+                  <span>Cue volume</span>
+                  <input
+                    aria-label="Foreman state cue volume"
+                    disabled={audioMuted}
+                    max="0.35"
+                    min="0"
+                    step="0.01"
+                    type="range"
+                    value={audioVolume}
+                    onChange={(event) =>
+                      setAudioVolume(
+                        normalizeForemanAudioVolume(
+                          Number(event.currentTarget.value)
+                        )
+                      )
+                    }
+                  />
+                </label>
+                <audio
+                  aria-label="Foreman state audio cue"
+                  className="foreman-guide-panel__audio-element"
+                  data-foreman-audio-cue={audioCue.identity}
+                  data-foreman-audio-source={audioSource}
+                  muted={audioMuted}
+                  preload="none"
+                  ref={audioRef}
+                  src={audioSource}
+                />
+                <span className="detail-copy">
+                  Local cue: {audioCue.identity}; {audioMuted ? "muted" : "armed"}.
+                </span>
+              </div>
             </div>
           </div>
 
