@@ -12,7 +12,7 @@ This file lists the current logic-bearing Meridian surfaces that exist in-repo f
 - V2-A is recorded separately in `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`.
 - V2-B/GARP Authority Runway is recorded separately in `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md` and `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`.
 - V2-B Foreman/Auth local proof cockpit is recorded separately in `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md` and `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`.
-- Deployed Vercel URL proof, live Auth0 callback/login proof, AUTH-5, and final V2-B closeout remain HOLD.
+- AUTH-5 deployed Vercel URL proof and Auth0 callback/login proof are recorded in `docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`; final V2-B closeout remains HOLD.
 
 ## Bridge Substrate
 
@@ -154,10 +154,12 @@ Purpose: bounded Wave 9 local dashboard proof over committed Wave 8 runner paylo
 
 ## V2-B Foreman/Auth Local Proof Cockpit
 
-Purpose: bounded dashboard-local guide/explainer cockpit for deterministic Foreman context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native speech output/input fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, and shared local `/api/authority-requests` endpoint behavior. It is local/pre-deployment proof only and does not ship deployed URL proof, live Auth0 callback/login proof, model/API calls, external voice service, Whisper/audio upload/transcription, delivered notifications, OpenFGA behavior, public portal behavior, legal/TPIA sufficiency, or final V2-B closeout.
+Purpose: bounded dashboard-local guide/explainer cockpit for deterministic Foreman context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native speech output/input fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, and shared local `/api/authority-requests` endpoint behavior. Local/pre-deployment truth is recorded in the local closeout, and AUTH-5 deployed demo proof is recorded separately. This lane does not ship model/API calls, external voice service, Whisper/audio upload/transcription, delivered notifications, OpenFGA behavior, public portal behavior, legal/TPIA sufficiency, or final V2-B closeout.
 
 - `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`
 - `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`
+- `docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`
+- `docs/closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md`
 - `dashboard/api/authority-requests.js`
 - `dashboard/src/foremanGuide/**/*.ts*`
 - `dashboard/src/components/ForemanGuidePanel.tsx`

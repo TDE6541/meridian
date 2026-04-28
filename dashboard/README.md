@@ -125,6 +125,16 @@ Remaining AUTH-5 HOLDs:
 - deploy hook cleanup proof
 - OpenFGA, CIBA, notification-delivery, legal/TPIA sufficiency, public-portal behavior, official Fort Worth workflow, production city behavior, and final V2-B closeout
 
+## Code Quality + Demo Hardening FAST Lane
+
+The required Code Quality + Demo Hardening FAST lane is recorded in:
+
+- `../docs/closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md`
+
+Packet 1 added the CI verification workflow and dashboard mobile/accessibility polish. Packet 2 hardened forensic-chain public boundary behavior, cleaned the redaction boundary, and corrected governance-shadow truth wording without dashboard source edits. Current floor after Packet 2 is dashboard `238/238` and repo-wide JS `719/719`.
+
+This lane does not close mobile/judge proof, full authority choreography proof, clean logout proof, deploy-hook cleanup proof, OpenFGA/CIBA/notification/legal/public-portal behavior, production city behavior, or final V2-B closeout.
+
 ## Demo Posture
 
 - Demo playback reads committed local files only.

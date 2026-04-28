@@ -17,6 +17,7 @@ Meridian is a governed city digital twin intelligence repo. The repo contains th
 11. [docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md](docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md)
 12. [docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md)
 13. [docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md)
+14. [docs/closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md)
 
 ## Current Status
 
@@ -62,6 +63,7 @@ Meridian V2-B Foreman/Auth local proof cockpit is recorded by `docs/specs/MERIDI
 - Foreman cockpit spec: `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`
 - Foreman local closeout: `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`
 - AUTH-5 deployed proof closeout: `docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`
+- Code Quality + Demo Hardening FAST closeout: `docs/closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md`
 - AUTH-5 stable deployed demo URL: `https://meridian-holdpoint.vercel.app`
 - Dashboard-local Foreman strings: `meridian.v2.foremanGuideContext.v1`, `meridian.v2.foremanGuideResponse.v1`, `meridian.v2.foremanGuideSignal.v1`, and `meridian.v2.foremanGuideMode.v1`.
 - Existing role-session string: `meridian.v2.roleSessionProof.v1`.
@@ -70,7 +72,7 @@ Meridian V2-B Foreman/Auth local proof cockpit is recorded by `docs/specs/MERIDI
 - Event-compatible authority payloads: `AUTHORITY_RESOLUTION_REQUESTED`, `AUTHORITY_APPROVED`, and `AUTHORITY_DENIED`.
 - Dashboard posture: Foreman is a guide/explainer layer over current dashboard-local context; it does not create governance, authority, legal, city, or deployment truth.
 - Voice posture: browser-native speech output/input is optional and keeps typed fallback; there is no external voice service, Whisper/audio upload/transcription, MediaRecorder/getUserMedia path, model/API call, or browser-exposed model API key.
-- Verification floor: dashboard suite `236` passing; repo-wide JS suite `717/717` passing.
+- B7 local proof floor: dashboard suite `236` passing; repo-wide JS suite `717/717` passing. Current Code Quality + Demo Hardening FAST floor after Packet 2: dashboard suite `238/238` passing; repo-wide JS suite `719/719` passing.
 - Migration posture: no B7 `MIGRATIONS.md` row required because the B1-B6 Foreman guide strings are dashboard-local and do not widen root/shared runtime contracts; `meridian.v2.roleSessionProof.v1` is already covered by the V2-B/GARP row.
 - AUTH-5 deployed proof: Vercel production deployment `Ready / Latest`, remote dashboard load, Auth0 hosted login/callback return, and role-session rendering for `permitting_staff` and `council_member` eval roles.
 - Remaining HOLDs: mobile/judge device proof, full authority submit/approve/deny choreography screenshot proof, clean logout proof, deploy hook cleanup proof, OpenFGA/CIBA/notification/legal/public-portal behavior, and final V2-B closeout.

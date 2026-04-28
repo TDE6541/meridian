@@ -30,6 +30,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 - Meridian V2-B/GARP closeout: [`docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`](closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md)
 - Meridian V2-B Foreman Platinum local closeout: [`docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`](closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md)
 - Meridian V2-B AUTH-5 deployed proof closeout: [`docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`](closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md)
+- Meridian V2-B Code Quality + Demo Hardening FAST closeout: [`docs/closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md`](closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md)
 - Wave 4B closeout: [`docs/closeouts/WAVE4B_CLOSEOUT.md`](closeouts/WAVE4B_CLOSEOUT.md)
 - Wave 4.5 closeout: [`docs/closeouts/WAVE4_5_CLOSEOUT.md`](closeouts/WAVE4_5_CLOSEOUT.md)
 - Wave 5 closeout: [`docs/closeouts/WAVE5_CLOSEOUT.md`](closeouts/WAVE5_CLOSEOUT.md)
@@ -52,4 +53,5 @@ Wave 9 dashboard surfaces listed above reflect a local-only dashboard proof over
 V2-A surfaces listed above reflect local/demo-day live extension truth only: local sessions, local gateway/projection, JSON-only HoldPoint ingest, live absence, optional local Live Mode, local seed/corridor generation, Constellation-compatible replay, and inert Foreman seams.
 V2-B/GARP surfaces listed above reflect the local G1-G5 Authority Runway only: dashboard-local Auth0 Universal Login role-session proof, deterministic authority contracts, local lifecycle/action record behavior, dashboard authority cockpit, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions.
 V2-B Foreman/Auth surfaces listed above reflect local/pre-deployment proof cockpit truth plus AUTH-5 deployed Vercel/Auth0 demo proof only: deterministic Foreman context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native voice fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, shared local `/api/authority-requests` endpoint behavior, stable Vercel demo URL, Auth0 hosted login/callback return, and two eval-role session mappings.
+The V2-B Code Quality + Demo Hardening FAST closeout records Packet 0-2 hardening evidence, current dashboard/repo-wide JS floors, AUTH-5 proof preservation, carried HOLDs, and deferred audit backlog without changing shared contracts.
 Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. Mobile/judge smoke proof, full authority choreography proof, clean logout proof, deploy hook cleanup proof, and final V2-B closeout remain HOLD.
