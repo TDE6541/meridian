@@ -18,7 +18,7 @@ Expected local URL:
 http://localhost:5173/
 ```
 
-Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. V2-A adds optional local Live Mode over `DashboardLiveProjectionV1`. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, disclosure preview, prepared disclosure preview actions, and Foreman handoff context with `foreman_ready: false`. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, and shared local `/api/authority-requests` endpoint behavior. AUTH-5 records deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app` with hosted login/callback return and two eval-role mappings. The dashboard remains proof infrastructure, not a deployed production city system.
+Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. V2-A adds optional local Live Mode over `DashboardLiveProjectionV1`. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, disclosure preview metadata, browser-native disclosure preview print/save-to-PDF, and Foreman handoff context with `foreman_ready: false`. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, and shared local `/api/authority-requests` endpoint behavior. AUTH-5 records deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app` with hosted login/callback return and two eval-role mappings. The dashboard remains proof infrastructure, not a deployed production city system.
 
 ## UI Surfaces
 
@@ -57,7 +57,7 @@ Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there i
 - No production identity or authorization infrastructure.
 - OpenFGA deferred.
 - Payload-only notification builder; no notification sending.
-- Prepared disclosure preview actions only; no clipboard write, browser download trigger, print trigger, or PDF.
+- Prepared disclosure preview metadata plus browser-native disclosure preview print/save-to-PDF only; no clipboard write, browser download trigger, generated PDF library, server-side report generation, legal/TPIA sufficiency, public portal behavior, or city-record generation.
 - No live broker.
 - No live Fort Worth city integration.
 - No live Constellation broker proof.
@@ -83,4 +83,4 @@ Packet A8 closeout records the current dashboard typecheck, dashboard tests, das
 
 ## V2-B Foreman/Auth Dashboard Verification Posture
 
-B7 records dashboard suite `236` passing and repo-wide JS tests `717/717` for the local/pre-deployment Foreman/Auth proof cockpit. The Code Quality + Demo Hardening FAST lane after Packet 2 records dashboard suite `238/238` and repo-wide JS tests `719/719`. AUTH-5 records deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`: remote dashboard load, Auth0 hosted login/callback return, and two eval-role mappings. Mobile/judge device proof, full authority choreography proof, clean logout proof, deploy hook cleanup proof, OpenFGA/CIBA/notification/legal/public-portal behavior, and final V2-B closeout remain HOLD.
+B7 records dashboard suite `236` passing and repo-wide JS tests `717/717` for the local/pre-deployment Foreman/Auth proof cockpit. The Code Quality + Demo Hardening FAST lane after Optional Packet 4 records dashboard suite `239/239` and repo-wide JS tests `719/719`. AUTH-5 records deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`: remote dashboard load, Auth0 hosted login/callback return, and two eval-role mappings. Mobile/judge device proof, full authority choreography proof, clean logout proof, deploy hook cleanup proof, OpenFGA/CIBA/notification/legal/public-portal behavior, and final V2-B closeout remain HOLD.

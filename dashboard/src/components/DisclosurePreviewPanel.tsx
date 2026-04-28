@@ -63,11 +63,25 @@ function renderActionBundle(actionBundle: DisclosurePreviewActionBundleV1 | null
   );
 }
 
+function canUseBrowserPrint(): boolean {
+  return typeof window !== "undefined" && typeof window.print === "function";
+}
+
 export function DisclosurePreviewPanel({
   actionBundle = null,
   foremanHighlighted = false,
   report,
 }: DisclosurePreviewPanelProps) {
+  const printAvailable = canUseBrowserPrint();
+
+  function handlePrintDisclosurePreview() {
+    if (!printAvailable) {
+      return;
+    }
+
+    window.print();
+  }
+
   if (!report) {
     return (
       <section
@@ -115,6 +129,23 @@ export function DisclosurePreviewPanel({
       </div>
 
       <p className="detail-copy">{report.disclaimer}</p>
+
+      <div className="disclosure-preview-print-control">
+        <button
+          aria-label="Print / Save report using your browser print dialog"
+          className="control-button control-button--primary"
+          disabled={!printAvailable}
+          onClick={handlePrintDisclosurePreview}
+          type="button"
+        >
+          Print / Save report
+        </button>
+        <span>
+          {printAvailable
+            ? "Opens your browser print dialog. Save as PDF from there if needed."
+            : "Browser print is unavailable in this environment."}
+        </span>
+      </div>
 
       <div className="fact-grid fact-grid--compact">
         <div>

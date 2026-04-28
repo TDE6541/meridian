@@ -1,6 +1,6 @@
 # Meridian Dashboard
 
-Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, shared local `/api/authority-requests` endpoint behavior, and AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`.
+Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, prepared disclosure preview metadata, and browser-native disclosure preview print/save-to-PDF. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, shared local `/api/authority-requests` endpoint behavior, and AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`.
 
 ## Scope
 
@@ -32,7 +32,7 @@ Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional loca
 - no production identity or authorization infrastructure
 - no CIBA
 - no notification sending, browser push registration, email sending, or service worker
-- no clipboard write, browser download trigger, print trigger, or PDF generation from disclosure preview actions
+- no clipboard write, browser download trigger, generated PDF library, server-side report generation, or city-record generation from disclosure preview actions; disclosure preview print/save-to-PDF uses the browser-native print dialog only
 - no governance, authority, matching, forensic, absence, skin, city, or cascade truth recomputation
 - no production identity or authorization behavior, live broker, live city integration, or live Constellation claim
 - no Foreman API, model call, external voice service, Whisper/audio upload/transcription, MediaRecorder/getUserMedia path, browser-exposed model API keys, or autonomous Foreman action
@@ -131,7 +131,7 @@ The required Code Quality + Demo Hardening FAST lane is recorded in:
 
 - `../docs/closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md`
 
-Packet 1 added the CI verification workflow and dashboard mobile/accessibility polish. Packet 2 hardened forensic-chain public boundary behavior, cleaned the redaction boundary, and corrected governance-shadow truth wording without dashboard source edits. Current floor after Packet 2 is dashboard `238/238` and repo-wide JS `719/719`.
+Packet 1 added the CI verification workflow and dashboard mobile/accessibility polish. Packet 2 hardened forensic-chain public boundary behavior, cleaned the redaction boundary, and corrected governance-shadow truth wording without dashboard source edits. Optional Packet 4 adds the browser-native disclosure preview print/save-to-PDF affordance. Current floor after Optional Packet 4 is dashboard `239/239` and repo-wide JS `719/719`.
 
 This lane does not close mobile/judge proof, full authority choreography proof, clean logout proof, deploy-hook cleanup proof, OpenFGA/CIBA/notification/legal/public-portal behavior, production city behavior, or final V2-B closeout.
 
@@ -165,7 +165,7 @@ The Foreman mount point is a reserved inert seam. It displays only supplied cont
 
 GARP is dashboard-local Authority Runway work only. It keeps snapshot mode and Live Mode intact, preserves `step.skins.outputs`, keeps `step.skins.renders` absent, and does not import root `src/live/**` or `src/skins/**` into the browser.
 
-The disclosure preview remains demo preview only. Prepared disclosure preview actions are metadata only and do not write to the clipboard, trigger browser downloads, trigger print, or generate PDFs.
+The disclosure preview remains demo preview only. Prepared disclosure preview metadata stays metadata only and does not write to the clipboard, trigger browser downloads, use a generated PDF library, or generate reports server-side. The visible `Print / Save report` action opens the browser-native print dialog so a judge/operator can save as PDF from the browser while the existing redaction boundary remains the source of visible content.
 
 Required disclosure disclaimer:
 

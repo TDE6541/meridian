@@ -91,6 +91,78 @@ function createAuthorityProjection(authority: JsonObject) {
   });
 }
 
+type ButtonElement = React.ReactElement<{
+  "aria-label"?: string;
+  disabled?: boolean;
+  onClick?: () => void;
+}>;
+
+function readElementText(node: React.ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node);
+  }
+
+  if (Array.isArray(node)) {
+    return node.map((child) => readElementText(child)).join("");
+  }
+
+  if (!React.isValidElement(node)) {
+    return "";
+  }
+
+  return readElementText((node.props as { children?: React.ReactNode }).children);
+}
+
+function findButtonByText(
+  node: React.ReactNode,
+  text: string
+): ButtonElement | null {
+  if (!React.isValidElement(node)) {
+    return null;
+  }
+
+  const props = node.props as { children?: React.ReactNode };
+
+  if (node.type === "button" && readElementText(props.children).includes(text)) {
+    return node as ButtonElement;
+  }
+
+  for (const child of React.Children.toArray(props.children)) {
+    const match = findButtonByText(child, text);
+
+    if (match) {
+      return match;
+    }
+  }
+
+  return null;
+}
+
+function installMockPrintWindow(print: () => void): () => void {
+  const globalWithWindow = globalThis as typeof globalThis & {
+    window?: Pick<Window, "print">;
+  };
+  const hadWindow = Object.prototype.hasOwnProperty.call(globalThis, "window");
+  const previousWindow = globalWithWindow.window;
+
+  Object.defineProperty(globalThis, "window", {
+    configurable: true,
+    value: { print },
+  });
+
+  return () => {
+    if (hadWindow) {
+      Object.defineProperty(globalThis, "window", {
+        configurable: true,
+        value: previousWindow,
+      });
+      return;
+    }
+
+    Reflect.deleteProperty(globalThis, "window");
+  };
+}
+
 const tests = [
   {
     name: "public panel surfaces actual redactions, disclosure holds, and fallback text",
@@ -281,6 +353,82 @@ const tests = [
       assert.equal(markup.includes("Preview action"), true);
       assert.equal(markup.includes("routine-disclosure-preview.json"), true);
       assert.equal(markup.includes("application/json"), true);
+    },
+  },
+  {
+    name: "disclosure preview print action uses browser-native print and preserves claim boundaries",
+    run: async () => {
+      let printCalls = 0;
+      const restoreWindow = installMockPrintWindow(() => {
+        printCalls += 1;
+      });
+
+      try {
+        const record = await loadScenarioRecord("routine");
+        const publicView = getDashboardSkinView(
+          adaptStepSkinPayloads(record.scenario.steps[0]),
+          "public"
+        );
+        const roleSession = createPublicRoleSession();
+        const authorityState = buildAuthorityDashboardState({
+          currentStep: null,
+          liveProjection: null,
+          roleSession,
+        });
+        const report = buildDisclosurePreviewReport({
+          authorityState,
+          generatedAt: "2026-04-27T15:00:00.000Z",
+          publicSkinView: publicView,
+          roleSession,
+          scenarioLabel: "Routine",
+          sessionLabel: "session-public",
+        });
+        const context = buildGarpHandoffContext({
+          authorityState,
+          disclosurePreviewReport: report,
+        });
+        const bundle = buildDisclosurePreviewActionBundle({
+          garpHandoffContext: context,
+          report,
+          roleSession,
+        });
+        const panel = DisclosurePreviewPanel({ actionBundle: bundle, report });
+        const button = findButtonByText(panel, "Print / Save report");
+        const markup = renderMarkup(
+          <DisclosurePreviewPanel actionBundle={bundle} report={report} />
+        );
+        const lowerMarkup = markup.toLowerCase();
+
+        assert.ok(button);
+        assert.equal(
+          button.props["aria-label"],
+          "Print / Save report using your browser print dialog"
+        );
+        assert.equal(button.props.disabled, false);
+        assert.equal(markup.includes("Print / Save report"), true);
+        assert.equal(
+          markup.includes(
+            "Opens your browser print dialog. Save as PDF from there if needed."
+          ),
+          true
+        );
+
+        button.props.onClick?.();
+        assert.equal(printCalls, 1);
+        assert.equal(markup.includes("restricted-demo-trace"), false);
+        assert.equal(lowerMarkup.includes("tpia compliant"), false);
+        assert.equal(lowerMarkup.includes("legal sufficiency"), false);
+        assert.equal(lowerMarkup.includes("public portal"), false);
+        assert.equal(lowerMarkup.includes(["official", "report"].join(" ")), false);
+        assert.equal(
+          lowerMarkup.includes(["official", "fort worth", "report"].join(" ")),
+          false
+        );
+        assert.equal(lowerMarkup.includes(["production", "report"].join(" ")), false);
+        assert.equal(lowerMarkup.includes("certified"), false);
+      } finally {
+        restoreWindow();
+      }
     },
   },
   {

@@ -211,19 +211,23 @@ const tests = [
   {
     name: "g5 prepared actions and handoff context do not ship Foreman behavior",
     run: async () => {
-      const files = [
+      const sideEffectGuardFiles = [
         "src/authority/disclosurePreviewActions.ts",
         "src/authority/garpHandoffContext.ts",
         "src/components/ControlRoomShell.tsx",
-        "src/components/DisclosurePreviewPanel.tsx",
         "src/foremanGuide/ForemanMountPoint.tsx",
       ];
       const source = (
         await Promise.all(
-          files.map((file) => readFile(path.resolve(process.cwd(), file), "utf8"))
+          sideEffectGuardFiles.map((file) => readFile(path.resolve(process.cwd(), file), "utf8"))
         )
       ).join("\n");
+      const disclosurePreviewPanel = await readFile(
+        path.resolve(process.cwd(), "src/components/DisclosurePreviewPanel.tsx"),
+        "utf8"
+      );
       const lowerSource = source.toLowerCase();
+      const lowerDisclosurePreviewPanel = disclosurePreviewPanel.toLowerCase();
 
       for (const fragment of [
         "navigator.clipboard",
@@ -251,6 +255,24 @@ const tests = [
         "../../src/skins",
       ]) {
         assert.equal(lowerSource.includes(fragment), false, fragment);
+      }
+
+      assert.equal(disclosurePreviewPanel.includes("window.print()"), true);
+      for (const fragment of [
+        "navigator.clipboard",
+        "createobjecturl",
+        "document.createelement(\"a\")",
+        "fetch(",
+        "serviceworker",
+        "pushmanager",
+        "notification.requestpermission",
+        "resend",
+        "sendgrid",
+        "openfga",
+        "../../src/live",
+        "../../src/skins",
+      ]) {
+        assert.equal(lowerDisclosurePreviewPanel.includes(fragment), false, fragment);
       }
 
       const foremanMount = await readFile(

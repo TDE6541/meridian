@@ -49,6 +49,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - V2-B Foreman/Auth local closeout: `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`
 - V2-B AUTH-5 deployed proof closeout: `docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`
 - V2-B Code Quality + Demo Hardening FAST closeout: `docs/closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md`
+- V2-B disclosure print polish closeout: `docs/closeouts/MERIDIAN_V2B_DISCLOSURE_PRINT_POLISH_CLOSEOUT.md`
 - Bridge runtime substrate: `src/bridge/*.js`
 - Governance runtime landing zone, sweep facade, subset, and policy pack: `src/governance/runtime/*.js`
 - Wave 4B capture substrate: `src/pipeline/*.py`
@@ -100,7 +101,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - V2-B/GARP Authority Runway is landed locally as a bounded G1-G5 authority sublane.
 - V2-B Foreman/Auth local proof cockpit is landed locally/pre-deployment as a bounded guide/explainer layer.
 - AUTH-5 deployed Vercel/Auth0 demo proof is recorded at `https://meridian-holdpoint.vercel.app`; mobile/judge device proof, full authority choreography proof, clean logout proof, deploy hook cleanup proof, and final V2-B closeout remain HOLD.
-- The required V2-B Code Quality + Demo Hardening FAST lane records Packet 1 CI/dashboard mobile/accessibility polish and Packet 2 forensic/redaction/truth-boundary hardening, with current floor dashboard `238/238` and repo-wide JS `719/719`.
+- The required V2-B Code Quality + Demo Hardening FAST lane records Packet 1 CI/dashboard mobile/accessibility polish and Packet 2 forensic/redaction/truth-boundary hardening; Optional Packet 4 records the browser-native disclosure preview print/save-to-PDF affordance, with current floor dashboard `239/239` and repo-wide JS `719/719`.
 - Final V1 implementation baseline commit is `3374d0f4ad7d410cdd37a765db8d473b36f92482`.
 - Wave 9 is landed as a bounded local dashboard lane under `dashboard/`.
 - Wave 7 ships five skins (`civic.permitting`, `civic.council`, `civic.operations`, `civic.dispatch`, `civic.public`) with deterministic public disclosure boundaries in `src/skins/redaction.js`.
@@ -184,7 +185,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - V2-A local live truth surfaces: `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`, `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`, `MIGRATIONS.md`, `src/live/**`, `scripts/run-live-governance.js`, `scripts/replay-constellation-stream.js`, `dashboard/src/live/**`, `dashboard/src/foremanGuide/**`, `dashboard/README.md`
 - V2-B/GARP Authority Runway truth surfaces: `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md`, `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`, `MIGRATIONS.md`, `src/live/authority/**`, `dashboard/src/auth/**`, `dashboard/src/roleSession/**`, `dashboard/src/authority/**`, `dashboard/README.md`
 - V2-B Foreman/Auth proof cockpit truth surfaces: `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`, `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`, `docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`, `dashboard/README.md`, `dashboard/api/authority-requests.js`, `dashboard/src/foremanGuide/**`, `dashboard/src/components/ForemanGuidePanel.tsx`
-- V2-B Code Quality + Demo Hardening FAST truth surface: `docs/closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md`
+- V2-B Code Quality + Demo Hardening FAST truth surfaces: `docs/closeouts/MERIDIAN_V2B_CODE_QUALITY_DEMO_HARDENING_CLOSEOUT.md`, `docs/closeouts/MERIDIAN_V2B_DISCLOSURE_PRINT_POLISH_CLOSEOUT.md`
 - V1 final truth surfaces: `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`, `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - Bridge/runtime/pipeline tests and fixtures: `tests/bridge*.test.js`, `tests/governance.runtime.test.js`, `tests/governance.policyPack.test.js`, `tests/governance.runtimeSubset.test.js`, `tests/governance.promiseConfidence.test.js`, `tests/governance.sweep.test.js`, `tests/governance.demoProof.test.js`, `tests/governance.pipelineHandoffProof.test.js`, `tests/pipeline/*.py`, `tests/pipeline/fixtures/*`, `tests/fixtures/governance/*.json`, `tests/fixtures/nats/*.json`, `scripts/synthetic-constellation.js`
 - Governance compatibility shadows: `src/governance/shadows.js` (legacy structural containers only; active governance data lives in typed `signal_tree`)

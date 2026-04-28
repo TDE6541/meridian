@@ -370,6 +370,18 @@ pre {
   cursor: not-allowed;
 }
 
+.disclosure-preview-print-control {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.75rem;
+  align-items: center;
+}
+
+.disclosure-preview-print-control span {
+  color: #405467;
+  font-size: 0.9rem;
+}
+
 .control-room-grid {
   display: grid;
   grid-template-columns: minmax(340px, 0.9fr) minmax(0, 1.1fr);
@@ -2032,5 +2044,30 @@ kbd {
 
   .status-bar {
     position: static;
+  }
+}
+
+@media print {
+  :root,
+  body {
+    background: #fff;
+    color: #172432;
+  }
+
+  .disclosure-preview-print-control,
+  .status-bar {
+    display: none !important;
+  }
+
+  [data-disclosure-preview-panel="true"] {
+    border: 1px solid #9aa8b4;
+    background: #fff;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  [data-disclosure-preview-panel="true"] .signal-card,
+  [data-disclosure-preview-panel="true"] .fact-grid > div {
+    background: #fff;
   }
 }
