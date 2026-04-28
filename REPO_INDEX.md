@@ -80,7 +80,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - Wave 6 forensic substrate: `src/governance/forensic/*.js`
 - Wave 7 skins lane: `src/skins/**/*.js`
 - Wave 8 integration lane: `src/integration/*.js`
-- Governance substrate: `src/governance/shadows.js`
+- Governance compatibility shadows: `src/governance/shadows.js` (legacy structural containers; active governance data lives in typed `signal_tree`)
 - Entity scaffold substrate: `src/entities/*.js`
 - Entity ontology spec: `docs/specs/ENTITY_ONTOLOGY.md`
 - Constellation config substrate: `src/config/constellation.js`
@@ -184,7 +184,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 - V2-B Foreman/Auth proof cockpit truth surfaces: `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`, `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`, `docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`, `dashboard/README.md`, `dashboard/api/authority-requests.js`, `dashboard/src/foremanGuide/**`, `dashboard/src/components/ForemanGuidePanel.tsx`
 - V1 final truth surfaces: `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`, `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - Bridge/runtime/pipeline tests and fixtures: `tests/bridge*.test.js`, `tests/governance.runtime.test.js`, `tests/governance.policyPack.test.js`, `tests/governance.runtimeSubset.test.js`, `tests/governance.promiseConfidence.test.js`, `tests/governance.sweep.test.js`, `tests/governance.demoProof.test.js`, `tests/governance.pipelineHandoffProof.test.js`, `tests/pipeline/*.py`, `tests/pipeline/fixtures/*`, `tests/fixtures/governance/*.json`, `tests/fixtures/nats/*.json`, `scripts/synthetic-constellation.js`
-- Governance shadows: `src/governance/shadows.js`
+- Governance compatibility shadows: `src/governance/shadows.js` (legacy structural containers only; active governance data lives in typed `signal_tree`)
 - Entity scaffolds: `src/entities/*.js`
 - Entity ontology spec: `docs/specs/ENTITY_ONTOLOGY.md`
 - Constellation config: `src/config/constellation.js`

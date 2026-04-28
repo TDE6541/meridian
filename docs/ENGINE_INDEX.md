@@ -166,13 +166,13 @@ Purpose: bounded dashboard-local guide/explainer cockpit for deterministic Forem
 
 ## Governance Substrate
 
-Purpose: shared governance shadow fields and validation substrate for entity scaffolds.
+Purpose: legacy/compatibility governance shadow container factories and validators for entity scaffolds. The `authority`, `evidence`, `obligation`, and `absence` shadows are structural containers only; active governance data lives in typed `signal_tree`.
 
 - `src/governance/shadows.js`
 
 ## Entity Scaffold Substrate
 
-Purpose: locked structural entity scaffolds with governance/evidence/disclosure shadow shape across 13 entity files.
+Purpose: locked structural entity scaffolds with legacy governance shadow containers and active typed `signal_tree` defaults across 13 entity files.
 
 - `src/entities/action_request.js`
 - `src/entities/authority_grant.js`

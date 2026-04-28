@@ -256,6 +256,56 @@ test("forensic chain: deeply freezes stored entries after append", () => {
   assert.equal(storedEntry.payload.nested.decision, "ALLOW");
 });
 
+test("forensic chain: public entries access is a frozen read-only copy", () => {
+  const chain = createChain();
+  chain.append(createGovernanceEntry());
+
+  const exposedEntries = chain.entries;
+  assert.equal(Object.isFrozen(exposedEntries), true);
+  assert.equal(exposedEntries.length, 1);
+  assert.throws(
+    () => exposedEntries.push(createGovernanceEntry({ entry_id: "mutated-entry" })),
+    TypeError
+  );
+  exposedEntries.length = 0;
+
+  assert.equal(chain.entries.length, 1);
+  assert.equal(chain.getEntries().length, 1);
+  assert.equal(chain.getEntry("gov-entry-1").entry_id, "gov-entry-1");
+});
+
+test("forensic chain: getEntries returns a frozen copy that cannot clear history", () => {
+  const chain = createChain();
+  chain.append(createGovernanceEntry());
+
+  const entries = chain.getEntries();
+  assert.equal(Object.isFrozen(entries), true);
+  assert.throws(
+    () => entries.splice(0, entries.length),
+    TypeError
+  );
+
+  assert.equal(entries.length, 1);
+  assert.equal(chain.getEntries().length, 1);
+
+  const secondEntry = chain.append(
+    createGovernanceEntry({
+      entry_id: "gov-entry-2",
+      occurred_at: "2026-04-18T18:00:01.000Z",
+    })
+  );
+
+  assert.equal(secondEntry.entry_id, "gov-entry-2");
+  assert.deepEqual(
+    chain.getEntries().map((entry) => entry.entry_id),
+    ["gov-entry-1", "gov-entry-2"]
+  );
+  assert.deepEqual(
+    chain.getSnapshot().entries.map((entry) => entry.entry_id),
+    ["gov-entry-1", "gov-entry-2"]
+  );
+});
+
 test("forensic chain: rejects duplicate entry ids", () => {
   const chain = createChain();
   chain.append(createGovernanceEntry());

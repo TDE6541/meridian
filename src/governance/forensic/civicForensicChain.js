@@ -64,6 +64,10 @@ function deepFreeze(value) {
   return value;
 }
 
+function freezeEntriesCopy(entries) {
+  return Object.freeze([...entries]);
+}
+
 function normalizeBaseEntryTypes(baseEntryTypes = []) {
   if (!isStringArray(baseEntryTypes)) {
     throw new TypeError("baseEntryTypes must be an array of non-empty strings");
@@ -165,6 +169,9 @@ function normalizeSerializableEntry(input, allowedEntryTypes, knownEntryIds) {
   });
 }
 
+const privateEntries = new WeakMap();
+const privateEntryIds = new WeakMap();
+
 class CivicForensicChain {
   constructor(options = {}) {
     if (!isPlainObject(options)) {
@@ -180,8 +187,8 @@ class CivicForensicChain {
       ...this.baseEntryTypes,
       ...ACTIVE_CIVIC_ENTRY_TYPES,
     ]);
-    this.entries = [];
-    this.entryIds = new Set();
+    privateEntries.set(this, []);
+    privateEntryIds.set(this, new Set());
 
     if (options.entries !== undefined) {
       if (!Array.isArray(options.entries)) {
@@ -192,15 +199,21 @@ class CivicForensicChain {
     }
   }
 
+  get entries() {
+    return freezeEntriesCopy(privateEntries.get(this));
+  }
+
   append(entry) {
+    const entries = privateEntries.get(this);
+    const entryIds = privateEntryIds.get(this);
     const normalizedEntry = normalizeSerializableEntry(
       entry,
       this.allowedEntryTypes,
-      this.entryIds
+      entryIds
     );
 
-    this.entries.push(normalizedEntry);
-    this.entryIds.add(normalizedEntry.entry_id);
+    entries.push(normalizedEntry);
+    entryIds.add(normalizedEntry.entry_id);
 
     return normalizedEntry;
   }
@@ -214,23 +227,28 @@ class CivicForensicChain {
   }
 
   hasEntry(entryId) {
-    return this.entryIds.has(entryId);
+    return privateEntryIds.get(this).has(entryId);
   }
 
   getEntry(entryId) {
-    return this.entries.find((entry) => entry.entry_id === entryId) || null;
+    return (
+      privateEntries.get(this).find((entry) => entry.entry_id === entryId) ||
+      null
+    );
   }
 
   getEntries() {
-    return [...this.entries];
+    return freezeEntriesCopy(privateEntries.get(this));
   }
 
   getSnapshot() {
+    const entries = privateEntries.get(this);
+
     return {
       version: this.version,
       base_entry_types: [...this.baseEntryTypes],
       allowed_entry_types: [...this.allowedEntryTypes],
-      entries: this.entries.map((entry) => cloneValue(entry)),
+      entries: entries.map((entry) => cloneValue(entry)),
     };
   }
 

@@ -31,6 +31,12 @@ Meridian ships only this typed `signal_tree` subset in Wave 2:
 
 `createTypedSignalTree()` produces these defaults. `validateTypedSignalTree(value)` enforces this shipped typed subset for entity validation.
 
+### Governance shadow compatibility containers
+
+Entities still carry a `governance` object with `authority`, `evidence`, `obligation`, and `absence` plain-object containers for Wave 1 structural compatibility. These shadow containers are empty by default and do not currently carry computed authority, evidence, obligation, or absence state.
+
+Active governance data for entity validation lives in the typed `signal_tree` subset above.
+
 ### Status rules
 
 - Stateful entities may use `status === null`, or a non-null `status` that appears in that entity's exported `LIFECYCLE_STATES`.

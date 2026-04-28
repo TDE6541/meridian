@@ -101,9 +101,12 @@ test("applyPublicRedaction does not mutate the passed civic input", () => {
 test("isApprovedPublicClaimLanguage rejects banned phrases and accepts the approved posture phrases", () => {
   const rejectedSamples = [
     "This summary is " + "TPIA" + "-compliant.",
+    "This summary is " + "TPIA" + " compliant.",
     "This summary is " + "legally" + " sufficient.",
     "This summary is " + "city" + "-attorney reviewed.",
+    "This summary is " + "city" + " attorney reviewed.",
     "This summary is " + "public" + "-records request automation.",
+    "This summary is " + "public" + " records request automation.",
     "This summary is " + "F" + "O" + "I" + "A" + "/TPIA workflow.",
   ];
 

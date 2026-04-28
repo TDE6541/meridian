@@ -29,12 +29,12 @@ const NOTICE_TEXT_BY_CATEGORY = Object.freeze({
     "Public disclosure boundary: unsupported detail withheld under deterministic demo redaction. This TPIA-aware summary is not legal review and not request adjudication.",
 });
 
-const REJECTED_PUBLIC_CLAIM_LANGUAGE_PARTS = Object.freeze([
-  ["TPIA", "-compliant"],
-  ["legally", " sufficient"],
-  ["city", "-attorney reviewed"],
-  ["public", "-records request automation"],
-  ["F", "O", "I", "A", "/TPIA workflow"],
+const REJECTED_PUBLIC_CLAIM_PATTERNS = Object.freeze([
+  /\btpia[\s-]*compliant\b/i,
+  /\blegally\s+sufficient\b/i,
+  /\bcity[\s-]*attorney\s+reviewed\b/i,
+  /\bpublic[\s-]*records\s+request\s+automation\b/i,
+  /\bfoia\s*\/\s*tpia\s+workflow\b/i,
 ]);
 
 function isPlainObject(value) {
@@ -72,18 +72,13 @@ function getRawRequest(input) {
   return {};
 }
 
-function getRejectedPublicClaimLanguage() {
-  return REJECTED_PUBLIC_CLAIM_LANGUAGE_PARTS.map((parts) => parts.join(""));
-}
-
 function isApprovedPublicClaimLanguage(text) {
   if (!isNonEmptyString(text)) {
     return false;
   }
 
-  const candidate = text.toLowerCase();
-  return getRejectedPublicClaimLanguage().every(
-    (phrase) => candidate.includes(phrase.toLowerCase()) === false
+  return REJECTED_PUBLIC_CLAIM_PATTERNS.every(
+    (pattern) => pattern.test(text) === false
   );
 }
 
