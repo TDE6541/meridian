@@ -481,6 +481,7 @@ export function ControlRoomShell({
         auditWallOpen={auditWallOpen}
         auditWallView={auditWallView}
         authorityState={authorityState}
+        canDrive={selectedRecord?.status === "ready"}
         currentStep={currentStep}
         dashboardMode={dashboardMode}
         dataVersion={dataVersion}
@@ -490,6 +491,10 @@ export function ControlRoomShell({
         holdWallOpen={holdWallOpen}
         holdWallView={holdWallView}
         missionRailStages={missionRailStages}
+        onDirectorModeOpen={() => {
+          setPresentationMode("engineer");
+          setDirectorModeEnabled(true);
+        }}
         onAbsenceLensToggle={() =>
           setMissionAbsenceLensEnabled((current) => !current)
         }
@@ -504,12 +509,25 @@ export function ControlRoomShell({
             setHoldWallOpen(true);
           }
         }}
+        onNextStep={() =>
+          setControlState((current) => goToNextStep(current, totalSteps))
+        }
+        onPausePlayback={() => setControlState((current) => pausePlayback(current))}
+        onPlayPlayback={() =>
+          setControlState((current) => startPlayback(current, totalSteps))
+        }
+        onPreviousStep={() =>
+          setControlState((current) => goToPreviousStep(current, totalSteps))
+        }
+        onResetStep={() => setControlState((current) => resetControlRoom(current))}
+        playbackState={controlState.playbackState}
         publicSkinView={publicSkinView}
         readyCount={readyCount}
         roleSession={roleSession}
         scenarioDescription={scenarioMeta.description}
         scenarioLabel={scenarioMeta.displayLabel}
         scenarioStatus={scenarioStatusLabel}
+        sharedEndpointStatus={sharedAuthority.endpointStatus}
         syncChoreography={syncChoreography}
         totalSteps={totalSteps}
         vibrationStatus={vibrationStatus}

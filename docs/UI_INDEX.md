@@ -18,7 +18,7 @@ Expected local URL:
 http://localhost:5173/
 ```
 
-Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. V2-A adds optional local Live Mode over `DashboardLiveProjectionV1`. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, disclosure preview metadata, browser-native disclosure preview print/save-to-PDF, and Foreman handoff context with `foreman_ready: false`. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, and shared local `/api/authority-requests` endpoint behavior. AUTH-5 records deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app` with hosted login/callback return and two eval-role mappings. V2-C adds dashboard-local presentation/choreography/reliability surfaces: Mission presentation skin, Mission Rail, Fictional Demo Permit #4471, HOLD Wall, Absence Lens presentation overlay, Decision Counter, Demo Audit Wall, Foreman audio identity, Disclosure Receipt, Doctrine Card, reliability panel/runbook/checklists, SyncPill, approval pulse, and vibration fallback. The dashboard remains proof infrastructure, not a deployed production city system.
+Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. V2-A adds optional local Live Mode over `DashboardLiveProjectionV1`. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, disclosure preview metadata, browser-native disclosure preview print/save-to-PDF, and Foreman handoff context with `foreman_ready: false`. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, and shared local `/api/authority-requests` endpoint behavior. AUTH-5 records deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app` with hosted login/callback return and two eval-role mappings. V2-C adds dashboard-local presentation/choreography/reliability surfaces: Mission presentation skin, Mission Rail, Fictional Demo Permit #4471, HOLD Wall, Absence Lens presentation overlay, Decision Counter, Demo Audit Wall, Foreman audio identity, Disclosure Receipt, Doctrine Card, reliability panel/runbook/checklists, SyncPill, approval pulse, and vibration fallback. The V2-B Demo UI Clarity pass makes Presenter Cockpit the default hierarchy with compact demo anchor, current decision/HOLD focal card, six-stage process rail, grouped proof tools, and dashboard `285/285`. The dashboard remains proof infrastructure, not a deployed production city system.
 
 ## UI Surfaces
 
@@ -68,6 +68,7 @@ Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there i
 - No new governance, authority, forensic, absence, skin, city, or cascade truth computation.
 - No legal determination, TPIA compliance, TRAIGA compliance, public-record completeness, public portal behavior, or official disclosure approval claim.
 - V2-C is presentation/choreography/reliability only; no root/shared contracts, protected runtime substrates, Auth0/Vercel/env/package/deploy/config/secret/security surfaces, or manual proof statuses changed.
+- V2-B Demo UI Clarity is presenter hierarchy only; no shared contracts, dashboard scenarios, package files, auth/config/deploy/env/security surfaces, or root runtime substrates changed.
 
 ## Visual Proof Status
 
@@ -90,4 +91,8 @@ B7 records dashboard suite `236` passing and repo-wide JS tests `717/717` for th
 
 ## V2-C Demo Presentation Layer Verification Posture
 
-V2-C records the dashboard-local Demo Presentation Layer in `docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md` and `docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`. DEMO-1 through DEMO-10 are implementation-complete. Current floor is dashboard suite `283/283`, repo-wide JS suite `719/719`, dashboard typecheck green, and dashboard build green. Eval account warm-tabs, phone smoke, full authority choreography screenshots, Walk-mode MP4 proof, clean logout proof, deploy-hook cleanup proof, and final V2-B closeout remain HOLD.
+V2-C records the dashboard-local Demo Presentation Layer in `docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md` and `docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`. DEMO-1 through DEMO-10 are implementation-complete.
+
+## V2-B Demo UI Clarity Verification Posture
+
+`docs/closeouts/MERIDIAN_V2B_DEMO_UI_CLARITY_CLOSEOUT.md` records the Presenter Cockpit hardening pass over the shipped dashboard proof surfaces. Current floor is dashboard suite `285/285`, repo-wide JS suite `719/719`, dashboard typecheck green, and dashboard build green. Screenshot-level proof for desktop, 1280x720, and mobile-ish breakpoints remains HOLD. Eval account warm-tabs, phone smoke, full authority choreography screenshots, Walk-mode MP4 proof, clean logout proof, deploy-hook cleanup proof, and final V2-B closeout remain HOLD.

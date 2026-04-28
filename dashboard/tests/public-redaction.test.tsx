@@ -466,10 +466,11 @@ const tests = [
       const principles = [...markup.matchAll(/data-doctrine-principle="true"/g)];
 
       assert.equal(markup.includes('data-doctrine-card-size="3.5x5"'), true);
+      assert.equal(markup.includes("Why this is safe"), true);
       assert.equal(markup.includes("HOLD &gt; GUESS"), true);
-      assert.equal(principles.length, 5);
+      assert.equal(principles.length, 4);
       for (const principle of DOCTRINE_CARD_PRINCIPLES) {
-        assert.equal(markup.includes(principle), true, principle);
+        assert.equal(markup.includes(principle.replace("->", "-&gt;")), true, principle);
       }
       assert.equal(markup.includes(DOCTRINE_CARD_DEMO_URL), true);
       assert.equal(markup.includes(DOCTRINE_CARD_QR_NOTE), true);

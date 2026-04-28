@@ -11,8 +11,9 @@ export function DoctrineCard() {
       data-doctrine-card="meridian-demo"
       data-doctrine-card-size="3.5x5"
     >
-      <p className="doctrine-card__eyebrow">Meridian Demo Doctrine</p>
-      <h2>HOLD &gt; GUESS</h2>
+      <p className="doctrine-card__eyebrow">Why this is safe</p>
+      <h2>Why this is safe</h2>
+      <p className="doctrine-card__rule">HOLD &gt; GUESS</p>
       <ol className="doctrine-card__principles">
         {DOCTRINE_CARD_PRINCIPLES.map((principle) => (
           <li data-doctrine-principle="true" key={principle}>

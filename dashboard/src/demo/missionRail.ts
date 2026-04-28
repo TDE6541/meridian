@@ -17,7 +17,14 @@ export const MISSION_RAIL_LABELS = [
 ] as const;
 
 export type MissionRailLabel = (typeof MISSION_RAIL_LABELS)[number];
-export type MissionRailStageState = "active" | "complete" | "pending";
+export type MissionRailStageState =
+  | "active"
+  | "blocked"
+  | "complete"
+  | "hold"
+  | "pending"
+  | "revoke"
+  | "unavailable";
 
 export interface MissionRailStage {
   index: number;
@@ -104,11 +111,21 @@ function getLiveStageIndex(
 
 function getSnapshotStageIndex({
   activeStepIndex,
+  authorityState,
   currentStep,
   totalSteps,
 }: BuildMissionRailStagesInput): number {
   if (!currentStep) {
     return -1;
+  }
+
+  const decision = currentStep.decision?.toUpperCase();
+  if (decision === "HOLD" || decision === "BLOCK" || decision === "REVOKE") {
+    return 2;
+  }
+
+  if (authorityState?.status === "holding" || authorityState?.status === "pending") {
+    return 1;
   }
 
   if (totalSteps <= 1) {
@@ -171,6 +188,50 @@ function getStageSources(input: BuildMissionRailStagesInput): readonly boolean[]
   ];
 }
 
+function getStageSignalState(
+  input: BuildMissionRailStagesInput,
+  label: MissionRailLabel
+): MissionRailStageState | null {
+  if (!input.currentStep && !input.liveProjection) {
+    return "unavailable";
+  }
+
+  if (label === "Authority") {
+    if (input.authorityState?.status === "holding") {
+      return "hold";
+    }
+
+    if (
+      input.authorityState?.status === "denied" ||
+      input.authorityState?.status === "expired"
+    ) {
+      return "blocked";
+    }
+
+    if (input.authorityState?.status === "unavailable") {
+      return "unavailable";
+    }
+  }
+
+  if (label === "Governance" && input.currentStep) {
+    const decision = input.currentStep.decision?.toUpperCase();
+
+    if (decision === "HOLD") {
+      return "hold";
+    }
+
+    if (decision === "BLOCK") {
+      return "blocked";
+    }
+
+    if (decision === "REVOKE") {
+      return "revoke";
+    }
+  }
+
+  return null;
+}
+
 export function buildMissionRailStages(
   input: BuildMissionRailStagesInput
 ): MissionRailStage[] {
@@ -182,7 +243,8 @@ export function buildMissionRailStages(
       : "existing scenario snapshot state";
 
   return MISSION_RAIL_LABELS.map((label, index) => {
-    const state: MissionRailStageState =
+    const stageSignalState = getStageSignalState(input, label);
+    const baseState: MissionRailStageState =
       activeStageIndex < 0 || (!sources[index] && index > activeStageIndex)
         ? "pending"
         : index < activeStageIndex
@@ -190,6 +252,11 @@ export function buildMissionRailStages(
           : index === activeStageIndex
             ? "active"
             : "pending";
+    const state: MissionRailStageState =
+      stageSignalState &&
+      (activeStageIndex < 0 || index <= activeStageIndex || baseState === "active")
+        ? stageSignalState
+        : baseState;
 
     return {
       index,

@@ -1,12 +1,13 @@
 # Meridian Dashboard
 
-Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, prepared disclosure preview metadata, and browser-native disclosure preview print/save-to-PDF. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, shared local `/api/authority-requests` endpoint behavior, and AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`. V2-C adds the dashboard-local Demo Presentation Layer for Mission presentation, choreography, legibility, and reliability over existing proof.
+Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, prepared disclosure preview metadata, and browser-native disclosure preview print/save-to-PDF. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, shared local `/api/authority-requests` endpoint behavior, and AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`. V2-C adds the dashboard-local Demo Presentation Layer for Mission presentation, choreography, legibility, and reliability over existing proof. The V2-B Demo UI Clarity pass hardens that dashboard into a Presenter Cockpit default without removing shipped proof tools.
 
 ## Scope
 
 - reads committed scenario snapshots from `public/scenarios/*.json`
 - renders the local control-room shell with Wave 9 demo hardening
 - renders the V2-C Mission presentation skin, Mission Rail, HOLD Wall, Absence Lens presentation overlay, Decision Counter, Demo Audit Wall, Doctrine Card, reliability panel, and SyncPill
+- defaults the first screen to a Presenter Cockpit with compact demo anchor, current decision/HOLD focal card, six-stage process rail, compact safety explanation, and grouped proof tools
 - stays consumption-only over Wave 8 replay output, including `step.skins.outputs`
 - keeps Director Mode and Absence Lens view-only over committed payload truth
 - keeps snapshot mode as the default dashboard mode
@@ -138,6 +139,31 @@ Packet 1 added the CI verification workflow and dashboard mobile/accessibility p
 
 This lane does not close mobile/judge proof, full authority choreography proof, clean logout proof, deploy-hook cleanup proof, OpenFGA/CIBA/notification/legal/public-portal behavior, production city behavior, or final V2-B closeout.
 
+## V2-B Demo UI Clarity / Presenter View
+
+The Presenter View hardening pass is recorded in:
+
+- `../docs/closeouts/MERIDIAN_V2B_DEMO_UI_CLARITY_CLOSEOUT.md`
+
+Shipped dashboard-local hierarchy:
+
+- Presenter Cockpit is the default first-screen hierarchy.
+- Fictional Demo Permit #4471 is a compact synthetic demo anchor with no private address and no city record claim.
+- Current decision / current HOLD is the primary focal card.
+- Capture, Authority, Governance, Absence, Chain, and Public render as a six-stage process rail.
+- Engineer Mode, Director Mode, Absence Lens, Audit Wall, and HOLD Wall are grouped behind Proof Tools by default.
+- Decision counts are secondary Outcome Summary / Decision Summary proof.
+- "Why this is safe" keeps HOLD > GUESS doctrine compact.
+
+Current floor after this pass:
+
+- dashboard tests `285/285`
+- repo-wide JS tests `719/719`
+- dashboard typecheck green
+- dashboard build green
+
+This pass does not widen root/shared contracts, does not add a `MIGRATIONS.md` row, and does not modify dashboard scenarios, package files, Auth0, Vercel, env, deploy, config, secret, security, or root runtime surfaces.
+
 ## V2-C Demo Presentation Layer Posture
 
 V2-C is recorded in:
@@ -171,7 +197,7 @@ Demo support artifacts:
 
 Current V2-C floor:
 
-- dashboard tests `283/283`
+- dashboard tests `285/285`
 - repo-wide JS tests `719/719`
 - dashboard typecheck green
 - dashboard build green

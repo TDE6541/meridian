@@ -17,12 +17,10 @@ export interface FictionalPermitAnchor {
 
 export const fictionalPermitAnchor: FictionalPermitAnchor = {
   boundary:
-    "Fictional demo boundary: invented case, no private address, no city record, no public-record status, and no workflow status is asserted.",
-  context:
-    "Fort Worth-flavored corridor repair story near a named commercial corridor, using synthetic facts only.",
-  fictionLabel: "Fictional demo anchor",
-  foremanReference:
-    "Fictional demo Foreman display reference: Fictional Demo Permit #4471 is visible through the Mission presentation display path only.",
+    "No private address. No city record. Demo-only framing.",
+  context: "Synthetic case.",
+  fictionLabel: "Demo anchor",
+  foremanReference: "Presenter display reference only.",
   roleFrames: [
     {
       label: "Council",

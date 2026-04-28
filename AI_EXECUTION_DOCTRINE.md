@@ -92,6 +92,7 @@ docs/
   closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md
   closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md
   closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md
+  closeouts/MERIDIAN_V2B_DEMO_UI_CLARITY_CLOSEOUT.md
   closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
   specs/MERIDIAN_V1_FINAL_TRUTH.md
@@ -139,7 +140,8 @@ dashboard/
 - Treat V2-B/GARP Authority Runway as a local G1-G5 sublane only.
 - Treat V2-B Foreman/Auth local proof cockpit as local/pre-deployment guide/explainer truth, with AUTH-5 deployed Vercel/Auth0 demo proof recorded separately.
 - Treat mobile/judge device proof, full authority choreography proof, clean logout proof, deploy hook cleanup proof, and final V2-B closeout as HOLD until Tim supplies proof.
-- Treat V2-C Demo Presentation Layer as dashboard-local presentation/choreography/reliability truth recorded in `docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md` and `docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`; DEMO-1 through DEMO-10 are implementation-complete, dashboard `283/283` and repo-wide JS `719/719` are the current floor, and eval warm-tabs, phone smoke, full authority choreography screenshots, Walk-mode MP4 proof, clean logout proof, deploy-hook cleanup proof, and final V2-B closeout remain HOLD.
+- Treat V2-C Demo Presentation Layer as dashboard-local presentation/choreography/reliability truth recorded in `docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md` and `docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`; DEMO-1 through DEMO-10 are implementation-complete.
+- Treat V2-B Demo UI Clarity as presenter hierarchy truth recorded in `docs/closeouts/MERIDIAN_V2B_DEMO_UI_CLARITY_CLOSEOUT.md`; dashboard `285/285` and repo-wide JS `719/719` are the current floor, and eval warm-tabs, phone smoke, full authority choreography screenshots, Walk-mode MP4 proof, clean logout proof, deploy-hook cleanup proof, screenshot-level visual proof, and final V2-B closeout remain HOLD.
 - Keep scope locked to the approved block.
 - Preserve canon alignment across root documents.
 - Treat upstream references as references unless their contents are available in this repo.
@@ -157,7 +159,7 @@ dashboard/
 - Describe V2-A only as local/demo-day live session, gateway/projection, JSON-only HoldPoint adapter, live absence, optional local Live Mode, local seed/corridor, and replay surfaces. Do not describe V2-A as production behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, live Auth0/OpenFGA integration, live Whisper/audio ingestion, legal certification, dashboard-side truth computation, Foreman behavior, or V2-B behavior.
 - Describe V2-B/GARP only as local Authority Runway surfaces: dashboard-local Auth0 Universal Login role-session proof, deterministic local authority request/evaluation/store contracts, local lifecycle/action record behavior, dashboard authority cockpit, payload-only notification builder, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. Do not describe it as full V2-B Foreman closure, Foreman behavior, production auth, live OpenFGA behavior, CIBA, delivered notifications, public portal behavior, legal/TPIA sufficiency, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
 - Describe V2-B Foreman/Auth as local/pre-deployment dashboard proof cockpit behavior plus AUTH-5 deployed demo proof only: deterministic guide context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native voice fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, shared local `/api/authority-requests` endpoint behavior, stable Vercel demo URL, Auth0 hosted login/callback return, and two eval-role session mappings. Do not describe it as production-ready, live-city integrated, legally sufficient, public-portal backed, OpenFGA-backed, CIBA-backed, notification-sending, model/API-backed, externally voice-serviced, Whisper/audio-upload backed, or final V2-B closeout.
-- Describe V2-C only as dashboard-local presentation/choreography/reliability over existing proof: Mission presentation skin, Mission Rail, Fictional Demo Permit #4471, HOLD Wall, Absence Lens presentation overlay, Decision Counter, Demo Audit Wall, Foreman audio identity, Disclosure Receipt, Doctrine Card, reliability panel/runbook/checklists, SyncPill, approval pulse, and vibration fallback. Do not describe it as runtime behavior, shared contract widening, protected-surface widening, production city behavior, legal/TPIA/TRAIGA sufficiency, official Fort Worth workflow, public portal behavior, live OpenFGA, CIBA, delivered notifications, model/API-backed Foreman, external voice service, Whisper/audio upload/transcription, or manual proof completion.
+- Describe V2-C only as dashboard-local presentation/choreography/reliability over existing proof: Mission presentation skin, Mission Rail, Fictional Demo Permit #4471, HOLD Wall, Absence Lens presentation overlay, Decision Counter, Demo Audit Wall, Foreman audio identity, Disclosure Receipt, Doctrine Card, reliability panel/runbook/checklists, SyncPill, approval pulse, and vibration fallback. Describe V2-B Demo UI Clarity only as presenter hierarchy over existing dashboard proof: Presenter Cockpit default, compact demo anchor, current decision/HOLD focal card, six-stage process rail, grouped proof tools, secondary decision summary, and compact safety card. Do not describe either as runtime behavior, shared contract widening, protected-surface widening, production city behavior, legal/TPIA/TRAIGA sufficiency, official Fort Worth workflow, public portal behavior, live OpenFGA, CIBA, delivered notifications, model/API-backed Foreman, external voice service, Whisper/audio upload/transcription, or manual proof completion.
 
 ## Planning Gate
 
@@ -182,7 +184,7 @@ dashboard/
 - Do not overstate V2-A local/demo-day surfaces as deployed, official, legally certified, live-broker-backed, auth-wired, audio-backed, Foreman-enabled, or V2-B behavior.
 - Do not overstate V2-B/GARP local runway surfaces as Foreman-enabled, production, legally sufficient, OpenFGA-backed, CIBA-backed, notification-delivering, or official city workflow behavior.
 - Do not overstate V2-B Foreman/Auth proof cockpit surfaces as production, legally sufficient, OpenFGA-backed, CIBA-backed, notification-sending, model-backed, external-voice-backed, or official city workflow behavior; AUTH-5 deployed proof is bounded to demo URL/login/callback/role-session evidence.
-- Do not overstate V2-C presentation surfaces as new governance, authority, forensic, absence, skin, city, legal, auth, deploy, or production truth.
+- Do not overstate V2-C or V2-B Demo UI Clarity presentation surfaces as new governance, authority, forensic, absence, skin, city, legal, auth, deploy, or production truth.
 - Stop if repo truth conflicts with the approved task.
 
 ## Verification Rules
@@ -212,7 +214,7 @@ dashboard/
 - V2-B/GARP adds a local authority contract family recorded in `MIGRATIONS.md`; literal contract strings must only be claimed when present in source.
 - V2-B/GARP does not widen V1 contracts, V2-A contracts, LiveFeedEvent kinds, ForensicChain vocabulary, root package dependencies, OpenFGA behavior, production auth posture, delivered notifications, public portal behavior, or legal/TPIA claims.
 - V2-B Foreman/Auth B1-B6 adds dashboard-local guide/explainer strings only. No B7 migration row is required unless a later approved packet promotes those strings into root/shared runtime contracts.
-- V2-C adds dashboard-local presentation, choreography, and reliability surfaces only. No V2-C migration row is required unless a later approved packet promotes a shared/root contract or protected surface.
+- V2-C adds dashboard-local presentation, choreography, and reliability surfaces only. V2-B Demo UI Clarity adds dashboard-local presenter hierarchy only. No V2-C or Demo UI Clarity migration row is required unless a later approved packet promotes a shared/root contract or protected surface.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 

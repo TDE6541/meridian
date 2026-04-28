@@ -38,6 +38,10 @@ const tests = [
       const markup = renderMarkup(<ControlRoomShell records={records} />);
 
       assert.equal(markup.includes('data-responsive-shell="projector-safe"'), true);
+      assert.equal(markup.includes('data-presenter-view-default="true"'), true);
+      assert.equal(markup.includes('data-current-decision-card="true"'), true);
+      assert.equal(markup.includes('data-primary-action-row="presenter"'), true);
+      assert.equal(markup.includes('data-secondary-proof-summary="true"'), true);
       assert.equal(markup.includes('data-demo-header="local"'), true);
       assert.equal(markup.includes('data-shortcuts-help="visible"'), true);
       assert.equal(markup.includes("Local demo control room"), true);
@@ -65,6 +69,9 @@ const tests = [
       assert.equal(styles.includes(".live-connection-banner"), true);
       assert.equal(styles.includes(".skin-tab"), true);
       assert.equal(styles.includes(".control-button,"), true);
+      assert.equal(styles.includes(".mission-current-card__facts"), true);
+      assert.equal(styles.includes(".mission-proof-tools"), true);
+      assert.equal(styles.includes(".mission-primary-actions__button"), true);
     },
   },
   {

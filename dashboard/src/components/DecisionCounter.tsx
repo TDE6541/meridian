@@ -6,10 +6,14 @@ export interface DecisionCounterProps {
 
 export function DecisionCounter({ view }: DecisionCounterProps) {
   return (
-    <section className="decision-counter" data-decision-counter={view.label}>
+    <section
+      className="decision-counter"
+      data-decision-counter={view.label}
+      data-decision-summary="secondary"
+    >
       <div className="decision-counter__header">
-        <p>Demo Run</p>
-        <h2>Decision Counter</h2>
+        <p>Outcome Summary</p>
+        <h2>Decision Summary</h2>
         <span>{view.sourceSummary}</span>
       </div>
       <div className="decision-counter__grid">

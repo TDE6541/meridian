@@ -169,15 +169,19 @@ async function buildSnapshotMissionFixture(activeStepIndex = 0) {
 
 const tests = [
   {
-    name: "mission presentation is the default view and Engineer Mode keeps the cockpit behind it",
+    name: "Presenter View is the default and Engineer Mode keeps the cockpit behind it",
     run: async () => {
       const records = await loadAllScenarioRecords();
       const markup = renderMarkup(<ControlRoomShell records={records} />);
 
       assert.equal(markup.includes('data-presentation-mode="mission"'), true);
       assert.equal(markup.includes('data-mission-presentation="active"'), true);
+      assert.equal(markup.includes('data-presenter-view-default="true"'), true);
       assert.equal(markup.includes('data-engineer-cockpit="hidden"'), true);
-      assert.equal(markup.includes("Mission Control"), true);
+      assert.equal(markup.includes("Presenter Cockpit"), true);
+      assert.equal(markup.includes("Proof Tools"), true);
+      assert.equal(markup.includes('data-proof-tools="collapsed-by-default"'), true);
+      assert.equal(markup.includes('data-current-decision-card="true"'), true);
       assert.equal(markup.includes("Engineer Mode"), true);
       assert.equal(markup.includes("Local demo control room"), true);
     },
@@ -192,7 +196,7 @@ const tests = [
 
       assert.equal(markup.includes('data-presentation-mode="engineer"'), true);
       assert.equal(markup.includes('data-engineer-cockpit="visible"'), true);
-      assert.equal(markup.includes("Mission View"), true);
+      assert.equal(markup.includes("Presenter View"), true);
       assert.equal(markup.includes("Local demo control room"), true);
       assert.equal(markup.includes("Snapshot remains the default stable path"), true);
     },
@@ -217,7 +221,7 @@ const tests = [
     },
   },
   {
-    name: "mission shell opens Demo Audit Wall from Mission presentation",
+    name: "mission shell opens Demo Audit Wall from grouped Proof Tools",
     run: async () => {
       const props = await buildSnapshotMissionFixture();
       const openRequests: string[] = [];
@@ -258,11 +262,13 @@ const tests = [
     },
   },
   {
-    name: "Decision Counter renders unsupported category handling with source note",
+    name: "Decision Summary renders unsupported category handling with source note",
     run: () => {
       const view = buildDecisionCounter([]);
       const markup = renderMarkup(<DecisionCounter view={view} />);
 
+      assert.equal(markup.includes('data-decision-summary="secondary"'), true);
+      assert.equal(markup.includes("Decision Summary"), true);
       assert.equal(markup.includes('data-decision-counter-category="blocked"'), true);
       assert.equal(markup.includes(">0</strong>"), true);
       assert.equal(
@@ -325,19 +331,18 @@ const tests = [
     },
   },
   {
-    name: "mission rail transitions from existing scenario step state",
+    name: "mission rail highlights HOLD/REVOKE state from existing scenario step state",
     run: async () => {
       const first = await buildSnapshotMissionFixture(0);
-      const final = await buildSnapshotMissionFixture(4);
+      const final = await buildSnapshotMissionFixture(3);
       const firstActive = first.missionRailStages.find((stage) => stage.state === "active");
-      const finalActive = final.missionRailStages.find((stage) => stage.state === "active");
+      const firstHold = first.missionRailStages.find((stage) => stage.state === "hold");
+      const finalRevoke = final.missionRailStages.find((stage) => stage.state === "revoke");
 
-      assert.equal(firstActive?.label, "Capture");
-      assert.equal(finalActive?.label, "Public");
-      assert.equal(
-        final.missionRailStages.filter((stage) => stage.state === "complete").length,
-        5
-      );
+      assert.equal(firstActive?.label, undefined);
+      assert.equal(firstHold?.label, "Governance");
+      assert.equal(finalRevoke?.label, "Governance");
+      assert.equal(final.missionRailStages.some((stage) => stage.state === "complete"), true);
     },
   },
   {
@@ -422,10 +427,11 @@ const tests = [
       const lowerMarkup = markup.toLowerCase();
 
       assert.equal(markup.includes(fictionalPermitAnchor.title), true);
-      assert.equal(markup.includes("Fictional demo anchor"), true);
-      assert.equal(markup.includes("Fictional demo Foreman display reference"), true);
-      assert.equal(markup.includes("no private address"), true);
-      assert.equal(markup.includes("no city record"), true);
+      assert.equal(markup.includes("Demo anchor"), true);
+      assert.equal(markup.includes("Synthetic case."), true);
+      assert.equal(lowerMarkup.includes("no private address"), true);
+      assert.equal(lowerMarkup.includes("no city record"), true);
+      assert.equal(lowerMarkup.includes("demo-only framing"), true);
 
       for (const label of ["Council", "Permitting", "Inspection", "Operations", "Public"]) {
         assert.equal(markup.includes(`data-fictional-permit-role="${label}"`), true, label);
@@ -433,6 +439,52 @@ const tests = [
 
       assert.equal(lowerMarkup.includes("official"), false);
       assert.equal(lowerMarkup.includes("real permit"), false);
+    },
+  },
+  {
+    name: "current decision focal card renders source-bounded proof path and Foreman guide boundary",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture(0);
+      const markup = renderMarkup(
+        <MissionPresentationShell
+          {...props}
+          engineerMode={false}
+          onEngineerModeChange={() => undefined}
+        />
+      );
+
+      assert.equal(markup.includes('data-current-decision-card="true"'), true);
+      assert.equal(markup.includes('data-current-decision-state="HOLD"'), true);
+      assert.equal(markup.includes("Current decision / HOLD"), true);
+      assert.equal(markup.includes("Why it matters"), true);
+      assert.equal(markup.includes("Proof available next"), true);
+      assert.equal(markup.includes('data-foreman-presenter-note="guide-only"'), true);
+      assert.equal(markup.includes("It does not create truth."), true);
+    },
+  },
+  {
+    name: "advanced proof tools are grouped by default and still expose required proof views",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture(0);
+      const markup = renderMarkup(
+        <MissionPresentationShell
+          {...props}
+          engineerMode={false}
+          onEngineerModeChange={() => undefined}
+        />
+      );
+
+      assert.equal(markup.includes('data-proof-tools="collapsed-by-default"'), true);
+      assert.equal(markup.includes("<summary>Proof Tools</summary>"), true);
+      for (const label of [
+        "Engineer Mode",
+        "Director Mode",
+        "Absence Lens",
+        "Audit Wall",
+        "HOLD Wall",
+      ]) {
+        assert.equal(markup.includes(label), true, label);
+      }
     },
   },
   {
