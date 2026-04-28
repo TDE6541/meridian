@@ -23,6 +23,7 @@ import {
   shouldIgnoreDemoShortcutTarget,
 } from "../demo/demoShortcuts.ts";
 import { getDemoScenarioMeta } from "../demo/demoScenarios.ts";
+import { buildMissionRailStages } from "../demo/missionRail.ts";
 import { CascadeChoreography } from "./CascadeChoreography.tsx";
 import { EntityRelationshipGraph } from "./EntityRelationshipGraph.tsx";
 import { EntityRelationshipStrip } from "./EntityRelationshipStrip.tsx";
@@ -35,6 +36,7 @@ import {
   LiveModeToggle,
   type DashboardMode,
 } from "./LiveModeToggle.tsx";
+import { MissionPresentationShell } from "./MissionPresentationShell.tsx";
 import { PlaybackControls } from "./PlaybackControls.tsx";
 import { RoleSessionPanel } from "./RoleSessionPanel.tsx";
 import { ScenarioSelector } from "./ScenarioSelector.tsx";
@@ -81,10 +83,13 @@ import type { ControlRoomScenarioRecord } from "../state/controlRoomState.ts";
 
 const PLAYBACK_INTERVAL_MS = 2400;
 
+export type ControlRoomPresentationMode = "engineer" | "mission";
+
 export interface ControlRoomShellProps {
   initialControlState?: Partial<ControlRoomState>;
   initialDashboardMode?: DashboardMode;
   initialDirectorModeEnabled?: boolean;
+  initialPresentationMode?: ControlRoomPresentationMode;
   liveClient?: LiveProjectionClient;
   liveSessionId?: string;
   records: readonly ControlRoomScenarioRecord[];
@@ -126,6 +131,7 @@ export function ControlRoomShell({
   initialControlState,
   initialDashboardMode = "snapshot",
   initialDirectorModeEnabled = false,
+  initialPresentationMode = "mission",
   liveClient,
   liveSessionId = "latest",
   records,
@@ -139,6 +145,8 @@ export function ControlRoomShell({
   const [directorModeEnabled, setDirectorModeEnabled] = useState(
     initialDirectorModeEnabled
   );
+  const [presentationMode, setPresentationMode] =
+    useState<ControlRoomPresentationMode>(initialPresentationMode);
   const [foremanHighlightedPanelId, setForemanHighlightedPanelId] = useState<
     string | null
   >(null);
@@ -276,6 +284,16 @@ export function ControlRoomShell({
           : [],
     },
   });
+  const missionRailStages = buildMissionRailStages({
+    activeStepIndex: controlState.activeStepIndex,
+    authorityState,
+    currentStep,
+    dashboardMode,
+    forensicChain: forensicChainView,
+    liveProjection: liveProjection.projection,
+    publicSkinView,
+    totalSteps,
+  });
 
   useEffect(() => {
     if (controlState.playbackState !== "playing" || totalSteps === 0) {
@@ -405,23 +423,53 @@ export function ControlRoomShell({
   return (
     <section
       className="control-room-shell control-room-shell--projector"
+      data-presentation-mode={presentationMode}
       data-responsive-shell="projector-safe"
     >
-      <DemoHeader
-        activeOutcome={currentStep?.decision ?? null}
+      <MissionPresentationShell
+        absenceLens={absenceLensView}
         activeSkinLabel={activeSkinLabel}
         activeStepLabel={activeStepLabel}
+        authorityState={authorityState}
+        currentStep={currentStep}
+        dashboardMode={dashboardMode}
         dataVersion={dataVersion}
+        engineerMode={presentationMode === "engineer"}
+        errorCount={errorCount}
+        forensicChain={forensicChainView}
+        missionRailStages={missionRailStages}
+        onEngineerModeChange={(enabled) =>
+          setPresentationMode(enabled ? "engineer" : "mission")
+        }
+        publicSkinView={publicSkinView}
+        readyCount={readyCount}
+        roleSession={roleSession}
         scenarioDescription={scenarioMeta.description}
         scenarioLabel={scenarioMeta.displayLabel}
         scenarioStatus={getScenarioStatusLabel(selectedRecord)}
+        totalSteps={totalSteps}
       />
 
-      <LiveModeToggle mode={dashboardMode} onModeChange={setDashboardMode} />
+      <div
+        className="engineer-cockpit"
+        data-engineer-cockpit={presentationMode === "engineer" ? "visible" : "hidden"}
+        hidden={presentationMode !== "engineer"}
+      >
+        <DemoHeader
+          activeOutcome={currentStep?.decision ?? null}
+          activeSkinLabel={activeSkinLabel}
+          activeStepLabel={activeStepLabel}
+          dataVersion={dataVersion}
+          scenarioDescription={scenarioMeta.description}
+          scenarioLabel={scenarioMeta.displayLabel}
+          scenarioStatus={getScenarioStatusLabel(selectedRecord)}
+        />
 
-      <RoleSessionPanel auth={authState} roleSession={roleSession} />
+        <LiveModeToggle mode={dashboardMode} onModeChange={setDashboardMode} />
 
-      <div className="control-room-toolbar">
+        <RoleSessionPanel auth={authState} roleSession={roleSession} />
+
+        <div className="control-room-toolbar">
         <ScenarioSelector
           records={records}
           selectedScenarioKey={controlState.selectedScenarioKey}
@@ -656,6 +704,7 @@ export function ControlRoomShell({
         dataVersion={dataVersion}
         scenarioId={scenarioId}
       />
+      </div>
     </section>
   );
 }

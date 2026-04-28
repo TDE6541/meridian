@@ -1857,6 +1857,200 @@ kbd {
   word-break: break-word;
 }
 
+.engineer-cockpit {
+  display: grid;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.engineer-cockpit[hidden] {
+  display: none;
+}
+
+.mission-presentation {
+  --mission-navy: #0A1628;
+  --mission-off-white: #E8EDF2;
+  --mission-amber-warning: #F5B547;
+  --mission-fault-red: #E5484D;
+  --mission-dim-green-status: #3DD68C;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(232, 237, 242, 0.18);
+  border-radius: 8px;
+  background: var(--mission-navy);
+  color: var(--mission-off-white);
+  font-family: "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  box-shadow: 0 18px 42px rgba(10, 22, 40, 0.22);
+}
+
+.mission-presentation__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: start;
+}
+
+.mission-presentation__eyebrow,
+.mission-presentation__readout span,
+.mission-presentation__card span,
+.mission-rail__state,
+.mission-rail__source {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+}
+
+.mission-presentation__eyebrow,
+.mission-presentation__readout span,
+.mission-presentation__card span,
+.mission-rail__source {
+  color: rgba(232, 237, 242, 0.68);
+}
+
+.mission-presentation h1 {
+  margin: 0.25rem 0 0;
+  color: #ffffff;
+  font-size: 2rem;
+  line-height: 1.05;
+}
+
+.mission-presentation__summary {
+  max-width: 66rem;
+  margin: 0.65rem 0 0;
+  color: rgba(232, 237, 242, 0.78);
+}
+
+.mission-presentation__mode-toggle {
+  min-height: 2.5rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid rgba(245, 181, 71, 0.58);
+  border-radius: 8px;
+  background: rgba(245, 181, 71, 0.12);
+  color: var(--mission-amber-warning);
+  cursor: pointer;
+}
+
+.mission-presentation__mode-toggle[aria-pressed="true"] {
+  border-color: rgba(61, 214, 140, 0.58);
+  color: var(--mission-dim-green-status);
+}
+
+.mission-presentation__mode-toggle:focus-visible {
+  outline-color: var(--mission-fault-red);
+}
+
+.mission-presentation__status-grid,
+.mission-presentation__telemetry {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.mission-presentation__status-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.mission-presentation__telemetry {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.mission-presentation__readout,
+.mission-presentation__card,
+.mission-rail__stage {
+  min-width: 0;
+  border: 1px solid rgba(232, 237, 242, 0.14);
+  border-radius: 8px;
+  background: rgba(232, 237, 242, 0.055);
+}
+
+.mission-presentation__readout,
+.mission-presentation__card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.75rem;
+}
+
+.mission-presentation__readout strong,
+.mission-presentation__card strong {
+  color: #ffffff;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+
+.mission-presentation__readout em,
+.mission-presentation__card em {
+  color: rgba(232, 237, 242, 0.7);
+  font-size: 0.76rem;
+  font-style: normal;
+  overflow-wrap: anywhere;
+}
+
+.mission-rail__list {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mission-rail__stage {
+  position: relative;
+  display: grid;
+  gap: 0.35rem;
+  min-height: 8rem;
+  padding: 0.75rem;
+}
+
+.mission-rail__stage::before {
+  content: "";
+  position: absolute;
+  inset: 0.45rem auto auto 0.45rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: rgba(232, 237, 242, 0.36);
+}
+
+.mission-rail__stage--complete {
+  border-color: rgba(61, 214, 140, 0.38);
+}
+
+.mission-rail__stage--complete::before {
+  background: var(--mission-dim-green-status);
+}
+
+.mission-rail__stage--active {
+  border-color: rgba(245, 181, 71, 0.72);
+  background: rgba(245, 181, 71, 0.12);
+}
+
+.mission-rail__stage--active::before {
+  background: var(--mission-amber-warning);
+}
+
+.mission-rail__stage--pending .mission-rail__state {
+  color: var(--mission-fault-red);
+}
+
+.mission-rail__index {
+  justify-self: end;
+  color: rgba(232, 237, 242, 0.58);
+  font-size: 0.78rem;
+}
+
+.mission-rail__label {
+  align-self: end;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mission-rail__state {
+  color: var(--mission-amber-warning);
+}
+
 @media (max-width: 1380px) {
   .demo-header,
   .control-room-toolbar,
@@ -1878,6 +2072,9 @@ kbd {
 
   .skin-switcher__tablist,
   .skin-panel__header,
+  .mission-presentation__status-grid,
+  .mission-presentation__telemetry,
+  .mission-rail__list,
     .demo-header__facts,
     .live-capture-panel__latest,
     .live-event-card__facts,
@@ -1969,6 +2166,10 @@ kbd {
     align-items: flex-start;
   }
 
+  .mission-presentation__header {
+    grid-template-columns: 1fr;
+  }
+
   .governance-card .panel-heading,
   .timeline-panel .panel-heading,
   .live-capture-panel .panel-heading {
@@ -2001,7 +2202,8 @@ kbd {
 
   .control-button,
   .foreman-guide-panel__chip,
-  .foreman-guide-panel__mode-button {
+  .foreman-guide-panel__mode-button,
+  .mission-presentation__mode-toggle {
     justify-content: center;
     width: 100%;
   }
