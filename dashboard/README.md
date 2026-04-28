@@ -159,6 +159,8 @@ Shipped dashboard-local surfaces:
 
 Demo support artifacts:
 
+- `../docs/demo/DEMO_DAY_COMMANDER_PACKET.md`
+- `../docs/demo/DEMO_DAY_PROOF_CAPTURE_BOARD.md`
 - `public/demo/reliability-runbook.md`
 - `public/demo/print-instructions.md`
 - `public/demo/adversarial-qa-sealed-envelopes.md`
