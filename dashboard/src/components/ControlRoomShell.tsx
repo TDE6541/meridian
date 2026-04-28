@@ -22,6 +22,7 @@ import {
   resolveSkinShortcutKey,
   shouldIgnoreDemoShortcutTarget,
 } from "../demo/demoShortcuts.ts";
+import { buildDemoAuditWallView } from "../demo/demoAudit.ts";
 import { getDemoScenarioMeta } from "../demo/demoScenarios.ts";
 import { buildHoldWallView } from "../demo/holdWall.ts";
 import { buildMissionRailStages } from "../demo/missionRail.ts";
@@ -146,6 +147,7 @@ export function ControlRoomShell({
   const [directorModeEnabled, setDirectorModeEnabled] = useState(
     initialDirectorModeEnabled
   );
+  const [auditWallOpen, setAuditWallOpen] = useState(false);
   const [missionAbsenceLensEnabled, setMissionAbsenceLensEnabled] = useState(false);
   const [holdWallOpen, setHoldWallOpen] = useState(false);
   const [presentationMode, setPresentationMode] =
@@ -214,6 +216,7 @@ export function ControlRoomShell({
     pollIntervalMs: 5000,
   });
   const scenarioMeta = getDemoScenarioMeta(controlState.selectedScenarioKey);
+  const scenarioStatusLabel = getScenarioStatusLabel(selectedRecord);
   const activeStepLabel = currentStep
     ? `${currentStep.stepId} (${currentStep.index + 1}/${timelineSteps.length})`
     : totalSteps > 0
@@ -303,6 +306,12 @@ export function ControlRoomShell({
     currentStep,
     forensicChain: forensicChainView,
     publicSkinView,
+  });
+  const auditWallView = buildDemoAuditWallView({
+    roleSession,
+    scenarioLabel: scenarioMeta.displayLabel,
+    scenarioStatus: scenarioStatusLabel,
+    timelineSteps,
   });
 
   useEffect(() => {
@@ -441,6 +450,8 @@ export function ControlRoomShell({
         absenceLensEnabled={missionAbsenceLensEnabled}
         activeSkinLabel={activeSkinLabel}
         activeStepLabel={activeStepLabel}
+        auditWallOpen={auditWallOpen}
+        auditWallView={auditWallView}
         authorityState={authorityState}
         currentStep={currentStep}
         dashboardMode={dashboardMode}
@@ -454,6 +465,8 @@ export function ControlRoomShell({
         onAbsenceLensToggle={() =>
           setMissionAbsenceLensEnabled((current) => !current)
         }
+        onAuditWallDismiss={() => setAuditWallOpen(false)}
+        onAuditWallOpen={() => setAuditWallOpen(true)}
         onEngineerModeChange={(enabled) =>
           setPresentationMode(enabled ? "engineer" : "mission")
         }
@@ -468,7 +481,7 @@ export function ControlRoomShell({
         roleSession={roleSession}
         scenarioDescription={scenarioMeta.description}
         scenarioLabel={scenarioMeta.displayLabel}
-        scenarioStatus={getScenarioStatusLabel(selectedRecord)}
+        scenarioStatus={scenarioStatusLabel}
         totalSteps={totalSteps}
       />
 
@@ -484,7 +497,7 @@ export function ControlRoomShell({
           dataVersion={dataVersion}
           scenarioDescription={scenarioMeta.description}
           scenarioLabel={scenarioMeta.displayLabel}
-          scenarioStatus={getScenarioStatusLabel(selectedRecord)}
+          scenarioStatus={scenarioStatusLabel}
         />
 
         <LiveModeToggle mode={dashboardMode} onModeChange={setDashboardMode} />

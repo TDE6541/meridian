@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import React from "react";
 import {
   adaptStepSkinPayloads,
@@ -15,6 +16,12 @@ import {
 import { resolveAuth0DashboardConfig } from "../src/auth/authConfig.ts";
 import type { MeridianAuthState } from "../src/auth/MeridianAuthProvider.tsx";
 import { DisclosurePreviewPanel } from "../src/components/DisclosurePreviewPanel.tsx";
+import { DoctrineCard } from "../src/components/DoctrineCard.tsx";
+import {
+  DOCTRINE_CARD_DEMO_URL,
+  DOCTRINE_CARD_PRINCIPLES,
+  DOCTRINE_CARD_QR_NOTE,
+} from "../src/demo/doctrineCard.ts";
 import type { JsonObject } from "../src/live/liveTypes.ts";
 import { SkinPanel } from "../src/components/SkinPanel.tsx";
 import { resolveDashboardRoleSession } from "../src/roleSession/resolveRoleSession.ts";
@@ -393,7 +400,7 @@ const tests = [
           roleSession,
         });
         const panel = DisclosurePreviewPanel({ actionBundle: bundle, report });
-        const button = findButtonByText(panel, "Print / Save report");
+        const button = findButtonByText(panel, "Save Disclosure");
         const markup = renderMarkup(
           <DisclosurePreviewPanel actionBundle={bundle} report={report} />
         );
@@ -402,10 +409,10 @@ const tests = [
         assert.ok(button);
         assert.equal(
           button.props["aria-label"],
-          "Print / Save report using your browser print dialog"
+          "Save disclosure preview using your browser print dialog"
         );
         assert.equal(button.props.disabled, false);
-        assert.equal(markup.includes("Print / Save report"), true);
+        assert.equal(markup.includes("Save Disclosure"), true);
         assert.equal(
           markup.includes(
             "Opens your browser print dialog. Save as PDF from there if needed."
@@ -416,6 +423,12 @@ const tests = [
         button.props.onClick?.();
         assert.equal(printCalls, 1);
         assert.equal(markup.includes("restricted-demo-trace"), false);
+        assert.equal(markup.includes('data-print-surface="disclosure-receipt"'), true);
+        assert.equal(markup.includes('data-disclosure-receipt="demo-public-boundary"'), true);
+        assert.equal(markup.includes("Demo disclosure preview receipt"), true);
+        assert.equal(markup.includes("non-official"), true);
+        assert.equal(markup.includes("non-legal"), true);
+        assert.equal(markup.includes("public-boundary aware"), true);
         assert.equal(lowerMarkup.includes("tpia compliant"), false);
         assert.equal(lowerMarkup.includes("legal sufficiency"), false);
         assert.equal(lowerMarkup.includes("public portal"), false);
@@ -429,6 +442,42 @@ const tests = [
       } finally {
         restoreWindow();
       }
+    },
+  },
+  {
+    name: "disclosure receipt print CSS keeps public-safe print surfaces explicit",
+    run: async () => {
+      const styles = await readFile("src/styles.css", "utf8");
+
+      assert.equal(styles.includes('@media print'), true);
+      assert.equal(styles.includes('[data-disclosure-preview-panel="true"]'), true);
+      assert.equal(styles.includes('data-print-surface="disclosure-receipt"'), false);
+      assert.equal(styles.includes(".disclosure-receipt"), true);
+      assert.equal(styles.includes(".doctrine-card"), true);
+      assert.equal(styles.includes("width: 3.5in"), true);
+      assert.equal(styles.includes("min-height: 5in"), true);
+    },
+  },
+  {
+    name: "doctrine card renders print-ready handoff text without a fake QR",
+    run: () => {
+      const markup = renderMarkup(<DoctrineCard />);
+      const lowerMarkup = markup.toLowerCase();
+      const principles = [...markup.matchAll(/data-doctrine-principle="true"/g)];
+
+      assert.equal(markup.includes('data-doctrine-card-size="3.5x5"'), true);
+      assert.equal(markup.includes("HOLD &gt; GUESS"), true);
+      assert.equal(principles.length, 5);
+      for (const principle of DOCTRINE_CARD_PRINCIPLES) {
+        assert.equal(markup.includes(principle), true, principle);
+      }
+      assert.equal(markup.includes(DOCTRINE_CARD_DEMO_URL), true);
+      assert.equal(markup.includes(DOCTRINE_CARD_QR_NOTE), true);
+      assert.equal(lowerMarkup.includes("<img"), false);
+      assert.equal(lowerMarkup.includes("qr code"), false);
+      assert.equal(lowerMarkup.includes("legal sufficiency"), false);
+      assert.equal(lowerMarkup.includes("official city workflow"), false);
+      assert.equal(lowerMarkup.includes("production civic infrastructure"), false);
     },
   },
   {

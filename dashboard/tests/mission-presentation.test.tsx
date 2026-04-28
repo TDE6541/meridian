@@ -9,9 +9,15 @@ import {
 } from "../src/adapters/skinPayloadAdapter.ts";
 import { buildAuthorityDashboardState } from "../src/authority/authorityStateAdapter.ts";
 import { ControlRoomShell } from "../src/components/ControlRoomShell.tsx";
+import { DecisionCounter } from "../src/components/DecisionCounter.tsx";
+import { DemoAuditWall } from "../src/components/DemoAuditWall.tsx";
 import { HoldWall } from "../src/components/HoldWall.tsx";
 import { MissionPresentationShell } from "../src/components/MissionPresentationShell.tsx";
 import { MissionRail } from "../src/components/MissionRail.tsx";
+import {
+  buildDecisionCounter,
+  buildDemoAuditWallView,
+} from "../src/demo/demoAudit.ts";
 import { fictionalPermitAnchor } from "../src/demo/fictionalPermitAnchor.ts";
 import {
   buildHoldWallView,
@@ -109,12 +115,20 @@ async function buildSnapshotMissionFixture(activeStepIndex = 0) {
     publicSkinView,
     totalSteps: timelineSteps.length,
   });
+  const auditWallView = buildDemoAuditWallView({
+    roleSession,
+    scenarioLabel: "Contested authority",
+    scenarioStatus: record.scenario.status,
+    timelineSteps,
+  });
 
   return {
     absenceLens,
     absenceLensEnabled: false,
     activeSkinLabel: publicSkinView?.label ?? "Public",
     activeStepLabel: `${currentStep.stepId} (${activeStepIndex + 1}/${timelineSteps.length})`,
+    auditWallOpen: false,
+    auditWallView,
     authorityState,
     currentStep,
     dashboardMode: "snapshot" as const,
@@ -125,6 +139,8 @@ async function buildSnapshotMissionFixture(activeStepIndex = 0) {
     holdWallView,
     missionRailStages,
     onAbsenceLensToggle: () => undefined,
+    onAuditWallDismiss: () => undefined,
+    onAuditWallOpen: () => undefined,
     onHoldWallDismiss: () => undefined,
     onHoldWallOpen: () => undefined,
     publicSkinView,
@@ -184,6 +200,101 @@ const tests = [
       assert.ok(engineerButton);
       engineerButton.props.onClick();
       assert.deepEqual(requestedModes, [true]);
+    },
+  },
+  {
+    name: "mission shell opens Demo Audit Wall from Mission presentation",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture();
+      const openRequests: string[] = [];
+      const element = MissionPresentationShell({
+        ...props,
+        engineerMode: false,
+        onAuditWallOpen: () => openRequests.push("open"),
+        onEngineerModeChange: () => undefined,
+      });
+      const auditButton = collectButtons(element).find(
+        (button) => getElementText(button) === "Audit Wall"
+      );
+
+      assert.ok(auditButton);
+      auditButton.props.onClick();
+      assert.deepEqual(openRequests, ["open"]);
+    },
+  },
+  {
+    name: "Decision Counter matches existing source event decisions",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture(4);
+      const counts = Object.fromEntries(
+        props.auditWallView.counter.items.map((item) => [item.category, item.count])
+      );
+
+      assert.deepEqual(counts, {
+        blocked: 0,
+        held: 3,
+        made: 5,
+        revoked: 1,
+      });
+      assert.equal(props.auditWallView.counter.totalSourceDecisions, 5);
+      assert.equal(
+        props.auditWallView.counter.sourceSummary,
+        "Counts derive from existing scenario governance decision fields only."
+      );
+    },
+  },
+  {
+    name: "Decision Counter renders unsupported category handling with source note",
+    run: () => {
+      const view = buildDecisionCounter([]);
+      const markup = renderMarkup(<DecisionCounter view={view} />);
+
+      assert.equal(markup.includes('data-decision-counter-category="blocked"'), true);
+      assert.equal(markup.includes(">0</strong>"), true);
+      assert.equal(
+        markup.includes("No source-supported BLOCK outcomes are present in this scenario."),
+        true
+      );
+      assert.equal(
+        markup.includes("No source-supported governance decisions are present in this scenario."),
+        true
+      );
+    },
+  },
+  {
+    name: "Demo Audit Wall renders safe source columns and does not mutate chain state",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture(4);
+      const beforeEntryCount = props.forensicChain.totalEntryCount;
+      const markup = renderMarkup(
+        <DemoAuditWall
+          onDismiss={() => undefined}
+          open={true}
+          view={props.auditWallView}
+        />
+      );
+      const lowerMarkup = markup.toLowerCase();
+
+      assert.equal(props.forensicChain.totalEntryCount, beforeEntryCount);
+      assert.equal(markup.includes('data-demo-audit-wall="open"'), true);
+      assert.equal(markup.includes('data-demo-audit-ticker="true"'), true);
+      for (const column of ["ref/hash", "role", "action", "state/outcome", "timestamp"]) {
+        assert.equal(markup.includes(column), true, column);
+      }
+      assert.equal(markup.includes("Contested authority"), true);
+      assert.equal(markup.includes("public"), true);
+      assert.equal(markup.includes("REVOKE"), true);
+      assert.equal(markup.includes("2026-04-21T12:00:00Z"), true);
+      for (const forbidden of [
+        "public audit portal",
+        "official city audit wall",
+        "production audit log",
+        "legal record",
+        "public portal",
+        "restricted-demo-trace",
+      ]) {
+        assert.equal(lowerMarkup.includes(forbidden), false, forbidden);
+      }
     },
   },
   {
@@ -508,7 +619,12 @@ const tests = [
       const sourcePaths = [
         "src/components/ControlRoomShell.tsx",
         "src/components/MissionPresentationShell.tsx",
+        "src/components/DecisionCounter.tsx",
+        "src/components/DemoAuditWall.tsx",
+        "src/components/DoctrineCard.tsx",
         "src/components/HoldWall.tsx",
+        "src/demo/demoAudit.ts",
+        "src/demo/doctrineCard.ts",
         "src/demo/fictionalPermitAnchor.ts",
         "src/demo/holdWall.ts",
         "src/demo/missionAbsenceLens.ts",

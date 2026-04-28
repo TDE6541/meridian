@@ -4,10 +4,14 @@ import type { AuthorityDashboardStateV1 } from "../authority/authorityDashboardT
 import type { AbsenceLensView } from "../adapters/absenceSignalAdapter.ts";
 import type { DashboardRoleSessionProofV1 } from "../roleSession/roleSessionTypes.ts";
 import type { ControlRoomTimelineStep } from "../state/controlRoomState.ts";
+import type { DemoAuditWallView } from "../demo/demoAudit.ts";
 import { fictionalPermitAnchor } from "../demo/fictionalPermitAnchor.ts";
 import type { HoldWallView } from "../demo/holdWall.ts";
 import { buildMissionAbsenceLensOverlay } from "../demo/missionAbsenceLens.ts";
 import type { MissionRailStage } from "../demo/missionRail.ts";
+import { DecisionCounter } from "./DecisionCounter.tsx";
+import { DemoAuditWall } from "./DemoAuditWall.tsx";
+import { DoctrineCard } from "./DoctrineCard.tsx";
 import { HoldWall } from "./HoldWall.tsx";
 import { MissionRail } from "./MissionRail.tsx";
 
@@ -16,6 +20,8 @@ export interface MissionPresentationShellProps {
   absenceLensEnabled: boolean;
   activeSkinLabel: string;
   activeStepLabel: string;
+  auditWallOpen: boolean;
+  auditWallView: DemoAuditWallView;
   authorityState: AuthorityDashboardStateV1;
   currentStep: ControlRoomTimelineStep | null;
   dashboardMode: "live" | "snapshot";
@@ -27,6 +33,8 @@ export interface MissionPresentationShellProps {
   holdWallView: HoldWallView;
   missionRailStages: readonly MissionRailStage[];
   onAbsenceLensToggle: () => void;
+  onAuditWallDismiss: () => void;
+  onAuditWallOpen: () => void;
   onEngineerModeChange: (enabled: boolean) => void;
   onHoldWallDismiss: () => void;
   onHoldWallOpen: () => void;
@@ -48,6 +56,8 @@ export function MissionPresentationShell({
   absenceLensEnabled,
   activeSkinLabel,
   activeStepLabel,
+  auditWallOpen,
+  auditWallView,
   authorityState,
   currentStep,
   dashboardMode,
@@ -59,6 +69,8 @@ export function MissionPresentationShell({
   holdWallView,
   missionRailStages,
   onAbsenceLensToggle,
+  onAuditWallDismiss,
+  onAuditWallOpen,
   onEngineerModeChange,
   onHoldWallDismiss,
   onHoldWallOpen,
@@ -106,6 +118,14 @@ export function MissionPresentationShell({
             type="button"
           >
             Absence Lens
+          </button>
+          <button
+            aria-label="Open Demo Audit Wall"
+            className="mission-presentation__mode-toggle mission-presentation__mode-toggle--audit"
+            onClick={onAuditWallOpen}
+            type="button"
+          >
+            Audit Wall
           </button>
           <button
             aria-label="Open HOLD Wall"
@@ -165,6 +185,8 @@ export function MissionPresentationShell({
       </div>
 
       <MissionRail stages={missionRailStages} />
+
+      <DecisionCounter view={auditWallView.counter} />
 
       {absenceLensEnabled ? (
         <section
@@ -244,6 +266,14 @@ export function MissionPresentationShell({
           <em>{formatCount(errorCount, "error")}</em>
         </div>
       </div>
+
+      <DoctrineCard />
+
+      <DemoAuditWall
+        onDismiss={onAuditWallDismiss}
+        open={auditWallOpen}
+        view={auditWallView}
+      />
 
       <HoldWall
         onDismiss={onHoldWallDismiss}

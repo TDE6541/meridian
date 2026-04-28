@@ -117,6 +117,7 @@ export function DisclosurePreviewPanel({
       data-disclosure-preview-panel="true"
       data-foreman-panel-id="disclosure-preview"
       data-foreman-highlighted={foremanHighlighted ? "true" : "false"}
+      data-print-surface="disclosure-receipt"
     >
       <div className="panel-heading">
         <div>
@@ -130,15 +131,27 @@ export function DisclosurePreviewPanel({
 
       <p className="detail-copy">{report.disclaimer}</p>
 
+      <section
+        className="disclosure-receipt"
+        data-disclosure-receipt="demo-public-boundary"
+      >
+        <p>Demo disclosure preview receipt</p>
+        <div>
+          <span>non-official</span>
+          <span>non-legal</span>
+          <span>public-boundary aware</span>
+        </div>
+      </section>
+
       <div className="disclosure-preview-print-control">
         <button
-          aria-label="Print / Save report using your browser print dialog"
+          aria-label="Save disclosure preview using your browser print dialog"
           className="control-button control-button--primary"
           disabled={!printAvailable}
           onClick={handlePrintDisclosurePreview}
           type="button"
         >
-          Print / Save report
+          Save Disclosure
         </button>
         <span>
           {printAvailable
