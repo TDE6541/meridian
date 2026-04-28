@@ -1,11 +1,12 @@
 # Meridian Dashboard
 
-Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, prepared disclosure preview metadata, and browser-native disclosure preview print/save-to-PDF. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, shared local `/api/authority-requests` endpoint behavior, and AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`.
+Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, prepared disclosure preview metadata, and browser-native disclosure preview print/save-to-PDF. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, shared local `/api/authority-requests` endpoint behavior, and AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`. V2-C adds the dashboard-local Demo Presentation Layer for Mission presentation, choreography, legibility, and reliability over existing proof.
 
 ## Scope
 
 - reads committed scenario snapshots from `public/scenarios/*.json`
 - renders the local control-room shell with Wave 9 demo hardening
+- renders the V2-C Mission presentation skin, Mission Rail, HOLD Wall, Absence Lens presentation overlay, Decision Counter, Demo Audit Wall, Doctrine Card, reliability panel, and SyncPill
 - stays consumption-only over Wave 8 replay output, including `step.skins.outputs`
 - keeps Director Mode and Absence Lens view-only over committed payload truth
 - keeps snapshot mode as the default dashboard mode
@@ -18,6 +19,7 @@ Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional loca
 - prepares disclosure preview action metadata without browser side effects
 - renders the Foreman guide/explainer panel with deterministic offline narration
 - supports Foreman guided event binding, spatial awareness, panel highlighting, Gold modes, browser-native voice fallback, and deterministic avatar state
+- serves dashboard-local static Foreman audio cues and demo runbook/print instructions from committed public assets
 - emits visible HOLD messaging when Live Mode is disconnected, unavailable, or invalid
 - preserves logged-out snapshot mode when Auth0 env is missing
 - requires no secrets, live broker, or live network dependency for logged-out local snapshot demo after local dependencies are installed
@@ -37,6 +39,7 @@ Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional loca
 - no production identity or authorization behavior, live broker, live city integration, or live Constellation claim
 - no Foreman API, model call, external voice service, Whisper/audio upload/transcription, MediaRecorder/getUserMedia path, browser-exposed model API keys, or autonomous Foreman action
 - no legal determination, TPIA compliance, TRAIGA compliance, public-record completeness, public portal behavior, or official disclosure approval claim
+- no V2-C root/shared contract widening, protected runtime substrate edits, Auth0/Vercel/env/package/deploy/config/secret/security edits, or manual proof completion claim
 
 ## Local Commands
 
@@ -135,10 +138,54 @@ Packet 1 added the CI verification workflow and dashboard mobile/accessibility p
 
 This lane does not close mobile/judge proof, full authority choreography proof, clean logout proof, deploy-hook cleanup proof, OpenFGA/CIBA/notification/legal/public-portal behavior, production city behavior, or final V2-B closeout.
 
+## V2-C Demo Presentation Layer Posture
+
+V2-C is recorded in:
+
+- `../docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md`
+- `../docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`
+
+Shipped dashboard-local surfaces:
+
+- Mission presentation skin and Mission Rail
+- Fictional Demo Permit #4471
+- HOLD Wall and Absence Lens presentation overlay
+- Decision Counter and Demo Audit Wall
+- Foreman audio identity
+- Disclosure Receipt and Doctrine Card
+- reliability panel, reliability runbook, and checklists
+- SyncPill, approval pulse, and vibration fallback
+
+Demo support artifacts:
+
+- `public/demo/reliability-runbook.md`
+- `public/demo/print-instructions.md`
+- `public/audio/foreman/README.md`
+
+Current V2-C floor:
+
+- dashboard tests `283/283`
+- repo-wide JS tests `719/719`
+- dashboard typecheck green
+- dashboard build green
+
+V2-C does not widen root/shared contracts, does not add a `MIGRATIONS.md` row, and does not modify root governance/forensic/authority/live absence/root skins, dashboard scenarios, package, Auth0, Vercel, env, deploy, config, secret, or security surfaces.
+
+Remaining V2-C HOLDs:
+
+- eval account warm-tabs
+- phone smoke
+- full authority choreography screenshots
+- Walk-mode MP4 proof
+- clean logout proof
+- deploy-hook cleanup proof
+- final V2-B closeout
+
 ## Demo Posture
 
 - Demo playback reads committed local files only.
 - Snapshot mode remains default.
+- V2-C Mission presentation is the review-facing dashboard layer over existing proof.
 - Live Mode is optional/local and fail-closed.
 - No env vars are required for logged-out snapshot mode.
 - Auth0 login proof requires the documented `VITE_AUTH0_DOMAIN`, `VITE_AUTH0_CLIENT_ID`, and `VITE_AUTH0_CALLBACK_URL` values.

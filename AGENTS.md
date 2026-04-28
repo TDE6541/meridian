@@ -20,8 +20,10 @@ Meridian is a governed city digital twin intelligence repo.
 12. [`docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`](docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md)
 13. [`docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md)
 14. [`docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md)
-15. Relevant active-task specs in `docs/specs/`
-16. Relevant active-task closeouts in `docs/closeouts/`
+15. [`docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md`](docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md)
+16. [`docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md)
+17. Relevant active-task specs in `docs/specs/`
+18. Relevant active-task closeouts in `docs/closeouts/`
 
 ## Operating Posture
 
@@ -36,6 +38,8 @@ Meridian is a governed city digital twin intelligence repo.
 - Treat V2-A as local/demo-day extension truth only unless a later approved envelope widens it.
 - Treat V2-B/GARP Authority Runway as a local G1-G5 sublane only; it does not close full V2-B Foreman.
 - Treat V2-B Foreman/Auth local proof cockpit as shipped local/pre-deployment guide/explainer truth only; AUTH-5 deployed Vercel/Auth0 demo proof is recorded separately and remains a proof cockpit, not production civic infrastructure.
+- Treat V2-C Demo Presentation Layer as shipped dashboard-local presentation/choreography/reliability truth only; DEMO-1 through DEMO-10 are implementation-complete, no root/shared contracts were widened, and dashboard `283/283` plus repo-wide JS `719/719` is the current floor.
+- Treat V2-C manual proof items as HOLD: eval account warm-tabs, phone smoke, full authority choreography screenshots, Walk-mode MP4 proof, clean logout proof, deploy-hook cleanup proof, and final V2-B closeout.
 - Treat Foreman behavior beyond the shipped dashboard-local guide/explainer cockpit as gated until Tim approves a later widening packet.
 
 ## Codex Scope Note
@@ -52,3 +56,4 @@ Meridian is a governed city digital twin intelligence repo.
 - Do not claim production, live city integration, legal sufficiency, live broker proof, Auth0/OpenFGA, live Whisper/audio, or Foreman behavior without explicit shipped proof.
 - Do not claim live OpenFGA, CIBA, delivered notifications, public portal behavior, legal/TPIA sufficiency, official Fort Worth workflow, or full V2-B Foreman closure from the GARP Authority Runway.
 - Do not claim AUTH-5 deployed Vercel/Auth0 proof beyond `docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`; do not claim mobile/judge device proof, full authority choreography proof, clean logout proof, deploy hook cleanup, final V2-B closeout, model/API calls, external voice service, Whisper/audio upload/transcription, or browser-exposed model API keys from the B7/AUTH-5 proof cockpit.
+- Do not claim V2-C proves production city behavior, legal/TPIA/TRAIGA sufficiency, official Fort Worth workflow, public portal behavior, live OpenFGA, CIBA, delivered notifications, model/API-backed Foreman, external voice service, Whisper/audio upload/transcription, or any manual proof item still marked HOLD in `docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`.
