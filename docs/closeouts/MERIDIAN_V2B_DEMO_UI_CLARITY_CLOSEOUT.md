@@ -2,7 +2,7 @@
 
 ## Status
 
-PASS for local implementation and verification. Remote publication proof is recorded in the session closeout after commit and push.
+PASS for local implementation, verification, and Tim-supplied deployed visual proof. Remote publication proof for this update is recorded in the session closeout after commit and push.
 
 ## Purpose
 
@@ -70,7 +70,7 @@ This is a hierarchy, clarity, and demo legibility pass only.
 - PASS: no browser-exposed model API key was introduced.
 - PASS: no production city, legal, OpenFGA, CIBA, public portal, or notification-delivery claim was introduced.
 - PASS: remaining AUTH-5/V2-B HOLDs remain explicit.
-- HOLD: screenshot-level visual proof for desktop, 1280x720, and mobile-ish breakpoints was not captured in this run; responsive source/tests were verified.
+- PASS: screenshot-level visual proof for the UI clarity Presenter Cockpit pass is cleared by Tim-supplied manual deployed proof and screenshot capture report. No screenshot filenames, dimensions, mobile/judge-device smoke proof, or unrelated manual proof items are claimed by this update.
 
 ## Contract / Migration Status
 
@@ -100,6 +100,31 @@ No `MIGRATIONS.md` row is required.
 
 Static guard checks also found no new `step.skins.renders`, no dashboard browser import from root `src/skins/**`, and no new visible production/legal/live-city/OpenFGA/CIBA/notification/model/API claim in the touched presenter surfaces.
 
+## Deployed Visual Proof Update
+
+Proof source: Tim-supplied manual deployed proof and screenshot capture report.
+
+Deployed URL: `https://meridian-holdpoint.vercel.app`
+
+Status: PASS for deployed visual proof of the Presenter Cockpit.
+
+- PASS: deployed URL loads after the UI clarity commit `01e045ddf06acd3823b084b5cbfd66327c4d36f3`.
+- PASS: deployed Presenter Cockpit visible.
+- PASS: compact demo anchor visible.
+- PASS: current decision / HOLD focal card visible.
+- PASS: six-stage process rail visible.
+- PASS: grouped Proof Tools visible.
+- PASS: compact "Why this is safe" doctrine visible.
+- PASS: Foreman/GARP/Auth proof surfaces remain accessible.
+- PASS: screenshot-level visual proof captured for UI clarity.
+- HOLD: manual proof items outside UI clarity remain carried.
+
+This update does not claim mobile/judge-device smoke, full authority choreography, clean logout, deploy-hook cleanup, Walk-mode MP4 proof, OpenFGA, CIBA, notification delivery, legal/TPIA/TRAIGA sufficiency, public portal behavior, official Fort Worth workflow, production city behavior, or final V2-B closeout.
+
+## Cleared Prior HOLDs
+
+- CLEARED for this UI clarity pass only: screenshot-level proof for the new presenter hierarchy, based on Tim-supplied deployed visual proof and screenshot capture report.
+
 ## Remaining HOLDs
 
 - mobile / judge-device smoke proof
@@ -117,7 +142,6 @@ Static guard checks also found no new `step.skins.renders`, no dashboard browser
 - eval account warm-tabs
 - phone smoke
 - Walk-mode MP4 proof
-- screenshot-level proof for the new presenter hierarchy
 
 ## Explicit Non-Claims
 
@@ -131,10 +155,14 @@ PASS. `README.md`, `REPO_INDEX.md`, `CLAUDE.md`, `AI_EXECUTION_DOCTRINE.md`, `CO
 
 ## Next Action
 
-Capture optional screenshot-level proof for desktop wide, 1280x720, and mobile-ish breakpoints if Tim wants visual evidence beyond source/tests.
+Carry the remaining manual Demo Day proof HOLDs until Tim supplies separate evidence in a later approved proof-closeout lane.
 
 ## Signoff Status
 
-Implementation and local verification: PASS.
+Implementation, local verification, and deployed visual proof: PASS.
 
-Remote-backed signoff: verify by session-level `git push origin main` proof and `HEAD == origin/main`.
+Screenshot-level UI clarity HOLD: cleared for this UI clarity pass only.
+
+Remaining manual Demo Day proof HOLDs: carried.
+
+Remote-backed signoff for this update: verify by session-level `git push origin main` proof and `HEAD == origin/main`.
