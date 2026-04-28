@@ -91,6 +91,7 @@ docs/
   closeouts/MERIDIAN_V2A_CLOSEOUT.md
   closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md
   closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md
+  closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
   specs/MERIDIAN_V1_FINAL_TRUTH.md
   specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md
@@ -131,8 +132,8 @@ dashboard/
 - Do not create or describe Wave 10 as active V1 scope; there is no Wave 10 in V1.
 - Treat V2-A as a local/demo-day Meridian V2 extension with truth surfaces in `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md` and `docs/closeouts/MERIDIAN_V2A_CLOSEOUT.md`.
 - Treat V2-B/GARP Authority Runway as a local G1-G5 sublane only.
-- Treat V2-B Foreman/Auth local proof cockpit as local/pre-deployment guide/explainer truth only.
-- Treat deployed URL proof, live Auth0 callback/login proof, AUTH-5, and final V2-B closeout as HOLD until Tim supplies manual proof.
+- Treat V2-B Foreman/Auth local proof cockpit as local/pre-deployment guide/explainer truth, with AUTH-5 deployed Vercel/Auth0 demo proof recorded separately.
+- Treat mobile/judge device proof, full authority choreography proof, clean logout proof, deploy hook cleanup proof, and final V2-B closeout as HOLD until Tim supplies proof.
 - Keep scope locked to the approved block.
 - Preserve canon alignment across root documents.
 - Treat upstream references as references unless their contents are available in this repo.
@@ -149,7 +150,7 @@ dashboard/
 - Describe Meridian V1 only as completed local/proof infrastructure, not as a deployed production city system or legal certification.
 - Describe V2-A only as local/demo-day live session, gateway/projection, JSON-only HoldPoint adapter, live absence, optional local Live Mode, local seed/corridor, and replay surfaces. Do not describe V2-A as production behavior, live Fort Worth city integration, full Accela/GIS automation, live Constellation broker proof, live Auth0/OpenFGA integration, live Whisper/audio ingestion, legal certification, dashboard-side truth computation, Foreman behavior, or V2-B behavior.
 - Describe V2-B/GARP only as local Authority Runway surfaces: dashboard-local Auth0 Universal Login role-session proof, deterministic local authority request/evaluation/store contracts, local lifecycle/action record behavior, dashboard authority cockpit, payload-only notification builder, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. Do not describe it as full V2-B Foreman closure, Foreman behavior, production auth, live OpenFGA behavior, CIBA, delivered notifications, public portal behavior, legal/TPIA sufficiency, official Fort Worth workflow, ForensicChain vocabulary widening, or LiveFeedEvent kind widening.
-- Describe V2-B Foreman/Auth only as local/pre-deployment dashboard proof cockpit behavior: deterministic guide context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native voice fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, and shared local `/api/authority-requests` endpoint behavior. Do not describe it as deployed, production-ready, live-city integrated, legally sufficient, public-portal backed, OpenFGA-backed, CIBA-backed, notification-sending, model/API-backed, externally voice-serviced, Whisper/audio-upload backed, or final V2-B closeout.
+- Describe V2-B Foreman/Auth as local/pre-deployment dashboard proof cockpit behavior plus AUTH-5 deployed demo proof only: deterministic guide context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native voice fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, shared local `/api/authority-requests` endpoint behavior, stable Vercel demo URL, Auth0 hosted login/callback return, and two eval-role session mappings. Do not describe it as production-ready, live-city integrated, legally sufficient, public-portal backed, OpenFGA-backed, CIBA-backed, notification-sending, model/API-backed, externally voice-serviced, Whisper/audio-upload backed, or final V2-B closeout.
 
 ## Planning Gate
 
@@ -173,7 +174,7 @@ dashboard/
 - Do not describe a Wave 10 as part of V1.
 - Do not overstate V2-A local/demo-day surfaces as deployed, official, legally certified, live-broker-backed, auth-wired, audio-backed, Foreman-enabled, or V2-B behavior.
 - Do not overstate V2-B/GARP local runway surfaces as Foreman-enabled, production, legally sufficient, OpenFGA-backed, CIBA-backed, notification-delivering, or official city workflow behavior.
-- Do not overstate V2-B Foreman/Auth local proof cockpit surfaces as deployed, production, legally sufficient, OpenFGA-backed, CIBA-backed, notification-sending, model-backed, external-voice-backed, or official city workflow behavior.
+- Do not overstate V2-B Foreman/Auth proof cockpit surfaces as production, legally sufficient, OpenFGA-backed, CIBA-backed, notification-sending, model-backed, external-voice-backed, or official city workflow behavior; AUTH-5 deployed proof is bounded to demo URL/login/callback/role-session evidence.
 - Stop if repo truth conflicts with the approved task.
 
 ## Verification Rules

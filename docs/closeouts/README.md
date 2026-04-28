@@ -17,6 +17,7 @@ This lane stores durable wave/session closeout records.
 - [`MERIDIAN_V2A_CLOSEOUT.md`](MERIDIAN_V2A_CLOSEOUT.md)
 - [`MERIDIAN_V2B_GARP_CLOSEOUT.md`](MERIDIAN_V2B_GARP_CLOSEOUT.md)
 - [`MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`](MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md)
+- [`MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`](MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md)
 - [`WAVE1_CLOSEOUT.md`](WAVE1_CLOSEOUT.md)
 - [`WAVE2_CLOSEOUT.md`](WAVE2_CLOSEOUT.md)
 - [`WAVE3_CLOSEOUT.md`](WAVE3_CLOSEOUT.md)
@@ -34,4 +35,4 @@ This lane stores durable wave/session closeout records.
 - [`WAVE8_CLOSEOUT.md`](WAVE8_CLOSEOUT.md)
 - [`WAVE9_CLOSEOUT.md`](WAVE9_CLOSEOUT.md)
 
-Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. V2-A is a local/demo-day extension closeout only. V2-B/GARP Authority Runway is the local G1-G5 authority runway closeout. V2-B Foreman/Auth local closeout records local/pre-deployment guide/explainer truth only; deployed URL proof, live Auth0 callback/login proof, AUTH-5, and final V2-B closeout remain HOLD.
+Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. V2-A is a local/demo-day extension closeout only. V2-B/GARP Authority Runway is the local G1-G5 authority runway closeout. V2-B Foreman/Auth local closeout records local/pre-deployment guide/explainer truth; AUTH-5 records deployed Vercel/Auth0 demo proof. Mobile/judge proof, full authority choreography proof, clean logout proof, deploy hook cleanup proof, production/live-city/legal/OpenFGA/CIBA/public-portal/notification-delivery claims, and final V2-B closeout remain HOLD.

@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures), a Wave 9 local dashboard proof under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots, a V2-A local/demo-day live civic nervous system extension, a V2-B/GARP Authority Runway local sublane, and a V2-B Foreman/Auth local proof cockpit. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. This repo is still not a production application; the dashboard is a local-only demo package with snapshot default, optional local Live Mode, dashboard-local Auth0 Universal Login role-session proof, local shared authority endpoint behavior, offline Foreman guide/explainer behavior, browser-native voice fallback, deterministic avatar state, OpenFGA deferred, payload-only notification preview, and prepared disclosure preview actions.
+Meridian is a governed city digital twin intelligence repo. The repo contains the Wave 1 foundation, Wave 2 entity ontology extension, Wave 3 transport-only bridge substrate, Wave 4A bounded governance runtime lane, Wave 4B bounded meeting-capture pipeline with a local/frozen handoff seam and frozen Fort Worth proof path, Wave 4.5 calibration truth lock, shipped Wave 5 authority-topology packets (Packet 1 entity/topology declaration, Packet 2 bounded authority evaluation projection, Packet 3 bounded REVOKE + projection-only propagation), shipped Wave 6 forensic-chain packets (Packet 1 bounded civic forensic chain + DI writer + demo JSON persistence, Packet 2 DI publisher + additive adapter publication seam), a Wave 7 civic skins lane (five bounded civic skins, deterministic public disclosure boundary, and five-skin structural integration proof), a Wave 8 corridor scenario integration lane (deterministic bridge replay, deterministic matching, single-state composition, resolution cascade replay, and runner verification over frozen scenario fixtures), a Wave 9 local dashboard proof under `dashboard/` that consumes committed Wave 8 scenario/cascade payload snapshots, a V2-A local/demo-day live civic nervous system extension, a V2-B/GARP Authority Runway local sublane, and a V2-B Foreman/Auth proof cockpit with AUTH-5 deployed demo proof recorded. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1. This repo is still not a production application; the dashboard is a demo/proof package with snapshot default, optional local Live Mode, dashboard-local Auth0 Universal Login role-session proof, AUTH-5 deployed Vercel/Auth0 demo login and role-session proof at `https://meridian-holdpoint.vercel.app`, local shared authority endpoint behavior, offline Foreman guide/explainer behavior, browser-native voice fallback, deterministic avatar state, OpenFGA deferred, payload-only notification preview, and prepared disclosure preview actions.
 
 ## Agent Start Here
 
@@ -16,6 +16,7 @@ Meridian is a governed city digital twin intelligence repo. The repo contains th
 10. [docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md)
 11. [docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md](docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md)
 12. [docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md)
+13. [docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md](docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md)
 
 ## Current Status
 
@@ -25,7 +26,7 @@ Meridian V2-A is the local/demo-day extension now recorded by `docs/specs/MERIDI
 
 Meridian V2-B/GARP Authority Runway is the local G1-G5 runway recorded by `docs/specs/MERIDIAN_V2B_GARP_AUTHORITY_RUNWAY.md` and `docs/closeouts/MERIDIAN_V2B_GARP_CLOSEOUT.md`. It ships dashboard-local Auth0 Universal Login role-session proof, deterministic authority resolution request/evaluation/store contracts, local authority lifecycle/action record behavior, the GARP authority cockpit, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. It is the authority runway, not full Foreman, and does not ship OpenFGA behavior, prove Auth0 tenant connectivity, ship CIBA, deliver notifications, create a public portal, or claim legal/TPIA sufficiency or official Fort Worth workflow status.
 
-Meridian V2-B Foreman/Auth local proof cockpit is recorded by `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md` and `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`. It ships the dashboard-local guide/explainer layer through Foreman B1-B6 plus AUTH-1 through AUTH-4: deterministic Foreman context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native speech output/input fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, and the shared local `/api/authority-requests` endpoint. Deployment proof, live Auth0 callback/login proof, mobile/judge device proof, and final V2-B closeout remain HOLD.
+Meridian V2-B Foreman/Auth local proof cockpit is recorded by `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md` and `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`. AUTH-5 deployed demo proof is recorded by `docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`. The stack ships the dashboard-local guide/explainer layer through Foreman B1-B6 plus AUTH-1 through AUTH-4: deterministic Foreman context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native speech output/input fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, and the shared local `/api/authority-requests` endpoint. AUTH-5 proves the deployed Vercel demo URL `https://meridian-holdpoint.vercel.app`, Auth0 hosted login/callback return, and role-session rendering for at least `permitting_staff` and `council_member` eval roles. Mobile/judge device proof, full authority choreography screenshot proof, clean logout proof, deploy hook cleanup proof, and final V2-B closeout remain HOLD.
 
 ## V1 Final Truth
 
@@ -60,6 +61,8 @@ Meridian V2-B Foreman/Auth local proof cockpit is recorded by `docs/specs/MERIDI
 
 - Foreman cockpit spec: `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`
 - Foreman local closeout: `docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`
+- AUTH-5 deployed proof closeout: `docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`
+- AUTH-5 stable deployed demo URL: `https://meridian-holdpoint.vercel.app`
 - Dashboard-local Foreman strings: `meridian.v2.foremanGuideContext.v1`, `meridian.v2.foremanGuideResponse.v1`, `meridian.v2.foremanGuideSignal.v1`, and `meridian.v2.foremanGuideMode.v1`.
 - Existing role-session string: `meridian.v2.roleSessionProof.v1`.
 - Auth0 role namespace: `https://meridian.city/roles`.
@@ -69,7 +72,8 @@ Meridian V2-B Foreman/Auth local proof cockpit is recorded by `docs/specs/MERIDI
 - Voice posture: browser-native speech output/input is optional and keeps typed fallback; there is no external voice service, Whisper/audio upload/transcription, MediaRecorder/getUserMedia path, model/API call, or browser-exposed model API key.
 - Verification floor: dashboard suite `236` passing; repo-wide JS suite `717/717` passing.
 - Migration posture: no B7 `MIGRATIONS.md` row required because the B1-B6 Foreman guide strings are dashboard-local and do not widen root/shared runtime contracts; `meridian.v2.roleSessionProof.v1` is already covered by the V2-B/GARP row.
-- Remaining HOLDs: deployed Vercel URL proof, Auth0 deployed callback/login proof, mobile/judge device proof, deployment smoke proof, AUTH-5, and final V2-B closeout.
+- AUTH-5 deployed proof: Vercel production deployment `Ready / Latest`, remote dashboard load, Auth0 hosted login/callback return, and role-session rendering for `permitting_staff` and `council_member` eval roles.
+- Remaining HOLDs: mobile/judge device proof, full authority submit/approve/deny choreography screenshot proof, clean logout proof, deploy hook cleanup proof, OpenFGA/CIBA/notification/legal/public-portal behavior, and final V2-B closeout.
 
 ## What This Is
 
@@ -139,14 +143,14 @@ Meridian V2-B Foreman/Auth local proof cockpit is recorded by `docs/specs/MERIDI
   - guided event binding, registry-bounded spatial awareness, and visual-only panel highlighting
   - Walk, Absence, Challenge, Public, and Judge modes
   - browser-native speech output/input fallback and deterministic avatar state
-  - dashboard-local deploy-prep docs for Tim's later manual Vercel/Auth0 proof lane
+  - dashboard-local deploy-prep docs plus AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`
 - A single external runtime dependency surface in `package.json`: `nats`.
 
 ## What This Is Not
 
 - Not a production application.
 - Not a Wave 10 plan; no Wave 10 exists in V1.
-- Not a hosted dashboard; Wave 9 and the B7 Foreman/Auth cockpit are local/pre-deployment dashboard proof surfaces.
+- Not production civic infrastructure; the hosted AUTH-5 Vercel URL is a deployed demo/proof cockpit only.
 - Not live broker proof or production Constellation compatibility proof.
 - Not general event-side governance routing or generalized publisher widening.
 - Not live/networked authority services, DB-backed forensic persistence, or legal/tamper-proof immutability guarantees.
@@ -162,9 +166,9 @@ Meridian V2-B Foreman/Auth local proof cockpit is recorded by `docs/specs/MERIDI
 - Not multi-corridor routing in one scenario run.
 - Not a persistent match-result store.
 - Not a chain replay engine.
-- Not live Auth0/OpenFGA wiring.
+- Not live OpenFGA wiring; Auth0 proof is limited to AUTH-5 deployed demo login/callback and role-session rendering.
 - Not live OpenFGA behavior; OpenFGA remains deferred.
-- Not Auth0 tenant connectivity proof.
+- Not production identity or authorization infrastructure.
 - Not CIBA.
 - Not delivered notifications, live browser push, live email sending, or service worker behavior.
 - Not clipboard write, browser download trigger, print trigger, or PDF generation from disclosure preview actions.
@@ -175,7 +179,7 @@ Meridian V2-B Foreman/Auth local proof cockpit is recorded by `docs/specs/MERIDI
 - Not full Accela/GIS automation.
 - Not live Constellation broker proof.
 - Not model-backed Foreman behavior, Foreman API, model call, external voice service, Whisper/audio upload/transcription, or autonomous Foreman action.
-- Not final V2-B deployed/demo closeout.
+- Not final V2-B closeout.
 
 ## Repo Structure
 
@@ -231,7 +235,7 @@ docs/
 
 ## V2 Boundary / Deferred Beyond V2-A
 
-V2-A is the bounded local/demo-day V2 extension recorded in this repo. V2-B/GARP Authority Runway is the local authority runway. V2-B Foreman/Auth local proof cockpit is the dashboard-local guide/explainer layer and remains pre-deployment. Final deployed/demo proof remains gated on Tim manual Vercel/Auth0 setup and AUTH-5 deployed URL/callback proof.
+V2-A is the bounded local/demo-day V2 extension recorded in this repo. V2-B/GARP Authority Runway is the local authority runway. V2-B Foreman/Auth local proof cockpit is the dashboard-local guide/explainer layer. AUTH-5 deployed demo proof now records the stable Vercel URL, Auth0 hosted login/callback return, and two eval-role session mappings; final V2-B closeout remains gated on the remaining AUTH-5 HOLDs.
 
 - Runtime-owned subject/entity binding and broader publication wiring beyond the frozen handoff seam.
 - Generalized event routing and authority-topology widening beyond the bounded lanes.
@@ -239,8 +243,8 @@ V2-A is the bounded local/demo-day V2 extension recorded in this repo. V2-B/GARP
 - DB-backed forensic persistence, cryptographic hash-linking, and legal immutability posture.
 - Meeting-capture-to-skin and forensic-entry-to-skin routing.
 - Governance-truth computation inside skins.
-- Dashboard deployment/hosting/live integration beyond the local/pre-deployment proof cockpit.
-- OpenFGA behavior, Auth0 deployed callback/login proof, CIBA, delivered notifications, public portal behavior, legal/TPIA sufficiency, and official disclosure workflow remain unshipped.
+- Dashboard deployment/hosting/live integration beyond the AUTH-5 deployed demo proof cockpit.
+- OpenFGA behavior, CIBA, delivered notifications, public portal behavior, legal/TPIA sufficiency, official disclosure workflow, clean logout proof, mobile/judge smoke proof, and full authority choreography proof remain unshipped.
 - Multi-corridor routing in one scenario run.
 - Persistent match-result storage.
 - Chain replay engine.

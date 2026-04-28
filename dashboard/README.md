@@ -1,6 +1,6 @@
 # Meridian Dashboard
 
-Wave 9 keeps the dashboard local-only and snapshot-driven for demo use on Tim's machine. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, and shared local `/api/authority-requests` endpoint behavior.
+Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, and prepared disclosure preview actions. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, shared local `/api/authority-requests` endpoint behavior, and AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`.
 
 ## Scope
 
@@ -29,12 +29,12 @@ Wave 9 keeps the dashboard local-only and snapshot-driven for demo use on Tim's 
 - no browser import of root `src/live/**`
 - no `step.skins.renders` consumption
 - no OpenFGA behavior
-- no Auth0 tenant connectivity proof
+- no production identity or authorization infrastructure
 - no CIBA
 - no notification sending, browser push registration, email sending, or service worker
 - no clipboard write, browser download trigger, print trigger, or PDF generation from disclosure preview actions
 - no governance, authority, matching, forensic, absence, skin, city, or cascade truth recomputation
-- no deployment, hosting, production identity or authorization behavior, live broker, live city integration, or live Constellation claim
+- no production identity or authorization behavior, live broker, live city integration, or live Constellation claim
 - no Foreman API, model call, external voice service, Whisper/audio upload/transcription, MediaRecorder/getUserMedia path, browser-exposed model API keys, or autonomous Foreman action
 - no legal determination, TPIA compliance, TRAIGA compliance, public-record completeness, public portal behavior, or official disclosure approval claim
 
@@ -95,9 +95,35 @@ Demo Day readiness checks after Tim configures Vercel and Auth0:
 Config boundaries:
 
 - no secrets are committed here
-- no Vercel deployment is attempted here
+- no Vercel or Auth0 setting change is attempted by repo docs
 - no Auth0 Management API, database, WebSocket, realtime push, delivered notifications, OpenFGA, CIBA, public portal, legal/TPIA sufficiency, production identity, live-city integration, model/API calls, external voice service, or autonomous Foreman action is added here
 - model-provider secrets are outside this lane; any future model API mode requires an approved server-side/serverless proxy with server-side environment only
+
+## AUTH-5 Deployed Demo Proof
+
+AUTH-5 records Tim's manual deployed Vercel/Auth0 proof in:
+
+- `../docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`
+
+Bounded deployed proof:
+
+- stable production-environment demo URL: `https://meridian-holdpoint.vercel.app`
+- Vercel production deployment status: `Ready / Latest`
+- remote dashboard load
+- Auth0 hosted login page reached
+- Auth0 callback returned to Meridian
+- authenticated eval-role proof for `permitting_staff` / `permitting` and `council_member` / `public`
+- allowed skins rendered for `permitting_staff`: `permitting`, `operations`
+- allowed skins rendered for `council_member`: `council`, `public`
+- GARP shared endpoint connected
+
+Remaining AUTH-5 HOLDs:
+
+- mobile / judge-device smoke proof
+- full authority submit/approve/deny choreography screenshot proof
+- clean logout success screenshot proof
+- deploy hook cleanup proof
+- OpenFGA, CIBA, notification-delivery, legal/TPIA sufficiency, public-portal behavior, official Fort Worth workflow, production city behavior, and final V2-B closeout
 
 ## Demo Posture
 
@@ -141,10 +167,11 @@ GARP is the authority runway, not full Foreman. The handoff context may display 
 
 ## V2-B Foreman/Auth Local Proof Cockpit Posture
 
-The Foreman/Auth cockpit is local/pre-deployment proof only. Current truth is recorded in:
+The Foreman/Auth cockpit remains a proof cockpit, not production civic infrastructure. Current truth is recorded in:
 
 - `../docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`
 - `../docs/closeouts/MERIDIAN_V2B_FOREMAN_PLATINUM_LOCAL_CLOSEOUT.md`
+- `../docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`
 
 Shipped local behavior:
 
@@ -158,14 +185,20 @@ Shipped local behavior:
 - event-compatible payloads `AUTHORITY_RESOLUTION_REQUESTED`, `AUTHORITY_APPROVED`, and `AUTHORITY_DENIED`
 - Foreman panel, offline narration, authority narration, guided event binding, spatial awareness, visual-only panel highlighting, Gold modes, browser-native voice output/input fallback, typed fallback, and deterministic avatar state
 
-Remaining deployment proof HOLDs:
+AUTH-5 deployed demo proof:
 
-- live deployed Vercel URL proof
-- Auth0 deployed callback/login proof
+- deployed URL: `https://meridian-holdpoint.vercel.app`
+- Auth0 hosted login and callback return
+- eval-role proof for `permitting_staff` and `council_member`
+
+Remaining proof HOLDs:
+
 - mobile/judge device proof
-- deployment smoke proof
-- AUTH-5 deployment proof/finish lane
-- final V2-B closeout after deployed URL and callback proof
+- full authority submit/approve/deny choreography proof
+- clean logout proof
+- deploy hook cleanup proof
+- OpenFGA/CIBA/notification/legal/public-portal behavior
+- final V2-B closeout
 
 ## Snapshot Source
 
