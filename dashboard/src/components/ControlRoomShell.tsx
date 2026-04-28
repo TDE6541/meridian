@@ -23,10 +23,13 @@ import {
   shouldIgnoreDemoShortcutTarget,
 } from "../demo/demoShortcuts.ts";
 import { buildDemoAuditWallView } from "../demo/demoAudit.ts";
+import { useJudgeAuthorityRequestVibration } from "../demo/deviceVibration.ts";
 import { getDemoScenarioMeta } from "../demo/demoScenarios.ts";
 import { buildHoldWallView } from "../demo/holdWall.ts";
 import { buildMissionRailStages } from "../demo/missionRail.ts";
+import { buildSyncChoreographyView } from "../demo/syncChoreography.ts";
 import { CascadeChoreography } from "./CascadeChoreography.tsx";
+import { DemoReliabilityPanel } from "./DemoReliabilityPanel.tsx";
 import { EntityRelationshipGraph } from "./EntityRelationshipGraph.tsx";
 import { EntityRelationshipStrip } from "./EntityRelationshipStrip.tsx";
 import { ForensicChainPanel } from "./ForensicChainPanel.tsx";
@@ -313,6 +316,31 @@ export function ControlRoomShell({
     scenarioStatus: scenarioStatusLabel,
     timelineSteps,
   });
+  const syncChoreography = buildSyncChoreographyView({
+    authorityState,
+    dashboardMode,
+    forensicChain: forensicChainView,
+    liveProjection: liveProjection.projection,
+    sharedAuthority,
+  });
+  const vibrationStatus = useJudgeAuthorityRequestVibration({
+    enabled: roleSession.role === "judge_demo_operator",
+    signalId: syncChoreography.vibrationSignalId,
+  });
+
+  function handleResetToKnownCleanState() {
+    setControlState(
+      createInitialControlRoomState(records[0]?.entry.key ?? "routine")
+    );
+    setDashboardMode("snapshot");
+    setDirectorModeEnabled(false);
+    setAuditWallOpen(false);
+    setMissionAbsenceLensEnabled(false);
+    setHoldWallOpen(false);
+    setForemanHighlightedPanelId(null);
+    setPresentationMode("mission");
+    void sharedAuthority.resetRequests();
+  }
 
   useEffect(() => {
     if (controlState.playbackState !== "playing" || totalSteps === 0) {
@@ -482,7 +510,9 @@ export function ControlRoomShell({
         scenarioDescription={scenarioMeta.description}
         scenarioLabel={scenarioMeta.displayLabel}
         scenarioStatus={scenarioStatusLabel}
+        syncChoreography={syncChoreography}
         totalSteps={totalSteps}
+        vibrationStatus={vibrationStatus}
       />
 
       <div
@@ -533,6 +563,11 @@ export function ControlRoomShell({
           />
 
           <KeyboardShortcutsHelp />
+
+          <DemoReliabilityPanel
+            onResetToKnownCleanState={handleResetToKnownCleanState}
+            sharedEndpointStatus={sharedAuthority.endpointStatus}
+          />
         </div>
       </div>
 

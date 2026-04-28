@@ -149,7 +149,21 @@ async function buildSnapshotMissionFixture(activeStepIndex = 0) {
     scenarioDescription: "Contested authority fixture.",
     scenarioLabel: "Contested authority",
     scenarioStatus: record.scenario.status,
+    syncChoreography: {
+      animate: false,
+      detail: "Existing forensic chain entries are visible on the main screen.",
+      directorApprovalPulse: false,
+      label: "Snapshot aligned",
+      pulse: "idle" as const,
+      sourceRef: "forensicChain.totalEntryCount",
+      vibrationSignalId: null,
+    },
     totalSteps: timelineSteps.length,
+    vibrationStatus: {
+      reason: "No authority request signal is active.",
+      signalId: null,
+      status: "idle" as const,
+    },
   };
 }
 

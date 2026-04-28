@@ -9,11 +9,14 @@ import { fictionalPermitAnchor } from "../demo/fictionalPermitAnchor.ts";
 import type { HoldWallView } from "../demo/holdWall.ts";
 import { buildMissionAbsenceLensOverlay } from "../demo/missionAbsenceLens.ts";
 import type { MissionRailStage } from "../demo/missionRail.ts";
+import type { AuthorityVibrationAttempt } from "../demo/deviceVibration.ts";
+import type { SyncChoreographyView } from "../demo/syncChoreography.ts";
 import { DecisionCounter } from "./DecisionCounter.tsx";
 import { DemoAuditWall } from "./DemoAuditWall.tsx";
 import { DoctrineCard } from "./DoctrineCard.tsx";
 import { HoldWall } from "./HoldWall.tsx";
 import { MissionRail } from "./MissionRail.tsx";
+import { SyncPill } from "./SyncPill.tsx";
 
 export interface MissionPresentationShellProps {
   absenceLens: AbsenceLensView;
@@ -44,7 +47,9 @@ export interface MissionPresentationShellProps {
   scenarioDescription: string;
   scenarioLabel: string;
   scenarioStatus: string;
+  syncChoreography: SyncChoreographyView;
   totalSteps: number;
+  vibrationStatus: AuthorityVibrationAttempt;
 }
 
 function formatCount(count: number, singular: string, plural = `${singular}s`) {
@@ -80,7 +85,9 @@ export function MissionPresentationShell({
   scenarioDescription,
   scenarioLabel,
   scenarioStatus,
+  syncChoreography,
   totalSteps,
+  vibrationStatus,
 }: MissionPresentationShellProps) {
   const activeDecision = currentStep?.decision ?? "pending";
   const missionAbsenceLens = buildMissionAbsenceLensOverlay(absenceLens);
@@ -183,6 +190,8 @@ export function MissionPresentationShell({
           <em>{roleSession.role} · {roleSession.auth_status}</em>
         </div>
       </div>
+
+      <SyncPill vibrationStatus={vibrationStatus} view={syncChoreography} />
 
       <MissionRail stages={missionRailStages} />
 
