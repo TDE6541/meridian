@@ -33,6 +33,17 @@ const tests = [
     },
   },
   {
+    name: "auth config reads Vite env through direct build-time properties",
+    run: async () => {
+      const source = await readFile(authConfigUrl, "utf8");
+
+      assert.equal(source.includes("import.meta.env.VITE_AUTH0_DOMAIN"), true);
+      assert.equal(source.includes("import.meta.env.VITE_AUTH0_CLIENT_ID"), true);
+      assert.equal(source.includes("import.meta.env.VITE_AUTH0_CALLBACK_URL"), true);
+      assert.equal(source.includes("importMetaWithEnv"), false);
+    },
+  },
+  {
     name: "missing Auth0 env remains safe and public-mode only",
     run: () => {
       const config = resolveAuth0DashboardConfig({});

@@ -25,10 +25,6 @@ export interface Auth0DashboardConfig {
 
 export type Auth0EnvSource = Record<string, unknown>;
 
-const importMetaWithEnv = import.meta as ImportMeta & {
-  env?: Auth0EnvSource;
-};
-
 function readEnvString(source: Auth0EnvSource, key: string): string | null {
   const value = source[key];
 
@@ -37,8 +33,19 @@ function readEnvString(source: Auth0EnvSource, key: string): string | null {
     : null;
 }
 
+function readViteAuth0Env(): Auth0EnvSource {
+  return {
+    VITE_AUTH0_AUDIENCE: import.meta.env.VITE_AUTH0_AUDIENCE,
+    VITE_AUTH0_CALLBACK_URL: import.meta.env.VITE_AUTH0_CALLBACK_URL,
+    VITE_AUTH0_CLIENT_ID: import.meta.env.VITE_AUTH0_CLIENT_ID,
+    VITE_AUTH0_DEPARTMENT_CLAIM: import.meta.env.VITE_AUTH0_DEPARTMENT_CLAIM,
+    VITE_AUTH0_DOMAIN: import.meta.env.VITE_AUTH0_DOMAIN,
+    VITE_AUTH0_ROLE_CLAIM: import.meta.env.VITE_AUTH0_ROLE_CLAIM,
+  };
+}
+
 export function resolveAuth0DashboardConfig(
-  env: Auth0EnvSource = importMetaWithEnv.env ?? {}
+  env: Auth0EnvSource = readViteAuth0Env()
 ): Auth0DashboardConfig {
   const domain = readEnvString(env, "VITE_AUTH0_DOMAIN");
   const clientId = readEnvString(env, "VITE_AUTH0_CLIENT_ID");
