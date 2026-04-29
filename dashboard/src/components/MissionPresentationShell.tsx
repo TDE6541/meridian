@@ -22,6 +22,7 @@ import {
   MissionPlaybackControls,
   type MissionPlaybackControlsProps,
 } from "./MissionPlaybackControls.tsx";
+import type { MissionStageId } from "../demo/missionPlaybackPlan.ts";
 import type { MissionPhysicalProjectionV1 } from "../demo/missionPhysicalProjection.ts";
 import type { JudgeQuestionId, JudgeTouchboardCard } from "../demo/judgeTouchboardDeck.ts";
 import { buildJudgeModeProjection } from "../demo/missionEvidenceNavigator.ts";
@@ -103,6 +104,42 @@ type PresenterDecisionTone =
   | "ready"
   | "revoke"
   | "unavailable";
+
+type MissionSurfaceName =
+  | "absence"
+  | "authority"
+  | "capture"
+  | "chain"
+  | "foreman"
+  | "governance"
+  | "presenter"
+  | "public"
+  | "review";
+
+function buildMissionSurfaceClassName({
+  active = false,
+  complete = false,
+  name,
+  reviewVisible = false,
+  visible = false,
+}: {
+  active?: boolean;
+  complete?: boolean;
+  name: MissionSurfaceName;
+  reviewVisible?: boolean;
+  visible?: boolean;
+}) {
+  return [
+    "mission-surface",
+    `mission-surface--${name}`,
+    visible ? "is-visible" : null,
+    reviewVisible ? "is-review-visible" : null,
+    active ? "is-active" : null,
+    complete ? "is-complete" : null,
+  ]
+    .filter((className): className is string => className !== null)
+    .join(" ");
+}
 
 function normalizeStatus(value: string | null | undefined): string | null {
   return typeof value === "string" && value.trim().length > 0
@@ -302,6 +339,52 @@ export function MissionPresentationShell({
   const physicalModeView = buildMissionPhysicalModeView({
     physicalMode: missionPhysicalModeEnabled,
   });
+  const missionPlaybackState = missionPlaybackControls?.playbackState ?? null;
+  const activeMissionStage =
+    missionPlaybackState?.currentStageId ??
+    presentationProjection?.active_stage_id ??
+    null;
+  const completedMissionStageIds =
+    missionPlaybackState?.completedStageIds ?? [];
+  const isReviewMode = Boolean(
+    missionPlaybackState &&
+      (missionPlaybackState.status === "completed" ||
+        missionPlaybackState.completedAtMs !== null)
+  );
+  const isMissionSurfaceActive = (stageId: MissionStageId) =>
+    activeMissionStage === stageId;
+  const isMissionSurfaceComplete = (stageId: MissionStageId) =>
+    completedMissionStageIds.includes(stageId);
+  const getMissionStageSurfaceClassName = (
+    name: MissionSurfaceName,
+    stageId: MissionStageId
+  ) =>
+    buildMissionSurfaceClassName({
+      active: isMissionSurfaceActive(stageId),
+      complete: isMissionSurfaceComplete(stageId),
+      name,
+      reviewVisible: isReviewMode,
+      visible: isMissionSurfaceActive(stageId),
+    });
+  const foremanSurfaceClassName = buildMissionSurfaceClassName({
+    active: activeMissionStage !== null,
+    complete: isReviewMode,
+    name: "foreman",
+    reviewVisible: isReviewMode,
+    visible: activeMissionStage !== null && activeMissionStage !== "public",
+  });
+  const presenterSurfaceClassName = buildMissionSurfaceClassName({
+    name: "presenter",
+    reviewVisible: isReviewMode,
+    visible: true,
+  });
+  const reviewSurfaceClassName = buildMissionSurfaceClassName({
+    active: Boolean(judgeCard),
+    complete: isReviewMode,
+    name: "review",
+    reviewVisible: isReviewMode,
+    visible: Boolean(judgeCard),
+  });
 
   return (
     <section
@@ -470,7 +553,12 @@ export function MissionPresentationShell({
         </dl>
       </section>
 
-      <ForensicReceiptRibbon receipt={missionRunReceipt} />
+      <section
+        className={getMissionStageSurfaceClassName("chain", "chain")}
+        data-mission-surface="chain"
+      >
+        <ForensicReceiptRibbon receipt={missionRunReceipt} />
+      </section>
 
       <aside className="mission-foreman-note" data-foreman-presenter-note="guide-only">
         <span>Foreman guide</span>
@@ -480,38 +568,71 @@ export function MissionPresentationShell({
         </strong>
       </aside>
 
-      <JudgeTouchboard
-        card={judgeCard}
-        interruptStatus={judgeInterruptStatus}
-        missionModeLabel={
-          presentationProjection?.mode === "foreman_autonomous"
-            ? "Foreman Autonomous"
-            : "Guided Mission"
-        }
-        onResetForNextJudge={onJudgeResetForNextJudge}
-        onResumeMission={onJudgeResumeMission}
-        onSelectQuestion={onJudgeSelectQuestion}
-        stageLabel={presentationProjection?.active_stage_id ?? "No active mission"}
-      />
+      <section className={reviewSurfaceClassName} data-mission-surface="review">
+        <JudgeTouchboard
+          card={judgeCard}
+          interruptStatus={judgeInterruptStatus}
+          missionModeLabel={
+            presentationProjection?.mode === "foreman_autonomous"
+              ? "Foreman Autonomous"
+              : "Guided Mission"
+          }
+          onResetForNextJudge={onJudgeResetForNextJudge}
+          onResumeMission={onJudgeResumeMission}
+          onSelectQuestion={onJudgeSelectQuestion}
+          stageLabel={presentationProjection?.active_stage_id ?? "No active mission"}
+        />
+      </section>
 
-      <ForemanAvatarBay
-        judgeChallenge={judgeCard}
-        projection={presentationProjection}
-      />
+      <section className={foremanSurfaceClassName} data-mission-surface="foreman">
+        <ForemanAvatarBay
+          judgeChallenge={judgeCard}
+          projection={presentationProjection}
+        />
+      </section>
 
-      <MissionEvidenceNavigator card={judgeCard} />
+      <section className={reviewSurfaceClassName} data-mission-surface="review">
+        <MissionEvidenceNavigator card={judgeCard} />
+      </section>
 
-      <CivicTwinDiorama projection={presentationProjection} />
+      <section
+        className={getMissionStageSurfaceClassName("capture", "capture")}
+        data-mission-surface="capture"
+      >
+        <CivicTwinDiorama projection={presentationProjection} />
+      </section>
 
-      <AuthorityHandoffTheater projection={presentationProjection} />
+      <section
+        className={getMissionStageSurfaceClassName("authority", "authority")}
+        data-mission-surface="authority"
+      >
+        <AuthorityHandoffTheater projection={presentationProjection} />
+      </section>
 
-      <ProofSpotlight projection={presentationProjection} />
+      <section
+        className={getMissionStageSurfaceClassName("governance", "governance")}
+        data-mission-surface="governance"
+      >
+        <ProofSpotlight projection={presentationProjection} />
+      </section>
 
-      <AbsenceShadowMap projection={presentationProjection} />
+      <section
+        className={getMissionStageSurfaceClassName("absence", "absence")}
+        data-mission-surface="absence"
+      >
+        <AbsenceShadowMap projection={presentationProjection} />
+      </section>
 
-      <MissionPlaybackControls {...missionPlaybackControls} />
+      <section className={presenterSurfaceClassName} data-mission-surface="presenter">
+        <MissionPlaybackControls {...missionPlaybackControls} />
+      </section>
 
-      <MissionRunReceiptPanel receipt={missionRunReceipt} />
+      <section
+        className={getMissionStageSurfaceClassName("public", "public")}
+        data-mission-surface="public"
+      >
+        <MissionRunReceiptPanel receipt={missionRunReceipt} />
+      </section>
 
       <MissionRail stages={missionRailStages} />
 
@@ -550,7 +671,12 @@ export function MissionPresentationShell({
         </button>
       </div>
 
-      <SyncPill vibrationStatus={vibrationStatus} view={syncChoreography} />
+      <section
+        className={getMissionStageSurfaceClassName("public", "public")}
+        data-mission-surface="public"
+      >
+        <SyncPill vibrationStatus={vibrationStatus} view={syncChoreography} />
+      </section>
 
       {absenceLensEnabled ? (
         <section
@@ -598,7 +724,11 @@ export function MissionPresentationShell({
         </section>
       ) : null}
 
-      <section className="mission-secondary-proof" data-secondary-proof-summary="true">
+      <section
+        className={`${reviewSurfaceClassName} mission-secondary-proof`}
+        data-mission-surface="review"
+        data-secondary-proof-summary="true"
+      >
         <DecisionCounter view={auditWallView.counter} />
 
         <div className="mission-proof-summary-grid" data-proof-summary-grid="secondary">

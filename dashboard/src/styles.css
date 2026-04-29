@@ -4424,6 +4424,22 @@ kbd {
   align-items: start;
 }
 
+.mission-surface {
+  display: none;
+  pointer-events: none;
+}
+
+.mission-surface.is-visible,
+.mission-surface.is-review-visible {
+  display: block;
+  pointer-events: auto;
+}
+
+.mission-surface.mission-secondary-proof.is-visible,
+.mission-surface.mission-secondary-proof.is-review-visible {
+  display: grid;
+}
+
 .decision-counter {
   display: grid;
   gap: 0.75rem;
