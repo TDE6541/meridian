@@ -38,6 +38,7 @@ import {
   missionPlaybackReducer,
   type MissionPlaybackState,
 } from "../demo/missionPlaybackController.ts";
+import { buildMissionPhysicalProjection } from "../demo/missionPhysicalProjection.ts";
 import {
   MISSION_STAGE_IDS,
   type MissionPlaybackMode,
@@ -367,6 +368,10 @@ export function ControlRoomShell({
   const vibrationStatus = useJudgeAuthorityRequestVibration({
     enabled: roleSession.role === "judge_demo_operator",
     signalId: syncChoreography.vibrationSignalId,
+  });
+  const missionPhysicalProjection = buildMissionPhysicalProjection({
+    conductor_output: missionRuntime.conductorOutput,
+    playback_state: missionRuntime.playbackState,
   });
 
   function getMissionClockMs(playbackState: MissionPlaybackState): number {
@@ -749,6 +754,7 @@ export function ControlRoomShell({
         forensicChain={forensicChainView}
         holdWallOpen={holdWallOpen}
         holdWallView={holdWallView}
+        missionPhysicalProjection={missionPhysicalProjection}
         missionPlaybackControls={{
           canStart: selectedRecord?.status === "ready",
           conductorOutput: missionRuntime.conductorOutput,

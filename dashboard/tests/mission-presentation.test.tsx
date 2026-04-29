@@ -182,6 +182,8 @@ const tests = [
       assert.equal(markup.includes("Proof Tools"), true);
       assert.equal(markup.includes('data-proof-tools="collapsed-by-default"'), true);
       assert.equal(markup.includes('data-current-decision-card="true"'), true);
+      assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
+      assert.equal(markup.includes("Foreman Avatar Bay"), true);
       assert.equal(markup.includes("Engineer Mode"), true);
       assert.equal(markup.includes("Local demo control room"), true);
     },
@@ -455,6 +457,7 @@ const tests = [
 
       assert.equal(markup.includes('data-current-decision-card="true"'), true);
       assert.equal(markup.includes('data-current-decision-state="HOLD"'), true);
+      assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
       assert.equal(markup.includes("Current decision / HOLD"), true);
       assert.equal(markup.includes("Why it matters"), true);
       assert.equal(markup.includes("Proof available next"), true);
@@ -684,6 +687,7 @@ const tests = [
     run: async () => {
       const sourcePaths = [
         "src/components/ControlRoomShell.tsx",
+        "src/components/ForemanAvatarBay.tsx",
         "src/components/MissionPresentationShell.tsx",
         "src/components/DecisionCounter.tsx",
         "src/components/DemoAuditWall.tsx",
@@ -697,6 +701,7 @@ const tests = [
         "src/demo/missionAbsenceLens.ts",
         "src/components/MissionRail.tsx",
         "src/demo/missionRail.ts",
+        "src/foremanGuide/foremanEmbodiedState.ts",
       ];
 
       for (const sourcePath of sourcePaths) {

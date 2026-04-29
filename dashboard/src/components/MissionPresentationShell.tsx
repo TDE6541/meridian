@@ -19,6 +19,8 @@ import {
   MissionPlaybackControls,
   type MissionPlaybackControlsProps,
 } from "./MissionPlaybackControls.tsx";
+import type { MissionPhysicalProjectionV1 } from "../demo/missionPhysicalProjection.ts";
+import { ForemanAvatarBay } from "./ForemanAvatarBay.tsx";
 import { MissionRail } from "./MissionRail.tsx";
 import { SyncPill } from "./SyncPill.tsx";
 
@@ -39,6 +41,7 @@ export interface MissionPresentationShellProps {
   forensicChain: DashboardForensicChainView;
   holdWallOpen: boolean;
   holdWallView: HoldWallView;
+  missionPhysicalProjection?: MissionPhysicalProjectionV1 | null;
   missionPlaybackControls?: MissionPlaybackControlsProps;
   missionRailStages: readonly MissionRailStage[];
   onDirectorModeOpen?: () => void;
@@ -200,6 +203,7 @@ export function MissionPresentationShell({
   forensicChain,
   holdWallOpen,
   holdWallView,
+  missionPhysicalProjection = null,
   missionPlaybackControls,
   missionRailStages,
   onDirectorModeOpen,
@@ -412,6 +416,8 @@ export function MissionPresentationShell({
           and what the public can see. It does not create truth.
         </strong>
       </aside>
+
+      <ForemanAvatarBay projection={missionPhysicalProjection} />
 
       <MissionPlaybackControls {...missionPlaybackControls} />
 
