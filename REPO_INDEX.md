@@ -39,6 +39,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 
 - Posture and operating rules: `CLAUDE.md`, `TEAM_CHARTER.md`, `AI_EXECUTION_DOCTRINE.md`
 - Repo identity and front door: `README.md`
+- Current state ledger: `docs/MERIDIAN_CURRENT_STATE_LEDGER.md`
 - V1 final truth: `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`
 - V1 master closeout: `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`
 - V2-A live civic nervous system spec: `docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`
@@ -179,7 +180,7 @@ Wave 4B Blocks A-E layer a bounded meeting-capture pipeline lane under `src/pipe
 
 ## Where To Change X (Quick Pointers)
 
-- Front-door repo truth: `README.md`, `REPO_INDEX.md`, `docs/INDEX.md`
+- Front-door repo truth: `README.md`, `REPO_INDEX.md`, `docs/INDEX.md`, `docs/MERIDIAN_CURRENT_STATE_LEDGER.md`
 - Agent start surfaces: `README.md`, `CLAUDE.md`
 - Bridge runtime: `src/bridge/*.js`
 - Governance runtime activation: `src/governance/runtime/*.js`

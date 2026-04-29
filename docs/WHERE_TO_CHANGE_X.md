@@ -3,6 +3,7 @@
 | Change Target | Primary Path(s) | Notes |
 |---|---|---|
 | Front-door repo truth | `README.md`, `REPO_INDEX.md`, `docs/INDEX.md` | Keep top-level discoverability truthful and synchronized. |
+| Current-state ledger | `docs/MERIDIAN_CURRENT_STATE_LEDGER.md`, current front-door docs | Compact operator navigation only; original closeouts remain canonical and no HOLD is closed here. |
 | Agent start surfaces | `README.md`, `CLAUDE.md` | Start links and execution posture live here. |
 | Meridian V1 final truth | `docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`, `docs/closeouts/MERIDIAN_V1_MASTER_CLOSEOUT.md`, current front-door docs | V1 is complete through Wave 9; Wave 9 is the final V1 wave; no Wave 10 exists in V1. |
 | Bridge runtime | `src/bridge/*.js` | Transport-only Wave 3 bridge surfaces; adapter activation may delegate into `src/governance/runtime/`, but no entity or KV mutation belongs here. |

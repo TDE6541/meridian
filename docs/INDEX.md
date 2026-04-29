@@ -6,6 +6,7 @@ This index maps the documentation lanes that exist in the Meridian repo today.
 
 ## Documentation Lanes
 
+- Current state ledger: [`docs/MERIDIAN_CURRENT_STATE_LEDGER.md`](MERIDIAN_CURRENT_STATE_LEDGER.md)
 - Specs lane: [`docs/specs/`](specs/)
 - Meridian V1 final truth: [`docs/specs/MERIDIAN_V1_FINAL_TRUTH.md`](specs/MERIDIAN_V1_FINAL_TRUTH.md)
 - Meridian V2-A live civic nervous system spec: [`docs/specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md`](specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md)
