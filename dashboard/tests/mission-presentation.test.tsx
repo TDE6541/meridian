@@ -189,6 +189,8 @@ const tests = [
       assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
       assert.equal(markup.includes('data-authority-handoff-theater="true"'), true);
       assert.equal(markup.includes('data-civic-twin-diorama="true"'), true);
+      assert.equal(markup.includes('data-forensic-receipt-ribbon="true"'), true);
+      assert.equal(markup.includes('data-mission-run-receipt-panel="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
       assert.equal(markup.includes('data-judge-touchboard="true"'), true);
       assert.equal(markup.includes('data-mission-evidence-navigator="true"'), true);
@@ -199,6 +201,8 @@ const tests = [
       assert.equal(markup.includes("Foreman Avatar Bay"), true);
       assert.equal(markup.includes("Judge Touchboard"), true);
       assert.equal(markup.includes("Evidence Navigator"), true);
+      assert.equal(markup.includes("Forensic Receipt Ribbon"), true);
+      assert.equal(markup.includes("Mission Run Receipt"), true);
       assert.equal(markup.includes("Engineer Mode"), true);
       assert.equal(markup.includes("Local demo control room"), true);
     },
@@ -501,6 +505,8 @@ const tests = [
       assert.equal(markup.includes('data-proof-spotlight="true"'), true);
       assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
       assert.equal(markup.includes('data-civic-twin-diorama="true"'), true);
+      assert.equal(markup.includes('data-forensic-receipt-ribbon="true"'), true);
+      assert.equal(markup.includes('data-mission-run-receipt-panel="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
       assert.equal(markup.includes('data-judge-touchboard="true"'), true);
       assert.equal(markup.includes('data-mission-evidence-navigator="true"'), true);
@@ -747,6 +753,8 @@ const tests = [
         "src/components/DemoAuditWall.tsx",
         "src/components/DoctrineCard.tsx",
         "src/components/HoldWall.tsx",
+        "src/components/ForensicReceiptRibbon.tsx",
+        "src/components/MissionRunReceiptPanel.tsx",
         "src/components/MissionPlaybackControls.tsx",
         "src/demo/demoAudit.ts",
         "src/demo/doctrineCard.ts",
@@ -759,6 +767,9 @@ const tests = [
         "src/demo/absenceShadowView.ts",
         "src/components/MissionRail.tsx",
         "src/demo/missionRail.ts",
+        "src/demo/missionRunRecorder.ts",
+        "src/demo/missionRunReceipt.ts",
+        "src/demo/missionReceiptRibbon.ts",
         "src/demo/proofSpotlightView.ts",
         "src/demo/authorityHandoffView.ts",
         "src/foremanGuide/foremanEmbodiedState.ts",

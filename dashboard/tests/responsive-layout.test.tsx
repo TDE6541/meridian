@@ -44,6 +44,8 @@ const tests = [
       assert.equal(markup.includes('data-civic-twin-diorama="true"'), true);
       assert.equal(markup.includes('data-proof-spotlight="true"'), true);
       assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
+      assert.equal(markup.includes('data-forensic-receipt-ribbon="true"'), true);
+      assert.equal(markup.includes('data-mission-run-receipt-panel="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
       assert.equal(markup.includes('data-judge-touchboard="true"'), true);
       assert.equal(markup.includes('data-mission-evidence-navigator="true"'), true);
@@ -83,6 +85,9 @@ const tests = [
       assert.equal(styles.includes(".absence-shadow-map__stages"), true);
       assert.equal(styles.includes(".absence-shadow-slot__facts"), true);
       assert.equal(styles.includes(".mission-playback-controls__status"), true);
+      assert.equal(styles.includes(".forensic-receipt-ribbon__header"), true);
+      assert.equal(styles.includes(".mission-run-receipt-panel__facts"), true);
+      assert.equal(styles.includes(".mission-run-receipt-panel__print"), true);
       assert.equal(styles.includes(".foreman-avatar-bay__readout"), true);
       assert.equal(styles.includes(".foreman-avatar-bay__button"), true);
       assert.equal(styles.includes(".judge-touchboard__controls"), true);

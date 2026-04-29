@@ -22,14 +22,17 @@ import {
 import type { MissionPhysicalProjectionV1 } from "../demo/missionPhysicalProjection.ts";
 import type { JudgeQuestionId, JudgeTouchboardCard } from "../demo/judgeTouchboardDeck.ts";
 import { buildJudgeModeProjection } from "../demo/missionEvidenceNavigator.ts";
+import { buildMissionRunReceipt } from "../demo/missionRunReceipt.ts";
 import { AbsenceShadowMap } from "./AbsenceShadowMap.tsx";
 import { AuthorityHandoffTheater } from "./AuthorityHandoffTheater.tsx";
 import { CivicTwinDiorama } from "./CivicTwinDiorama.tsx";
+import { ForensicReceiptRibbon } from "./ForensicReceiptRibbon.tsx";
 import { ForemanAvatarBay } from "./ForemanAvatarBay.tsx";
 import { JudgeTouchboard } from "./JudgeTouchboard.tsx";
 import { MissionEvidenceNavigator } from "./MissionEvidenceNavigator.tsx";
 import { MissionRail } from "./MissionRail.tsx";
 import { ProofSpotlight } from "./ProofSpotlight.tsx";
+import { MissionRunReceiptPanel } from "./MissionRunReceiptPanel.tsx";
 import { SyncPill } from "./SyncPill.tsx";
 
 export interface MissionPresentationShellProps {
@@ -274,6 +277,13 @@ export function MissionPresentationShell({
     missionPhysicalProjection,
     judgeCard
   );
+  const missionRunReceipt = buildMissionRunReceipt({
+    conductorOutput: missionPlaybackControls?.conductorOutput ?? null,
+    judgeCard,
+    judgeInterruptStatus,
+    playbackState: missionPlaybackControls?.playbackState ?? null,
+    projection: presentationProjection,
+  });
   const publicPayloadStatus = publicSkinView?.hasPayload
     ? "public skin payload present"
     : "public skin payload pending";
@@ -431,6 +441,8 @@ export function MissionPresentationShell({
         </dl>
       </section>
 
+      <ForensicReceiptRibbon receipt={missionRunReceipt} />
+
       <aside className="mission-foreman-note" data-foreman-presenter-note="guide-only">
         <span>Foreman guide</span>
         <strong>
@@ -469,6 +481,8 @@ export function MissionPresentationShell({
       <AbsenceShadowMap projection={presentationProjection} />
 
       <MissionPlaybackControls {...missionPlaybackControls} />
+
+      <MissionRunReceiptPanel receipt={missionRunReceipt} />
 
       <MissionRail stages={missionRailStages} />
 

@@ -3837,6 +3837,230 @@ kbd {
   font-size: 0.76rem;
 }
 
+.forensic-receipt-ribbon,
+.mission-run-receipt-panel {
+  display: grid;
+  gap: 0.68rem;
+  padding: 0.82rem;
+  border: 1px solid rgba(61, 214, 140, 0.3);
+  border-radius: 8px;
+  background: rgba(61, 214, 140, 0.065);
+}
+
+.mission-run-receipt-panel {
+  border-color: rgba(245, 181, 71, 0.32);
+  background: rgba(10, 22, 40, 0.3);
+}
+
+.forensic-receipt-ribbon__header,
+.mission-run-receipt-panel__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(11rem, 0.34fr);
+  gap: 0.7rem;
+  align-items: start;
+}
+
+.forensic-receipt-ribbon__header h2,
+.forensic-receipt-ribbon__header p,
+.mission-run-receipt-panel__header h2,
+.mission-run-receipt-panel__header p {
+  margin: 0;
+}
+
+.forensic-receipt-ribbon__eyebrow,
+.forensic-receipt-ribbon__run span,
+.forensic-receipt-ribbon__latest span,
+.forensic-receipt-ribbon__ticket span,
+.mission-run-receipt-panel__eyebrow,
+.mission-run-receipt-panel__facts span,
+.mission-run-receipt-panel__boundary span {
+  margin: 0;
+  text-transform: uppercase;
+  color: rgba(61, 214, 140, 0.82);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.mission-run-receipt-panel__eyebrow,
+.mission-run-receipt-panel__facts span,
+.mission-run-receipt-panel__boundary span {
+  color: rgba(245, 181, 71, 0.82);
+}
+
+.forensic-receipt-ribbon h2,
+.mission-run-receipt-panel h2 {
+  color: #ffffff;
+  font-size: 1.06rem;
+  line-height: 1.12;
+}
+
+.forensic-receipt-ribbon__header p,
+.mission-run-receipt-panel__header p {
+  color: rgba(232, 237, 242, 0.76);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.forensic-receipt-ribbon__run,
+.forensic-receipt-ribbon__latest,
+.mission-run-receipt-panel__facts div,
+.mission-run-receipt-stage,
+.mission-run-receipt-panel__lists section {
+  min-width: 0;
+  padding: 0.58rem;
+  border: 1px solid rgba(232, 237, 242, 0.14);
+  border-radius: 8px;
+  background: rgba(10, 22, 40, 0.26);
+}
+
+.forensic-receipt-ribbon__run,
+.forensic-receipt-ribbon__latest,
+.mission-run-receipt-panel__facts div,
+.mission-run-receipt-stage {
+  display: grid;
+  gap: 0.24rem;
+}
+
+.forensic-receipt-ribbon__run strong,
+.forensic-receipt-ribbon__latest strong,
+.forensic-receipt-ribbon__ticket strong,
+.mission-run-receipt-panel__facts strong,
+.mission-run-receipt-stage strong,
+.mission-run-receipt-panel__lists strong {
+  color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.forensic-receipt-ribbon__run em,
+.forensic-receipt-ribbon__latest em,
+.forensic-receipt-ribbon__latest small,
+.forensic-receipt-ribbon__ticket em,
+.forensic-receipt-ribbon__ticket small,
+.mission-run-receipt-panel__facts strong,
+.mission-run-receipt-stage em,
+.mission-run-receipt-panel__lists span,
+.mission-run-receipt-panel__lists p {
+  color: rgba(232, 237, 242, 0.7);
+  font-size: 0.76rem;
+  font-style: normal;
+  overflow-wrap: anywhere;
+}
+
+.forensic-receipt-ribbon__latest p,
+.forensic-receipt-ribbon__ticket p {
+  margin: 0;
+  color: rgba(232, 237, 242, 0.82);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.forensic-receipt-ribbon__ticker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.forensic-receipt-ribbon__ticket {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.58rem;
+  border: 1px solid rgba(61, 214, 140, 0.2);
+  border-radius: 8px;
+  background: rgba(10, 22, 40, 0.2);
+}
+
+.forensic-receipt-ribbon__ticket--empty,
+.forensic-receipt-ribbon__latest--ready {
+  border-style: dashed;
+}
+
+.mission-run-receipt-panel__print {
+  min-height: 2.55rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid rgba(245, 181, 71, 0.44);
+  border-radius: 8px;
+  background: rgba(245, 181, 71, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.mission-run-receipt-panel__print:focus-visible {
+  outline: 3px solid rgba(245, 181, 71, 0.45);
+  outline-offset: 2px;
+}
+
+.mission-run-receipt-panel__facts,
+.mission-run-receipt-panel__stages,
+.mission-run-receipt-panel__lists {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.mission-run-receipt-panel__facts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.mission-run-receipt-panel__stages {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.mission-run-receipt-stage--active {
+  border-color: rgba(61, 214, 140, 0.5);
+}
+
+.mission-run-receipt-stage--complete {
+  border-color: rgba(245, 181, 71, 0.42);
+}
+
+.mission-run-receipt-stage--hold {
+  border-color: rgba(229, 72, 77, 0.56);
+}
+
+.mission-run-receipt-panel__lists {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mission-run-receipt-panel__lists h3,
+.mission-run-receipt-panel__lists ul,
+.mission-run-receipt-panel__lists p {
+  margin: 0;
+}
+
+.mission-run-receipt-panel__lists h3 {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.mission-run-receipt-panel__lists ul {
+  display: grid;
+  gap: 0.35rem;
+  padding-left: 1.1rem;
+}
+
+.mission-run-receipt-panel__boundary {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.mission-run-receipt-panel__boundary div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.mission-run-receipt-panel__boundary small {
+  padding: 0.28rem 0.46rem;
+  border: 1px solid rgba(232, 237, 242, 0.14);
+  border-radius: 999px;
+  color: rgba(232, 237, 242, 0.76);
+  background: rgba(232, 237, 242, 0.055);
+  overflow-wrap: anywhere;
+}
+
 .mission-primary-actions {
   display: flex;
   flex-wrap: wrap;
@@ -4375,6 +4599,11 @@ kbd {
   .absence-shadow-map__footer,
   .mission-playback-controls__intro,
   .mission-playback-controls__status,
+  .forensic-receipt-ribbon__header,
+  .mission-run-receipt-panel__header,
+  .mission-run-receipt-panel__facts,
+  .mission-run-receipt-panel__stages,
+  .mission-run-receipt-panel__lists,
   .mission-secondary-proof,
   .mission-proof-summary-grid,
   .decision-counter__grid,
@@ -4435,6 +4664,8 @@ kbd {
   .proof-spotlight,
   .absence-shadow-map,
   .mission-playback-controls,
+  .forensic-receipt-ribbon,
+  .mission-run-receipt-panel,
   .mission-presentation__readout,
   .mission-presentation__card,
   .mission-rail__stage,
@@ -4510,6 +4741,11 @@ kbd {
     .absence-shadow-map__legend,
     .absence-shadow-map__stages,
     .absence-shadow-map__footer,
+    .forensic-receipt-ribbon__header,
+    .mission-run-receipt-panel__header,
+    .mission-run-receipt-panel__facts,
+    .mission-run-receipt-panel__stages,
+    .mission-run-receipt-panel__lists,
     .foreman-mount-point__facts,
     .relationship-graph__nodes,
     .status-bar {
@@ -4582,6 +4818,7 @@ kbd {
   .judge-touchboard__button,
   .judge-touchboard__resume,
   .foreman-avatar-bay__button,
+  .mission-run-receipt-panel__print,
   .mission-presentation__mode-toggle,
   .mission-primary-actions__button {
     justify-content: center;
