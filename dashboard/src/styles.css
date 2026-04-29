@@ -2630,7 +2630,7 @@ kbd {
 .foreman-avatar-bay__control-card span {
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   color: rgba(245, 181, 71, 0.86);
   font-size: 0.72rem;
 }
@@ -2732,6 +2732,178 @@ kbd {
 
 .foreman-avatar-bay__button:focus-visible {
   outline-color: var(--mission-amber-warning);
+}
+
+.authority-handoff-theater {
+  --authority-handoff-tone: var(--mission-dim-green-status);
+  display: grid;
+  gap: 0.72rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(232, 237, 242, 0.18);
+  border-left: 4px solid var(--authority-handoff-tone);
+  border-radius: 8px;
+  background: rgba(232, 237, 242, 0.055);
+}
+
+.authority-handoff-theater--holding {
+  --authority-handoff-tone: var(--mission-amber-warning);
+  background: rgba(245, 181, 71, 0.08);
+}
+
+.authority-handoff-theater--idle,
+.authority-handoff-theater--unavailable {
+  --authority-handoff-tone: rgba(232, 237, 242, 0.52);
+}
+
+.authority-handoff-theater__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.3fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.authority-handoff-theater__header > div,
+.authority-role-card,
+.authority-handoff-theater__facts div,
+.authority-handoff-theater__transfer,
+.authority-handoff-token {
+  min-width: 0;
+}
+
+.authority-handoff-theater__eyebrow,
+.authority-handoff-theater__status span,
+.authority-handoff-token span,
+.authority-handoff-theater__transfer span,
+.authority-role-card span,
+.authority-role-card dt,
+.authority-handoff-theater__facts dt,
+.authority-handoff-theater__non-claims span,
+.authority-handoff-theater__legend span,
+.authority-handoff-theater__footer span {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(245, 181, 71, 0.86);
+  font-size: 0.72rem;
+}
+
+.authority-handoff-theater h2 {
+  margin: 0.16rem 0 0;
+  color: #ffffff;
+  font-size: 1.25rem;
+  line-height: 1.1;
+}
+
+.authority-handoff-theater__boundary,
+.authority-handoff-theater__status em,
+.authority-handoff-token em,
+.authority-handoff-theater__transfer em,
+.authority-role-card dd,
+.authority-role-card p,
+.authority-handoff-theater__facts dd {
+  margin: 0;
+  color: rgba(232, 237, 242, 0.76);
+  font-size: 0.8rem;
+  font-style: normal;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.authority-handoff-theater__boundary {
+  margin-top: 0.35rem;
+}
+
+.authority-handoff-theater__status,
+.authority-handoff-token,
+.authority-handoff-theater__transfer,
+.authority-role-card,
+.authority-handoff-theater__facts div {
+  display: grid;
+  gap: 0.28rem;
+  padding: 0.62rem;
+  border: 1px solid rgba(232, 237, 242, 0.14);
+  border-radius: 8px;
+  background: rgba(10, 22, 40, 0.24);
+}
+
+.authority-handoff-theater__status {
+  border-color: var(--authority-handoff-tone);
+}
+
+.authority-handoff-theater__status strong,
+.authority-handoff-token strong,
+.authority-handoff-theater__transfer strong,
+.authority-role-card strong {
+  color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.authority-handoff-token {
+  border-color: var(--authority-handoff-tone);
+}
+
+.authority-handoff-theater__transfer {
+  border-color: rgba(61, 214, 140, 0.34);
+}
+
+.authority-handoff-theater__roles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.authority-role-card--requester {
+  border-color: rgba(61, 214, 140, 0.38);
+}
+
+.authority-role-card--approver {
+  border-color: rgba(245, 181, 71, 0.42);
+}
+
+.authority-role-card--public-boundary,
+.authority-role-card--observer {
+  border-color: rgba(232, 237, 242, 0.28);
+}
+
+.authority-role-card--fallback {
+  border-color: rgba(245, 181, 71, 0.5);
+}
+
+.authority-role-card dl,
+.authority-handoff-theater__facts {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.authority-role-card dl {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.authority-handoff-theater__facts {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.authority-role-card div {
+  min-width: 0;
+}
+
+.authority-handoff-theater__non-claims,
+.authority-handoff-theater__legend,
+.authority-handoff-theater__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.authority-handoff-theater__non-claims span,
+.authority-handoff-theater__legend span,
+.authority-handoff-theater__footer span {
+  padding: 0.32rem 0.5rem;
+  border: 1px solid rgba(232, 237, 242, 0.16);
+  border-radius: 999px;
+  background: rgba(10, 22, 40, 0.24);
+  color: rgba(232, 237, 242, 0.82);
 }
 
 .proof-spotlight {
@@ -3773,6 +3945,10 @@ kbd {
   .mission-current-card__facts,
   .mission-foreman-note,
   .foreman-avatar-bay__readout,
+  .authority-handoff-theater__header,
+  .authority-handoff-theater__roles,
+  .authority-role-card dl,
+  .authority-handoff-theater__facts,
   .proof-spotlight__header,
   .proof-spotlight__beam,
   .proof-spotlight__facts,
@@ -3835,6 +4011,7 @@ kbd {
   }
 
   .mission-current-card,
+  .authority-handoff-theater,
   .proof-spotlight,
   .absence-shadow-map,
   .mission-playback-controls,
@@ -3894,6 +4071,10 @@ kbd {
     .foreman-guide-panel__presence-row,
     .foreman-avatar-bay__stage,
     .foreman-avatar-bay__readout,
+    .authority-handoff-theater__header,
+    .authority-handoff-theater__roles,
+    .authority-role-card dl,
+    .authority-handoff-theater__facts,
     .proof-spotlight__header,
     .proof-spotlight__beam,
     .proof-spotlight__facts,

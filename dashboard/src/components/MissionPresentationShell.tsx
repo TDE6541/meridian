@@ -21,6 +21,7 @@ import {
 } from "./MissionPlaybackControls.tsx";
 import type { MissionPhysicalProjectionV1 } from "../demo/missionPhysicalProjection.ts";
 import { AbsenceShadowMap } from "./AbsenceShadowMap.tsx";
+import { AuthorityHandoffTheater } from "./AuthorityHandoffTheater.tsx";
 import { ForemanAvatarBay } from "./ForemanAvatarBay.tsx";
 import { MissionRail } from "./MissionRail.tsx";
 import { ProofSpotlight } from "./ProofSpotlight.tsx";
@@ -420,6 +421,8 @@ export function MissionPresentationShell({
       </aside>
 
       <ForemanAvatarBay projection={missionPhysicalProjection} />
+
+      <AuthorityHandoffTheater projection={missionPhysicalProjection} />
 
       <ProofSpotlight projection={missionPhysicalProjection} />
 

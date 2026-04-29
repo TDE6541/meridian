@@ -184,8 +184,10 @@ const tests = [
       assert.equal(markup.includes('data-current-decision-card="true"'), true);
       assert.equal(markup.includes('data-proof-spotlight="true"'), true);
       assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
+      assert.equal(markup.includes('data-authority-handoff-theater="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
       assert.equal(markup.includes("Evidence Beam"), true);
+      assert.equal(markup.includes("Authority Handoff Theater"), true);
       assert.equal(markup.includes("Absence Shadow Map"), true);
       assert.equal(markup.includes("Foreman Avatar Bay"), true);
       assert.equal(markup.includes("Engineer Mode"), true);
@@ -696,6 +698,7 @@ const tests = [
       const sourcePaths = [
         "src/components/ControlRoomShell.tsx",
         "src/components/AbsenceShadowMap.tsx",
+        "src/components/AuthorityHandoffTheater.tsx",
         "src/components/ForemanAvatarBay.tsx",
         "src/components/MissionPresentationShell.tsx",
         "src/components/ProofSpotlight.tsx",
@@ -713,6 +716,7 @@ const tests = [
         "src/components/MissionRail.tsx",
         "src/demo/missionRail.ts",
         "src/demo/proofSpotlightView.ts",
+        "src/demo/authorityHandoffView.ts",
         "src/foremanGuide/foremanEmbodiedState.ts",
       ];
 

@@ -40,6 +40,7 @@ const tests = [
       assert.equal(markup.includes('data-responsive-shell="projector-safe"'), true);
       assert.equal(markup.includes('data-presenter-view-default="true"'), true);
       assert.equal(markup.includes('data-current-decision-card="true"'), true);
+      assert.equal(markup.includes('data-authority-handoff-theater="true"'), true);
       assert.equal(markup.includes('data-proof-spotlight="true"'), true);
       assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
@@ -81,6 +82,8 @@ const tests = [
       assert.equal(styles.includes(".mission-playback-controls__status"), true);
       assert.equal(styles.includes(".foreman-avatar-bay__readout"), true);
       assert.equal(styles.includes(".foreman-avatar-bay__button"), true);
+      assert.equal(styles.includes(".authority-handoff-theater__roles"), true);
+      assert.equal(styles.includes(".authority-handoff-theater__facts"), true);
       assert.equal(styles.includes(".mission-primary-actions__button"), true);
     },
   },
