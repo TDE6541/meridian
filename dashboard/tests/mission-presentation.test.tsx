@@ -180,6 +180,8 @@ const tests = [
       assert.equal(markup.includes('data-presentation-mode="mission"'), true);
       assert.equal(markup.includes('data-mission-presentation="active"'), true);
       assert.equal(markup.includes('data-presenter-view-default="true"'), true);
+      assert.equal(markup.includes('data-mission-control-physical-mode="off"'), true);
+      assert.equal(markup.includes('data-mission-physical-toggle="true"'), true);
       assert.equal(markup.includes('data-engineer-cockpit="hidden"'), true);
       assert.equal(markup.includes("Presenter Cockpit"), true);
       assert.equal(markup.includes("Proof Tools"), true);

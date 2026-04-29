@@ -39,6 +39,7 @@ const tests = [
 
       assert.equal(markup.includes('data-responsive-shell="projector-safe"'), true);
       assert.equal(markup.includes('data-presenter-view-default="true"'), true);
+      assert.equal(markup.includes('data-mission-control-physical-mode="off"'), true);
       assert.equal(markup.includes('data-current-decision-card="true"'), true);
       assert.equal(markup.includes('data-authority-handoff-theater="true"'), true);
       assert.equal(markup.includes('data-civic-twin-diorama="true"'), true);
@@ -66,6 +67,30 @@ const tests = [
     },
   },
   {
+    name: "responsive physical mode keeps projection surfaces visible and controls stage-scaled",
+    run: async () => {
+      const records = await loadAllScenarioRecords();
+      const markup = renderMarkup(
+        <ControlRoomShell records={records} initialMissionPhysicalModeEnabled={true} />
+      );
+
+      assert.equal(markup.includes('data-mission-physical-mode="on"'), true);
+      assert.equal(markup.includes('data-mission-physical-layout="stage"'), true);
+      assert.equal(markup.includes('data-mission-physical-control-scale="large"'), true);
+      assert.equal(markup.includes('data-reduced-motion-safe="true"'), true);
+      assert.equal(markup.includes('data-proof-tools="collapsed-by-default"'), true);
+      assert.equal(markup.includes("Mission Control Physical Mode"), true);
+      assert.equal(markup.includes("Current decision / HOLD"), true);
+      assert.equal(markup.includes("Permit #4471"), true);
+      assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
+      assert.equal(markup.includes('data-judge-touchboard="true"'), true);
+      assert.equal(markup.includes('data-proof-spotlight="true"'), true);
+      assert.equal(markup.includes('data-civic-twin-diorama="true"'), true);
+      assert.equal(markup.includes('data-forensic-receipt-ribbon="true"'), true);
+      assert.equal([...markup.matchAll(/data-mission-stage-label="/g)].length, 6);
+    },
+  },
+  {
     name: "responsive CSS protects 375px judge demo panels without package dependencies",
     run: async () => {
       const styles = await readFile("src/styles.css", "utf8");
@@ -88,6 +113,8 @@ const tests = [
       assert.equal(styles.includes(".forensic-receipt-ribbon__header"), true);
       assert.equal(styles.includes(".mission-run-receipt-panel__facts"), true);
       assert.equal(styles.includes(".mission-run-receipt-panel__print"), true);
+      assert.equal(styles.includes(".mission-control-physical-mode"), true);
+      assert.equal(styles.includes(".mission-presentation--physical"), true);
       assert.equal(styles.includes(".foreman-avatar-bay__readout"), true);
       assert.equal(styles.includes(".foreman-avatar-bay__button"), true);
       assert.equal(styles.includes(".judge-touchboard__controls"), true);

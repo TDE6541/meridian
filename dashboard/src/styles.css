@@ -2136,9 +2136,20 @@ kbd {
 
 .mission-presentation__header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.42fr);
   gap: 1rem;
   align-items: start;
+}
+
+.mission-presentation__header-tools {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.mission-presentation--physical {
+  gap: 1rem;
+  padding: 1rem;
 }
 
 .mission-presentation__eyebrow,
@@ -2182,10 +2193,161 @@ kbd {
 
 .mission-proof-tools {
   justify-self: end;
-  min-width: min(100%, 18rem);
+  width: 100%;
+  min-width: 0;
   border: 1px solid rgba(245, 181, 71, 0.38);
   border-radius: 8px;
   background: rgba(245, 181, 71, 0.08);
+}
+
+.mission-control-physical-mode {
+  display: grid;
+  gap: 0.6rem;
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid rgba(61, 214, 140, 0.28);
+  border-radius: 8px;
+  background: rgba(61, 214, 140, 0.065);
+}
+
+.mission-control-physical-mode--enabled {
+  border-color: rgba(61, 214, 140, 0.58);
+  background: rgba(61, 214, 140, 0.11);
+  box-shadow: inset 0 0 0 1px rgba(61, 214, 140, 0.16);
+}
+
+.mission-control-physical-mode__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.6rem;
+  align-items: start;
+}
+
+.mission-control-physical-mode__eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  color: rgba(61, 214, 140, 0.88);
+  font-size: 0.72rem;
+}
+
+.mission-control-physical-mode h2,
+.mission-control-physical-mode p {
+  margin: 0;
+}
+
+.mission-control-physical-mode h2 {
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.12;
+}
+
+.mission-control-physical-mode p {
+  color: rgba(232, 237, 242, 0.76);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.mission-control-physical-mode__toggle {
+  min-width: 4.5rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid rgba(61, 214, 140, 0.58);
+  border-radius: 8px;
+  background: rgba(61, 214, 140, 0.12);
+  color: var(--mission-dim-green-status);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.mission-control-physical-mode__toggle[aria-pressed="true"] {
+  background: rgba(61, 214, 140, 0.2);
+  color: #ffffff;
+}
+
+.mission-control-physical-mode__toggle:focus-visible {
+  outline-color: var(--mission-dim-green-status);
+}
+
+.mission-control-physical-mode__safe-copy {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.mission-control-physical-mode__facts,
+.mission-control-physical-mode__surfaces,
+.mission-control-physical-mode__boundary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.mission-control-physical-mode__facts span,
+.mission-control-physical-mode__surfaces span,
+.mission-control-physical-mode__boundary span {
+  min-width: 0;
+  padding: 0.28rem 0.45rem;
+  border: 1px solid rgba(232, 237, 242, 0.14);
+  border-radius: 999px;
+  color: rgba(232, 237, 242, 0.78);
+  background: rgba(10, 22, 40, 0.22);
+  font-size: 0.68rem;
+  overflow-wrap: anywhere;
+}
+
+.mission-control-physical-mode__surfaces span {
+  color: rgba(61, 214, 140, 0.9);
+}
+
+.mission-control-physical-mode__boundary span {
+  color: rgba(245, 181, 71, 0.88);
+}
+
+.mission-control-physical-mode__reset {
+  padding-top: 0.15rem;
+  border-top: 1px solid rgba(232, 237, 242, 0.12);
+}
+
+.mission-presentation--physical .mission-control-physical-mode,
+.mission-presentation--physical .mission-current-card,
+.mission-presentation--physical .foreman-avatar-bay,
+.mission-presentation--physical .judge-touchboard,
+.mission-presentation--physical .proof-spotlight,
+.mission-presentation--physical .civic-twin-diorama,
+.mission-presentation--physical .mission-playback-controls,
+.mission-presentation--physical .forensic-receipt-ribbon {
+  border-width: 2px;
+}
+
+.mission-presentation--physical .foreman-avatar-bay,
+.mission-presentation--physical .judge-touchboard,
+.mission-presentation--physical .proof-spotlight,
+.mission-presentation--physical .mission-playback-controls {
+  background-color: rgba(232, 237, 242, 0.075);
+}
+
+.mission-presentation--physical .foreman-avatar-bay h2,
+.mission-presentation--physical .judge-touchboard h2,
+.mission-presentation--physical .proof-spotlight h2,
+.mission-presentation--physical .mission-playback-controls__intro h2 {
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+}
+
+.mission-presentation--physical .mission-playback-controls__mode,
+.mission-presentation--physical .mission-playback-controls__button,
+.mission-presentation--physical .mission-primary-actions__button,
+.mission-presentation--physical .judge-touchboard__button,
+.mission-presentation--physical .judge-touchboard__resume {
+  min-height: 3.75rem;
+  font-size: 1rem;
+}
+
+.mission-presentation--physical .foreman-avatar-bay__avatar {
+  min-height: 12rem;
+}
+
+.mission-presentation--physical .mission-secondary-proof {
+  opacity: 0.78;
 }
 
 .mission-proof-tools summary {
@@ -4557,7 +4719,8 @@ kbd {
   .live-mode-grid,
   .live-mode-toggle,
   .director-grid,
-  .director-toggle__row {
+  .director-toggle__row,
+  .mission-presentation__header {
     grid-template-columns: 1fr;
   }
 
@@ -4606,6 +4769,7 @@ kbd {
   .mission-run-receipt-panel__lists,
   .mission-secondary-proof,
   .mission-proof-summary-grid,
+  .mission-control-physical-mode__header,
   .decision-counter__grid,
   .mission-rail__list,
   .mission-demo-anchor,
@@ -4766,6 +4930,10 @@ kbd {
     grid-template-columns: 1fr;
   }
 
+  .mission-control-physical-mode__header {
+    grid-template-columns: 1fr;
+  }
+
   .mission-proof-tools {
     justify-self: stretch;
   }
@@ -4819,6 +4987,7 @@ kbd {
   .judge-touchboard__resume,
   .foreman-avatar-bay__button,
   .mission-run-receipt-panel__print,
+  .mission-control-physical-mode__toggle,
   .mission-presentation__mode-toggle,
   .mission-primary-actions__button {
     justify-content: center;

@@ -136,6 +136,7 @@ export interface ControlRoomShellProps {
   initialControlState?: Partial<ControlRoomState>;
   initialDashboardMode?: DashboardMode;
   initialDirectorModeEnabled?: boolean;
+  initialMissionPhysicalModeEnabled?: boolean;
   initialPresentationMode?: ControlRoomPresentationMode;
   liveClient?: LiveProjectionClient;
   liveSessionId?: string;
@@ -178,6 +179,7 @@ export function ControlRoomShell({
   initialControlState,
   initialDashboardMode = "snapshot",
   initialDirectorModeEnabled = false,
+  initialMissionPhysicalModeEnabled = false,
   initialPresentationMode = "mission",
   liveClient,
   liveSessionId = "latest",
@@ -194,6 +196,9 @@ export function ControlRoomShell({
   );
   const [auditWallOpen, setAuditWallOpen] = useState(false);
   const [missionAbsenceLensEnabled, setMissionAbsenceLensEnabled] = useState(false);
+  const [missionPhysicalModeEnabled, setMissionPhysicalModeEnabled] = useState(
+    initialMissionPhysicalModeEnabled
+  );
   const [holdWallOpen, setHoldWallOpen] = useState(false);
   const [judgeInterrupt, setJudgeInterrupt] =
     useState<JudgeInterruptState | null>(null);
@@ -688,6 +693,7 @@ export function ControlRoomShell({
     setDirectorModeEnabled(false);
     setAuditWallOpen(false);
     setMissionAbsenceLensEnabled(false);
+    setMissionPhysicalModeEnabled(false);
     setHoldWallOpen(false);
     setJudgeInterrupt(null);
     setForemanHighlightedPanelId(null);
@@ -862,6 +868,7 @@ export function ControlRoomShell({
               : "interrupted"
             : "idle"
         }
+        missionPhysicalModeEnabled={missionPhysicalModeEnabled}
         missionPhysicalProjection={missionPhysicalProjection}
         missionPlaybackControls={{
           canStart: selectedRecord?.status === "ready",
@@ -892,6 +899,7 @@ export function ControlRoomShell({
             setHoldWallOpen(true);
           }
         }}
+        onMissionPhysicalModeChange={setMissionPhysicalModeEnabled}
         onJudgeResetForNextJudge={handleJudgeResetForNextJudge}
         onJudgeResumeMission={handleJudgeResumeMission}
         onJudgeSelectQuestion={handleJudgeQuestionSelect}

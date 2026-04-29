@@ -11,10 +11,12 @@ import { buildMissionAbsenceLensOverlay } from "../demo/missionAbsenceLens.ts";
 import type { MissionRailStage } from "../demo/missionRail.ts";
 import type { AuthorityVibrationAttempt } from "../demo/deviceVibration.ts";
 import type { SyncChoreographyView } from "../demo/syncChoreography.ts";
+import { buildMissionPhysicalModeView } from "../demo/missionPhysicalModeView.ts";
 import { DecisionCounter } from "./DecisionCounter.tsx";
 import { DemoAuditWall } from "./DemoAuditWall.tsx";
 import { DoctrineCard } from "./DoctrineCard.tsx";
 import { HoldWall } from "./HoldWall.tsx";
+import { MissionControlPhysicalMode } from "./MissionControlPhysicalMode.tsx";
 import {
   MissionPlaybackControls,
   type MissionPlaybackControlsProps,
@@ -54,6 +56,7 @@ export interface MissionPresentationShellProps {
   holdWallView: HoldWallView;
   judgeCard?: JudgeTouchboardCard | null;
   judgeInterruptStatus?: "idle" | "interrupted" | "paused";
+  missionPhysicalModeEnabled?: boolean;
   missionPhysicalProjection?: MissionPhysicalProjectionV1 | null;
   missionPlaybackControls?: MissionPlaybackControlsProps;
   missionRailStages: readonly MissionRailStage[];
@@ -64,6 +67,7 @@ export interface MissionPresentationShellProps {
   onEngineerModeChange: (enabled: boolean) => void;
   onHoldWallDismiss: () => void;
   onHoldWallOpen: () => void;
+  onMissionPhysicalModeChange?: (enabled: boolean) => void;
   onJudgeResetForNextJudge?: () => void;
   onJudgeResumeMission?: () => void;
   onJudgeSelectQuestion?: (questionId: JudgeQuestionId) => void;
@@ -221,6 +225,7 @@ export function MissionPresentationShell({
   holdWallView,
   judgeCard = null,
   judgeInterruptStatus = judgeCard ? "interrupted" : "idle",
+  missionPhysicalModeEnabled = false,
   missionPhysicalProjection = null,
   missionPlaybackControls,
   missionRailStages,
@@ -231,6 +236,7 @@ export function MissionPresentationShell({
   onEngineerModeChange,
   onHoldWallDismiss,
   onHoldWallOpen,
+  onMissionPhysicalModeChange,
   onJudgeResetForNextJudge,
   onJudgeResumeMission,
   onJudgeSelectQuestion,
@@ -289,11 +295,19 @@ export function MissionPresentationShell({
     : "public skin payload pending";
   const primaryPlaybackAction =
     playbackState === "playing" ? onPausePlayback : onPlayPlayback;
+  const physicalModeView = buildMissionPhysicalModeView({
+    physicalMode: missionPhysicalModeEnabled,
+  });
 
   return (
     <section
-      className="mission-presentation"
+      className={`mission-presentation${
+        missionPhysicalModeEnabled ? " mission-presentation--physical" : ""
+      }`}
       data-mission-presentation={engineerMode ? "engineer" : "active"}
+      data-mission-physical-control-scale={physicalModeView.control_scale}
+      data-mission-physical-layout={physicalModeView.layout_density}
+      data-mission-physical-mode={missionPhysicalModeEnabled ? "on" : "off"}
       data-presenter-view-default={engineerMode ? "false" : "true"}
     >
       <div className="mission-presentation__header">
@@ -307,57 +321,65 @@ export function MissionPresentationShell({
           <p className="mission-presentation__scenario-line">{scenarioDescription}</p>
         </div>
 
-        <details className="mission-proof-tools" data-proof-tools="collapsed-by-default">
-          <summary>Proof Tools</summary>
-          <div className="mission-proof-tools__buttons">
-            <button
-              aria-label={
-                engineerMode ? "Return to Presenter View" : "Reveal Engineer Mode cockpit"
-              }
-              aria-pressed={engineerMode}
-              className="mission-presentation__mode-toggle"
-              onClick={() => onEngineerModeChange(!engineerMode)}
-              type="button"
-            >
-              {engineerMode ? "Presenter View" : "Engineer Mode"}
-            </button>
-            <button
-              aria-label="Open Director Mode in Engineer cockpit"
-              className="mission-presentation__mode-toggle"
-              onClick={onDirectorModeOpen}
-              type="button"
-            >
-              Director Mode
-            </button>
-            <button
-              aria-label="Toggle Absence Lens"
-              aria-pressed={absenceLensEnabled}
-              className="mission-presentation__mode-toggle mission-presentation__mode-toggle--lens"
-              onClick={onAbsenceLensToggle}
-              type="button"
-            >
-              Absence Lens
-            </button>
-            <button
-              aria-label="Open Demo Audit Wall"
-              className="mission-presentation__mode-toggle mission-presentation__mode-toggle--audit"
-              onClick={onAuditWallOpen}
-              type="button"
-            >
-              Audit Wall
-            </button>
-            <button
-              aria-label="Open HOLD Wall"
-              className="mission-presentation__mode-toggle mission-presentation__mode-toggle--hold"
-              data-hold-wall-trigger-state={holdWallView.triggered ? "available" : "unavailable"}
-              disabled={!holdWallView.triggered}
-              onClick={onHoldWallOpen}
-              type="button"
-            >
-              HOLD Wall
-            </button>
-          </div>
-        </details>
+        <div className="mission-presentation__header-tools">
+          <MissionControlPhysicalMode
+            enabled={missionPhysicalModeEnabled}
+            onEnabledChange={onMissionPhysicalModeChange}
+            view={physicalModeView}
+          />
+
+          <details className="mission-proof-tools" data-proof-tools="collapsed-by-default">
+            <summary>Proof Tools</summary>
+            <div className="mission-proof-tools__buttons">
+              <button
+                aria-label={
+                  engineerMode ? "Return to Presenter View" : "Reveal Engineer Mode cockpit"
+                }
+                aria-pressed={engineerMode}
+                className="mission-presentation__mode-toggle"
+                onClick={() => onEngineerModeChange(!engineerMode)}
+                type="button"
+              >
+                {engineerMode ? "Presenter View" : "Engineer Mode"}
+              </button>
+              <button
+                aria-label="Open Director Mode in Engineer cockpit"
+                className="mission-presentation__mode-toggle"
+                onClick={onDirectorModeOpen}
+                type="button"
+              >
+                Director Mode
+              </button>
+              <button
+                aria-label="Toggle Absence Lens"
+                aria-pressed={absenceLensEnabled}
+                className="mission-presentation__mode-toggle mission-presentation__mode-toggle--lens"
+                onClick={onAbsenceLensToggle}
+                type="button"
+              >
+                Absence Lens
+              </button>
+              <button
+                aria-label="Open Demo Audit Wall"
+                className="mission-presentation__mode-toggle mission-presentation__mode-toggle--audit"
+                onClick={onAuditWallOpen}
+                type="button"
+              >
+                Audit Wall
+              </button>
+              <button
+                aria-label="Open HOLD Wall"
+                className="mission-presentation__mode-toggle mission-presentation__mode-toggle--hold"
+                data-hold-wall-trigger-state={holdWallView.triggered ? "available" : "unavailable"}
+                disabled={!holdWallView.triggered}
+                onClick={onHoldWallOpen}
+                type="button"
+              >
+                HOLD Wall
+              </button>
+            </div>
+          </details>
+        </div>
       </div>
 
       <section
