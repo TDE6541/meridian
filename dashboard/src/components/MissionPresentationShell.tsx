@@ -12,6 +12,7 @@ import type { MissionRailStage } from "../demo/missionRail.ts";
 import type { AuthorityVibrationAttempt } from "../demo/deviceVibration.ts";
 import type { SyncChoreographyView } from "../demo/syncChoreography.ts";
 import { buildMissionPhysicalModeView } from "../demo/missionPhysicalModeView.ts";
+import type { MissionRehearsalCertificationV1 } from "../demo/missionRehearsalCertification.ts";
 import { DecisionCounter } from "./DecisionCounter.tsx";
 import { DemoAuditWall } from "./DemoAuditWall.tsx";
 import { DoctrineCard } from "./DoctrineCard.tsx";
@@ -33,6 +34,7 @@ import { ForemanAvatarBay } from "./ForemanAvatarBay.tsx";
 import { JudgeTouchboard } from "./JudgeTouchboard.tsx";
 import { MissionEvidenceNavigator } from "./MissionEvidenceNavigator.tsx";
 import { MissionRail } from "./MissionRail.tsx";
+import { MissionRehearsalPanel } from "./MissionRehearsalPanel.tsx";
 import { ProofSpotlight } from "./ProofSpotlight.tsx";
 import { MissionRunReceiptPanel } from "./MissionRunReceiptPanel.tsx";
 import { SyncPill } from "./SyncPill.tsx";
@@ -60,6 +62,7 @@ export interface MissionPresentationShellProps {
   missionPhysicalProjection?: MissionPhysicalProjectionV1 | null;
   missionPlaybackControls?: MissionPlaybackControlsProps;
   missionRailStages: readonly MissionRailStage[];
+  rehearsalCertification?: MissionRehearsalCertificationV1 | null;
   onDirectorModeOpen?: () => void;
   onAbsenceLensToggle: () => void;
   onAuditWallDismiss: () => void;
@@ -229,6 +232,7 @@ export function MissionPresentationShell({
   missionPhysicalProjection = null,
   missionPlaybackControls,
   missionRailStages,
+  rehearsalCertification = null,
   onDirectorModeOpen,
   onAbsenceLensToggle,
   onAuditWallDismiss,
@@ -378,6 +382,9 @@ export function MissionPresentationShell({
                 HOLD Wall
               </button>
             </div>
+            {rehearsalCertification ? (
+              <MissionRehearsalPanel certification={rehearsalCertification} />
+            ) : null}
           </details>
         </div>
       </div>

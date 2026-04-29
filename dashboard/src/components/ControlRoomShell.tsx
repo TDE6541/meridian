@@ -25,6 +25,7 @@ import {
 import { buildDemoAuditWallView } from "../demo/demoAudit.ts";
 import { useJudgeAuthorityRequestVibration } from "../demo/deviceVibration.ts";
 import { getDemoScenarioMeta } from "../demo/demoScenarios.ts";
+import { FOREMAN_AUTONOMOUS_PLAYBACK_POLICY } from "../demo/foremanAutonomousPolicy.ts";
 import {
   createInitialForemanAutonomousConductorState,
   runForemanAutonomousConductor,
@@ -43,6 +44,7 @@ import {
   type MissionPlaybackState,
 } from "../demo/missionPlaybackController.ts";
 import { buildMissionPhysicalProjection } from "../demo/missionPhysicalProjection.ts";
+import { buildMissionRehearsalCertification } from "../demo/missionRehearsalCertification.ts";
 import {
   MISSION_STAGE_IDS,
   type MissionPlaybackMode,
@@ -390,6 +392,42 @@ export function ControlRoomShell({
   const missionPhysicalProjection = buildMissionPhysicalProjection({
     conductor_output: missionRuntime.conductorOutput,
     playback_state: missionRuntime.playbackState,
+  });
+  const rehearsalCertification = buildMissionRehearsalCertification({
+    certificationId: `mission-rehearsal-${scenarioId}`,
+    createdAt: "dashboard-local-rehearsal",
+    surfaces: {
+      absence_shadow_map:
+        missionPhysicalProjection.absence_shadow_slots.length > 0,
+      authority_handoff_theater:
+        missionPhysicalProjection.authority_handoff.beats.length > 0,
+      boundary_non_claim_posture:
+        missionPhysicalProjection.boundary.demo_only &&
+        missionPhysicalProjection.boundary.no_production_city_claim &&
+        missionPhysicalProjection.boundary.no_root_forensic_chain_write_claim,
+      civic_twin_diorama: Boolean(missionPhysicalProjection.diorama),
+      current_decision_hold_focal_card: currentStep !== null,
+      evidence_navigator: true,
+      foreman_autonomous_conductor: true,
+      foreman_autonomous_policy:
+        FOREMAN_AUTONOMOUS_PLAYBACK_POLICY.mode === "foreman_autonomous",
+      foreman_mount_avatar_bay: true,
+      forensic_receipt_ribbon: true,
+      guided_policy: true,
+      judge_touchboard: true,
+      mission_control_physical_mode: true,
+      mission_playback_controller: Boolean(missionRuntime.playbackState.runId),
+      mission_rail: missionRailStages.length === MISSION_STAGE_IDS.length,
+      mission_run_receipt_panel: true,
+      permit_4471_anchor: true,
+      presenter_cockpit: true,
+      proof_spotlight: missionPhysicalProjection.spotlight.target_count > 0,
+      proof_tools_disclosure: true,
+      required_scenario_demo_data_posture:
+        selectedRecord?.status === "ready" &&
+        totalSteps > 0,
+      reset_behavior: true,
+    },
   });
   const selectedJudgeCard = getJudgeTouchboardCard(judgeInterrupt?.questionId);
 
@@ -881,6 +919,7 @@ export function ControlRoomShell({
           playbackState: missionRuntime.playbackState,
         }}
         missionRailStages={missionRailStages}
+        rehearsalCertification={rehearsalCertification}
         onDirectorModeOpen={() => {
           setPresentationMode("engineer");
           setDirectorModeEnabled(true);

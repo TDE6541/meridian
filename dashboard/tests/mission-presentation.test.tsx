@@ -193,6 +193,7 @@ const tests = [
       assert.equal(markup.includes('data-civic-twin-diorama="true"'), true);
       assert.equal(markup.includes('data-forensic-receipt-ribbon="true"'), true);
       assert.equal(markup.includes('data-mission-run-receipt-panel="true"'), true);
+      assert.equal(markup.includes('data-mission-rehearsal-panel="operator-proof"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
       assert.equal(markup.includes('data-judge-touchboard="true"'), true);
       assert.equal(markup.includes('data-mission-evidence-navigator="true"'), true);
@@ -205,6 +206,7 @@ const tests = [
       assert.equal(markup.includes("Evidence Navigator"), true);
       assert.equal(markup.includes("Forensic Receipt Ribbon"), true);
       assert.equal(markup.includes("Mission Run Receipt"), true);
+      assert.equal(markup.includes("Rehearsal Certification"), true);
       assert.equal(markup.includes("Engineer Mode"), true);
       assert.equal(markup.includes("Local demo control room"), true);
     },
@@ -544,6 +546,24 @@ const tests = [
       ]) {
         assert.equal(markup.includes(label), true, label);
       }
+    },
+  },
+  {
+    name: "ControlRoomShell mounts Rehearsal Panel inside grouped Proof Tools",
+    run: async () => {
+      const records = await loadAllScenarioRecords();
+      const markup = renderMarkup(<ControlRoomShell records={records} />);
+
+      assert.equal(markup.includes('data-proof-tools="collapsed-by-default"'), true);
+      assert.equal(/<details[^>]*class="mission-proof-tools"[^>]* open/.test(markup), false);
+      assert.equal(markup.includes('data-mission-rehearsal-panel="operator-proof"'), true);
+      assert.equal(markup.includes("Rehearsal / operator proof"), true);
+      assert.equal(markup.includes("Rehearsal Certification"), true);
+      assert.equal(markup.includes("does not prove mobile/judge-device smoke"), true);
+      assert.equal(markup.includes("Blocking HOLDs:"), true);
+      assert.equal(markup.includes('data-rehearsal-failure="authority_endpoint_unavailable"'), true);
+      assert.equal(markup.includes('data-rehearsal-manual-hold="final_v2b_closeout"'), true);
+      assert.equal(markup.includes('data-rehearsal-boundary="no_model_api_foreman_claim"'), true);
     },
   },
   {

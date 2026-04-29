@@ -2399,6 +2399,140 @@ kbd {
   outline-color: var(--mission-fault-red);
 }
 
+.mission-rehearsal-panel {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(232, 237, 242, 0.16);
+  border-radius: 8px;
+  background: rgba(10, 22, 40, 0.44);
+}
+
+.mission-rehearsal-panel__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.34fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.mission-rehearsal-panel__eyebrow,
+.mission-rehearsal-panel__status span,
+.mission-rehearsal-panel__summary span,
+.mission-rehearsal-panel__modes span,
+.mission-rehearsal-panel__list span,
+.mission-rehearsal-panel__manual-holds h3,
+.mission-rehearsal-panel__boundary h3,
+.mission-rehearsal-panel__sections h3 {
+  margin: 0;
+  color: rgba(245, 181, 71, 0.9);
+  font-size: 0.68rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.mission-rehearsal-panel h2,
+.mission-rehearsal-panel h3,
+.mission-rehearsal-panel p {
+  margin: 0;
+}
+
+.mission-rehearsal-panel h2 {
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.12;
+}
+
+.mission-rehearsal-panel p,
+.mission-rehearsal-panel small,
+.mission-rehearsal-panel em {
+  color: rgba(232, 237, 242, 0.74);
+  font-size: 0.76rem;
+  font-style: normal;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.mission-rehearsal-panel__status,
+.mission-rehearsal-panel__modes article,
+.mission-rehearsal-panel__list article {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.62rem;
+  border: 1px solid rgba(232, 237, 242, 0.14);
+  border-radius: 8px;
+  background: rgba(232, 237, 242, 0.055);
+}
+
+.mission-rehearsal-panel__status strong,
+.mission-rehearsal-panel__modes strong,
+.mission-rehearsal-panel__list strong {
+  color: #ffffff;
+  font-size: 0.85rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.mission-rehearsal-panel[data-rehearsal-certification-status="HOLD"] .mission-rehearsal-panel__status,
+.mission-rehearsal-panel__list article[data-rehearsal-check-status="HOLD"],
+.mission-rehearsal-panel__list article[data-rehearsal-failure-status="HOLD"] {
+  border-color: rgba(229, 72, 77, 0.5);
+}
+
+.mission-rehearsal-panel__summary,
+.mission-rehearsal-panel__manual-holds div,
+.mission-rehearsal-panel__boundary div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.mission-rehearsal-panel__summary span,
+.mission-rehearsal-panel__manual-holds span,
+.mission-rehearsal-panel__boundary span {
+  min-width: 0;
+  padding: 0.25rem 0.42rem;
+  border: 1px solid rgba(232, 237, 242, 0.13);
+  border-radius: 999px;
+  background: rgba(232, 237, 242, 0.055);
+  color: rgba(232, 237, 242, 0.78);
+  font-size: 0.68rem;
+  overflow-wrap: anywhere;
+}
+
+.mission-rehearsal-panel__manual-holds span {
+  border-color: rgba(245, 181, 71, 0.28);
+  color: rgba(245, 181, 71, 0.88);
+}
+
+.mission-rehearsal-panel__boundary span {
+  border-color: rgba(61, 214, 140, 0.28);
+  color: rgba(61, 214, 140, 0.88);
+}
+
+.mission-rehearsal-panel__modes,
+.mission-rehearsal-panel__sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.mission-rehearsal-panel__sections section,
+.mission-rehearsal-panel__manual-holds,
+.mission-rehearsal-panel__boundary {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.mission-rehearsal-panel__list {
+  display: grid;
+  gap: 0.45rem;
+  max-height: 18rem;
+  overflow: auto;
+  padding-right: 0.1rem;
+}
+
 .judge-touchboard,
 .mission-evidence-navigator {
   display: grid;
@@ -4767,6 +4901,9 @@ kbd {
   .mission-run-receipt-panel__facts,
   .mission-run-receipt-panel__stages,
   .mission-run-receipt-panel__lists,
+  .mission-rehearsal-panel__header,
+  .mission-rehearsal-panel__modes,
+  .mission-rehearsal-panel__sections,
   .mission-secondary-proof,
   .mission-proof-summary-grid,
   .mission-control-physical-mode__header,
@@ -4830,6 +4967,7 @@ kbd {
   .mission-playback-controls,
   .forensic-receipt-ribbon,
   .mission-run-receipt-panel,
+  .mission-rehearsal-panel,
   .mission-presentation__readout,
   .mission-presentation__card,
   .mission-rail__stage,
@@ -4910,6 +5048,9 @@ kbd {
     .mission-run-receipt-panel__facts,
     .mission-run-receipt-panel__stages,
     .mission-run-receipt-panel__lists,
+    .mission-rehearsal-panel__header,
+    .mission-rehearsal-panel__modes,
+    .mission-rehearsal-panel__sections,
     .foreman-mount-point__facts,
     .relationship-graph__nodes,
     .status-bar {
