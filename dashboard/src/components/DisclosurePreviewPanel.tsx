@@ -46,15 +46,15 @@ function renderActionBundle(actionBundle: DisclosurePreviewActionBundleV1 | null
         <span>{actionBundle.role_boundary_summary}</span>
       </div>
 
-      {actionBundle.prepared_actions.map((action) => (
-        <div className="signal-card" key={action.action}>
+      {actionBundle.prepared_actions.map((action, index) => (
+        <div className="signal-card" key={`prepared-action-${index}-${action.action}`}>
           <strong>{action.label}</strong>
           <span>{action.side_effect}</span>
         </div>
       ))}
 
-      {actionBundle.holds.map((hold) => (
-        <div className="signal-card signal-card--hold" key={hold}>
+      {actionBundle.holds.map((hold, index) => (
+        <div className="signal-card signal-card--hold" key={`action-hold-${index}-${hold.slice(0, 80)}`}>
           <strong>Action HOLD</strong>
           <span>{hold}</span>
         </div>
@@ -188,8 +188,8 @@ export function DisclosurePreviewPanel({
 
       {report.unresolved_holds.length > 0 ? (
         <div className="signal-list">
-          {report.unresolved_holds.map((hold) => (
-            <div className="signal-card signal-card--hold" key={hold}>
+          {report.unresolved_holds.map((hold, index) => (
+            <div className="signal-card signal-card--hold" key={`report-hold-${index}-${hold.slice(0, 80)}`}>
               <strong>Unresolved HOLD</strong>
               <span>{hold}</span>
             </div>
@@ -198,15 +198,15 @@ export function DisclosurePreviewPanel({
       ) : null}
 
       <div className="source-ref-list">
-        {report.restricted_fields_excluded.map((field) => (
-          <span key={field}>{field}</span>
+        {report.restricted_fields_excluded.map((field, index) => (
+          <span key={`restricted-field-${index}-${field}`}>{field}</span>
         ))}
       </div>
 
       {report.source_refs.length > 0 ? (
         <div className="source-ref-list">
-          {report.source_refs.map((ref) => (
-            <span key={`${ref.id}-${ref.label}`}>{ref.id}: {ref.label}</span>
+          {report.source_refs.map((ref, index) => (
+            <span key={`source-ref-${index}-${ref.id}-${ref.label}`}>{ref.id}: {ref.label}</span>
           ))}
         </div>
       ) : null}

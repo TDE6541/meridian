@@ -78,6 +78,7 @@ export interface MissionPresentationShellProps {
   onJudgeResetForNextJudge?: () => void;
   onJudgeResumeMission?: () => void;
   onJudgeSelectQuestion?: (questionId: JudgeQuestionId) => void;
+  onMissionAdvance?: () => void;
   onNextStep?: () => void;
   onPausePlayback?: () => void;
   onPlayPlayback?: () => void;
@@ -374,6 +375,7 @@ export function MissionPresentationShell({
   onJudgeResetForNextJudge,
   onJudgeResumeMission,
   onJudgeSelectQuestion,
+  onMissionAdvance,
   onNextStep,
   onPausePlayback,
   onPlayPlayback,
@@ -456,6 +458,14 @@ export function MissionPresentationShell({
       : null;
   const completedMissionStageIds =
     missionPlaybackState?.completedStageIds ?? [];
+  const canAdvanceMission = Boolean(
+    onMissionAdvance &&
+      missionPlaybackState?.mode === "guided" &&
+      missionPlaybackState.status === "running" &&
+      activeMissionStage
+  );
+  const missionAdvanceLabel =
+    activeMissionStage === "public" ? "Complete Mission" : "Next Act";
   const displayedMissionRailStages = buildMissionRevealRailStages(
     missionRailStages,
     missionPlaybackState
@@ -984,7 +994,7 @@ export function MissionPresentationShell({
           Previous
         </button>
         <button
-          className="mission-primary-actions__button mission-primary-actions__button--primary"
+          className="mission-primary-actions__button"
           disabled={!canDrive}
           onClick={primaryPlaybackAction}
           type="button"
@@ -992,12 +1002,20 @@ export function MissionPresentationShell({
           {playbackState === "playing" ? "Pause" : "Play"}
         </button>
         <button
+          className="mission-primary-actions__button mission-primary-actions__button--primary"
+          disabled={!canAdvanceMission}
+          onClick={canAdvanceMission ? onMissionAdvance : undefined}
+          type="button"
+        >
+          {missionAdvanceLabel}
+        </button>
+        <button
           className="mission-primary-actions__button"
           disabled={!canDrive}
           onClick={onNextStep}
           type="button"
         >
-          Next Proof
+          Next Proof Step
         </button>
         <button
           className="mission-primary-actions__button"

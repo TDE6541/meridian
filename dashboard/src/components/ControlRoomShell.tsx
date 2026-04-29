@@ -644,6 +644,35 @@ export function ControlRoomShell({
     });
   }
 
+  function handleMissionAdvance() {
+    setMissionRuntime((current) => {
+      if (
+        current.playbackState.mode !== "guided" ||
+        current.playbackState.status !== "running" ||
+        !current.playbackState.currentStageId
+      ) {
+        return current;
+      }
+
+      const nowMs = getMissionClockMs(current.playbackState);
+      const playbackState = missionPlaybackReducer(current.playbackState, {
+        nowMs,
+        readiness: buildMissionControllerReadiness(
+          current.playbackState,
+          current.playbackState.currentStageId,
+          nowMs
+        ),
+        type: "advance_stage",
+      });
+
+      return {
+        ...current,
+        conductorOutput: null,
+        playbackState,
+      };
+    });
+  }
+
   function handleJudgeQuestionSelect(questionId: JudgeQuestionId) {
     const priorPlaybackState = missionRuntime.playbackState;
 
@@ -950,6 +979,7 @@ export function ControlRoomShell({
         onJudgeResetForNextJudge={handleJudgeResetForNextJudge}
         onJudgeResumeMission={handleJudgeResumeMission}
         onJudgeSelectQuestion={handleJudgeQuestionSelect}
+        onMissionAdvance={handleMissionAdvance}
         onNextStep={() =>
           setControlState((current) => goToNextStep(current, totalSteps))
         }
