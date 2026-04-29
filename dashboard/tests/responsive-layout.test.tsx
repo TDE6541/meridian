@@ -41,6 +41,7 @@ const tests = [
       assert.equal(markup.includes('data-presenter-view-default="true"'), true);
       assert.equal(markup.includes('data-current-decision-card="true"'), true);
       assert.equal(markup.includes('data-proof-spotlight="true"'), true);
+      assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
       assert.equal(markup.includes('data-primary-action-row="presenter"'), true);
       assert.equal(markup.includes('data-secondary-proof-summary="true"'), true);
@@ -75,6 +76,8 @@ const tests = [
       assert.equal(styles.includes(".mission-proof-tools"), true);
       assert.equal(styles.includes(".proof-spotlight__facts"), true);
       assert.equal(styles.includes(".proof-spotlight__beam"), true);
+      assert.equal(styles.includes(".absence-shadow-map__stages"), true);
+      assert.equal(styles.includes(".absence-shadow-slot__facts"), true);
       assert.equal(styles.includes(".mission-playback-controls__status"), true);
       assert.equal(styles.includes(".foreman-avatar-bay__readout"), true);
       assert.equal(styles.includes(".foreman-avatar-bay__button"), true);
