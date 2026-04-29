@@ -540,7 +540,7 @@ export function MissionPresentationShell({
   };
   const renderCurrentDecisionCard = (context: "capture" | "hero") => (
     <section
-      className={`mission-current-card decision-card decision-card--${decisionTone} mission-current-card--${decisionTone} mission-current-card--${context}`}
+      className={`mission-current-card mission-proof-card mission-hold-focal-card decision-card decision-card--${decisionTone} mission-current-card--${decisionTone} mission-current-card--${context}`}
       data-current-decision-card="true"
       data-current-decision-context={context}
       data-current-decision-state={focalDecision}
@@ -636,18 +636,18 @@ export function MissionPresentationShell({
 
         <aside className="mission-hero__side" aria-label="Mission readiness">
           <section
-            className="foreman-compact"
+            className="foreman-compact mission-proof-card"
             data-foreman-compact="ready"
             data-foreman-presenter-note="guide-only"
           >
-            <span>Foreman ready</span>
+            <span className="foreman-compact__badge">Foreman ready</span>
             <strong>Foreman ready. Governance walkthrough armed.</strong>
             <em>
               Explains the HOLD and the missing proof path. It does not create truth.
             </em>
           </section>
 
-          <section className="governance-card mission-safety-card" data-safety-card="compact">
+          <section className="governance-card mission-proof-card mission-safety-card" data-safety-card="compact">
             <p className="mission-safety-card__eyebrow">Why This Is Safe</p>
             <h2>Missing inputs become HOLDs, not guesses.</h2>
             <ul>
@@ -678,7 +678,7 @@ export function MissionPresentationShell({
 
       <section
         aria-hidden={!isReviewMode}
-        className={`${reviewSurfaceClassName} mission-review-banner`}
+        className={`${reviewSurfaceClassName} mission-review-banner mission-review-card`}
         data-mission-review-banner="completion"
         data-mission-surface="review"
       >
@@ -710,7 +710,7 @@ export function MissionPresentationShell({
 
       <section
         aria-hidden={!isReviewMode}
-        className={`${reviewSurfaceClassName} mission-internal-controls`}
+        className={`${reviewSurfaceClassName} mission-internal-controls mission-review-card`}
         data-internal-proof-controls="true"
         data-mission-surface="review"
       >
@@ -727,6 +727,16 @@ export function MissionPresentationShell({
 
           <details className="mission-proof-tools" data-proof-tools="collapsed-by-default">
             <summary>Proof Tools</summary>
+            <div
+              className="mission-proof-tools__framing"
+              data-failure-injection-surface="review-proof-tools"
+            >
+              <span>Optional proof: controlled failure becomes evidence.</span>
+              <p>
+                In a normal AI workflow, this is where confidence becomes risk. In
+                Meridian, failure becomes evidence.
+              </p>
+            </div>
             <div className="mission-proof-tools__buttons">
               <button
                 aria-label={
@@ -784,7 +794,7 @@ export function MissionPresentationShell({
 
       <section
         aria-hidden={!isReviewMode}
-        className={`${reviewSurfaceClassName} mission-status-strip`}
+        className={`${reviewSurfaceClassName} mission-status-strip mission-review-grid`}
         data-demo-status-strip="presenter"
         data-mission-surface="review"
       >
@@ -1083,7 +1093,7 @@ export function MissionPresentationShell({
 
       <section
         aria-hidden={!isReviewMode}
-        className={`${reviewSurfaceClassName} mission-secondary-proof`}
+        className={`${reviewSurfaceClassName} mission-secondary-proof mission-review-grid`}
         data-mission-surface="review"
         data-secondary-proof-summary="true"
       >

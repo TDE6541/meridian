@@ -992,7 +992,7 @@ export function ControlRoomShell({
       >
         {missionCompletionReviewVisible ? (
           <section
-            className="mission-review-banner mission-review-banner--technical"
+            className="mission-review-banner mission-review-banner--technical mission-review-card"
             data-mission-review-banner="technical-stack"
           >
             <div>
