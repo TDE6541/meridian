@@ -301,15 +301,16 @@ export function MissionPresentationShell({
   const activeDecision = normalizeDecision(
     currentStep?.decision ?? currentStep?.step.governance?.result?.decision
   );
+  const focalDecision = holdWallView.triggered ? "HOLD" : activeDecision;
   const governanceState =
     normalizeStatus(currentStep?.step.governance?.status) ??
     normalizeStatus(currentStep?.step.status) ??
     "HOLD: step unavailable";
-  const decisionTone = getDecisionTone(currentStep, activeDecision, authorityState);
+  const decisionTone = getDecisionTone(currentStep, focalDecision, authorityState);
   const currentDecisionWhy = getCurrentDecisionWhy({
     authorityState,
     currentStep,
-    decision: activeDecision,
+    decision: focalDecision,
     holdWallView,
   });
   const proofNext = getProofNext({
@@ -319,6 +320,10 @@ export function MissionPresentationShell({
     holdWallView,
     publicSkinView,
   });
+  const focalDecisionReason =
+    focalDecision === "HOLD"
+      ? "Missing authority and evidence prevent safe civic action."
+      : currentDecisionWhy;
   const missionAbsenceLens = buildMissionAbsenceLensOverlay(absenceLens);
   const presentationProjection = buildJudgeModeProjection(
     missionPhysicalProjection,
@@ -340,6 +345,11 @@ export function MissionPresentationShell({
     physicalMode: missionPhysicalModeEnabled,
   });
   const missionPlaybackState = missionPlaybackControls?.playbackState ?? null;
+  const missionHasStarted = Boolean(
+    missionPlaybackState && missionPlaybackState.status !== "idle"
+  );
+  const canBeginMission =
+    !missionHasStarted && (missionPlaybackControls?.canStart ?? canDrive);
   const activeMissionStage =
     missionPlaybackState?.currentStageId ??
     presentationProjection?.active_stage_id ??
@@ -376,7 +386,7 @@ export function MissionPresentationShell({
   const presenterSurfaceClassName = buildMissionSurfaceClassName({
     name: "presenter",
     reviewVisible: isReviewMode,
-    visible: true,
+    visible: missionHasStarted || isReviewMode,
   });
   const reviewSurfaceClassName = buildMissionSurfaceClassName({
     active: Boolean(judgeCard),
@@ -388,7 +398,7 @@ export function MissionPresentationShell({
 
   return (
     <section
-      className={`mission-presentation${
+      className={`mission-presentation mission-shell${
         missionPhysicalModeEnabled ? " mission-presentation--physical" : ""
       }`}
       data-mission-presentation={engineerMode ? "engineer" : "active"}
@@ -397,18 +407,133 @@ export function MissionPresentationShell({
       data-mission-physical-mode={missionPhysicalModeEnabled ? "on" : "off"}
       data-presenter-view-default={engineerMode ? "false" : "true"}
     >
-      <div className="mission-presentation__header">
-        <div>
-          <p className="mission-presentation__eyebrow">Meridian Presenter View</p>
-          <h1>Presenter Cockpit</h1>
+      <section
+        className="mission-hero mission-surface mission-surface--hero is-visible"
+        data-default-product-wrapper="true"
+        data-mission-surface="hero"
+      >
+        <div className="mission-hero__main">
+          <div className="mission-presentation__header mission-hero__title">
+            <p className="mission-presentation__eyebrow">
+              Governed civic intelligence dashboard
+            </p>
+            <h1>Meridian</h1>
+            <p className="mission-presentation__deck-label">
+              Presenter Cockpit
+            </p>
+            <p className="mission-presentation__summary">
+              Fictional demo permit proof cockpit. Deterministic governance before AI
+              action.
+            </p>
+            <p className="mission-presentation__scenario-line">{scenarioDescription}</p>
+          </div>
+
+          <section
+            className="mission-demo-anchor"
+            data-demo-anchor="compact"
+            data-fictional-permit-anchor={fictionalPermitAnchor.title}
+          >
+            <span>{fictionalPermitAnchor.fictionLabel}</span>
+            <strong>{fictionalPermitAnchor.title}</strong>
+            <em>{fictionalPermitAnchor.context}</em>
+            <em>{fictionalPermitAnchor.boundary}</em>
+            <details className="mission-demo-anchor__roles">
+              <summary>Audience frames</summary>
+              <div>
+                {fictionalPermitAnchor.roleFrames.map((frame) => (
+                  <article data-fictional-permit-role={frame.label} key={frame.label}>
+                    <span>{frame.label}</span>
+                    <strong>{frame.summary}</strong>
+                  </article>
+                ))}
+              </div>
+            </details>
+          </section>
+
+          <section
+            className={`mission-current-card decision-card decision-card--${decisionTone} mission-current-card--${decisionTone}`}
+            data-current-decision-card="true"
+            data-current-decision-state={focalDecision}
+            data-current-decision-tone={decisionTone}
+          >
+            <div className="mission-current-card__headline">
+              <p>Current decision / HOLD</p>
+              <h2>Current Decision: {focalDecision}</h2>
+              <span>{currentStep?.stepId ?? "HOLD: active step unavailable"}</span>
+            </div>
+            <dl className="mission-current-card__facts">
+              <div>
+                <dt>Why it matters</dt>
+                <dd>Reason: {focalDecisionReason}</dd>
+              </div>
+              <div>
+                <dt>Current step</dt>
+                <dd>{activeStepLabel}</dd>
+              </div>
+              <div>
+                <dt>Governance state</dt>
+                <dd>{governanceState}</dd>
+              </div>
+              <div>
+                <dt>Proof available next</dt>
+                <dd>{proofNext}</dd>
+              </div>
+            </dl>
+          </section>
+        </div>
+
+        <aside className="mission-hero__side" aria-label="Mission readiness">
+          <section
+            className="foreman-compact"
+            data-foreman-compact="ready"
+            data-foreman-presenter-note="guide-only"
+          >
+            <span>Foreman ready</span>
+            <strong>Foreman ready. Governance walkthrough armed.</strong>
+            <em>
+              Explains the HOLD and the missing proof path. It does not create truth.
+            </em>
+          </section>
+
+          <section className="governance-card mission-safety-card" data-safety-card="compact">
+            <p className="mission-safety-card__eyebrow">Why This Is Safe</p>
+            <h2>Missing inputs become HOLDs, not guesses.</h2>
+            <ul>
+              <li>Authority required before action</li>
+              <li>Evidence required before action</li>
+              <li>The chain remains inspectable</li>
+            </ul>
+          </section>
+
+          <div className="mission-begin-card" data-begin-mission-cta="true">
+            <span>What to click</span>
+            <button
+              className="mission-begin-card__button"
+              disabled={!canBeginMission}
+              onClick={
+                canBeginMission ? missionPlaybackControls?.onBeginMission : undefined
+              }
+              type="button"
+            >
+              Begin Mission
+            </button>
+            <em>
+              Starts the existing guided mission playback without creating new proof truth.
+            </em>
+          </div>
+        </aside>
+      </section>
+
+      <section
+        className={`${reviewSurfaceClassName} mission-internal-controls`}
+        data-internal-proof-controls="true"
+        data-mission-surface="review"
+      >
+        <div className="mission-presentation__header-tools">
           <p className="mission-presentation__summary">
             Show the scenario, current decision, safety logic, and proof path without
             turning the first screen into the full control room.
           </p>
-          <p className="mission-presentation__scenario-line">{scenarioDescription}</p>
-        </div>
-
-        <div className="mission-presentation__header-tools">
           <MissionControlPhysicalMode
             enabled={missionPhysicalModeEnabled}
             onEnabledChange={onMissionPhysicalModeChange}
@@ -470,31 +595,13 @@ export function MissionPresentationShell({
             ) : null}
           </details>
         </div>
-      </div>
-
-      <section
-        className="mission-demo-anchor"
-        data-demo-anchor="compact"
-        data-fictional-permit-anchor={fictionalPermitAnchor.title}
-      >
-        <span>{fictionalPermitAnchor.fictionLabel}</span>
-        <strong>{fictionalPermitAnchor.title}</strong>
-        <em>{fictionalPermitAnchor.context}</em>
-        <em>{fictionalPermitAnchor.boundary}</em>
-        <details className="mission-demo-anchor__roles">
-          <summary>Audience frames</summary>
-          <div>
-            {fictionalPermitAnchor.roleFrames.map((frame) => (
-              <article data-fictional-permit-role={frame.label} key={frame.label}>
-                <span>{frame.label}</span>
-                <strong>{frame.summary}</strong>
-              </article>
-            ))}
-          </div>
-        </details>
       </section>
 
-      <div className="mission-status-strip" data-demo-status-strip="presenter">
+      <section
+        className={`${reviewSurfaceClassName} mission-status-strip`}
+        data-demo-status-strip="presenter"
+        data-mission-surface="review"
+      >
         <div className="mission-presentation__readout">
           <span>Scenario</span>
           <strong>{scenarioLabel}</strong>
@@ -520,37 +627,6 @@ export function MissionPresentationShell({
           <strong>{sharedEndpointStatus}</strong>
           <em>authority state: {authorityState.status}</em>
         </div>
-      </div>
-
-      <section
-        className={`mission-current-card mission-current-card--${decisionTone}`}
-        data-current-decision-card="true"
-        data-current-decision-state={activeDecision}
-        data-current-decision-tone={decisionTone}
-      >
-        <div className="mission-current-card__headline">
-          <p>Current decision / HOLD</p>
-          <h2>{activeDecision}</h2>
-          <span>{currentStep?.stepId ?? "HOLD: active step unavailable"}</span>
-        </div>
-        <dl className="mission-current-card__facts">
-          <div>
-            <dt>Current step</dt>
-            <dd>{activeStepLabel}</dd>
-          </div>
-          <div>
-            <dt>Governance state</dt>
-            <dd>{governanceState}</dd>
-          </div>
-          <div>
-            <dt>Why it matters</dt>
-            <dd>{currentDecisionWhy}</dd>
-          </div>
-          <div>
-            <dt>Proof available next</dt>
-            <dd>{proofNext}</dd>
-          </div>
-        </dl>
       </section>
 
       <section
@@ -559,14 +635,6 @@ export function MissionPresentationShell({
       >
         <ForensicReceiptRibbon receipt={missionRunReceipt} />
       </section>
-
-      <aside className="mission-foreman-note" data-foreman-presenter-note="guide-only">
-        <span>Foreman guide</span>
-        <strong>
-          Can explain what happened, what is missing, why the system held/blocked/revoked,
-          and what the public can see. It does not create truth.
-        </strong>
-      </aside>
 
       <section className={reviewSurfaceClassName} data-mission-surface="review">
         <JudgeTouchboard
@@ -636,7 +704,12 @@ export function MissionPresentationShell({
 
       <MissionRail stages={missionRailStages} />
 
-      <div className="mission-primary-actions" data-primary-action-row="presenter">
+      <div
+        className={`mission-primary-actions${
+          missionHasStarted || isReviewMode ? " is-visible" : ""
+        }`}
+        data-primary-action-row="presenter"
+      >
         <button
           className="mission-primary-actions__button"
           disabled={!canDrive}
