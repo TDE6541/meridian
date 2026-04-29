@@ -71,6 +71,7 @@ const tests = [
       assert.equal(styles.includes(".control-button,"), true);
       assert.equal(styles.includes(".mission-current-card__facts"), true);
       assert.equal(styles.includes(".mission-proof-tools"), true);
+      assert.equal(styles.includes(".mission-playback-controls__status"), true);
       assert.equal(styles.includes(".mission-primary-actions__button"), true);
     },
   },

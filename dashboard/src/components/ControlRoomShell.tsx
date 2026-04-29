@@ -25,8 +25,27 @@ import {
 import { buildDemoAuditWallView } from "../demo/demoAudit.ts";
 import { useJudgeAuthorityRequestVibration } from "../demo/deviceVibration.ts";
 import { getDemoScenarioMeta } from "../demo/demoScenarios.ts";
+import {
+  createInitialForemanAutonomousConductorState,
+  runForemanAutonomousConductor,
+  type ForemanAutonomousConductorOutput,
+  type ForemanAutonomousConductorState,
+  type ForemanConductorReadinessInput,
+} from "../demo/foremanAutonomousConductor.ts";
 import { buildHoldWallView } from "../demo/holdWall.ts";
+import {
+  createInitialMissionPlaybackState,
+  missionPlaybackReducer,
+  type MissionPlaybackState,
+} from "../demo/missionPlaybackController.ts";
+import {
+  MISSION_STAGE_IDS,
+  type MissionPlaybackMode,
+  type MissionStageId,
+  type MissionStageSubstrateKey,
+} from "../demo/missionPlaybackPlan.ts";
 import { buildMissionRailStages } from "../demo/missionRail.ts";
+import type { MissionStageReadinessInput } from "../demo/missionStageReadiness.ts";
 import { buildSyncChoreographyView } from "../demo/syncChoreography.ts";
 import { CascadeChoreography } from "./CascadeChoreography.tsx";
 import { DemoReliabilityPanel } from "./DemoReliabilityPanel.tsx";
@@ -89,6 +108,17 @@ import type { ControlRoomScenarioRecord } from "../state/controlRoomState.ts";
 const PLAYBACK_INTERVAL_MS = 2400;
 
 export type ControlRoomPresentationMode = "engineer" | "mission";
+
+type MissionControllerReadinessInput = Omit<
+  MissionStageReadinessInput,
+  "enteredAtMs" | "minDwellMs" | "mode" | "stageId"
+>;
+
+interface MissionPlaybackRuntime {
+  conductorOutput: ForemanAutonomousConductorOutput | null;
+  conductorState: ForemanAutonomousConductorState;
+  playbackState: MissionPlaybackState;
+}
 
 export interface ControlRoomShellProps {
   initialControlState?: Partial<ControlRoomState>;
@@ -155,6 +185,17 @@ export function ControlRoomShell({
   const [holdWallOpen, setHoldWallOpen] = useState(false);
   const [presentationMode, setPresentationMode] =
     useState<ControlRoomPresentationMode>(initialPresentationMode);
+  const [missionRuntime, setMissionRuntime] = useState<MissionPlaybackRuntime>(() => {
+    const playbackState = createInitialMissionPlaybackState("guided");
+
+    return {
+      conductorOutput: null,
+      conductorState: createInitialForemanAutonomousConductorState(
+        playbackState.runId
+      ),
+      playbackState,
+    };
+  });
   const [foremanHighlightedPanelId, setForemanHighlightedPanelId] = useState<
     string | null
   >(null);
@@ -328,6 +369,213 @@ export function ControlRoomShell({
     signalId: syncChoreography.vibrationSignalId,
   });
 
+  function getMissionClockMs(playbackState: MissionPlaybackState): number {
+    const lastEventAtMs = playbackState.events.at(-1)?.atMs;
+    const lastKnownAtMs =
+      lastEventAtMs ??
+      playbackState.completedAtMs ??
+      playbackState.pausedAtMs ??
+      playbackState.stageEnteredAtMs ??
+      playbackState.startedAtMs ??
+      0;
+
+    return lastKnownAtMs + 1;
+  }
+
+  function getMissionActiveStageId(
+    playbackState: MissionPlaybackState
+  ): MissionStageId {
+    return playbackState.currentStageId ?? MISSION_STAGE_IDS[0];
+  }
+
+  function buildMissionSubstrateReadiness(): Partial<
+    Record<MissionStageSubstrateKey, boolean>
+  > {
+    return {
+      absence_lens: true,
+      authority_panel: authorityState.status !== "unavailable",
+      capture_snapshot: selectedRecord?.status === "ready",
+      forensic_chain: true,
+      governance_panel: currentStep !== null,
+      public_disclosure: publicSkinView?.hasPayload === true,
+    };
+  }
+
+  function buildMissionControllerReadiness(
+    playbackState: MissionPlaybackState,
+    stageId: MissionStageId,
+    nowMs: number
+  ): MissionControllerReadinessInput {
+    return {
+      activeStageId: stageId,
+      foremanCue: {
+        required: false,
+        source: "d3.presenter.guided",
+        status: "ready",
+      },
+      modeConsistent:
+        playbackState.currentStageId === null ||
+        playbackState.currentStageId === stageId,
+      nowMs,
+      presenterCockpitReady: true,
+      proofCue: {
+        required: false,
+        source: "d3.presenter.guided.proof",
+        status: "ready",
+      },
+      requiredHolds: [],
+      resetCleanupOk: true,
+      scenarioAvailable: selectedRecord?.status === "ready",
+      substrate: buildMissionSubstrateReadiness(),
+    };
+  }
+
+  function buildForemanConductorReadiness(
+    playbackState: MissionPlaybackState
+  ): ForemanConductorReadinessInput {
+    return {
+      modeConsistent: playbackState.mode === "foreman_autonomous",
+      presenterCockpitReady: true,
+      requiredHolds: [],
+      resetCleanupOk: true,
+      scenarioAvailable: selectedRecord?.status === "ready",
+      substrate: buildMissionSubstrateReadiness(),
+    };
+  }
+
+  function handleMissionModeChange(mode: MissionPlaybackMode) {
+    setMissionRuntime((current) => {
+      const nowMs = getMissionClockMs(current.playbackState);
+      const playbackState = missionPlaybackReducer(current.playbackState, {
+        mode,
+        nowMs,
+        type: "select_mode",
+      });
+      const modeChanged = playbackState.mode !== current.playbackState.mode;
+
+      return {
+        conductorOutput: modeChanged ? null : current.conductorOutput,
+        conductorState: modeChanged
+          ? createInitialForemanAutonomousConductorState(playbackState.runId)
+          : current.conductorState,
+        playbackState,
+      };
+    });
+  }
+
+  function handleMissionBegin() {
+    setMissionRuntime((current) => {
+      const nowMs = getMissionClockMs(current.playbackState);
+
+      if (current.playbackState.mode === "foreman_autonomous") {
+        const conductorOutput = runForemanAutonomousConductor({
+          conductorState: current.conductorState,
+          nowMs,
+          playbackState: current.playbackState,
+          readiness: buildForemanConductorReadiness(current.playbackState),
+          resetCleanupVerified: true,
+        });
+
+        return {
+          conductorOutput,
+          conductorState: conductorOutput.conductorState,
+          playbackState: conductorOutput.controllerState,
+        };
+      }
+
+      const stageId = getMissionActiveStageId(current.playbackState);
+      const playbackState = missionPlaybackReducer(current.playbackState, {
+        nowMs,
+        readiness: buildMissionControllerReadiness(
+          current.playbackState,
+          stageId,
+          nowMs
+        ),
+        type: "begin_mission",
+      });
+
+      return {
+        conductorOutput: null,
+        conductorState: createInitialForemanAutonomousConductorState(
+          playbackState.runId
+        ),
+        playbackState,
+      };
+    });
+  }
+
+  function handleMissionPause() {
+    setMissionRuntime((current) => {
+      const nowMs = getMissionClockMs(current.playbackState);
+      const playbackState = missionPlaybackReducer(current.playbackState, {
+        nowMs,
+        type: "pause",
+      });
+
+      return {
+        ...current,
+        conductorOutput: current.conductorOutput
+          ? {
+              ...current.conductorOutput,
+              controllerState: playbackState,
+              status:
+                playbackState.status === "paused"
+                  ? "paused"
+                  : current.conductorOutput.status,
+            }
+          : null,
+        playbackState,
+      };
+    });
+  }
+
+  function handleMissionResume() {
+    setMissionRuntime((current) => {
+      const nowMs = getMissionClockMs(current.playbackState);
+      const playbackState = missionPlaybackReducer(current.playbackState, {
+        nowMs,
+        type: "resume",
+      });
+      const conductorStatus =
+        current.conductorOutput?.status === "paused"
+          ? current.conductorOutput.cueEvent
+            ? "cue_emitted"
+            : "waiting"
+          : current.conductorOutput?.status;
+
+      return {
+        ...current,
+        conductorOutput: current.conductorOutput
+          ? {
+              ...current.conductorOutput,
+              controllerState: playbackState,
+              status: conductorStatus ?? current.conductorOutput.status,
+            }
+          : null,
+        playbackState,
+      };
+    });
+  }
+
+  function handleMissionReset() {
+    setMissionRuntime((current) => {
+      const nowMs = getMissionClockMs(current.playbackState);
+      const playbackState = missionPlaybackReducer(current.playbackState, {
+        cleanupOk: true,
+        nowMs,
+        type: "reset_mission",
+      });
+
+      return {
+        conductorOutput: null,
+        conductorState: createInitialForemanAutonomousConductorState(
+          playbackState.runId
+        ),
+        playbackState,
+      };
+    });
+  }
+
   function handleResetToKnownCleanState() {
     setControlState(
       createInitialControlRoomState(records[0]?.entry.key ?? "routine")
@@ -338,6 +586,17 @@ export function ControlRoomShell({
     setMissionAbsenceLensEnabled(false);
     setHoldWallOpen(false);
     setForemanHighlightedPanelId(null);
+    setMissionRuntime(() => {
+      const playbackState = createInitialMissionPlaybackState("guided");
+
+      return {
+        conductorOutput: null,
+        conductorState: createInitialForemanAutonomousConductorState(
+          playbackState.runId
+        ),
+        playbackState,
+      };
+    });
     setPresentationMode("mission");
     void sharedAuthority.resetRequests();
   }
@@ -490,6 +749,16 @@ export function ControlRoomShell({
         forensicChain={forensicChainView}
         holdWallOpen={holdWallOpen}
         holdWallView={holdWallView}
+        missionPlaybackControls={{
+          canStart: selectedRecord?.status === "ready",
+          conductorOutput: missionRuntime.conductorOutput,
+          onBeginMission: handleMissionBegin,
+          onModeChange: handleMissionModeChange,
+          onPauseMission: handleMissionPause,
+          onResetMission: handleMissionReset,
+          onResumeMission: handleMissionResume,
+          playbackState: missionRuntime.playbackState,
+        }}
         missionRailStages={missionRailStages}
         onDirectorModeOpen={() => {
           setPresentationMode("engineer");

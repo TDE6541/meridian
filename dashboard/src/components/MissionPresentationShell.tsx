@@ -15,6 +15,10 @@ import { DecisionCounter } from "./DecisionCounter.tsx";
 import { DemoAuditWall } from "./DemoAuditWall.tsx";
 import { DoctrineCard } from "./DoctrineCard.tsx";
 import { HoldWall } from "./HoldWall.tsx";
+import {
+  MissionPlaybackControls,
+  type MissionPlaybackControlsProps,
+} from "./MissionPlaybackControls.tsx";
 import { MissionRail } from "./MissionRail.tsx";
 import { SyncPill } from "./SyncPill.tsx";
 
@@ -35,6 +39,7 @@ export interface MissionPresentationShellProps {
   forensicChain: DashboardForensicChainView;
   holdWallOpen: boolean;
   holdWallView: HoldWallView;
+  missionPlaybackControls?: MissionPlaybackControlsProps;
   missionRailStages: readonly MissionRailStage[];
   onDirectorModeOpen?: () => void;
   onAbsenceLensToggle: () => void;
@@ -195,6 +200,7 @@ export function MissionPresentationShell({
   forensicChain,
   holdWallOpen,
   holdWallView,
+  missionPlaybackControls,
   missionRailStages,
   onDirectorModeOpen,
   onAbsenceLensToggle,
@@ -406,6 +412,8 @@ export function MissionPresentationShell({
           and what the public can see. It does not create truth.
         </strong>
       </aside>
+
+      <MissionPlaybackControls {...missionPlaybackControls} />
 
       <MissionRail stages={missionRailStages} />
 

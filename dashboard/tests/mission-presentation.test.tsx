@@ -689,6 +689,7 @@ const tests = [
         "src/components/DemoAuditWall.tsx",
         "src/components/DoctrineCard.tsx",
         "src/components/HoldWall.tsx",
+        "src/components/MissionPlaybackControls.tsx",
         "src/demo/demoAudit.ts",
         "src/demo/doctrineCard.ts",
         "src/demo/fictionalPermitAnchor.ts",
