@@ -2,9 +2,9 @@
 
 ## Repo Identity
 
-Current V2-D++ truth: the Embodied Foreman Civic Proof Theater is a dashboard-local demo/proof theater for mission playback, deterministic Foreman Autonomous conduct, embodied proof visualization, challenge cards, receipts, physical mode, rehearsal certification, failure injection, and reliability guards. It is not production civic infrastructure.
+Current V2-E truth: Visibility Cleanup + Demo Thesis Lock is dashboard-local visibility/proof hierarchy work over existing V2-D++ surfaces. It records hard mission-surface visibility, product-facing default state, six-act guided reveal, completion Review Mode, P0 guided mission progression repair, and duplicate-key warning repair. It is not production civic infrastructure.
 
-Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, a bounded Wave 5 authority-topology lane, a bounded Wave 6 forensic-chain lane, a bounded Wave 7 civic skins rendering lane, a bounded Wave 8 corridor scenario integration lane, a Wave 9 local dashboard proof lane, a V2-A local/demo-day live civic nervous system extension, a V2-B/GARP Authority Runway local sublane, a V2-B Foreman/Auth proof cockpit with AUTH-5 deployed demo proof recorded, a V2-C Demo Presentation Layer for dashboard-local presentation/choreography/reliability, a V2-B Demo UI Clarity Presenter Cockpit hardening pass, and a V2-D++ Embodied Foreman Civic Proof Theater for dashboard-local demo/proof theater truth. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
+Meridian is a governed city digital twin intelligence repo with a transport-only Wave 3 bridge substrate, a bounded Wave 4A governance runtime lane, a bounded Wave 4B meeting-capture pipeline lane with a local/frozen governance handoff seam and Fort Worth frozen proof path, a Wave 4.5 calibration truth lane, a bounded Wave 5 authority-topology lane, a bounded Wave 6 forensic-chain lane, a bounded Wave 7 civic skins rendering lane, a bounded Wave 8 corridor scenario integration lane, a Wave 9 local dashboard proof lane, a V2-A local/demo-day live civic nervous system extension, a V2-B/GARP Authority Runway local sublane, a V2-B Foreman/Auth proof cockpit with AUTH-5 deployed demo proof recorded, a V2-C Demo Presentation Layer for dashboard-local presentation/choreography/reliability, a V2-B Demo UI Clarity Presenter Cockpit hardening pass, a V2-D++ Embodied Foreman Civic Proof Theater for dashboard-local demo/proof theater truth, and a V2-E Visibility Cleanup + Demo Thesis Lock for dashboard-local visibility/proof hierarchy truth. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
 
 ## Agent Start Here / Read First
 
@@ -30,15 +30,17 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 20. [`docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md)
 21. [`docs/specs/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER.md`](docs/specs/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER.md)
 22. [`docs/closeouts/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER_CLOSEOUT.md)
-23. [`docs/specs/WAVE3_NATS_BRIDGE.md`](docs/specs/WAVE3_NATS_BRIDGE.md)
-24. [`docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`](docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md)
-25. [`docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`](docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md)
-26. [`docs/specs/WAVE4_5_CALIBRATION.md`](docs/specs/WAVE4_5_CALIBRATION.md)
-27. [`docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`](docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md)
-28. [`docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`](docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md)
-29. [`docs/specs/WAVE7_CIVIC_SKINS.md`](docs/specs/WAVE7_CIVIC_SKINS.md)
-30. [`docs/specs/WAVE8_CORRIDOR_SCENARIO.md`](docs/specs/WAVE8_CORRIDOR_SCENARIO.md)
-31. [`docs/specs/WAVE9_DASHBOARD.md`](docs/specs/WAVE9_DASHBOARD.md)
+23. [`docs/specs/MERIDIAN_V2E_VISIBILITY_CLEANUP.md`](docs/specs/MERIDIAN_V2E_VISIBILITY_CLEANUP.md)
+24. [`docs/closeouts/MERIDIAN_V2E_VISIBILITY_CLEANUP_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2E_VISIBILITY_CLEANUP_CLOSEOUT.md)
+25. [`docs/specs/WAVE3_NATS_BRIDGE.md`](docs/specs/WAVE3_NATS_BRIDGE.md)
+26. [`docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md`](docs/specs/WAVE4A_GOVERNANCE_RUNTIME.md)
+27. [`docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md`](docs/specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md)
+28. [`docs/specs/WAVE4_5_CALIBRATION.md`](docs/specs/WAVE4_5_CALIBRATION.md)
+29. [`docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md`](docs/specs/WAVE5_AUTHORITY_TOPOLOGY.md)
+30. [`docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md`](docs/specs/WAVE6_FORENSICCHAIN_CIVIC.md)
+31. [`docs/specs/WAVE7_CIVIC_SKINS.md`](docs/specs/WAVE7_CIVIC_SKINS.md)
+32. [`docs/specs/WAVE8_CORRIDOR_SCENARIO.md`](docs/specs/WAVE8_CORRIDOR_SCENARIO.md)
+33. [`docs/specs/WAVE9_DASHBOARD.md`](docs/specs/WAVE9_DASHBOARD.md)
 
 ## Session Posture
 
@@ -53,6 +55,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Treat V2-C Demo Presentation Layer as shipped dashboard-local presentation/choreography/reliability truth recorded in `docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md` and `docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`; DEMO-1 through DEMO-10 are implementation-complete.
 - Treat V2-B Demo UI Clarity as shipped presenter hierarchy truth recorded in `docs/closeouts/MERIDIAN_V2B_DEMO_UI_CLARITY_CLOSEOUT.md`; dashboard `285/285` and repo-wide JS `719/719` were the V2-C/UI Clarity floor, and manual proof HOLDs remain carried.
 - Treat V2-D++ Embodied Foreman Civic Proof Theater as shipped dashboard-local demo/proof theater truth recorded in `docs/specs/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER.md` and `docs/closeouts/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER_CLOSEOUT.md`; D1-D14 are implementation-complete, D15 validated dashboard `593/593` plus repo-wide JS `719/719`, and manual/global HOLDs remain carried.
+- Treat V2-E Visibility Cleanup + Demo Thesis Lock as shipped dashboard-local visibility/proof hierarchy truth recorded in `docs/specs/MERIDIAN_V2E_VISIBILITY_CLEANUP.md` and `docs/closeouts/MERIDIAN_V2E_VISIBILITY_CLEANUP_CLOSEOUT.md`; E0-E4 are implementation-complete, P0 restored guided mission progression and fixed duplicate-key warnings, browser proof passed at `http://127.0.0.1:5173/`, and broader manual/global HOLDs remain carried.
 - Keep all claims bounded to visible files and approved inputs.
 - Surface uncertainty as HOLD instead of filling gaps.
 - Keep root canon synchronized when substrate truth changes.
@@ -72,6 +75,7 @@ Meridian is a governed city digital twin intelligence repo with a transport-only
 - Do not describe the V2-B Foreman/Auth proof cockpit as production-ready, live-city integrated, legally sufficient, public-portal backed, OpenFGA-backed, CIBA-backed, notification-sending, model/API-backed, externally voice-serviced, Whisper/audio-upload backed, or final V2-B closeout; AUTH-5 deployed proof is limited to the recorded Vercel/Auth0 demo evidence.
 - Do not describe V2-C as shared contract widening, protected-surface widening, production city behavior, legal/TPIA/TRAIGA sufficiency, official Fort Worth workflow, public portal behavior, live OpenFGA, CIBA, delivered notifications, model/API-backed Foreman, external voice service, Whisper/audio upload/transcription, or completion of manual Demo Day proof HOLDs.
 - Do not describe V2-D++ as shared contract widening, production city infrastructure, official Fort Worth workflow, legal/TPIA/TRAIGA sufficiency, public portal behavior, live OpenFGA, CIBA, delivered notifications, live LLM/model/API-backed Foreman, browser-exposed key behavior, external voice service, Whisper/audio upload/transcription, root ForensicChain writes, legal audit trail behavior, live GIS/Accela/city-record behavior, mobile/judge-device proof, or completion of manual/global HOLDs.
+- Do not describe V2-E as shared contract widening, production city infrastructure, official Fort Worth workflow, legal/TPIA/TRAIGA sufficiency, public portal behavior, live OpenFGA, CIBA, delivered notifications, live LLM/model/API-backed Foreman, external voice service, Whisper/audio upload/transcription, root ForensicChain writes, live Constellation broker proof, mobile/judge-device proof, or completion of broader manual/global HOLDs.
 
 ## Non-Negotiables
 
@@ -168,6 +172,7 @@ Edit(/**/*.config.*)
 - `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`
 - `docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md`
 - `docs/specs/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER.md`
+- `docs/specs/MERIDIAN_V2E_VISIBILITY_CLEANUP.md`
 - `docs/INDEX.md`
 - `docs/ENGINE_INDEX.md`
 - `docs/UI_INDEX.md`
@@ -197,6 +202,7 @@ Edit(/**/*.config.*)
 - `docs/closeouts/MERIDIAN_V2B_DEMO_UI_CLARITY_CLOSEOUT.md`
 - `docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`
 - `docs/closeouts/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER_CLOSEOUT.md`
+- `docs/closeouts/MERIDIAN_V2E_VISIBILITY_CLEANUP_CLOSEOUT.md`
 - `dashboard/README.md`
 - `dashboard/package.json`
 - `dashboard/index.html`
@@ -227,6 +233,7 @@ Edit(/**/*.config.*)
 - V2-B Foreman/Auth truth: a local/pre-deployment dashboard proof cockpit ships deterministic Foreman context, offline source-bounded narration, authority-aware narration, guided event binding, Gold modes, browser-native speech output/input fallback, deterministic avatar state, dashboard-local Auth0 role-session mapping, and shared local `/api/authority-requests` endpoint behavior. AUTH-5 records deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app` with hosted login/callback return and at least two eval-role mappings. Mobile/judge device proof, full authority choreography screenshot proof, clean logout proof, deploy hook cleanup proof, and final V2-B closeout remain HOLD.
 - V2-C truth: a dashboard-local Demo Presentation Layer ships Mission presentation skin, Mission Rail, Fictional Demo Permit #4471, HOLD Wall, Absence Lens presentation overlay, Decision Counter, Demo Audit Wall, Foreman audio identity, Disclosure Receipt, Doctrine Card, reliability panel/runbook/checklists, SyncPill, approval pulse, and vibration fallback over existing proof only. V2-B Demo UI Clarity ships Presenter Cockpit default hierarchy, compact demo anchor, current decision/HOLD focal card, six-stage process rail, grouped proof tools, secondary decision summary, and compact safety card over existing proof only. Neither widens root/shared contracts, root governance/forensic/authority/live absence/root skins substrates, Auth0/Vercel/env/package/deploy/config/secret/security surfaces, or manual proof status. V2-C/UI Clarity floor was dashboard `285/285`, repo-wide JS `719/719`, dashboard typecheck green, and dashboard build green.
 - V2-D++ truth: a dashboard-local Embodied Foreman Civic Proof Theater ships Guided Mission, Foreman Autonomous scripted conduct, embodied avatar state, Proof Spotlight, Absence Shadow Map, Authority Handoff Theater, Judge Touchboard, Evidence Navigator, Civic Twin Diorama, Forensic Receipt Ribbon, Mission Run Receipt Panel, Physical Mode, Rehearsal Certification, Failure Injection, and reliability guards over existing dashboard proof only. It adds dashboard-local contracts only, does not require a `MIGRATIONS.md` row, and does not close production/legal/live-city/OpenFGA/CIBA/notification/public-portal/model/API/audio/root-ForensicChain/mobile proof HOLDs. Current D15 floor is dashboard `593/593`, repo-wide JS `719/719`, dashboard typecheck green, and dashboard build green.
+- V2-E truth: a dashboard-local Visibility Cleanup + Demo Thesis Lock ships hard mission-surface visibility, product-facing default state, six-act guided reveal, completion Review Mode, proof card polish, and review-only Failure Injection surfacing over existing proof only. P0 restored guided mission progression through all six acts and Review Mode and fixed duplicate-key warnings. It does not require a `MIGRATIONS.md` row and does not close broader manual/global HOLDs. Current proof floor is dashboard `593/593`, repo-wide JS `719/719`, dashboard typecheck green, dashboard build green, and browser proof PASS at `http://127.0.0.1:5173/`.
 - V1 final truth: Meridian V1 is complete through Wave 9; Wave 9 is the final V1 wave; there is no Wave 10 in V1; V2 work stays outside V1 under approved envelopes. Final V1 verification posture records dashboard `36` passing / `0` failing across `14` dashboard test files and repo-wide JS `511` passing / `0` failing, with 1920x1080 and 1280x720 visual proof HOLDs carried honestly.
 
 ## Required Sync Surfaces
@@ -255,6 +262,7 @@ Edit(/**/*.config.*)
 - `docs/specs/MERIDIAN_V2B_FOREMAN_GUIDED_PROOF_COCKPIT.md`
 - `docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md`
 - `docs/specs/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER.md`
+- `docs/specs/MERIDIAN_V2E_VISIBILITY_CLEANUP.md`
 - `docs/closeouts/README.md`
 - `docs/closeouts/WAVE3_CLOSEOUT.md`
 - `docs/closeouts/WAVE4A_CLOSEOUT.md`
@@ -278,6 +286,7 @@ Edit(/**/*.config.*)
 - `docs/closeouts/MERIDIAN_V2B_DEMO_UI_CLARITY_CLOSEOUT.md`
 - `docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`
 - `docs/closeouts/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER_CLOSEOUT.md`
+- `docs/closeouts/MERIDIAN_V2E_VISIBILITY_CLEANUP_CLOSEOUT.md`
 - `dashboard/README.md`
 - `dashboard/api/authority-requests.js`
 

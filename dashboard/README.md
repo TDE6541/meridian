@@ -1,6 +1,6 @@
 # Meridian Dashboard
 
-Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, prepared disclosure preview metadata, and browser-native disclosure preview print/save-to-PDF. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, shared local `/api/authority-requests` endpoint behavior, and AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`. V2-C adds the dashboard-local Demo Presentation Layer for Mission presentation, choreography, legibility, and reliability over existing proof. The V2-B Demo UI Clarity pass hardens that dashboard into a Presenter Cockpit default without removing shipped proof tools. V2-D++ adds the dashboard-local Embodied Foreman Civic Proof Theater for Guided Mission, Foreman Autonomous scripted conduct, embodied proof visualization, challenge cards, receipts, physical mode, rehearsal certification, failure injection, and reliability guards.
+Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, prepared disclosure preview metadata, and browser-native disclosure preview print/save-to-PDF. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, shared local `/api/authority-requests` endpoint behavior, and AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`. V2-C adds the dashboard-local Demo Presentation Layer for Mission presentation, choreography, legibility, and reliability over existing proof. The V2-B Demo UI Clarity pass hardens that dashboard into a Presenter Cockpit default without removing shipped proof tools. V2-D++ adds the dashboard-local Embodied Foreman Civic Proof Theater for Guided Mission, Foreman Autonomous scripted conduct, embodied proof visualization, challenge cards, receipts, physical mode, rehearsal certification, failure injection, and reliability guards. V2-E adds dashboard-local Visibility Cleanup + Demo Thesis Lock for hard mission-surface visibility, product-facing default state, six-act guided reveal, completion Review Mode, proof polish, and P0 guided progression/duplicate-key warning repair.
 
 ## Scope
 
@@ -8,6 +8,7 @@ Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional loca
 - renders the local control-room shell with Wave 9 demo hardening
 - renders the V2-C Mission presentation skin, Mission Rail, HOLD Wall, Absence Lens presentation overlay, Decision Counter, Demo Audit Wall, Doctrine Card, reliability panel, and SyncPill
 - renders the V2-D++ Embodied Foreman Civic Proof Theater surfaces: Guided Mission, Foreman Autonomous, Embodied Avatar Bay, Proof Spotlight, Absence Shadow Map, Authority Handoff Theater, Judge Touchboard, Evidence Navigator, Civic Twin Diorama, Forensic Receipt Ribbon, Mission Run Receipt Panel, Mission Control Physical Mode, Rehearsal Certification, Failure Injection, and reliability guards
+- renders the V2-E visibility/proof hierarchy: product-facing default state, Begin Mission CTA, six-act reveal, completion Review Mode, and review-only Proof Tools surfacing
 - defaults the first screen to a Presenter Cockpit with compact demo anchor, current decision/HOLD focal card, six-stage process rail, compact safety explanation, and grouped proof tools
 - stays consumption-only over Wave 8 replay output, including `step.skins.outputs`
 - keeps Director Mode and Absence Lens view-only over committed payload truth
@@ -43,6 +44,7 @@ Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional loca
 - no legal determination, TPIA compliance, TRAIGA compliance, public-record completeness, public portal behavior, or official disclosure approval claim
 - no V2-C root/shared contract widening, protected runtime substrate edits, Auth0/Vercel/env/package/deploy/config/secret/security edits, or manual proof completion claim
 - no V2-D++ root/shared contract widening, production city infrastructure, official Fort Worth workflow, legal/TPIA/TRAIGA sufficiency, live OpenFGA/CIBA/notification/public-portal behavior, model/API-backed Foreman, browser-exposed key behavior, root ForensicChain write, legal audit trail, live GIS/Accela/city-record behavior, mobile/judge-device proof claim, or manual/global proof completion claim
+- no V2-E root/shared contract widening, new state machine, new package, new external API/model call, live Constellation broker proof, production/legal/live-city claim, root ForensicChain write, or manual/global proof completion claim
 
 ## Local Commands
 
@@ -273,12 +275,47 @@ Remaining V2-D++ HOLDs:
 - Whisper/audio upload/transcription
 - root ForensicChain writes
 
+## V2-E Visibility Cleanup + Demo Thesis Lock
+
+V2-E is recorded in:
+
+- `../docs/specs/MERIDIAN_V2E_VISIBILITY_CLEANUP.md`
+- `../docs/closeouts/MERIDIAN_V2E_VISIBILITY_CLEANUP_CLOSEOUT.md`
+
+Shipped dashboard-local visibility surfaces:
+
+- hard `mission-surface`, `is-visible`, and `is-review-visible` visibility contract
+- product-facing default state with Meridian branding and Fictional Demo Permit #4471
+- Begin Mission CTA and compact Foreman ready state
+- six-act guided reveal: Capture, Authority, Governance, Absence, Chain, Public
+- completion-derived Review Mode
+- review-only Proof Tools surfacing for Failure Injection
+- P0 repair for guided mission progression through all six acts and Review Mode
+- P0 duplicate-key warning repair in `DisclosurePreviewPanel`
+
+Current V2-E floor:
+
+- dashboard tests `593/593`
+- repo-wide JS tests `719/719`
+- dashboard typecheck green
+- dashboard build green
+- browser proof PASS at `http://127.0.0.1:5173/`
+
+V2-E is visibility cleanup and proof hierarchy only. It does not widen root/shared contracts, does not add a `MIGRATIONS.md` row, and does not modify dashboard scenarios, package files, Auth0, Vercel, env, deploy, config, secret, security, root runtime surfaces, governance engines, authority logic, ForensicChain logic, or data contracts.
+
+Remaining V2-E HOLDs:
+
+- broader V2-C/V2-D++ manual/global proof HOLDs remain unchanged
+- production/legal/live-city/OpenFGA/CIBA/notification/public-portal/model/API/audio/root-ForensicChain claims remain unshipped
+- Constellation artifact surfacing remains deferred because it requires new data plumbing
+
 ## Demo Posture
 
 - Demo playback reads committed local files only.
 - Snapshot mode remains default.
 - V2-C Mission presentation is the review-facing dashboard layer over existing proof.
 - V2-D++ Embodied Foreman Civic Proof Theater is the room-facing proof theater over existing proof.
+- V2-E is the five-minute guided visibility path over existing proof.
 - Live Mode is optional/local and fail-closed.
 - No env vars are required for logged-out snapshot mode.
 - Auth0 login proof requires the documented `VITE_AUTH0_DOMAIN`, `VITE_AUTH0_CLIENT_ID`, and `VITE_AUTH0_CALLBACK_URL` values.
