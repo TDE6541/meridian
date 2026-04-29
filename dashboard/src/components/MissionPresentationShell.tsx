@@ -22,6 +22,7 @@ import {
 import type { MissionPhysicalProjectionV1 } from "../demo/missionPhysicalProjection.ts";
 import { ForemanAvatarBay } from "./ForemanAvatarBay.tsx";
 import { MissionRail } from "./MissionRail.tsx";
+import { ProofSpotlight } from "./ProofSpotlight.tsx";
 import { SyncPill } from "./SyncPill.tsx";
 
 export interface MissionPresentationShellProps {
@@ -418,6 +419,8 @@ export function MissionPresentationShell({
       </aside>
 
       <ForemanAvatarBay projection={missionPhysicalProjection} />
+
+      <ProofSpotlight projection={missionPhysicalProjection} />
 
       <MissionPlaybackControls {...missionPlaybackControls} />
 

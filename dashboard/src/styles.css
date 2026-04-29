@@ -2734,6 +2734,151 @@ kbd {
   outline-color: var(--mission-amber-warning);
 }
 
+.proof-spotlight {
+  --spotlight-tone: var(--mission-dim-green-status);
+  display: grid;
+  gap: 0.72rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(232, 237, 242, 0.18);
+  border-left: 4px solid var(--spotlight-tone);
+  border-radius: 8px;
+  background: rgba(232, 237, 242, 0.055);
+}
+
+.proof-spotlight--holding {
+  --spotlight-tone: var(--mission-fault-red);
+  background: rgba(229, 72, 77, 0.09);
+}
+
+.proof-spotlight--warning {
+  --spotlight-tone: var(--mission-amber-warning);
+  background: rgba(245, 181, 71, 0.08);
+}
+
+.proof-spotlight--unavailable {
+  --spotlight-tone: rgba(232, 237, 242, 0.52);
+  background: rgba(232, 237, 242, 0.04);
+}
+
+.proof-spotlight__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(10rem, 0.24fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.proof-spotlight__header > div,
+.proof-spotlight__facts div {
+  min-width: 0;
+}
+
+.proof-spotlight__eyebrow,
+.proof-spotlight__status span,
+.proof-spotlight__facts dt,
+.proof-spotlight__motion span {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(245, 181, 71, 0.86);
+  font-size: 0.72rem;
+}
+
+.proof-spotlight h2 {
+  margin: 0.16rem 0 0;
+  color: #ffffff;
+  font-size: 1.25rem;
+  line-height: 1.1;
+}
+
+.proof-spotlight__boundary,
+.proof-spotlight__status em,
+.proof-spotlight__facts dd {
+  margin: 0;
+  color: rgba(232, 237, 242, 0.76);
+  font-size: 0.8rem;
+  font-style: normal;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.proof-spotlight__boundary {
+  margin-top: 0.35rem;
+}
+
+.proof-spotlight__status {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.62rem;
+  border: 1px solid var(--spotlight-tone);
+  border-radius: 8px;
+  background: rgba(10, 22, 40, 0.24);
+}
+
+.proof-spotlight__status strong {
+  color: #ffffff;
+}
+
+.proof-spotlight__beam {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.8fr) minmax(3rem, 0.22fr) minmax(10rem, 1fr) minmax(3rem, 0.22fr) minmax(12rem, 1.2fr);
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.proof-spotlight__beam span {
+  min-width: 0;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid rgba(232, 237, 242, 0.16);
+  border-radius: 8px;
+  background: rgba(10, 22, 40, 0.3);
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.proof-spotlight__beam i {
+  display: block;
+  min-width: 2.5rem;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--spotlight-tone);
+}
+
+.proof-spotlight__facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.proof-spotlight__facts div {
+  display: grid;
+  gap: 0.24rem;
+  padding: 0.58rem;
+  border: 1px solid rgba(232, 237, 242, 0.14);
+  border-radius: 8px;
+  background: rgba(10, 22, 40, 0.24);
+}
+
+.proof-spotlight__facts dd {
+  color: rgba(232, 237, 242, 0.84);
+}
+
+.proof-spotlight__motion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.proof-spotlight__motion span {
+  padding: 0.32rem 0.5rem;
+  border: 1px solid rgba(232, 237, 242, 0.16);
+  border-radius: 999px;
+  background: rgba(10, 22, 40, 0.24);
+  color: rgba(232, 237, 242, 0.82);
+}
+
 .mission-playback-controls {
   display: grid;
   gap: 0.7rem;
@@ -3409,6 +3554,9 @@ kbd {
   .mission-current-card__facts,
   .mission-foreman-note,
   .foreman-avatar-bay__readout,
+  .proof-spotlight__header,
+  .proof-spotlight__beam,
+  .proof-spotlight__facts,
   .mission-playback-controls__intro,
   .mission-playback-controls__status,
   .mission-secondary-proof,
@@ -3464,6 +3612,7 @@ kbd {
   }
 
   .mission-current-card,
+  .proof-spotlight,
   .mission-playback-controls,
   .mission-presentation__readout,
   .mission-presentation__card,
@@ -3521,6 +3670,9 @@ kbd {
     .foreman-guide-panel__presence-row,
     .foreman-avatar-bay__stage,
     .foreman-avatar-bay__readout,
+    .proof-spotlight__header,
+    .proof-spotlight__beam,
+    .proof-spotlight__facts,
     .foreman-mount-point__facts,
     .relationship-graph__nodes,
     .status-bar {
@@ -3543,6 +3695,13 @@ kbd {
 
   .mission-proof-tools {
     justify-self: stretch;
+  }
+
+  .proof-spotlight__beam i {
+    justify-self: center;
+    width: 2px;
+    min-width: 2px;
+    height: 1.3rem;
   }
 
   .mission-playback-controls__mode,

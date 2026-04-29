@@ -182,7 +182,9 @@ const tests = [
       assert.equal(markup.includes("Proof Tools"), true);
       assert.equal(markup.includes('data-proof-tools="collapsed-by-default"'), true);
       assert.equal(markup.includes('data-current-decision-card="true"'), true);
+      assert.equal(markup.includes('data-proof-spotlight="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
+      assert.equal(markup.includes("Evidence Beam"), true);
       assert.equal(markup.includes("Foreman Avatar Bay"), true);
       assert.equal(markup.includes("Engineer Mode"), true);
       assert.equal(markup.includes("Local demo control room"), true);
@@ -457,8 +459,10 @@ const tests = [
 
       assert.equal(markup.includes('data-current-decision-card="true"'), true);
       assert.equal(markup.includes('data-current-decision-state="HOLD"'), true);
+      assert.equal(markup.includes('data-proof-spotlight="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
       assert.equal(markup.includes("Current decision / HOLD"), true);
+      assert.equal(markup.includes("Spotlight shows where the current proof lives"), true);
       assert.equal(markup.includes("Why it matters"), true);
       assert.equal(markup.includes("Proof available next"), true);
       assert.equal(markup.includes('data-foreman-presenter-note="guide-only"'), true);
@@ -689,6 +693,7 @@ const tests = [
         "src/components/ControlRoomShell.tsx",
         "src/components/ForemanAvatarBay.tsx",
         "src/components/MissionPresentationShell.tsx",
+        "src/components/ProofSpotlight.tsx",
         "src/components/DecisionCounter.tsx",
         "src/components/DemoAuditWall.tsx",
         "src/components/DoctrineCard.tsx",
@@ -701,6 +706,7 @@ const tests = [
         "src/demo/missionAbsenceLens.ts",
         "src/components/MissionRail.tsx",
         "src/demo/missionRail.ts",
+        "src/demo/proofSpotlightView.ts",
         "src/foremanGuide/foremanEmbodiedState.ts",
       ];
 
