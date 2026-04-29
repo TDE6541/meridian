@@ -22,7 +22,10 @@ import {
   MissionPlaybackControls,
   type MissionPlaybackControlsProps,
 } from "./MissionPlaybackControls.tsx";
-import type { MissionStageId } from "../demo/missionPlaybackPlan.ts";
+import {
+  MISSION_STAGE_IDS,
+  type MissionStageId,
+} from "../demo/missionPlaybackPlan.ts";
 import type { MissionPhysicalProjectionV1 } from "../demo/missionPhysicalProjection.ts";
 import type { JudgeQuestionId, JudgeTouchboardCard } from "../demo/judgeTouchboardDeck.ts";
 import { buildJudgeModeProjection } from "../demo/missionEvidenceNavigator.ts";
@@ -115,6 +118,95 @@ type MissionSurfaceName =
   | "presenter"
   | "public"
   | "review";
+
+const MISSION_STAGE_LABELS: Record<MissionStageId, MissionRailStage["label"]> = {
+  absence: "Absence",
+  authority: "Authority",
+  capture: "Capture",
+  chain: "Chain",
+  governance: "Governance",
+  public: "Public",
+};
+
+const MISSION_STAGE_STORY_BEATS: Record<
+  MissionStageId,
+  { beat: string; meaning: string; title: string }
+> = {
+  absence: {
+    beat: "The system reveals what is missing.",
+    meaning:
+      "Most systems reason from what is present. Meridian also reasons from what is missing.",
+    title: "Absence",
+  },
+  authority: {
+    beat: "Inspector requests escalation. System requires director-level authority.",
+    meaning: "The AI cannot grant itself civic authority.",
+    title: "Authority",
+  },
+  capture: {
+    beat: "Permit #4471 appears. Inspector flagged a structural concern.",
+    meaning:
+      "Meridian can understand the permit, but understanding is not authorization.",
+    title: "Capture",
+  },
+  chain: {
+    beat: "Forensic chain records the decision path.",
+    meaning: "Meridian gives the city an inspectable chain.",
+    title: "Chain",
+  },
+  governance: {
+    beat: "Governance engine evaluates the permit across civic domains.",
+    meaning:
+      "Meridian separates intelligence from governance evaluation.",
+    title: "Governance",
+  },
+  public: {
+    beat: "Public-facing version renders with disclosure boundaries.",
+    meaning:
+      "Meridian can be transparent without exposing what should remain bounded.",
+    title: "Public",
+  },
+};
+
+type MissionPlaybackViewState = NonNullable<
+  MissionPlaybackControlsProps["playbackState"]
+>;
+
+function buildMissionRevealRailStages(
+  sourceStages: readonly MissionRailStage[],
+  playbackState: MissionPlaybackViewState | null
+): readonly MissionRailStage[] {
+  if (!playbackState || playbackState.status === "idle") {
+    return sourceStages;
+  }
+
+  const sourceStageByIndex = new Map(
+    sourceStages.map((stage) => [stage.index, stage])
+  );
+
+  return MISSION_STAGE_IDS.map((stageId, index) => {
+    const sourceStage = sourceStageByIndex.get(index);
+    const complete = playbackState.completedStageIds.includes(stageId);
+    const active = playbackState.currentStageId === stageId;
+    const state: MissionRailStage["state"] = complete
+      ? "complete"
+      : active && playbackState.status === "holding"
+        ? "hold"
+        : active
+          ? "active"
+          : "pending";
+
+    return {
+      index,
+      label: sourceStage?.label ?? MISSION_STAGE_LABELS[stageId],
+      source:
+        state === "pending"
+          ? "awaiting mission playback"
+          : "existing mission playback state",
+      state,
+    };
+  });
+}
 
 function buildMissionSurfaceClassName({
   active = false,
@@ -350,21 +442,37 @@ export function MissionPresentationShell({
   );
   const canBeginMission =
     !missionHasStarted && (missionPlaybackControls?.canStart ?? canDrive);
-  const activeMissionStage =
-    missionPlaybackState?.currentStageId ??
-    presentationProjection?.active_stage_id ??
-    null;
-  const completedMissionStageIds =
-    missionPlaybackState?.completedStageIds ?? [];
   const isReviewMode = Boolean(
     missionPlaybackState &&
       (missionPlaybackState.status === "completed" ||
         missionPlaybackState.completedAtMs !== null)
   );
+  const activeMissionStage =
+    missionHasStarted && !isReviewMode
+      ? (missionPlaybackState?.currentStageId ??
+        presentationProjection?.active_stage_id ??
+        null)
+      : null;
+  const completedMissionStageIds =
+    missionPlaybackState?.completedStageIds ?? [];
+  const displayedMissionRailStages = buildMissionRevealRailStages(
+    missionRailStages,
+    missionPlaybackState
+  );
   const isMissionSurfaceActive = (stageId: MissionStageId) =>
     activeMissionStage === stageId;
   const isMissionSurfaceComplete = (stageId: MissionStageId) =>
     completedMissionStageIds.includes(stageId);
+  const getMissionSurfaceState = (stageId: MissionStageId) =>
+    isReviewMode
+      ? "review"
+      : isMissionSurfaceActive(stageId)
+        ? "active"
+        : isMissionSurfaceComplete(stageId)
+          ? "complete"
+          : "hidden";
+  const isMissionSurfaceHidden = (stageId: MissionStageId) =>
+    !isReviewMode && !isMissionSurfaceActive(stageId);
   const getMissionStageSurfaceClassName = (
     name: MissionSurfaceName,
     stageId: MissionStageId
@@ -377,11 +485,19 @@ export function MissionPresentationShell({
       visible: isMissionSurfaceActive(stageId),
     });
   const foremanSurfaceClassName = buildMissionSurfaceClassName({
-    active: activeMissionStage !== null,
+    active:
+      activeMissionStage !== null &&
+      activeMissionStage !== "absence" &&
+      activeMissionStage !== "chain" &&
+      activeMissionStage !== "public",
     complete: isReviewMode,
     name: "foreman",
     reviewVisible: isReviewMode,
-    visible: activeMissionStage !== null && activeMissionStage !== "public",
+    visible:
+      activeMissionStage !== null &&
+      activeMissionStage !== "absence" &&
+      activeMissionStage !== "chain" &&
+      activeMissionStage !== "public",
   });
   const presenterSurfaceClassName = buildMissionSurfaceClassName({
     name: "presenter",
@@ -395,6 +511,65 @@ export function MissionPresentationShell({
     reviewVisible: isReviewMode,
     visible: Boolean(judgeCard),
   });
+  const heroSurfaceClassName = [
+    "mission-hero",
+    "mission-surface",
+    "mission-surface--hero",
+    !missionHasStarted || isReviewMode ? "is-visible" : null,
+    missionHasStarted ? "is-complete" : null,
+  ]
+    .filter((className): className is string => className !== null)
+    .join(" ");
+  const renderActFrame = (stageId: MissionStageId) => {
+    const storyBeat = MISSION_STAGE_STORY_BEATS[stageId];
+
+    return (
+      <div
+        className={`mission-act-frame mission-act-frame--${stageId}`}
+        data-mission-act-frame={stageId}
+      >
+        <p className="mission-act-frame__eyebrow">
+          Act {MISSION_STAGE_IDS.indexOf(stageId) + 1} · {storyBeat.title}
+        </p>
+        <h2>{storyBeat.title}</h2>
+        <p>{storyBeat.beat}</p>
+        <strong>{storyBeat.meaning}</strong>
+      </div>
+    );
+  };
+  const renderCurrentDecisionCard = (context: "capture" | "hero") => (
+    <section
+      className={`mission-current-card decision-card decision-card--${decisionTone} mission-current-card--${decisionTone} mission-current-card--${context}`}
+      data-current-decision-card="true"
+      data-current-decision-context={context}
+      data-current-decision-state={focalDecision}
+      data-current-decision-tone={decisionTone}
+    >
+      <div className="mission-current-card__headline">
+        <p>Current decision / HOLD</p>
+        <h2>Current Decision: {focalDecision}</h2>
+        <span>{currentStep?.stepId ?? "HOLD: active step unavailable"}</span>
+      </div>
+      <dl className="mission-current-card__facts">
+        <div>
+          <dt>Why it matters</dt>
+          <dd>Reason: {focalDecisionReason}</dd>
+        </div>
+        <div>
+          <dt>Current step</dt>
+          <dd>{activeStepLabel}</dd>
+        </div>
+        <div>
+          <dt>Governance state</dt>
+          <dd>{governanceState}</dd>
+        </div>
+        <div>
+          <dt>Proof available next</dt>
+          <dd>{proofNext}</dd>
+        </div>
+      </dl>
+    </section>
+  );
 
   return (
     <section
@@ -405,10 +580,14 @@ export function MissionPresentationShell({
       data-mission-physical-control-scale={physicalModeView.control_scale}
       data-mission-physical-layout={physicalModeView.layout_density}
       data-mission-physical-mode={missionPhysicalModeEnabled ? "on" : "off"}
+      data-mission-active-act={
+        activeMissionStage ?? (isReviewMode ? "review" : "lobby")
+      }
       data-presenter-view-default={engineerMode ? "false" : "true"}
     >
       <section
-        className="mission-hero mission-surface mission-surface--hero is-visible"
+        aria-hidden={missionHasStarted && !isReviewMode}
+        className={heroSurfaceClassName}
         data-default-product-wrapper="true"
         data-mission-surface="hero"
       >
@@ -450,36 +629,7 @@ export function MissionPresentationShell({
             </details>
           </section>
 
-          <section
-            className={`mission-current-card decision-card decision-card--${decisionTone} mission-current-card--${decisionTone}`}
-            data-current-decision-card="true"
-            data-current-decision-state={focalDecision}
-            data-current-decision-tone={decisionTone}
-          >
-            <div className="mission-current-card__headline">
-              <p>Current decision / HOLD</p>
-              <h2>Current Decision: {focalDecision}</h2>
-              <span>{currentStep?.stepId ?? "HOLD: active step unavailable"}</span>
-            </div>
-            <dl className="mission-current-card__facts">
-              <div>
-                <dt>Why it matters</dt>
-                <dd>Reason: {focalDecisionReason}</dd>
-              </div>
-              <div>
-                <dt>Current step</dt>
-                <dd>{activeStepLabel}</dd>
-              </div>
-              <div>
-                <dt>Governance state</dt>
-                <dd>{governanceState}</dd>
-              </div>
-              <div>
-                <dt>Proof available next</dt>
-                <dd>{proofNext}</dd>
-              </div>
-            </dl>
-          </section>
+          {renderCurrentDecisionCard("hero")}
         </div>
 
         <aside className="mission-hero__side" aria-label="Mission readiness">
@@ -631,12 +781,25 @@ export function MissionPresentationShell({
 
       <section
         className={getMissionStageSurfaceClassName("chain", "chain")}
+        aria-hidden={isMissionSurfaceHidden("chain")}
+        data-mission-act-state={getMissionSurfaceState("chain")}
+        data-mission-act-wrapper="chain"
+        data-mission-chain-part="ribbon"
         data-mission-surface="chain"
       >
+        {renderActFrame("chain")}
         <ForensicReceiptRibbon receipt={missionRunReceipt} />
       </section>
 
-      <section className={reviewSurfaceClassName} data-mission-surface="review">
+      <section
+        className={getMissionStageSurfaceClassName("governance", "governance")}
+        aria-hidden={isMissionSurfaceHidden("governance")}
+        data-mission-act-state={getMissionSurfaceState("governance")}
+        data-mission-act-wrapper="governance"
+        data-mission-governance-part="touchboard"
+        data-mission-surface="governance"
+      >
+        {renderActFrame("governance")}
         <JudgeTouchboard
           card={judgeCard}
           interruptStatus={judgeInterruptStatus}
@@ -659,36 +822,88 @@ export function MissionPresentationShell({
         />
       </section>
 
-      <section className={reviewSurfaceClassName} data-mission-surface="review">
+      <section
+        className={getMissionStageSurfaceClassName("governance", "governance")}
+        aria-hidden={isMissionSurfaceHidden("governance")}
+        data-mission-act-state={getMissionSurfaceState("governance")}
+        data-mission-act-wrapper="governance"
+        data-mission-governance-part="evidence"
+        data-mission-surface="governance"
+      >
         <MissionEvidenceNavigator card={judgeCard} />
       </section>
 
       <section
-        className={getMissionStageSurfaceClassName("capture", "capture")}
-        data-mission-surface="capture"
+        className={getMissionStageSurfaceClassName("public", "public")}
+        aria-hidden={isMissionSurfaceHidden("public")}
+        data-mission-act-state={getMissionSurfaceState("public")}
+        data-mission-act-wrapper="public"
+        data-mission-public-part="civic-twin"
+        data-mission-surface="public"
       >
+        {renderActFrame("public")}
         <CivicTwinDiorama projection={presentationProjection} />
       </section>
 
       <section
         className={getMissionStageSurfaceClassName("authority", "authority")}
+        aria-hidden={isMissionSurfaceHidden("authority")}
+        data-mission-act-state={getMissionSurfaceState("authority")}
+        data-mission-act-wrapper="authority"
         data-mission-surface="authority"
       >
+        {renderActFrame("authority")}
         <AuthorityHandoffTheater projection={presentationProjection} />
       </section>
 
       <section
-        className={getMissionStageSurfaceClassName("governance", "governance")}
-        data-mission-surface="governance"
+        className={getMissionStageSurfaceClassName("capture", "capture")}
+        aria-hidden={isMissionSurfaceHidden("capture")}
+        data-mission-act-state={getMissionSurfaceState("capture")}
+        data-mission-act-wrapper="capture"
+        data-mission-surface="capture"
       >
-        <ProofSpotlight projection={presentationProjection} />
+        {renderActFrame("capture")}
+        <div className="mission-act-grid mission-act-grid--capture">
+          {renderCurrentDecisionCard("capture")}
+          <ProofSpotlight projection={presentationProjection} />
+        </div>
       </section>
 
       <section
         className={getMissionStageSurfaceClassName("absence", "absence")}
+        aria-hidden={isMissionSurfaceHidden("absence")}
+        data-mission-act-state={getMissionSurfaceState("absence")}
+        data-mission-act-wrapper="absence"
         data-mission-surface="absence"
       >
-        <AbsenceShadowMap projection={presentationProjection} />
+        {renderActFrame("absence")}
+        <div className="mission-act-grid mission-act-grid--absence">
+          <AbsenceShadowMap projection={presentationProjection} />
+          <section
+            className="mission-act-hold-card"
+            data-absence-hold-focal-treatment="true"
+          >
+            <span>HOLD focal treatment</span>
+            <strong>
+              {holdWallView.triggered
+                ? "Missing proof is the proof moment."
+                : "No HOLD trigger is active in current dashboard state."}
+            </strong>
+            <em>
+              Trigger source: {holdWallView.triggerSource}; source mode:{" "}
+              {holdWallView.sourceMode}.
+            </em>
+            <dl>
+              {holdWallView.fields.map((field) => (
+                <div key={field.key}>
+                  <dt>{field.label}</dt>
+                  <dd>{field.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        </div>
       </section>
 
       <section className={presenterSurfaceClassName} data-mission-surface="presenter">
@@ -696,13 +911,17 @@ export function MissionPresentationShell({
       </section>
 
       <section
-        className={getMissionStageSurfaceClassName("public", "public")}
-        data-mission-surface="public"
+        className={getMissionStageSurfaceClassName("chain", "chain")}
+        aria-hidden={isMissionSurfaceHidden("chain")}
+        data-mission-act-state={getMissionSurfaceState("chain")}
+        data-mission-act-wrapper="chain"
+        data-mission-chain-part="receipt"
+        data-mission-surface="chain"
       >
         <MissionRunReceiptPanel receipt={missionRunReceipt} />
       </section>
 
-      <MissionRail stages={missionRailStages} />
+      <MissionRail stages={displayedMissionRailStages} />
 
       <div
         className={`mission-primary-actions${
@@ -746,9 +965,38 @@ export function MissionPresentationShell({
 
       <section
         className={getMissionStageSurfaceClassName("public", "public")}
+        aria-hidden={isMissionSurfaceHidden("public")}
+        data-mission-act-state={getMissionSurfaceState("public")}
+        data-mission-act-wrapper="public"
+        data-mission-public-part="boundary"
         data-mission-surface="public"
       >
-        <SyncPill vibrationStatus={vibrationStatus} view={syncChoreography} />
+        <div className="mission-act-grid mission-act-grid--public">
+          <section
+            className="mission-public-boundary-card"
+            data-public-civic-view="bounded"
+          >
+            <span>Public / redacted civic view</span>
+            <strong>{publicPayloadStatus}</strong>
+            <dl>
+              <div>
+                <dt>Audience</dt>
+                <dd>{publicSkinView?.audience ?? "public boundary pending"}</dd>
+              </div>
+              <div>
+                <dt>Claims</dt>
+                <dd>{formatCount(publicSkinView?.claims.length ?? 0, "claim")}</dd>
+              </div>
+              <div>
+                <dt>Redactions</dt>
+                <dd>
+                  {formatCount(publicSkinView?.redactions.length ?? 0, "redaction")}
+                </dd>
+              </div>
+            </dl>
+          </section>
+          <SyncPill vibrationStatus={vibrationStatus} view={syncChoreography} />
+        </div>
       </section>
 
       {absenceLensEnabled ? (
