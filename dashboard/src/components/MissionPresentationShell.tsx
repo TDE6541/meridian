@@ -226,6 +226,7 @@ function buildMissionSurfaceClassName({
     `mission-surface--${name}`,
     visible ? "is-visible" : null,
     reviewVisible ? "is-review-visible" : null,
+    reviewVisible ? "mission-review-section" : null,
     active ? "is-active" : null,
     complete ? "is-complete" : null,
   ]
@@ -509,7 +510,7 @@ export function MissionPresentationShell({
     complete: isReviewMode,
     name: "review",
     reviewVisible: isReviewMode,
-    visible: Boolean(judgeCard),
+    visible: isReviewMode,
   });
   const heroSurfaceClassName = [
     "mission-hero",
@@ -575,11 +576,12 @@ export function MissionPresentationShell({
     <section
       className={`mission-presentation mission-shell${
         missionPhysicalModeEnabled ? " mission-presentation--physical" : ""
-      }`}
+      }${isReviewMode ? " mission-presentation--review" : ""}`}
       data-mission-presentation={engineerMode ? "engineer" : "active"}
       data-mission-physical-control-scale={physicalModeView.control_scale}
       data-mission-physical-layout={physicalModeView.layout_density}
       data-mission-physical-mode={missionPhysicalModeEnabled ? "on" : "off"}
+      data-mission-review-mode={isReviewMode ? "visible" : "hidden"}
       data-mission-active-act={
         activeMissionStage ?? (isReviewMode ? "review" : "lobby")
       }
@@ -675,6 +677,39 @@ export function MissionPresentationShell({
       </section>
 
       <section
+        aria-hidden={!isReviewMode}
+        className={`${reviewSurfaceClassName} mission-review-banner`}
+        data-mission-review-banner="completion"
+        data-mission-surface="review"
+      >
+        <div>
+          <p className="mission-review-banner__eyebrow">Completion review</p>
+          <h2>Mission Complete. Review Mode: full governed chain visible.</h2>
+          <p>
+            The AI tried to act. Meridian refused. The Foreman explained why.
+            The chain proves it. The city is safer.
+          </p>
+        </div>
+        <dl>
+          <div>
+            <dt>Mission status</dt>
+            <dd>{missionPlaybackState?.status ?? "idle"}</dd>
+          </div>
+          <div>
+            <dt>Acts complete</dt>
+            <dd>
+              {completedMissionStageIds.length}/{MISSION_STAGE_IDS.length}
+            </dd>
+          </div>
+          <div>
+            <dt>Inspection source</dt>
+            <dd>existing mission playback completion</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section
+        aria-hidden={!isReviewMode}
         className={`${reviewSurfaceClassName} mission-internal-controls`}
         data-internal-proof-controls="true"
         data-mission-surface="review"
@@ -748,6 +783,7 @@ export function MissionPresentationShell({
       </section>
 
       <section
+        aria-hidden={!isReviewMode}
         className={`${reviewSurfaceClassName} mission-status-strip`}
         data-demo-status-strip="presenter"
         data-mission-surface="review"
@@ -1046,6 +1082,7 @@ export function MissionPresentationShell({
       ) : null}
 
       <section
+        aria-hidden={!isReviewMode}
         className={`${reviewSurfaceClassName} mission-secondary-proof`}
         data-mission-surface="review"
         data-secondary-proof-summary="true"

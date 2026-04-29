@@ -430,6 +430,11 @@ export function ControlRoomShell({
     },
   });
   const selectedJudgeCard = getJudgeTouchboardCard(judgeInterrupt?.questionId);
+  const missionCompletionReviewVisible =
+    missionRuntime.playbackState.status === "completed" ||
+    missionRuntime.playbackState.completedAtMs !== null;
+  const engineerCockpitVisible =
+    presentationMode === "engineer" || missionCompletionReviewVisible;
 
   function getMissionClockMs(playbackState: MissionPlaybackState): number {
     const lastEventAtMs = playbackState.events.at(-1)?.atMs;
@@ -878,6 +883,9 @@ export function ControlRoomShell({
   return (
     <section
       className="control-room-shell control-room-shell--projector"
+      data-mission-review-mode={
+        missionCompletionReviewVisible ? "visible" : "hidden"
+      }
       data-presentation-mode={presentationMode}
       data-responsive-shell="projector-safe"
     >
@@ -967,10 +975,51 @@ export function ControlRoomShell({
       />
 
       <div
-        className="engineer-cockpit"
-        data-engineer-cockpit={presentationMode === "engineer" ? "visible" : "hidden"}
-        hidden={presentationMode !== "engineer"}
+        className={`engineer-cockpit${
+          missionCompletionReviewVisible ? " engineer-cockpit--review" : ""
+        }`}
+        data-engineer-cockpit={
+          engineerCockpitVisible
+            ? missionCompletionReviewVisible
+              ? "review"
+              : "visible"
+            : "hidden"
+        }
+        data-mission-review-surface={
+          missionCompletionReviewVisible ? "technical-stack" : undefined
+        }
+        hidden={!engineerCockpitVisible}
       >
+        {missionCompletionReviewVisible ? (
+          <section
+            className="mission-review-banner mission-review-banner--technical"
+            data-mission-review-banner="technical-stack"
+          >
+            <div>
+              <p className="mission-review-banner__eyebrow">Technical inspection</p>
+              <h2>Full proof cockpit visible after mission completion.</h2>
+              <p>
+                Existing presenter, authority, disclosure, Foreman, absence,
+                governance, skin, and chain surfaces are open for review.
+              </p>
+            </div>
+            <dl>
+              <div>
+                <dt>Playback source</dt>
+                <dd>{missionRuntime.playbackState.status}</dd>
+              </div>
+              <div>
+                <dt>Completion timestamp</dt>
+                <dd>{missionRuntime.playbackState.completedAtMs ?? "pending"}</dd>
+              </div>
+              <div>
+                <dt>Surface rule</dt>
+                <dd>no new review state</dd>
+              </div>
+            </dl>
+          </section>
+        ) : null}
+
         <DemoHeader
           activeOutcome={currentStep?.decision ?? null}
           activeSkinLabel={activeSkinLabel}

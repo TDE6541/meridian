@@ -2113,6 +2113,19 @@ kbd {
   min-width: 0;
 }
 
+.engineer-cockpit--review {
+  --mission-navy: #0A1628;
+  --mission-off-white: #E8EDF2;
+  --mission-amber-warning: #F5B547;
+  --mission-dim-green-status: #3DD68C;
+  width: min(100%, 1280px);
+  margin: 0 auto;
+  padding: 0.9rem;
+  border: 1px solid rgba(10, 22, 40, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 252, 246, 0.9);
+}
+
 .engineer-cockpit[hidden] {
   display: none;
 }
@@ -2296,6 +2309,116 @@ kbd {
 .mission-presentation--physical {
   gap: 1rem;
   padding: 1rem;
+}
+
+.mission-presentation--review {
+  gap: 1rem;
+}
+
+.mission-review-banner {
+  order: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.42fr);
+  gap: 0.85rem;
+  align-items: stretch;
+  min-width: 0;
+  padding: 0.9rem;
+  border: 1px solid rgba(61, 214, 140, 0.34);
+  border-left: 4px solid var(--mission-dim-green-status, #3DD68C);
+  border-radius: 8px;
+  background: rgba(61, 214, 140, 0.08);
+  color: var(--mission-off-white, #E8EDF2);
+}
+
+.mission-review-banner--technical {
+  color: #172432;
+}
+
+.mission-review-banner div,
+.mission-review-banner dl {
+  display: grid;
+  gap: 0.42rem;
+  min-width: 0;
+  margin: 0;
+}
+
+.mission-review-banner dl {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.mission-review-banner dl div {
+  padding: 0.62rem;
+  border: 1px solid rgba(232, 237, 242, 0.14);
+  border-radius: 8px;
+  background: rgba(10, 22, 40, 0.22);
+}
+
+.mission-review-banner--technical dl div {
+  border-color: rgba(23, 36, 50, 0.12);
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.mission-review-banner__eyebrow,
+.mission-review-banner dt {
+  margin: 0;
+  color: rgba(245, 181, 71, 0.92);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.mission-review-banner--technical .mission-review-banner__eyebrow,
+.mission-review-banner--technical dt {
+  color: #216746;
+}
+
+.mission-review-banner h2,
+.mission-review-banner p,
+.mission-review-banner dd {
+  margin: 0;
+}
+
+.mission-review-banner h2 {
+  color: #ffffff;
+  font-size: 1.25rem;
+  line-height: 1.14;
+}
+
+.mission-review-banner--technical h2 {
+  color: #172432;
+}
+
+.mission-review-banner p,
+.mission-review-banner dd {
+  color: rgba(232, 237, 242, 0.78);
+  font-size: 0.84rem;
+  line-height: 1.38;
+  overflow-wrap: anywhere;
+}
+
+.mission-review-banner--technical p,
+.mission-review-banner--technical dd {
+  color: #405467;
+}
+
+.mission-surface.mission-review-banner.is-review-visible {
+  display: grid;
+  pointer-events: auto;
+}
+
+.mission-review-section {
+  padding: 0.75rem;
+  border: 1px solid rgba(232, 237, 242, 0.12);
+  border-radius: 8px;
+  background: rgba(232, 237, 242, 0.035);
+}
+
+@media (max-width: 780px) {
+  .mission-review-banner,
+  .mission-review-banner dl {
+    grid-template-columns: 1fr;
+  }
 }
 
 .mission-presentation__eyebrow,
