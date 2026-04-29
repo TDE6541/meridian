@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { JudgeTouchboardCard } from "../demo/judgeTouchboardDeck.ts";
 import type { MissionPhysicalProjectionV1 } from "../demo/missionPhysicalProjection.ts";
 import {
   deriveForemanProjectionDisplay,
@@ -9,6 +10,7 @@ export type ForemanAvatarCardId = "ask" | "challenge" | "proof";
 
 export interface ForemanAvatarBayProps {
   initialCard?: ForemanAvatarCardId | null;
+  judgeChallenge?: JudgeTouchboardCard | null;
   projection?: MissionPhysicalProjectionV1 | null;
 }
 
@@ -123,6 +125,7 @@ function renderCard(
 
 export function ForemanAvatarBay({
   initialCard = null,
+  judgeChallenge = null,
   projection = null,
 }: ForemanAvatarBayProps) {
   const [activeCard, setActiveCard] = useState<ForemanAvatarCardId | null>(
@@ -237,6 +240,19 @@ export function ForemanAvatarBay({
       </div>
 
       {renderCard(activeCard, display)}
+
+      {judgeChallenge ? (
+        <article
+          className="foreman-avatar-bay__control-card foreman-avatar-bay__control-card--judge"
+          data-foreman-avatar-card="judge-mode"
+          data-foreman-judge-question={judgeChallenge.question_id}
+        >
+          <span>Judge Mode</span>
+          <strong>{judgeChallenge.label}</strong>
+          <p>{judgeChallenge.safe_claim}</p>
+          <p>{judgeChallenge.recovery_line}</p>
+        </article>
+      ) : null}
     </section>
   );
 }

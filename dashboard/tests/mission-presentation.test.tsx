@@ -23,7 +23,10 @@ import {
   buildHoldWallView,
   HOLD_WALL_SILENCE_BEAT_MS,
 } from "../src/demo/holdWall.ts";
+import { getJudgeTouchboardCard } from "../src/demo/judgeTouchboardDeck.ts";
 import { buildMissionAbsenceLensOverlay } from "../src/demo/missionAbsenceLens.ts";
+import { createInitialMissionPlaybackState } from "../src/demo/missionPlaybackController.ts";
+import { buildMissionPhysicalProjection } from "../src/demo/missionPhysicalProjection.ts";
 import {
   buildMissionRailStages,
   MISSION_RAIL_LABELS,
@@ -186,10 +189,14 @@ const tests = [
       assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
       assert.equal(markup.includes('data-authority-handoff-theater="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
+      assert.equal(markup.includes('data-judge-touchboard="true"'), true);
+      assert.equal(markup.includes('data-mission-evidence-navigator="true"'), true);
       assert.equal(markup.includes("Evidence Beam"), true);
       assert.equal(markup.includes("Authority Handoff Theater"), true);
       assert.equal(markup.includes("Absence Shadow Map"), true);
       assert.equal(markup.includes("Foreman Avatar Bay"), true);
+      assert.equal(markup.includes("Judge Touchboard"), true);
+      assert.equal(markup.includes("Evidence Navigator"), true);
       assert.equal(markup.includes("Engineer Mode"), true);
       assert.equal(markup.includes("Local demo control room"), true);
     },
@@ -207,6 +214,30 @@ const tests = [
       assert.equal(markup.includes("Presenter View"), true);
       assert.equal(markup.includes("Local demo control room"), true);
       assert.equal(markup.includes("Snapshot remains the default stable path"), true);
+    },
+  },
+  {
+    name: "mission shell mounts judge card navigator and keeps Proof Tools grouped",
+    run: async () => {
+      const props = await buildSnapshotMissionFixture();
+      const card = getJudgeTouchboardCard("production_system");
+      const element = MissionPresentationShell({
+        ...props,
+        engineerMode: false,
+        judgeCard: card,
+        judgeInterruptStatus: "paused",
+        missionPhysicalProjection: buildMissionPhysicalProjection({
+          playback_state: createInitialMissionPlaybackState("guided"),
+        }),
+        onEngineerModeChange: () => undefined,
+      });
+      const markup = renderMarkup(element);
+
+      assert.equal(markup.includes('data-proof-tools="collapsed-by-default"'), true);
+      assert.equal(markup.includes('data-judge-answer-card="production_system"'), true);
+      assert.equal(markup.includes('data-mission-evidence-navigator-selected="true"'), true);
+      assert.equal(markup.includes('data-foreman-avatar-state="challenged"'), true);
+      assert.equal(markup.includes('data-foreman-avatar-card="judge-mode"'), true);
     },
   },
   {
@@ -466,6 +497,8 @@ const tests = [
       assert.equal(markup.includes('data-proof-spotlight="true"'), true);
       assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
+      assert.equal(markup.includes('data-judge-touchboard="true"'), true);
+      assert.equal(markup.includes('data-mission-evidence-navigator="true"'), true);
       assert.equal(markup.includes("Current decision / HOLD"), true);
       assert.equal(markup.includes("Spotlight shows where the current proof lives"), true);
       assert.equal(markup.includes("Shadow slots show expected evidence"), true);
@@ -697,6 +730,8 @@ const tests = [
     run: async () => {
       const sourcePaths = [
         "src/components/ControlRoomShell.tsx",
+        "src/components/JudgeTouchboard.tsx",
+        "src/components/MissionEvidenceNavigator.tsx",
         "src/components/AbsenceShadowMap.tsx",
         "src/components/AuthorityHandoffTheater.tsx",
         "src/components/ForemanAvatarBay.tsx",
@@ -712,6 +747,8 @@ const tests = [
         "src/demo/fictionalPermitAnchor.ts",
         "src/demo/holdWall.ts",
         "src/demo/missionAbsenceLens.ts",
+        "src/demo/judgeTouchboardDeck.ts",
+        "src/demo/missionEvidenceNavigator.ts",
         "src/demo/absenceShadowView.ts",
         "src/components/MissionRail.tsx",
         "src/demo/missionRail.ts",

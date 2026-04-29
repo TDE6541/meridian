@@ -20,9 +20,13 @@ import {
   type MissionPlaybackControlsProps,
 } from "./MissionPlaybackControls.tsx";
 import type { MissionPhysicalProjectionV1 } from "../demo/missionPhysicalProjection.ts";
+import type { JudgeQuestionId, JudgeTouchboardCard } from "../demo/judgeTouchboardDeck.ts";
+import { buildJudgeModeProjection } from "../demo/missionEvidenceNavigator.ts";
 import { AbsenceShadowMap } from "./AbsenceShadowMap.tsx";
 import { AuthorityHandoffTheater } from "./AuthorityHandoffTheater.tsx";
 import { ForemanAvatarBay } from "./ForemanAvatarBay.tsx";
+import { JudgeTouchboard } from "./JudgeTouchboard.tsx";
+import { MissionEvidenceNavigator } from "./MissionEvidenceNavigator.tsx";
 import { MissionRail } from "./MissionRail.tsx";
 import { ProofSpotlight } from "./ProofSpotlight.tsx";
 import { SyncPill } from "./SyncPill.tsx";
@@ -44,6 +48,8 @@ export interface MissionPresentationShellProps {
   forensicChain: DashboardForensicChainView;
   holdWallOpen: boolean;
   holdWallView: HoldWallView;
+  judgeCard?: JudgeTouchboardCard | null;
+  judgeInterruptStatus?: "idle" | "interrupted" | "paused";
   missionPhysicalProjection?: MissionPhysicalProjectionV1 | null;
   missionPlaybackControls?: MissionPlaybackControlsProps;
   missionRailStages: readonly MissionRailStage[];
@@ -54,6 +60,9 @@ export interface MissionPresentationShellProps {
   onEngineerModeChange: (enabled: boolean) => void;
   onHoldWallDismiss: () => void;
   onHoldWallOpen: () => void;
+  onJudgeResetForNextJudge?: () => void;
+  onJudgeResumeMission?: () => void;
+  onJudgeSelectQuestion?: (questionId: JudgeQuestionId) => void;
   onNextStep?: () => void;
   onPausePlayback?: () => void;
   onPlayPlayback?: () => void;
@@ -206,6 +215,8 @@ export function MissionPresentationShell({
   forensicChain,
   holdWallOpen,
   holdWallView,
+  judgeCard = null,
+  judgeInterruptStatus = judgeCard ? "interrupted" : "idle",
   missionPhysicalProjection = null,
   missionPlaybackControls,
   missionRailStages,
@@ -216,6 +227,9 @@ export function MissionPresentationShell({
   onEngineerModeChange,
   onHoldWallDismiss,
   onHoldWallOpen,
+  onJudgeResetForNextJudge,
+  onJudgeResumeMission,
+  onJudgeSelectQuestion,
   onNextStep,
   onPausePlayback,
   onPlayPlayback,
@@ -255,6 +269,10 @@ export function MissionPresentationShell({
     publicSkinView,
   });
   const missionAbsenceLens = buildMissionAbsenceLensOverlay(absenceLens);
+  const presentationProjection = buildJudgeModeProjection(
+    missionPhysicalProjection,
+    judgeCard
+  );
   const publicPayloadStatus = publicSkinView?.hasPayload
     ? "public skin payload present"
     : "public skin payload pending";
@@ -420,13 +438,32 @@ export function MissionPresentationShell({
         </strong>
       </aside>
 
-      <ForemanAvatarBay projection={missionPhysicalProjection} />
+      <JudgeTouchboard
+        card={judgeCard}
+        interruptStatus={judgeInterruptStatus}
+        missionModeLabel={
+          presentationProjection?.mode === "foreman_autonomous"
+            ? "Foreman Autonomous"
+            : "Guided Mission"
+        }
+        onResetForNextJudge={onJudgeResetForNextJudge}
+        onResumeMission={onJudgeResumeMission}
+        onSelectQuestion={onJudgeSelectQuestion}
+        stageLabel={presentationProjection?.active_stage_id ?? "No active mission"}
+      />
 
-      <AuthorityHandoffTheater projection={missionPhysicalProjection} />
+      <ForemanAvatarBay
+        judgeChallenge={judgeCard}
+        projection={presentationProjection}
+      />
 
-      <ProofSpotlight projection={missionPhysicalProjection} />
+      <MissionEvidenceNavigator card={judgeCard} />
 
-      <AbsenceShadowMap projection={missionPhysicalProjection} />
+      <AuthorityHandoffTheater projection={presentationProjection} />
+
+      <ProofSpotlight projection={presentationProjection} />
+
+      <AbsenceShadowMap projection={presentationProjection} />
 
       <MissionPlaybackControls {...missionPlaybackControls} />
 

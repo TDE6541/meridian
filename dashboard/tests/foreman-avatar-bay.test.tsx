@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import React from "react";
 import { ForemanAvatarBay } from "../src/components/ForemanAvatarBay.tsx";
+import { getJudgeTouchboardCard } from "../src/demo/judgeTouchboardDeck.ts";
 import {
   runForemanAutonomousConductor,
   type ForemanConductorReadinessInput,
@@ -15,6 +16,7 @@ import {
   buildMissionPhysicalProjection,
   type MissionPhysicalProjectionV1,
 } from "../src/demo/missionPhysicalProjection.ts";
+import { buildJudgeModeProjection } from "../src/demo/missionEvidenceNavigator.ts";
 import type { MissionStageReadinessInput } from "../src/demo/missionStageReadiness.ts";
 import { renderMarkup, runTests } from "./scenarioTestUtils.ts";
 
@@ -234,6 +236,23 @@ await runTests([
       assert.equal(markup.includes("Permit #4471 source card"), true);
       assert.equal(markup.includes("dashboard/src/demo/fictionalPermitAnchor.ts"), true);
       assert.equal(markup.includes("Proof Tools remain grouped"), true);
+    },
+  },
+  {
+    name: "Avatar Bay shows Judge Mode challenged card from selected judge question",
+    run() {
+      const card = getJudgeTouchboardCard("autonomous_safe");
+      const projection = buildJudgeModeProjection(guidedCaptureProjection(), card);
+      const markup = renderMarkup(
+        <ForemanAvatarBay judgeChallenge={card} projection={projection} />
+      );
+
+      assert.ok(card);
+      assert.equal(markup.includes('data-foreman-avatar-state="challenged"'), true);
+      assert.equal(markup.includes('data-foreman-avatar-card="judge-mode"'), true);
+      assert.equal(markup.includes('data-foreman-judge-question="autonomous_safe"'), true);
+      assert.equal(markup.includes("Judge Mode"), true);
+      assert.equal(markup.includes(card.safe_claim), true);
     },
   },
   {

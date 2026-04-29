@@ -44,6 +44,8 @@ const tests = [
       assert.equal(markup.includes('data-proof-spotlight="true"'), true);
       assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
+      assert.equal(markup.includes('data-judge-touchboard="true"'), true);
+      assert.equal(markup.includes('data-mission-evidence-navigator="true"'), true);
       assert.equal(markup.includes('data-primary-action-row="presenter"'), true);
       assert.equal(markup.includes('data-secondary-proof-summary="true"'), true);
       assert.equal(markup.includes('data-demo-header="local"'), true);
@@ -82,6 +84,9 @@ const tests = [
       assert.equal(styles.includes(".mission-playback-controls__status"), true);
       assert.equal(styles.includes(".foreman-avatar-bay__readout"), true);
       assert.equal(styles.includes(".foreman-avatar-bay__button"), true);
+      assert.equal(styles.includes(".judge-touchboard__controls"), true);
+      assert.equal(styles.includes(".judge-touchboard__button"), true);
+      assert.equal(styles.includes(".mission-evidence-navigator__targets"), true);
       assert.equal(styles.includes(".authority-handoff-theater__roles"), true);
       assert.equal(styles.includes(".authority-handoff-theater__facts"), true);
       assert.equal(styles.includes(".mission-primary-actions__button"), true);

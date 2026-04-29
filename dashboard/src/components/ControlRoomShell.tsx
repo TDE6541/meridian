@@ -34,6 +34,10 @@ import {
 } from "../demo/foremanAutonomousConductor.ts";
 import { buildHoldWallView } from "../demo/holdWall.ts";
 import {
+  getJudgeTouchboardCard,
+  type JudgeQuestionId,
+} from "../demo/judgeTouchboardDeck.ts";
+import {
   createInitialMissionPlaybackState,
   missionPlaybackReducer,
   type MissionPlaybackState,
@@ -121,6 +125,13 @@ interface MissionPlaybackRuntime {
   playbackState: MissionPlaybackState;
 }
 
+interface JudgeInterruptState {
+  priorMode: MissionPlaybackMode;
+  priorPlaybackStatus: MissionPlaybackState["status"];
+  priorStageId: MissionStageId | null;
+  questionId: JudgeQuestionId;
+}
+
 export interface ControlRoomShellProps {
   initialControlState?: Partial<ControlRoomState>;
   initialDashboardMode?: DashboardMode;
@@ -184,6 +195,8 @@ export function ControlRoomShell({
   const [auditWallOpen, setAuditWallOpen] = useState(false);
   const [missionAbsenceLensEnabled, setMissionAbsenceLensEnabled] = useState(false);
   const [holdWallOpen, setHoldWallOpen] = useState(false);
+  const [judgeInterrupt, setJudgeInterrupt] =
+    useState<JudgeInterruptState | null>(null);
   const [presentationMode, setPresentationMode] =
     useState<ControlRoomPresentationMode>(initialPresentationMode);
   const [missionRuntime, setMissionRuntime] = useState<MissionPlaybackRuntime>(() => {
@@ -373,6 +386,7 @@ export function ControlRoomShell({
     conductor_output: missionRuntime.conductorOutput,
     playback_state: missionRuntime.playbackState,
   });
+  const selectedJudgeCard = getJudgeTouchboardCard(judgeInterrupt?.questionId);
 
   function getMissionClockMs(playbackState: MissionPlaybackState): number {
     const lastEventAtMs = playbackState.events.at(-1)?.atMs;
@@ -563,6 +577,7 @@ export function ControlRoomShell({
   }
 
   function handleMissionReset() {
+    setJudgeInterrupt(null);
     setMissionRuntime((current) => {
       const nowMs = getMissionClockMs(current.playbackState);
       const playbackState = missionPlaybackReducer(current.playbackState, {
@@ -581,6 +596,90 @@ export function ControlRoomShell({
     });
   }
 
+  function handleJudgeQuestionSelect(questionId: JudgeQuestionId) {
+    const priorPlaybackState = missionRuntime.playbackState;
+
+    setJudgeInterrupt({
+      priorMode: judgeInterrupt?.priorMode ?? priorPlaybackState.mode,
+      priorPlaybackStatus:
+        judgeInterrupt?.priorPlaybackStatus ?? priorPlaybackState.status,
+      priorStageId: judgeInterrupt?.priorStageId ?? priorPlaybackState.currentStageId,
+      questionId,
+    });
+
+    setMissionRuntime((current) => {
+      if (current.playbackState.status !== "running") {
+        return current;
+      }
+
+      const nowMs = getMissionClockMs(current.playbackState);
+      const playbackState = missionPlaybackReducer(current.playbackState, {
+        nowMs,
+        type: "pause",
+      });
+
+      return {
+        ...current,
+        conductorOutput: current.conductorOutput
+          ? {
+              ...current.conductorOutput,
+              controllerState: playbackState,
+              status:
+                playbackState.status === "paused"
+                  ? "paused"
+                  : current.conductorOutput.status,
+            }
+          : null,
+        playbackState,
+      };
+    });
+  }
+
+  function handleJudgeResumeMission() {
+    const shouldResume = judgeInterrupt?.priorPlaybackStatus === "running";
+
+    setJudgeInterrupt(null);
+
+    if (!shouldResume) {
+      return;
+    }
+
+    setMissionRuntime((current) => {
+      if (current.playbackState.status !== "paused") {
+        return current;
+      }
+
+      const nowMs = getMissionClockMs(current.playbackState);
+      const playbackState = missionPlaybackReducer(current.playbackState, {
+        nowMs,
+        type: "resume",
+      });
+      const conductorStatus =
+        current.conductorOutput?.status === "paused"
+          ? current.conductorOutput.cueEvent
+            ? "cue_emitted"
+            : "waiting"
+          : current.conductorOutput?.status;
+
+      return {
+        ...current,
+        conductorOutput: current.conductorOutput
+          ? {
+              ...current.conductorOutput,
+              controllerState: playbackState,
+              status: conductorStatus ?? current.conductorOutput.status,
+            }
+          : null,
+        playbackState,
+      };
+    });
+  }
+
+  function handleJudgeResetForNextJudge() {
+    setJudgeInterrupt(null);
+    handleMissionReset();
+  }
+
   function handleResetToKnownCleanState() {
     setControlState(
       createInitialControlRoomState(records[0]?.entry.key ?? "routine")
@@ -590,6 +689,7 @@ export function ControlRoomShell({
     setAuditWallOpen(false);
     setMissionAbsenceLensEnabled(false);
     setHoldWallOpen(false);
+    setJudgeInterrupt(null);
     setForemanHighlightedPanelId(null);
     setMissionRuntime(() => {
       const playbackState = createInitialMissionPlaybackState("guided");
@@ -754,6 +854,14 @@ export function ControlRoomShell({
         forensicChain={forensicChainView}
         holdWallOpen={holdWallOpen}
         holdWallView={holdWallView}
+        judgeCard={selectedJudgeCard}
+        judgeInterruptStatus={
+          judgeInterrupt
+            ? missionRuntime.playbackState.status === "paused"
+              ? "paused"
+              : "interrupted"
+            : "idle"
+        }
         missionPhysicalProjection={missionPhysicalProjection}
         missionPlaybackControls={{
           canStart: selectedRecord?.status === "ready",
@@ -784,6 +892,9 @@ export function ControlRoomShell({
             setHoldWallOpen(true);
           }
         }}
+        onJudgeResetForNextJudge={handleJudgeResetForNextJudge}
+        onJudgeResumeMission={handleJudgeResumeMission}
+        onJudgeSelectQuestion={handleJudgeQuestionSelect}
         onNextStep={() =>
           setControlState((current) => goToNextStep(current, totalSteps))
         }
