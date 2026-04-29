@@ -188,9 +188,11 @@ const tests = [
       assert.equal(markup.includes('data-proof-spotlight="true"'), true);
       assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
       assert.equal(markup.includes('data-authority-handoff-theater="true"'), true);
+      assert.equal(markup.includes('data-civic-twin-diorama="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
       assert.equal(markup.includes('data-judge-touchboard="true"'), true);
       assert.equal(markup.includes('data-mission-evidence-navigator="true"'), true);
+      assert.equal(markup.includes("Civic Twin Diorama"), true);
       assert.equal(markup.includes("Evidence Beam"), true);
       assert.equal(markup.includes("Authority Handoff Theater"), true);
       assert.equal(markup.includes("Absence Shadow Map"), true);
@@ -476,7 +478,9 @@ const tests = [
         assert.equal(markup.includes(`data-fictional-permit-role="${label}"`), true, label);
       }
 
-      assert.equal(lowerMarkup.includes("official"), false);
+      assert.equal(lowerMarkup.includes("is an official"), false);
+      assert.equal(lowerMarkup.includes("official fort worth"), false);
+      assert.equal(lowerMarkup.includes("official workflow"), false);
       assert.equal(lowerMarkup.includes("real permit"), false);
     },
   },
@@ -496,6 +500,7 @@ const tests = [
       assert.equal(markup.includes('data-current-decision-state="HOLD"'), true);
       assert.equal(markup.includes('data-proof-spotlight="true"'), true);
       assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
+      assert.equal(markup.includes('data-civic-twin-diorama="true"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
       assert.equal(markup.includes('data-judge-touchboard="true"'), true);
       assert.equal(markup.includes('data-mission-evidence-navigator="true"'), true);
@@ -732,6 +737,7 @@ const tests = [
         "src/components/ControlRoomShell.tsx",
         "src/components/JudgeTouchboard.tsx",
         "src/components/MissionEvidenceNavigator.tsx",
+        "src/components/CivicTwinDiorama.tsx",
         "src/components/AbsenceShadowMap.tsx",
         "src/components/AuthorityHandoffTheater.tsx",
         "src/components/ForemanAvatarBay.tsx",
@@ -749,6 +755,7 @@ const tests = [
         "src/demo/missionAbsenceLens.ts",
         "src/demo/judgeTouchboardDeck.ts",
         "src/demo/missionEvidenceNavigator.ts",
+        "src/demo/civicTwinDioramaView.ts",
         "src/demo/absenceShadowView.ts",
         "src/components/MissionRail.tsx",
         "src/demo/missionRail.ts",

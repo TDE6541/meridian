@@ -24,6 +24,7 @@ import type { JudgeQuestionId, JudgeTouchboardCard } from "../demo/judgeTouchboa
 import { buildJudgeModeProjection } from "../demo/missionEvidenceNavigator.ts";
 import { AbsenceShadowMap } from "./AbsenceShadowMap.tsx";
 import { AuthorityHandoffTheater } from "./AuthorityHandoffTheater.tsx";
+import { CivicTwinDiorama } from "./CivicTwinDiorama.tsx";
 import { ForemanAvatarBay } from "./ForemanAvatarBay.tsx";
 import { JudgeTouchboard } from "./JudgeTouchboard.tsx";
 import { MissionEvidenceNavigator } from "./MissionEvidenceNavigator.tsx";
@@ -458,6 +459,8 @@ export function MissionPresentationShell({
       />
 
       <MissionEvidenceNavigator card={judgeCard} />
+
+      <CivicTwinDiorama projection={presentationProjection} />
 
       <AuthorityHandoffTheater projection={presentationProjection} />
 
