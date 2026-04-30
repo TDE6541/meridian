@@ -3,6 +3,7 @@ import type {
   ForemanLiveVoicePlayback,
   ForemanLiveVoiceTransport,
 } from "./liveVoiceTransport.ts";
+import { isForemanMissionNarrationActive } from "./missionNarration.ts";
 
 export interface SpeakLatestForemanAnswerInput {
   messages: readonly ForemanGuideMessage[];
@@ -32,6 +33,10 @@ export function speakLatestForemanAnswer({
   const text = latest.content.trim();
 
   if (!text) {
+    return null;
+  }
+
+  if (isForemanMissionNarrationActive()) {
     return null;
   }
 

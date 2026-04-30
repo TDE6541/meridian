@@ -18,6 +18,8 @@ const MIN_TYPED_FALLBACK_MS = 1800;
 const MAX_TYPED_FALLBACK_MS = 7200;
 const NARRATION_FAILSAFE_PAD_MS = 1200;
 
+let activeMissionNarrationRuns = 0;
+
 export type ForemanMissionNarrationPhase =
   | "complete"
   | "fallback"
@@ -141,6 +143,10 @@ export function estimateMissionNarrationFailsafeMs(line: string): number {
   return estimateMissionTypedFallbackMs(line) + NARRATION_FAILSAFE_PAD_MS;
 }
 
+export function isForemanMissionNarrationActive(): boolean {
+  return activeMissionNarrationRuns > 0;
+}
+
 export function runForemanMissionNarration({
   clearTimer = clearTimeout,
   line,
@@ -176,6 +182,8 @@ export function runForemanMissionNarration({
   const safeLine = line.trim();
   let liveVoicePlayback: ForemanLiveVoicePlayback | null = null;
   let complete = false;
+  let activeRunReleased = false;
+  activeMissionNarrationRuns += 1;
 
   const addTimer = (callback: () => void, delayMs: number) => {
     const timer = setTimer(callback, delayMs);
@@ -189,6 +197,15 @@ export function runForemanMissionNarration({
   const stopLiveVoice = () => {
     liveVoicePlayback?.cancel();
     liveVoicePlayback = null;
+  };
+
+  const releaseActiveRun = () => {
+    if (activeRunReleased) {
+      return;
+    }
+
+    activeRunReleased = true;
+    activeMissionNarrationRuns = Math.max(0, activeMissionNarrationRuns - 1);
   };
 
   const finish = (reason: ForemanMissionNarrationCompletionReason) => {
@@ -311,6 +328,8 @@ export function runForemanMissionNarration({
 
   return {
     cancel: () => {
+      releaseActiveRun();
+
       if (complete) {
         return;
       }
