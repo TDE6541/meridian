@@ -4,6 +4,7 @@ import path from "node:path";
 import {
   createForemanLiveVoiceTransport,
   FOREMAN_LIVE_VOICE_ENDPOINT,
+  FOREMAN_LIVE_VOICE_MISSION_SOURCE,
   speakForemanLiveText,
   type ForemanLiveVoiceAudioElement,
   type ForemanLiveVoiceBrowserTarget,
@@ -122,6 +123,7 @@ const tests = [
       const promise = speakForemanLiveText({
         fetcher,
         onState: (state) => states.push(state),
+        source: FOREMAN_LIVE_VOICE_MISSION_SOURCE,
         target,
         text: "Existing Foreman text.",
       });
@@ -147,6 +149,32 @@ const tests = [
     },
   },
   {
+    name: "live voice client gates non-mission text before fetch",
+    run: async () => {
+      const target = createAudioTarget();
+      const states: string[] = [];
+      let fetchCount = 0;
+      const fetcher: typeof fetch = async () => {
+        fetchCount += 1;
+        return new Response(new Uint8Array([1, 2, 3]), { status: 200 });
+      };
+
+      const result = await speakForemanLiveText({
+        fetcher,
+        onState: (state) => states.push(state),
+        target,
+        text: "Role/session/status chatter.",
+      });
+
+      assert.equal(result.ok, false);
+      assert.equal(result.state, "idle");
+      assert.equal(result.issue, "Voice transport is gated to scripted mission narration.");
+      assert.equal(fetchCount, 0);
+      assert.deepEqual(states, ["idle"]);
+      assert.equal(MockAudio.instances.length, 0);
+    },
+  },
+  {
     name: "live voice client reports unavailable without blocking typed text",
     run: async () => {
       const target = createAudioTarget();
@@ -167,6 +195,7 @@ const tests = [
       const result = await speakForemanLiveText({
         fetcher,
         onState: (state) => states.push(state),
+        source: FOREMAN_LIVE_VOICE_MISSION_SOURCE,
         target,
         text: "Typed answer stays visible.",
       });
@@ -188,7 +217,10 @@ const tests = [
         target,
       });
 
-      const playback = transport.speak({ text: "Cancel this voice." });
+      const playback = transport.speak({
+        source: FOREMAN_LIVE_VOICE_MISSION_SOURCE,
+        text: "Cancel this voice.",
+      });
 
       await waitFor(() => MockAudio.instances.length === 1, "audio instance");
       assert.equal(MockAudio.instances.length, 1);
@@ -202,105 +234,116 @@ const tests = [
     },
   },
   {
-    name: "existing Ask Foreman answer text is passed to live voice client",
+    name: "non-mission transport call does not cancel active mission audio",
+    run: async () => {
+      const target = createAudioTarget();
+      const transport = createForemanLiveVoiceTransport({
+        fetcher: async () =>
+          new Response(new Uint8Array([1, 2, 3]), { status: 200 }),
+        target,
+      });
+
+      const missionPlayback = transport.speak({
+        source: FOREMAN_LIVE_VOICE_MISSION_SOURCE,
+        text: "This is Permit 4471. A field inspector flagged a concern during a routine corridor walk.",
+      });
+
+      await waitFor(() => MockAudio.instances.length === 1, "audio instance");
+
+      const blockedPlayback = transport.speak({
+        text: "Role/session/status chatter.",
+      });
+      const blockedResult = await blockedPlayback.finished;
+
+      assert.equal(blockedResult.ok, false);
+      assert.equal(blockedResult.state, "idle");
+      assert.equal(MockAudio.instances.length, 1);
+      assert.equal(MockAudio.instances[0]?.paused, false);
+
+      MockAudio.instances[0]?.onended?.({});
+
+      const missionResult = await missionPlayback.finished;
+
+      assert.equal(missionResult.ok, true);
+    },
+  },
+  {
+    name: "existing Ask Foreman answer text is consumed without live voice",
     run: async () => {
       const context = await createPanelContext();
       const messages = appendForemanGuideExchange([], "Walk the proof", context);
-      const spoken: string[] = [];
-      const transport = createForemanLiveVoiceTransport({
-        fetcher: async (_, init) => {
-          spoken.push(JSON.parse(String(init?.body)).text);
-          return new Response(
-            JSON.stringify({
-              error: "voice_unavailable",
-              issue: "Voice unavailable - showing typed answer.",
-              ok: false,
-            }),
-            { status: 503 }
-          );
+      const spokenMessageIds = new Set<string>();
+      let speakCount = 0;
+      const transport: ReturnType<typeof createForemanLiveVoiceTransport> = {
+        speak: () => {
+          speakCount += 1;
+          throw new Error("non-mission answer voice must not speak");
         },
-        target: createAudioTarget(),
-      });
+        stop: () => undefined,
+      };
 
       const routed = speakLatestForemanAnswer({
         messages,
-        spokenMessageIds: new Set(),
+        spokenMessageIds,
         transport,
       });
 
       assert.ok(routed);
-      await routed.playback.finished;
-      assert.equal(spoken[0], messages[1]?.content);
+      assert.equal(routed.skipped, "mission_narration_only");
+      assert.equal(routed.text, messages[1]?.content);
+      assert.equal(spokenMessageIds.has(String(messages[1]?.id)), true);
+      assert.equal(speakCount, 0);
       assert.equal(messages[1]?.content.length > 0, true);
     },
   },
   {
-    name: "existing Challenge Foreman answer text is passed to live voice client",
+    name: "existing Challenge Foreman answer text is consumed without live voice",
     run: async () => {
       const context = await createPanelContext();
       const messages = appendForemanGuideExchange([], "Challenge this", context);
-      const spoken: string[] = [];
-      const transport = createForemanLiveVoiceTransport({
-        fetcher: async (_, init) => {
-          spoken.push(JSON.parse(String(init?.body)).text);
-          return new Response(
-            JSON.stringify({
-              error: "voice_unavailable",
-              issue: "Voice unavailable - showing typed answer.",
-              ok: false,
-            }),
-            { status: 503 }
-          );
+      const spokenMessageIds = new Set<string>();
+      let speakCount = 0;
+      const transport: ReturnType<typeof createForemanLiveVoiceTransport> = {
+        speak: () => {
+          speakCount += 1;
+          throw new Error("non-mission answer voice must not speak");
         },
-        target: createAudioTarget(),
-      });
+        stop: () => undefined,
+      };
 
       const routed = speakLatestForemanAnswer({
         messages,
-        spokenMessageIds: new Set(),
+        spokenMessageIds,
         transport,
       });
 
       assert.ok(routed);
-      await routed.playback.finished;
-      assert.equal(spoken[0], messages[1]?.content);
+      assert.equal(routed.skipped, "mission_narration_only");
+      assert.equal(routed.text, messages[1]?.content);
+      assert.equal(spokenMessageIds.has(String(messages[1]?.id)), true);
+      assert.equal(speakCount, 0);
       assert.equal(messages[1]?.response?.response_kind, "authority_challenge");
     },
   },
   {
-    name: "typed Foreman answer remains visible when live voice fails",
+    name: "typed Foreman answer remains visible when answer voice is gated",
     run: async () => {
       const context = await createPanelContext();
       const messages = appendForemanGuideExchange([], "Challenge this", context);
       const typedAnswer = messages[1]?.content;
-      const transport = createForemanLiveVoiceTransport({
-        fetcher: async () =>
-          new Response(
-            JSON.stringify({
-              error: "voice_unavailable",
-              issue: "Voice unavailable - showing typed answer.",
-              ok: false,
-            }),
-            { status: 503 }
-          ),
-        target: createAudioTarget(),
-      });
       const routed = speakLatestForemanAnswer({
         messages,
         spokenMessageIds: new Set(),
-        transport,
       });
 
       assert.ok(routed);
-      const result = await routed.playback.finished;
-
-      assert.equal(result.ok, false);
+      assert.equal(routed.skipped, "mission_narration_only");
       assert.equal(messages[1]?.content, typedAnswer);
       assert.equal(messages[1]?.speaker, "foreman");
     },
   },
   {
-    name: "same Foreman answer is not voiced twice on stable rerender key",
+    name: "same Foreman answer is consumed once on stable rerender key",
     run: async () => {
       const context = await createPanelContext();
       const messages = appendForemanGuideExchange([], "Walk the proof", context);
@@ -334,7 +377,41 @@ const tests = [
 
       assert.ok(first);
       assert.equal(second, null);
-      assert.equal(speakCount, 1);
+      assert.equal(first.skipped, "mission_narration_only");
+      assert.equal(speakCount, 0);
+    },
+  },
+  {
+    name: "consumed proactive Foreman answer is not replayed after mission ends",
+    run: async () => {
+      const context = await createPanelContext();
+      const messages = appendForemanGuideExchange([], "What can my role do?", context);
+      const spokenMessageIds = new Set<string>();
+      let speakCount = 0;
+      const transport: ReturnType<typeof createForemanLiveVoiceTransport> = {
+        speak: () => {
+          speakCount += 1;
+          throw new Error("consumed non-mission answer must not replay");
+        },
+        stop: () => undefined,
+      };
+
+      const beforeMission = speakLatestForemanAnswer({
+        messages,
+        spokenMessageIds,
+        transport,
+      });
+      const afterMission = speakLatestForemanAnswer({
+        messages,
+        spokenMessageIds,
+        transport,
+      });
+
+      assert.ok(beforeMission);
+      assert.equal(beforeMission.skipped, "mission_narration_only");
+      assert.equal(afterMission, null);
+      assert.equal(spokenMessageIds.has(String(messages[1]?.id)), true);
+      assert.equal(speakCount, 0);
     },
   },
   {

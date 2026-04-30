@@ -30,6 +30,7 @@ import type {
   ForemanLiveVoiceState,
   ForemanLiveVoiceTransport,
 } from "../src/foremanGuide/liveVoiceTransport.ts";
+import { FOREMAN_LIVE_VOICE_MISSION_SOURCE } from "../src/foremanGuide/liveVoiceTransport.ts";
 import { submitVoiceTranscript } from "../src/foremanGuide/useForemanVoice.ts";
 import { createTestLiveProjection, renderMarkup, runTests } from "./scenarioTestUtils.ts";
 
@@ -155,6 +156,7 @@ function createFakeTimers() {
 
 function createLiveVoiceTransport() {
   const requests: string[] = [];
+  const sources: Array<string | undefined> = [];
   const states: ForemanLiveVoiceState[] = [];
   const pending: Array<{
     onState?: (state: ForemanLiveVoiceState) => void;
@@ -162,8 +164,9 @@ function createLiveVoiceTransport() {
   }> = [];
   let cancelCount = 0;
   const transport: ForemanLiveVoiceTransport = {
-    speak: ({ onState, text }) => {
+    speak: ({ onState, source, text }) => {
       requests.push(text);
+      sources.push(source);
       onState?.("requesting");
       states.push("requesting");
 
@@ -214,6 +217,7 @@ function createLiveVoiceTransport() {
     },
     pending,
     requests,
+    sources,
     states,
     transport,
   };
@@ -397,7 +401,15 @@ const tests = [
         stages.map((stage) => stage.stageId),
         ["capture", "authority", "governance", "absence", "chain", "public"]
       );
-      assert.equal(stages[0]?.line.includes("Permit 4471"), true);
+      assert.equal(
+        stages[0]?.line,
+        "This is Permit 4471. A field inspector flagged a concern during a routine corridor walk."
+      );
+      stages.forEach((stage) => {
+        assert.equal(stage.line.trim().length > stage.title.length, true);
+        assert.equal(stage.line.trim().includes(" "), true);
+        assert.equal(stage.line.trim(), MISSION_ACT_NARRATION[stage.stageId].line);
+      });
       assert.equal(
         stages[3]?.line,
         "Meridian detected what is missing. The city cannot act until the absent evidence is present."
@@ -464,6 +476,33 @@ const tests = [
 
       timers.fireNext(0);
       assert.deepEqual(liveVoice.requests, [narration.line]);
+      assert.deepEqual(liveVoice.sources, [FOREMAN_LIVE_VOICE_MISSION_SOURCE]);
+    },
+  },
+  {
+    name: "mission act sends full scripted line when caller input is truncated",
+    run: () => {
+      const timers = createFakeTimers();
+      const liveVoice = createLiveVoiceTransport();
+      const narration = getMissionActNarration("capture");
+
+      runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: "This is Permit 4471.",
+        lineKey: narration.lineKey,
+        liveVoiceTransport: liveVoice.transport,
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "capture",
+      });
+
+      timers.fireNext(0);
+      assert.deepEqual(liveVoice.requests, [narration.line]);
+      assert.equal(
+        liveVoice.requests[0],
+        "This is Permit 4471. A field inspector flagged a concern during a routine corridor walk."
+      );
+      assert.notEqual(liveVoice.requests[0], "This is Permit 4471.");
     },
   },
   {

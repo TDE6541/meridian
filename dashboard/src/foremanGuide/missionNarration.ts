@@ -8,6 +8,7 @@ import type {
   ForemanLiveVoicePlayback,
   ForemanLiveVoiceTransport,
 } from "./liveVoiceTransport.ts";
+import { FOREMAN_LIVE_VOICE_MISSION_SOURCE } from "./liveVoiceTransport.ts";
 
 export const FOREMAN_MISSION_NARRATION_VERSION =
   "meridian.v2f.foremanMissionNarration.v1" as const;
@@ -178,8 +179,10 @@ export function runForemanMissionNarration({
   target?: ForemanVoiceBrowserTarget | null;
 }): ForemanMissionNarrationRun {
   const key = buildMissionNarrationKey({ lineKey, runId, stageId });
+  const scriptedNarration = getMissionActNarration(stageId);
   const timers: ReturnType<typeof setTimeout>[] = [];
-  const safeLine = line.trim();
+  const suppliedLine = line.trim();
+  const safeLine = scriptedNarration.line.trim() || suppliedLine;
   let liveVoicePlayback: ForemanLiveVoicePlayback | null = null;
   let complete = false;
   let activeRunReleased = false;
@@ -293,6 +296,7 @@ export function runForemanMissionNarration({
             : null
         );
       },
+      source: FOREMAN_LIVE_VOICE_MISSION_SOURCE,
       text: safeLine,
     });
 

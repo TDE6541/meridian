@@ -14,12 +14,7 @@ import type { ForemanGuideSignalV1 } from "../foremanGuide/foremanSignals.ts";
 import type { ForemanGuideResponseV1 } from "../foremanGuide/offlineNarration.ts";
 import { getForemanPanelLabel } from "../foremanGuide/panelRegistry.ts";
 import { speakLatestForemanAnswer } from "../foremanGuide/foremanAnswerVoice.ts";
-import {
-  createForemanLiveVoiceTransport,
-  type ForemanLiveVoicePlayback,
-  type ForemanLiveVoiceState,
-  type ForemanLiveVoiceTransport,
-} from "../foremanGuide/liveVoiceTransport.ts";
+import type { ForemanLiveVoiceState } from "../foremanGuide/liveVoiceTransport.ts";
 import {
   useForemanGuide,
   type ForemanGuideModeId,
@@ -261,8 +256,6 @@ export function ForemanGuidePanel({
   const [audioVolume, setAudioVolume] = useState(DEFAULT_FOREMAN_AUDIO_VOLUME);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const previousAudioSourceRef = useRef<string | null>(null);
-  const liveVoicePlaybackRef = useRef<ForemanLiveVoicePlayback | null>(null);
-  const liveVoiceTransportRef = useRef<ForemanLiveVoiceTransport | null>(null);
   const spokenForemanMessageIdsRef = useRef<Set<string>>(new Set());
   const {
     clearProactiveSignals,
@@ -304,60 +297,6 @@ export function ForemanGuidePanel({
   const audioCue = getForemanAudioCueForPresenceState(presenceBadge.state);
   const audioSource = audioCue.source;
 
-  if (!liveVoiceTransportRef.current) {
-    liveVoiceTransportRef.current = createForemanLiveVoiceTransport();
-  }
-
-  function trackLiveVoicePlayback(playback: ForemanLiveVoicePlayback) {
-    liveVoicePlaybackRef.current?.cancel();
-    liveVoicePlaybackRef.current = playback;
-
-    void playback.finished.then((result) => {
-      if (liveVoicePlaybackRef.current !== playback) {
-        return;
-      }
-
-      liveVoicePlaybackRef.current = null;
-
-      if (result.ok) {
-        setSpeechStatus(null);
-        setLiveVoiceState("idle");
-        return;
-      }
-
-      if (result.state === "idle") {
-        setLiveVoiceState("idle");
-        return;
-      }
-
-      setSpeechStatus(result.issue ?? "Voice unavailable - showing typed answer.");
-      setLiveVoiceState(result.state);
-    });
-  }
-
-  function startLiveVoicePlayback(text: string) {
-    const trimmedText = text.trim();
-
-    if (!trimmedText) {
-      setSpeechStatus("HOLD: no Foreman answer is available to speak yet.");
-      setLiveVoiceState("failed");
-      return;
-    }
-
-    const playback = liveVoiceTransportRef.current?.speak({
-      onState: setLiveVoiceState,
-      text: trimmedText,
-    });
-
-    if (!playback) {
-      setSpeechStatus("Voice unavailable - showing typed answer.");
-      setLiveVoiceState("unavailable");
-      return;
-    }
-
-    trackLiveVoicePlayback(playback);
-  }
-
   useEffect(() => {
     const target = audioRef.current;
 
@@ -393,27 +332,10 @@ export function ForemanGuidePanel({
   }, [audioMuted, audioSource, audioVolume]);
 
   useEffect(() => {
-    const transport = liveVoiceTransportRef.current;
-
-    if (!transport) {
-      return undefined;
-    }
-
-    const routed = speakLatestForemanAnswer({
+    speakLatestForemanAnswer({
       messages,
       spokenMessageIds: spokenForemanMessageIdsRef.current,
-      transport,
     });
-
-    if (!routed) {
-      return undefined;
-    }
-
-    trackLiveVoicePlayback(routed.playback);
-
-    return () => {
-      routed.playback.cancel();
-    };
   }, [messages]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -430,13 +352,11 @@ export function ForemanGuidePanel({
       return;
     }
 
-    startLiveVoicePlayback(text);
+    setSpeechStatus("Voice output is limited to scripted mission narration.");
+    setLiveVoiceState("idle");
   }
 
   function handleStopSpeech() {
-    liveVoicePlaybackRef.current?.cancel();
-    liveVoiceTransportRef.current?.stop();
-    liveVoicePlaybackRef.current = null;
     setLiveVoiceState("idle");
 
     const target = getPanelSpeechWindow();
@@ -594,7 +514,7 @@ export function ForemanGuidePanel({
               <span className="fact-label">Speech output</span>
               <button
                 className="control-button"
-                disabled={!latestForemanText}
+                disabled
                 type="button"
                 aria-label="Speak the latest Foreman response"
                 onClick={handleSpeakLatest}

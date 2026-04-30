@@ -1,19 +1,18 @@
 import type { ForemanGuideMessage } from "./useForemanGuide.ts";
-import type {
-  ForemanLiveVoicePlayback,
-  ForemanLiveVoiceTransport,
-} from "./liveVoiceTransport.ts";
-import { isForemanMissionNarrationActive } from "./missionNarration.ts";
+import type { ForemanLiveVoiceTransport } from "./liveVoiceTransport.ts";
+
+export const FOREMAN_ANSWER_VOICE_DEMO_SAFE_GATE =
+  "mission_narration_only" as const;
 
 export interface SpeakLatestForemanAnswerInput {
   messages: readonly ForemanGuideMessage[];
   spokenMessageIds: Set<string>;
-  transport: ForemanLiveVoiceTransport;
+  transport?: ForemanLiveVoiceTransport | null;
 }
 
 export interface SpeakLatestForemanAnswerResult {
   messageId: string;
-  playback: ForemanLiveVoicePlayback;
+  skipped: typeof FOREMAN_ANSWER_VOICE_DEMO_SAFE_GATE;
   text: string;
 }
 
@@ -33,10 +32,7 @@ export function speakLatestForemanAnswer({
   const text = latest.content.trim();
 
   if (!text) {
-    return null;
-  }
-
-  if (isForemanMissionNarrationActive()) {
+    spokenMessageIds.add(latest.id);
     return null;
   }
 
@@ -44,7 +40,7 @@ export function speakLatestForemanAnswer({
 
   return {
     messageId: latest.id,
-    playback: transport.speak({ text }),
+    skipped: FOREMAN_ANSWER_VOICE_DEMO_SAFE_GATE,
     text,
   };
 }

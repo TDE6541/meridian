@@ -2,6 +2,7 @@ export const FOREMAN_LIVE_VOICE_TRANSPORT_VERSION =
   "meridian.v2g.foremanLiveVoiceTransport.v1" as const;
 
 export const FOREMAN_LIVE_VOICE_ENDPOINT = "/api/foreman-voice" as const;
+export const FOREMAN_LIVE_VOICE_MISSION_SOURCE = "mission_narration" as const;
 
 export type ForemanLiveVoiceState =
   | "failed"
@@ -28,6 +29,7 @@ export interface ForemanLiveVoiceTransport {
 
 export interface ForemanLiveVoiceSpeakInput {
   onState?: (state: ForemanLiveVoiceState) => void;
+  source?: typeof FOREMAN_LIVE_VOICE_MISSION_SOURCE;
   text: string;
 }
 
@@ -98,6 +100,23 @@ function result(
     ok,
     state,
   };
+}
+
+function isMissionNarrationSource(
+  source: ForemanLiveVoiceSpeakInput["source"]
+): boolean {
+  return source === FOREMAN_LIVE_VOICE_MISSION_SOURCE;
+}
+
+function missionOnlyGateResult(
+  onState?: (state: ForemanLiveVoiceState) => void
+): ForemanLiveVoiceResult {
+  onState?.("idle");
+  return result(
+    false,
+    "idle",
+    "Voice transport is gated to scripted mission narration."
+  );
 }
 
 async function readJsonIssue(response: Response): Promise<string | null> {
@@ -262,6 +281,7 @@ export async function speakForemanLiveText({
   fetcher,
   onState,
   signal,
+  source,
   target,
   text,
 }: ForemanLiveVoiceSpeakInput &
@@ -271,6 +291,10 @@ export async function speakForemanLiveText({
   const trimmedText = text.trim();
   const resolvedFetch = getFetch(fetcher);
   const resolvedTarget = resolveTarget(target);
+
+  if (!isMissionNarrationSource(source)) {
+    return missionOnlyGateResult(onState);
+  }
 
   if (!trimmedText) {
     return result(false, "failed", "HOLD: no Foreman text is available.");
@@ -372,6 +396,13 @@ export function createForemanLiveVoiceTransport({
 
   return {
     speak: (input) => {
+      if (!isMissionNarrationSource(input.source)) {
+        return {
+          cancel: () => undefined,
+          finished: Promise.resolve(missionOnlyGateResult(input.onState)),
+        };
+      }
+
       stop();
       const abortController = new AbortController();
       currentAbortController = abortController;
@@ -380,6 +411,7 @@ export function createForemanLiveVoiceTransport({
         fetcher,
         onState: input.onState,
         signal: abortController.signal,
+        source: input.source,
         target,
         text: input.text,
       }).finally(() => {
