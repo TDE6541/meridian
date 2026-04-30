@@ -16,6 +16,15 @@ import {
   type ForemanSpeechSynthesisUtteranceLike,
   type ForemanVoiceBrowserTarget,
 } from "../src/foremanGuide/voiceSupport.ts";
+import {
+  buildMissionNarrationKey,
+  estimateMissionNarrationFailsafeMs,
+  estimateMissionTypedFallbackMs,
+  getMissionActNarration,
+  MISSION_ACT_NARRATION,
+  MISSION_NARRATION_ABSENCE_SILENCE_MS,
+  runForemanMissionNarration,
+} from "../src/foremanGuide/missionNarration.ts";
 import { submitVoiceTranscript } from "../src/foremanGuide/useForemanVoice.ts";
 import { createTestLiveProjection, renderMarkup, runTests } from "./scenarioTestUtils.ts";
 
@@ -99,6 +108,43 @@ function createRecognitionTarget({
     target: {
       SpeechRecognition: MockRecognition as ForemanSpeechRecognitionCtor,
     } satisfies ForemanVoiceBrowserTarget,
+  };
+}
+
+interface FakeTimer {
+  active: boolean;
+  callback: () => void;
+  delayMs: number;
+}
+
+function createFakeTimers() {
+  const timers: FakeTimer[] = [];
+
+  return {
+    clearTimer: (timer: ReturnType<typeof setTimeout>) => {
+      (timer as unknown as FakeTimer).active = false;
+    },
+    fireNext: (delayMs?: number) => {
+      const timer = timers.find(
+        (entry) => entry.active && (delayMs === undefined || entry.delayMs === delayMs)
+      );
+
+      assert.ok(timer, `missing active timer for ${delayMs ?? "next"}`);
+      timer.active = false;
+      timer.callback();
+    },
+    setTimer: (callback: () => void, delayMs: number) => {
+      const timer: FakeTimer = {
+        active: true,
+        callback,
+        delayMs,
+      };
+
+      timers.push(timer);
+
+      return timer as unknown as ReturnType<typeof setTimeout>;
+    },
+    timers,
   };
 }
 
@@ -270,9 +316,204 @@ const tests = [
     },
   },
   {
+    name: "mission narration pins all six act lines and stable run-stage keys",
+    run: () => {
+      const stages = Object.values(MISSION_ACT_NARRATION).sort(
+        (left, right) => left.index - right.index
+      );
+
+      assert.deepEqual(
+        stages.map((stage) => stage.stageId),
+        ["capture", "authority", "governance", "absence", "chain", "public"]
+      );
+      assert.equal(stages[0]?.line.includes("Permit 4471"), true);
+      assert.equal(stages[3]?.line.startsWith("This is the moat."), true);
+      assert.equal(stages[4]?.line.includes("Every decision"), true);
+      assert.equal(
+        buildMissionNarrationKey({
+          lineKey: stages[0]?.lineKey ?? "",
+          runId: "mission-run-1",
+          stageId: "capture",
+        }),
+        "mission-run-1:capture:act-1-capture-permit-4471"
+      );
+    },
+  },
+  {
+    name: "mission narration speaks through existing Foreman voice support",
+    run: () => {
+      const timers = createFakeTimers();
+      const { target, utterances } = createSpeechTarget();
+      const narration = getMissionActNarration("capture");
+      const phases: string[] = [];
+      const completed: string[] = [];
+
+      runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        onComplete: (reason) => completed.push(reason),
+        onPhase: (phase) => phases.push(phase),
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "capture",
+        target,
+      });
+
+      assert.equal(utterances.length, 0);
+      timers.fireNext(0);
+      assert.equal(utterances.length, 1);
+      assert.equal(utterances[0]?.text, narration.line);
+      assert.equal(phases.includes("speaking"), true);
+      utterances[0]?.onend?.({});
+      assert.deepEqual(completed, ["speech_end"]);
+    },
+  },
+  {
+    name: "mission narration falls back visibly when speech is unavailable",
+    run: () => {
+      const timers = createFakeTimers();
+      const narration = getMissionActNarration("authority");
+      const visibleLines: Array<string | null> = [];
+      const phases: string[] = [];
+      const completed: string[] = [];
+
+      runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        onComplete: (reason) => completed.push(reason),
+        onPhase: (phase) => phases.push(phase),
+        onVisibleLine: (line) => visibleLines.push(line),
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "authority",
+        target: {},
+      });
+
+      timers.fireNext(0);
+      assert.equal(phases.includes("fallback"), true);
+      assert.equal(visibleLines.at(-1), narration.line);
+      timers.fireNext(estimateMissionTypedFallbackMs(narration.line));
+      assert.deepEqual(completed, ["fallback_complete"]);
+    },
+  },
+  {
+    name: "mission narration falls back after speech output error",
+    run: () => {
+      const timers = createFakeTimers();
+      const { target, utterances } = createSpeechTarget();
+      const narration = getMissionActNarration("governance");
+      const phases: string[] = [];
+      const issues: Array<string | null> = [];
+      const completed: string[] = [];
+
+      runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        onComplete: (reason) => completed.push(reason),
+        onIssue: (issue) => issues.push(issue),
+        onPhase: (phase) => phases.push(phase),
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "governance",
+        target,
+      });
+
+      timers.fireNext(0);
+      utterances[0]?.onerror?.({});
+      assert.equal(phases.includes("fallback"), true);
+      assert.equal(issues.some((issue) => issue?.startsWith("HOLD:")), true);
+      timers.fireNext(estimateMissionTypedFallbackMs(narration.line));
+      assert.deepEqual(completed, ["fallback_complete"]);
+    },
+  },
+  {
+    name: "mission narration failsafe completes a stuck speech utterance",
+    run: () => {
+      const timers = createFakeTimers();
+      const { target, utterances } = createSpeechTarget();
+      const narration = getMissionActNarration("chain");
+      const completed: string[] = [];
+
+      runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        onComplete: (reason) => completed.push(reason),
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "chain",
+        target,
+      });
+
+      timers.fireNext(0);
+      assert.equal(utterances.length, 1);
+      timers.fireNext(estimateMissionNarrationFailsafeMs(narration.line));
+      assert.deepEqual(completed, ["failsafe"]);
+    },
+  },
+  {
+    name: "mission narration holds Act 4 silent for exactly 3000ms before speaking",
+    run: () => {
+      const timers = createFakeTimers();
+      const { target, utterances } = createSpeechTarget();
+      const narration = getMissionActNarration("absence");
+      const visibleLines: Array<string | null> = [];
+      const phases: string[] = [];
+
+      runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        onPhase: (phase) => phases.push(phase),
+        onVisibleLine: (line) => visibleLines.push(line),
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "absence",
+        target,
+      });
+
+      assert.deepEqual(phases, ["silence"]);
+      assert.deepEqual(visibleLines, [null]);
+      assert.equal(utterances.length, 0);
+      timers.fireNext(MISSION_NARRATION_ABSENCE_SILENCE_MS);
+      assert.equal(utterances.length, 1);
+      assert.equal(utterances[0]?.text, narration.line);
+      assert.equal(phases.includes("speaking"), true);
+    },
+  },
+  {
+    name: "mission narration cancel clears timers and stops speech",
+    run: () => {
+      const timers = createFakeTimers();
+      const harness = createSpeechTarget();
+      const narration = getMissionActNarration("public");
+      const completed: string[] = [];
+      const run = runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        onComplete: (reason) => completed.push(reason),
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "public",
+        target: harness.target,
+      });
+
+      run.cancel();
+      assert.deepEqual(completed, ["cancelled"]);
+      assert.equal(harness.cancelCount, 1);
+      assert.equal(harness.utterances.length, 0);
+      assert.equal(timers.timers.every((timer) => !timer.active), true);
+    },
+  },
+  {
     name: "B6 speech source avoids forbidden external capture and model behavior",
     run: async () => {
       const files = [
+        "src/foremanGuide/missionNarration.ts",
         "src/foremanGuide/voiceSupport.ts",
         "src/foremanGuide/useForemanVoice.ts",
         "src/components/ForemanGuidePanel.tsx",

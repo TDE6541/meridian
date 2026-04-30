@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { adaptAbsenceSignals } from "../adapters/absenceSignalAdapter.ts";
 import {
   adaptStepSkinPayloads,
@@ -54,6 +54,13 @@ import {
 import { buildMissionRailStages } from "../demo/missionRail.ts";
 import type { MissionStageReadinessInput } from "../demo/missionStageReadiness.ts";
 import { buildSyncChoreographyView } from "../demo/syncChoreography.ts";
+import {
+  buildMissionNarrationKey,
+  getMissionActNarration,
+  IDLE_FOREMAN_MISSION_NARRATION_VIEW,
+  runForemanMissionNarration,
+  type ForemanMissionNarrationView,
+} from "../foremanGuide/missionNarration.ts";
 import { CascadeChoreography } from "./CascadeChoreography.tsx";
 import { DemoReliabilityPanel } from "./DemoReliabilityPanel.tsx";
 import { EntityRelationshipGraph } from "./EntityRelationshipGraph.tsx";
@@ -217,6 +224,12 @@ export function ControlRoomShell({
       playbackState,
     };
   });
+  const [missionNarrationView, setMissionNarrationView] =
+    useState<ForemanMissionNarrationView>(IDLE_FOREMAN_MISSION_NARRATION_VIEW);
+  const completedMissionNarrationKeysRef = useRef<Set<string>>(new Set());
+  const missionNarrationRunRef = useRef<ReturnType<
+    typeof runForemanMissionNarration
+  > | null>(null);
   const [foremanHighlightedPanelId, setForemanHighlightedPanelId] = useState<
     string | null
   >(null);
@@ -435,6 +448,109 @@ export function ControlRoomShell({
     missionRuntime.playbackState.completedAtMs !== null;
   const engineerCockpitVisible =
     presentationMode === "engineer" || missionCompletionReviewVisible;
+  const activeMissionNarrationStage =
+    missionRuntime.playbackState.status !== "idle" &&
+    !missionCompletionReviewVisible
+      ? missionRuntime.playbackState.currentStageId
+      : null;
+  const activeMissionNarration = activeMissionNarrationStage
+    ? getMissionActNarration(activeMissionNarrationStage)
+    : null;
+  const activeMissionNarrationKey =
+    activeMissionNarration && activeMissionNarrationStage
+      ? buildMissionNarrationKey({
+          lineKey: activeMissionNarration.lineKey,
+          runId: missionRuntime.playbackState.runId,
+          stageId: activeMissionNarrationStage,
+        })
+      : null;
+
+  useEffect(() => {
+    missionNarrationRunRef.current?.cancel();
+    missionNarrationRunRef.current = null;
+
+    if (
+      !activeMissionNarration ||
+      !activeMissionNarrationKey ||
+      !activeMissionNarrationStage
+    ) {
+      setMissionNarrationView(IDLE_FOREMAN_MISSION_NARRATION_VIEW);
+      return undefined;
+    }
+
+    if (completedMissionNarrationKeysRef.current.has(activeMissionNarrationKey)) {
+      setMissionNarrationView({
+        issue: null,
+        key: activeMissionNarrationKey,
+        line: activeMissionNarration.line,
+        phase: "complete",
+      });
+      return undefined;
+    }
+
+    setMissionNarrationView({
+      issue: null,
+      key: activeMissionNarrationKey,
+      line:
+        activeMissionNarrationStage === "absence"
+          ? null
+          : activeMissionNarration.line,
+      phase: activeMissionNarrationStage === "absence" ? "silence" : "speaking",
+    });
+
+    const run = runForemanMissionNarration({
+      line: activeMissionNarration.line,
+      lineKey: activeMissionNarration.lineKey,
+      onComplete: (reason) => {
+        if (reason !== "cancelled") {
+          completedMissionNarrationKeysRef.current.add(activeMissionNarrationKey);
+          setMissionNarrationView((current) => ({
+            issue: current.issue,
+            key: activeMissionNarrationKey,
+            line: activeMissionNarration.line,
+            phase: "complete",
+          }));
+        }
+      },
+      onIssue: (issue) => {
+        setMissionNarrationView((current) => ({
+          ...current,
+          issue,
+          key: activeMissionNarrationKey,
+        }));
+      },
+      onPhase: (phase) => {
+        setMissionNarrationView((current) => ({
+          ...current,
+          key: activeMissionNarrationKey,
+          phase,
+        }));
+      },
+      onVisibleLine: (line) => {
+        setMissionNarrationView((current) => ({
+          ...current,
+          key: activeMissionNarrationKey,
+          line,
+        }));
+      },
+      runId: missionRuntime.playbackState.runId,
+      stageId: activeMissionNarrationStage,
+    });
+
+    missionNarrationRunRef.current = run;
+
+    return () => {
+      run.cancel();
+      if (missionNarrationRunRef.current === run) {
+        missionNarrationRunRef.current = null;
+      }
+    };
+  }, [
+    activeMissionNarration,
+    activeMissionNarrationKey,
+    activeMissionNarrationStage,
+    missionRuntime.playbackState.runId,
+  ]);
 
   function getMissionClockMs(playbackState: MissionPlaybackState): number {
     const lastEventAtMs = playbackState.events.at(-1)?.atMs;
@@ -945,6 +1061,7 @@ export function ControlRoomShell({
         }
         missionPhysicalModeEnabled={missionPhysicalModeEnabled}
         missionPhysicalProjection={missionPhysicalProjection}
+        missionNarrationView={missionNarrationView}
         missionPlaybackControls={{
           canStart: selectedRecord?.status === "ready",
           conductorOutput: missionRuntime.conductorOutput,

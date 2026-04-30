@@ -25,12 +25,17 @@ import {
 } from "../src/demo/holdWall.ts";
 import { getJudgeTouchboardCard } from "../src/demo/judgeTouchboardDeck.ts";
 import { buildMissionAbsenceLensOverlay } from "../src/demo/missionAbsenceLens.ts";
-import { createInitialMissionPlaybackState } from "../src/demo/missionPlaybackController.ts";
+import {
+  createInitialMissionPlaybackState,
+  type MissionPlaybackState,
+} from "../src/demo/missionPlaybackController.ts";
 import { buildMissionPhysicalProjection } from "../src/demo/missionPhysicalProjection.ts";
+import { MISSION_STAGE_IDS, type MissionStageId } from "../src/demo/missionPlaybackPlan.ts";
 import {
   buildMissionRailStages,
   MISSION_RAIL_LABELS,
 } from "../src/demo/missionRail.ts";
+import { getMissionActNarration } from "../src/foremanGuide/missionNarration.ts";
 import {
   ROLE_SESSION_PROOF_CONTRACT,
   type DashboardRoleSessionProofV1,
@@ -170,6 +175,74 @@ async function buildSnapshotMissionFixture(activeStepIndex = 0) {
   };
 }
 
+function createRunningMissionPlaybackState(
+  stageId: MissionStageId,
+  runId = "mission-run-f1"
+): MissionPlaybackState {
+  return {
+    ...createInitialMissionPlaybackState("guided"),
+    currentStageId: stageId,
+    events: [
+      {
+        atMs: 1,
+        eventId: `${runId}:1:stage_enter:${stageId}`,
+        runId,
+        stageId,
+        type: "stage_enter",
+      },
+    ],
+    runId,
+    stageEnteredAtMs: 1,
+    startedAtMs: 1,
+    status: "running",
+  };
+}
+
+function createCompletedMissionPlaybackState(): MissionPlaybackState {
+  const runId = "mission-run-review";
+
+  return {
+    ...createInitialMissionPlaybackState("guided"),
+    completedAtMs: 12,
+    completedStageIds: [...MISSION_STAGE_IDS],
+    events: [
+      {
+        atMs: 12,
+        eventId: `${runId}:1:mission_complete:mission`,
+        runId,
+        stageId: null,
+        type: "mission_complete",
+      },
+    ],
+    runId,
+    startedAtMs: 1,
+    status: "completed",
+  };
+}
+
+async function renderMissionShellWithPlayback(playbackState: MissionPlaybackState) {
+  const props = await buildSnapshotMissionFixture();
+
+  return MissionPresentationShell({
+    ...props,
+    engineerMode: false,
+    missionPhysicalProjection: buildMissionPhysicalProjection({
+      playback_state: playbackState,
+    }),
+    missionPlaybackControls: {
+      canStart: true,
+      onBeginMission: () => undefined,
+      onModeChange: () => undefined,
+      onPauseMission: () => undefined,
+      onResetMission: () => undefined,
+      onResumeMission: () => undefined,
+      playbackState,
+    },
+    onEngineerModeChange: () => undefined,
+    onMissionAdvance: () => undefined,
+  });
+}
+
 const tests = [
   {
     name: "Presenter View is the default and Engineer Mode keeps the cockpit behind it",
@@ -224,6 +297,139 @@ const tests = [
       assert.equal(markup.includes("Presenter View"), true);
       assert.equal(markup.includes("Local demo control room"), true);
       assert.equal(markup.includes("Snapshot remains the default stable path"), true);
+    },
+  },
+  {
+    name: "active mission mode renders one line one focal card rail compact Foreman and one visible button",
+    run: async () => {
+      const playbackState = createRunningMissionPlaybackState("capture");
+      const element = await renderMissionShellWithPlayback(playbackState);
+      const markup = renderMarkup(element);
+      const visibleButtons = collectButtons(element).filter(
+        (button) =>
+          String(button.props.className ?? "").includes(
+            "mission-primary-actions__button"
+          ) && button.props["aria-hidden"] !== true
+      );
+
+      assert.equal(markup.includes('data-mission-active-walkthrough="true"'), true);
+      assert.equal(markup.includes('data-mission-rail="true"'), true);
+      assert.equal(markup.includes('data-mission-compact-foreman="true"'), true);
+      assert.equal(
+        [...markup.matchAll(/data-mission-active-foreman-line="true"/g)].length,
+        1
+      );
+      assert.equal([...markup.matchAll(/data-mission-focal-card="/g)].length, 1);
+      assert.equal(markup.includes(getMissionActNarration("capture").line), true);
+      assert.deepEqual(visibleButtons.map((button) => getElementText(button)), [
+        "Next Act",
+      ]);
+      assert.equal(visibleButtons[0]?.props.disabled, true);
+    },
+  },
+  {
+    name: "active mission mode keeps proof cockpit mounted but hidden from judge view",
+    run: async () => {
+      const playbackState = createRunningMissionPlaybackState("capture");
+      const markup = renderMarkup(await renderMissionShellWithPlayback(playbackState));
+
+      assert.equal(markup.includes('data-proof-spotlight="true"'), true);
+      assert.equal(markup.includes('data-absence-shadow-map="true"'), true);
+      assert.equal(markup.includes('data-authority-handoff-theater="true"'), true);
+      assert.equal(markup.includes('data-mission-run-receipt-panel="true"'), true);
+      assert.equal(
+        markup.includes(
+          'class="mission-surface mission-surface--capture is-active" aria-hidden="true" data-mission-act-state="active" data-mission-act-wrapper="capture"'
+        ),
+        true
+      );
+      assert.equal(
+        markup.includes(
+          'aria-hidden="true" class="mission-surface mission-surface--presenter" data-mission-surface="presenter"'
+        ),
+        true
+      );
+    },
+  },
+  {
+    name: "active mission mode hides debug labels source refs and secondary controls from judge-facing surface",
+    run: async () => {
+      const playbackState = createRunningMissionPlaybackState("authority");
+      const element = await renderMissionShellWithPlayback(playbackState);
+      const markup = renderMarkup(element);
+      const activeStart = markup.indexOf('data-mission-active-walkthrough="true"');
+      const reviewStart = markup.indexOf('data-mission-review-banner="completion"', activeStart);
+      const activeMarkup = markup.slice(activeStart, reviewStart);
+      const styles = await readFile("src/styles.css", "utf8");
+      const hiddenButtons = collectButtons(element).filter(
+        (button) => button.props["aria-hidden"] === true
+      );
+
+      assert.notEqual(activeStart, -1);
+      assert.notEqual(reviewStart, -1);
+      for (const forbidden of [
+        "Presenter Cockpit",
+        "GUIDED MISSION",
+        "WALK",
+        "OPERATOR-GUIDED",
+        "REDUCED MOTION SAFE",
+        "Proof Spotlight",
+        "Evidence Beam",
+        "source_ref",
+        "fallback",
+        "ATTENTION TARGET",
+        "mission-run-1",
+        "current_focal_card",
+        "EXISTING MISSION PLAYBACK STATE",
+        "AWAITING MISSION PLAYBACK",
+        "PROOF AVAILABLE NEXT",
+      ]) {
+        assert.equal(activeMarkup.includes(forbidden), false, forbidden);
+      }
+      assert.equal(
+        styles.includes(
+          ".mission-primary-actions--active-walkthrough .mission-primary-actions__button--secondary"
+        ),
+        true
+      );
+      assert.equal(
+        styles.includes(
+          ".mission-presentation--active-walkthrough .mission-rail__state"
+        ),
+        true
+      );
+      assert.equal(hiddenButtons.length, 4);
+    },
+  },
+  {
+    name: "Act 4 renders HOLD focal card before the moat narration appears",
+    run: async () => {
+      const playbackState = createRunningMissionPlaybackState("absence");
+      const markup = renderMarkup(await renderMissionShellWithPlayback(playbackState));
+      const activeStart = markup.indexOf('data-mission-active-walkthrough="true"');
+      const reviewStart = markup.indexOf('data-mission-review-banner="completion"', activeStart);
+      const activeMarkup = markup.slice(activeStart, reviewStart);
+
+      assert.equal(markup.includes('data-mission-focal-card="absence"'), true);
+      assert.equal(markup.includes("Missing evidence boundary"), true);
+      assert.equal(activeMarkup.includes('data-mission-narration-phase="speaking"'), false);
+      assert.equal(activeMarkup.includes(getMissionActNarration("absence").line), false);
+    },
+  },
+  {
+    name: "Review Mode restores full cockpit after mission completion",
+    run: async () => {
+      const playbackState = createCompletedMissionPlaybackState();
+      const markup = renderMarkup(await renderMissionShellWithPlayback(playbackState));
+
+      assert.equal(markup.includes('data-mission-review-mode="visible"'), true);
+      assert.equal(markup.includes("Review Mode: full governed chain visible"), true);
+      assert.equal(markup.includes('data-mission-active-walkthrough="true"'), false);
+      assert.equal(markup.includes('data-proof-tools="collapsed-by-default"'), true);
+      assert.equal(markup.includes('data-mission-playback-controls="started"'), true);
+      assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
+      assert.equal(markup.includes('data-proof-spotlight="true"'), true);
+      assert.equal(markup.includes('data-mission-run-receipt-panel="true"'), true);
     },
   },
   {

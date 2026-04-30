@@ -26,7 +26,10 @@ import {
   MISSION_STAGE_IDS,
   type MissionStageId,
 } from "../demo/missionPlaybackPlan.ts";
-import type { MissionPhysicalProjectionV1 } from "../demo/missionPhysicalProjection.ts";
+import type {
+  MissionForemanEmbodiedState,
+  MissionPhysicalProjectionV1,
+} from "../demo/missionPhysicalProjection.ts";
 import type { JudgeQuestionId, JudgeTouchboardCard } from "../demo/judgeTouchboardDeck.ts";
 import { buildJudgeModeProjection } from "../demo/missionEvidenceNavigator.ts";
 import { buildMissionRunReceipt } from "../demo/missionRunReceipt.ts";
@@ -42,6 +45,14 @@ import { MissionRehearsalPanel } from "./MissionRehearsalPanel.tsx";
 import { ProofSpotlight } from "./ProofSpotlight.tsx";
 import { MissionRunReceiptPanel } from "./MissionRunReceiptPanel.tsx";
 import { SyncPill } from "./SyncPill.tsx";
+import { getForemanEmbodiedStateDisplay } from "../foremanGuide/foremanEmbodiedState.ts";
+import {
+  buildMissionNarrationKey,
+  getMissionActNarration,
+  IDLE_FOREMAN_MISSION_NARRATION_VIEW,
+  type ForemanMissionNarrationView,
+  type ForemanMissionNarrationPhase,
+} from "../foremanGuide/missionNarration.ts";
 
 export interface MissionPresentationShellProps {
   absenceLens: AbsenceLensView;
@@ -64,6 +75,7 @@ export interface MissionPresentationShellProps {
   judgeInterruptStatus?: "idle" | "interrupted" | "paused";
   missionPhysicalModeEnabled?: boolean;
   missionPhysicalProjection?: MissionPhysicalProjectionV1 | null;
+  missionNarrationView?: ForemanMissionNarrationView | null;
   missionPlaybackControls?: MissionPlaybackControlsProps;
   missionRailStages: readonly MissionRailStage[];
   rehearsalCertification?: MissionRehearsalCertificationV1 | null;
@@ -207,6 +219,25 @@ function buildMissionRevealRailStages(
       state,
     };
   });
+}
+
+function getCompactForemanState(
+  stageId: MissionStageId | null,
+  phase: ForemanMissionNarrationPhase
+): MissionForemanEmbodiedState {
+  if (phase === "speaking" || phase === "fallback") {
+    return "explaining";
+  }
+
+  if (phase === "silence" || stageId === "absence") {
+    return "holding";
+  }
+
+  if (phase === "complete") {
+    return "conducting";
+  }
+
+  return "ready";
 }
 
 function buildMissionSurfaceClassName({
@@ -361,6 +392,7 @@ export function MissionPresentationShell({
   judgeInterruptStatus = judgeCard ? "interrupted" : "idle",
   missionPhysicalModeEnabled = false,
   missionPhysicalProjection = null,
+  missionNarrationView = null,
   missionPlaybackControls,
   missionRailStages,
   rehearsalCertification = null,
@@ -450,22 +482,61 @@ export function MissionPresentationShell({
       (missionPlaybackState.status === "completed" ||
         missionPlaybackState.completedAtMs !== null)
   );
+  const isActiveMissionMode = missionHasStarted && !isReviewMode;
   const activeMissionStage =
-    missionHasStarted && !isReviewMode
+    isActiveMissionMode
       ? (missionPlaybackState?.currentStageId ??
         presentationProjection?.active_stage_id ??
         null)
       : null;
+  const activeMissionNarration = activeMissionStage
+    ? getMissionActNarration(activeMissionStage)
+    : null;
+  const activeMissionNarrationKey =
+    missionPlaybackState?.runId && activeMissionStage && activeMissionNarration
+      ? buildMissionNarrationKey({
+          lineKey: activeMissionNarration.lineKey,
+          runId: missionPlaybackState.runId,
+          stageId: activeMissionStage,
+        })
+      : null;
+  const resolvedMissionNarrationView =
+    missionNarrationView ?? IDLE_FOREMAN_MISSION_NARRATION_VIEW;
   const completedMissionStageIds =
     missionPlaybackState?.completedStageIds ?? [];
+  const activeNarrationPhase =
+    activeMissionNarrationKey &&
+    resolvedMissionNarrationView.key === activeMissionNarrationKey
+      ? resolvedMissionNarrationView.phase
+      : activeMissionStage
+        ? activeMissionStage === "absence"
+          ? "silence"
+          : "speaking"
+        : "idle";
+  const activeNarrationLine =
+    activeMissionNarrationKey &&
+    resolvedMissionNarrationView.key === activeMissionNarrationKey
+      ? resolvedMissionNarrationView.line
+      : activeMissionStage === "absence"
+        ? null
+        : activeMissionNarration?.line ?? null;
+  const activeNarrationComplete = Boolean(
+    activeMissionNarrationKey &&
+      resolvedMissionNarrationView.key === activeMissionNarrationKey &&
+      resolvedMissionNarrationView.phase === "complete"
+  );
+  const missionAdvanceDisabledByNarration = Boolean(
+    isActiveMissionMode && activeMissionNarrationKey && !activeNarrationComplete
+  );
   const canAdvanceMission = Boolean(
     onMissionAdvance &&
       missionPlaybackState?.mode === "guided" &&
       missionPlaybackState.status === "running" &&
-      activeMissionStage
+      activeMissionStage &&
+      !missionAdvanceDisabledByNarration
   );
   const missionAdvanceLabel =
-    activeMissionStage === "public" ? "Complete Mission" : "Next Act";
+    activeMissionStage === "public" ? "Finish / Review" : "Next Act";
   const displayedMissionRailStages = buildMissionRevealRailStages(
     missionRailStages,
     missionPlaybackState
@@ -483,7 +554,7 @@ export function MissionPresentationShell({
           ? "complete"
           : "hidden";
   const isMissionSurfaceHidden = (stageId: MissionStageId) =>
-    !isReviewMode && !isMissionSurfaceActive(stageId);
+    !isReviewMode && (isActiveMissionMode || !isMissionSurfaceActive(stageId));
   const getMissionStageSurfaceClassName = (
     name: MissionSurfaceName,
     stageId: MissionStageId
@@ -493,10 +564,11 @@ export function MissionPresentationShell({
       complete: isMissionSurfaceComplete(stageId),
       name,
       reviewVisible: isReviewMode,
-      visible: isMissionSurfaceActive(stageId),
+      visible: !isActiveMissionMode && isMissionSurfaceActive(stageId),
     });
   const foremanSurfaceClassName = buildMissionSurfaceClassName({
     active:
+      !isActiveMissionMode &&
       activeMissionStage !== null &&
       activeMissionStage !== "absence" &&
       activeMissionStage !== "chain" &&
@@ -505,6 +577,7 @@ export function MissionPresentationShell({
     name: "foreman",
     reviewVisible: isReviewMode,
     visible:
+      !isActiveMissionMode &&
       activeMissionStage !== null &&
       activeMissionStage !== "absence" &&
       activeMissionStage !== "chain" &&
@@ -513,7 +586,7 @@ export function MissionPresentationShell({
   const presenterSurfaceClassName = buildMissionSurfaceClassName({
     name: "presenter",
     reviewVisible: isReviewMode,
-    visible: missionHasStarted || isReviewMode,
+    visible: !isActiveMissionMode && (missionHasStarted || isReviewMode),
   });
   const reviewSurfaceClassName = buildMissionSurfaceClassName({
     active: Boolean(judgeCard),
@@ -581,12 +654,145 @@ export function MissionPresentationShell({
       </dl>
     </section>
   );
+  const renderActiveFocalCard = (stageId: MissionStageId) => {
+    if (stageId === "capture") {
+      return (
+        <section
+          className="mission-active-focal-card mission-active-focal-card--capture"
+          data-mission-focal-card="capture"
+        >
+          <span>Permit #4471</span>
+          <strong>{fictionalPermitAnchor.title}</strong>
+          <em>Field concern captured from the existing fictional demo permit.</em>
+        </section>
+      );
+    }
+
+    if (stageId === "authority") {
+      return (
+        <section
+          className="mission-active-focal-card mission-active-focal-card--authority"
+          data-mission-focal-card="authority"
+        >
+          <span>Authority gate</span>
+          <strong>{authorityState.status}</strong>
+          <em>Director approval is required before escalation can proceed.</em>
+        </section>
+      );
+    }
+
+    if (stageId === "governance") {
+      return (
+        <section
+          className="mission-active-focal-card mission-active-focal-card--governance"
+          data-mission-focal-card="governance"
+        >
+          <span>Governance</span>
+          <strong>{focalDecision === "HOLD" ? "HOLD" : governanceState}</strong>
+          <em>{focalDecisionReason}</em>
+        </section>
+      );
+    }
+
+    if (stageId === "absence") {
+      return (
+        <section
+          className="mission-active-focal-card mission-active-focal-card--absence"
+          data-absence-hold-focal-treatment="true"
+          data-mission-focal-card="absence"
+        >
+          <span>HOLD</span>
+          <strong>Missing evidence boundary</strong>
+          <em>
+            The action stays held until the absent evidence is present.
+          </em>
+        </section>
+      );
+    }
+
+    if (stageId === "chain") {
+      return (
+        <section
+          className="mission-active-focal-card mission-active-focal-card--chain"
+          data-mission-focal-card="chain"
+        >
+          <span>Forensic chain</span>
+          <strong>{formatCount(forensicChain.totalEntryCount, "entry", "entries")}</strong>
+          <em>Receipt path remains inspectable without writing new chain truth.</em>
+        </section>
+      );
+    }
+
+    return (
+      <section
+        className="mission-active-focal-card mission-active-focal-card--public"
+        data-mission-focal-card="public"
+      >
+        <span>Public disclosure</span>
+        <strong>{publicPayloadStatus}</strong>
+        <em>
+          {formatCount(publicSkinView?.redactions.length ?? 0, "redaction")} keep
+          the public view bounded.
+        </em>
+      </section>
+    );
+  };
+  const renderActiveWalkthrough = () => {
+    if (!activeMissionStage || !activeMissionNarration) {
+      return null;
+    }
+
+    const compactForemanState = getForemanEmbodiedStateDisplay(
+      getCompactForemanState(activeMissionStage, activeNarrationPhase)
+    );
+
+    return (
+      <section
+        aria-hidden={!isActiveMissionMode}
+        className={`mission-active-walkthrough${
+          isActiveMissionMode ? " is-visible" : ""
+        }`}
+        data-mission-active-act-title={activeMissionNarration.title}
+        data-mission-active-walkthrough="true"
+        data-mission-narration-phase={activeNarrationPhase}
+      >
+        <div
+          className="mission-active-foreman"
+          data-mission-compact-foreman="true"
+          data-mission-compact-foreman-state={compactForemanState.state}
+        >
+          <span
+            aria-hidden="true"
+            className={`mission-active-foreman__mark mission-active-foreman__mark--${compactForemanState.className}`}
+          />
+          <div>
+            <span>Foreman</span>
+            <strong aria-label={compactForemanState.ariaLabel}>
+              {compactForemanState.label}
+            </strong>
+          </div>
+        </div>
+
+        <p
+          aria-live="polite"
+          className="mission-active-walkthrough__line"
+          data-mission-active-foreman-line="true"
+        >
+          {activeNarrationLine}
+        </p>
+
+        {renderActiveFocalCard(activeMissionStage)}
+      </section>
+    );
+  };
 
   return (
     <section
       className={`mission-presentation mission-shell${
         missionPhysicalModeEnabled ? " mission-presentation--physical" : ""
-      }${isReviewMode ? " mission-presentation--review" : ""}`}
+      }${isReviewMode ? " mission-presentation--review" : ""}${
+        isActiveMissionMode ? " mission-presentation--active-walkthrough" : ""
+      }`}
       data-mission-presentation={engineerMode ? "engineer" : "active"}
       data-mission-physical-control-scale={physicalModeView.control_scale}
       data-mission-physical-layout={physicalModeView.layout_density}
@@ -685,6 +891,8 @@ export function MissionPresentationShell({
           </div>
         </aside>
       </section>
+
+      {renderActiveWalkthrough()}
 
       <section
         aria-hidden={!isReviewMode}
@@ -871,7 +1079,11 @@ export function MissionPresentationShell({
         />
       </section>
 
-      <section className={foremanSurfaceClassName} data-mission-surface="foreman">
+      <section
+        aria-hidden={!isReviewMode}
+        className={foremanSurfaceClassName}
+        data-mission-surface="foreman"
+      >
         <ForemanAvatarBay
           judgeChallenge={judgeCard}
           projection={presentationProjection}
@@ -962,7 +1174,11 @@ export function MissionPresentationShell({
         </div>
       </section>
 
-      <section className={presenterSurfaceClassName} data-mission-surface="presenter">
+      <section
+        aria-hidden={isActiveMissionMode}
+        className={presenterSurfaceClassName}
+        data-mission-surface="presenter"
+      >
         <MissionPlaybackControls {...missionPlaybackControls} />
       </section>
 
@@ -982,11 +1198,14 @@ export function MissionPresentationShell({
       <div
         className={`mission-primary-actions${
           missionHasStarted || isReviewMode ? " is-visible" : ""
+        }${
+          isActiveMissionMode ? " mission-primary-actions--active-walkthrough" : ""
         }`}
         data-primary-action-row="presenter"
       >
         <button
-          className="mission-primary-actions__button"
+          aria-hidden={isActiveMissionMode}
+          className="mission-primary-actions__button mission-primary-actions__button--secondary"
           disabled={!canDrive}
           onClick={onPreviousStep}
           type="button"
@@ -994,7 +1213,8 @@ export function MissionPresentationShell({
           Previous
         </button>
         <button
-          className="mission-primary-actions__button"
+          aria-hidden={isActiveMissionMode}
+          className="mission-primary-actions__button mission-primary-actions__button--secondary"
           disabled={!canDrive}
           onClick={primaryPlaybackAction}
           type="button"
@@ -1010,7 +1230,8 @@ export function MissionPresentationShell({
           {missionAdvanceLabel}
         </button>
         <button
-          className="mission-primary-actions__button"
+          aria-hidden={isActiveMissionMode}
+          className="mission-primary-actions__button mission-primary-actions__button--secondary"
           disabled={!canDrive}
           onClick={onNextStep}
           type="button"
@@ -1018,7 +1239,8 @@ export function MissionPresentationShell({
           Next Proof Step
         </button>
         <button
-          className="mission-primary-actions__button"
+          aria-hidden={isActiveMissionMode}
+          className="mission-primary-actions__button mission-primary-actions__button--secondary"
           disabled={!canDrive}
           onClick={onResetStep}
           type="button"
