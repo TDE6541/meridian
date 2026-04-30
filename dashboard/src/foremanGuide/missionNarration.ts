@@ -4,6 +4,10 @@ import {
   stopForemanSpeech,
   type ForemanVoiceBrowserTarget,
 } from "./voiceSupport.ts";
+import type {
+  ForemanLiveVoicePlayback,
+  ForemanLiveVoiceTransport,
+} from "./liveVoiceTransport.ts";
 
 export const FOREMAN_MISSION_NARRATION_VERSION =
   "meridian.v2f.foremanMissionNarration.v1" as const;
@@ -141,6 +145,7 @@ export function runForemanMissionNarration({
   clearTimer = clearTimeout,
   line,
   lineKey,
+  liveVoiceTransport = null,
   onComplete,
   onIssue,
   onPhase,
@@ -153,6 +158,7 @@ export function runForemanMissionNarration({
   clearTimer?: (timer: ReturnType<typeof setTimeout>) => void;
   line: string;
   lineKey: string;
+  liveVoiceTransport?: ForemanLiveVoiceTransport | null;
   onComplete?: (reason: ForemanMissionNarrationCompletionReason) => void;
   onIssue?: (issue: string | null) => void;
   onPhase?: (phase: ForemanMissionNarrationPhase) => void;
@@ -168,6 +174,7 @@ export function runForemanMissionNarration({
   const key = buildMissionNarrationKey({ lineKey, runId, stageId });
   const timers: ReturnType<typeof setTimeout>[] = [];
   const safeLine = line.trim();
+  let liveVoicePlayback: ForemanLiveVoicePlayback | null = null;
   let complete = false;
 
   const addTimer = (callback: () => void, delayMs: number) => {
@@ -179,6 +186,11 @@ export function runForemanMissionNarration({
     timers.splice(0).forEach((timer) => clearTimer(timer));
   };
 
+  const stopLiveVoice = () => {
+    liveVoicePlayback?.cancel();
+    liveVoicePlayback = null;
+  };
+
   const finish = (reason: ForemanMissionNarrationCompletionReason) => {
     if (complete) {
       return;
@@ -186,6 +198,7 @@ export function runForemanMissionNarration({
 
     complete = true;
     clearTimers();
+    stopLiveVoice();
     onPhase?.("complete");
     onComplete?.(reason);
   };
@@ -195,6 +208,7 @@ export function runForemanMissionNarration({
       return;
     }
 
+    clearTimers();
     onIssue?.(issue);
     onVisibleLine?.(safeLine);
     onPhase?.("fallback");
@@ -202,6 +216,34 @@ export function runForemanMissionNarration({
       () => finish("fallback_complete"),
       estimateMissionTypedFallbackMs(safeLine)
     );
+    addTimer(
+      () => finish("failsafe"),
+      estimateMissionNarrationFailsafeMs(safeLine)
+    );
+  };
+
+  const beginBrowserSpeech = (liveVoiceIssue: string | null = null) => {
+    if (complete) {
+      return;
+    }
+
+    clearTimers();
+    onIssue?.(liveVoiceIssue);
+    onVisibleLine?.(safeLine);
+    onPhase?.("speaking");
+
+    const result = speakForemanText({
+      onEnd: () => finish("speech_end"),
+      onError: (message) => beginTypedFallback(message),
+      target,
+      text: safeLine,
+    });
+
+    if (!result.ok) {
+      beginTypedFallback(liveVoiceIssue ?? result.issue);
+      return;
+    }
+
     addTimer(
       () => finish("failsafe"),
       estimateMissionNarrationFailsafeMs(safeLine)
@@ -217,22 +259,45 @@ export function runForemanMissionNarration({
     onVisibleLine?.(safeLine);
     onPhase?.("speaking");
 
-    const result = speakForemanText({
-      onEnd: () => finish("speech_end"),
-      onError: (message) => beginTypedFallback(message),
-      target,
-      text: safeLine,
-    });
-
-    if (!result.ok) {
-      beginTypedFallback(result.issue);
+    if (!liveVoiceTransport) {
+      beginBrowserSpeech();
       return;
     }
+
+    liveVoicePlayback = liveVoiceTransport.speak({
+      onState: (state) => {
+        if (complete || state === "requesting" || state === "playing") {
+          return;
+        }
+
+        onIssue?.(
+          state === "unavailable" || state === "failed"
+            ? "Voice unavailable - showing typed answer."
+            : null
+        );
+      },
+      text: safeLine,
+    });
 
     addTimer(
       () => finish("failsafe"),
       estimateMissionNarrationFailsafeMs(safeLine)
     );
+
+    void liveVoicePlayback.finished.then((result) => {
+      if (complete) {
+        return;
+      }
+
+      liveVoicePlayback = null;
+
+      if (result.ok) {
+        finish("speech_end");
+        return;
+      }
+
+      beginBrowserSpeech(result.issue);
+    });
   };
 
   if (stageId === "absence") {
@@ -252,6 +317,7 @@ export function runForemanMissionNarration({
 
       complete = true;
       clearTimers();
+      stopLiveVoice();
       stopForemanSpeech(target);
       onPhase?.("idle");
       onComplete?.("cancelled");

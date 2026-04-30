@@ -1,6 +1,6 @@
 # Meridian Dashboard
 
-Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, prepared disclosure preview metadata, and browser-native disclosure preview print/save-to-PDF. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, shared local `/api/authority-requests` endpoint behavior, and AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`. V2-C adds the dashboard-local Demo Presentation Layer for Mission presentation, choreography, legibility, and reliability over existing proof. The V2-B Demo UI Clarity pass hardens that dashboard into a Presenter Cockpit default without removing shipped proof tools. V2-D++ adds the dashboard-local Embodied Foreman Civic Proof Theater for Guided Mission, Foreman Autonomous scripted conduct, embodied proof visualization, challenge cards, receipts, physical mode, rehearsal certification, failure injection, and reliability guards. V2-E adds dashboard-local Visibility Cleanup + Demo Thesis Lock for hard mission-surface visibility, product-facing default state, six-act guided reveal, completion Review Mode, proof polish, and P0 guided progression/duplicate-key warning repair. V2-F adds dashboard-local Foreman Simplification + Voice for one Foreman line, one focal card, one Next/Finish button, six acts, Act 4 3000ms silence, typed fallback, and Review Mode cockpit restoration.
+Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional local Live Mode while preserving snapshot mode as the default path. V2-B/GARP adds dashboard-local Auth0 Universal Login role-session proof, an authority cockpit, payload-only notification preview, Foreman handoff context with `foreman_ready: false`, prepared disclosure preview metadata, and browser-native disclosure preview print/save-to-PDF. V2-B Foreman/Auth adds the local/pre-deployment guide/explainer cockpit with deterministic context, offline narration, guided signals, Gold modes, browser-native voice fallback, deterministic avatar state, shared local `/api/authority-requests` endpoint behavior, and AUTH-5 deployed Vercel/Auth0 demo proof at `https://meridian-holdpoint.vercel.app`. V2-C adds the dashboard-local Demo Presentation Layer for Mission presentation, choreography, legibility, and reliability over existing proof. The V2-B Demo UI Clarity pass hardens that dashboard into a Presenter Cockpit default without removing shipped proof tools. V2-D++ adds the dashboard-local Embodied Foreman Civic Proof Theater for Guided Mission, Foreman Autonomous scripted conduct, embodied proof visualization, challenge cards, receipts, physical mode, rehearsal certification, failure injection, and reliability guards. V2-E adds dashboard-local Visibility Cleanup + Demo Thesis Lock for hard mission-surface visibility, product-facing default state, six-act guided reveal, completion Review Mode, proof polish, and P0 guided progression/duplicate-key warning repair. V2-F adds dashboard-local Foreman Simplification + Voice for one Foreman line, one focal card, one Next/Finish button, six acts, Act 4 3000ms silence, typed fallback, and Review Mode cockpit restoration. V2-G adds dashboard-local live voice transport for already-produced mission and Foreman Q&A text through a server-side ElevenLabs endpoint with typed fallback preserved.
 
 ## Scope
 
@@ -10,6 +10,7 @@ Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional loca
 - renders the V2-D++ Embodied Foreman Civic Proof Theater surfaces: Guided Mission, Foreman Autonomous, Embodied Avatar Bay, Proof Spotlight, Absence Shadow Map, Authority Handoff Theater, Judge Touchboard, Evidence Navigator, Civic Twin Diorama, Forensic Receipt Ribbon, Mission Run Receipt Panel, Mission Control Physical Mode, Rehearsal Certification, Failure Injection, and reliability guards
 - renders the V2-E visibility/proof hierarchy: product-facing default state, Begin Mission CTA, six-act reveal, completion Review Mode, and review-only Proof Tools surfacing
 - renders the V2-F simplified mission walkthrough: one Foreman line, one focal card, one Next/Finish button, six acts, browser-native voice/fallback, and Act 4 3000ms silence
+- routes existing V2-F mission act text and existing Ask Foreman / Challenge Foreman response text through the V2-G same-origin live voice transport when server-side ElevenLabs env is configured
 - defaults the first screen to a Presenter Cockpit with compact demo anchor, current decision/HOLD focal card, six-stage process rail, compact safety explanation, and grouped proof tools
 - stays consumption-only over Wave 8 replay output, including `step.skins.outputs`
 - keeps Director Mode and Absence Lens view-only over committed payload truth
@@ -41,12 +42,13 @@ Wave 9 keeps the dashboard snapshot-driven for demo use. V2-A adds optional loca
 - no clipboard write, browser download trigger, generated PDF library, server-side report generation, or city-record generation from disclosure preview actions; disclosure preview print/save-to-PDF uses the browser-native print dialog only
 - no governance, authority, matching, forensic, absence, skin, city, or cascade truth recomputation
 - no production identity or authorization behavior, live broker, live city integration, or live Constellation claim
-- no Foreman API, model call, external voice service, Whisper/audio upload/transcription, MediaRecorder/getUserMedia path, browser-exposed model API keys, or autonomous Foreman action
+- no Foreman answer API, model call, browser-exposed voice provider key, Whisper/audio upload/transcription, MediaRecorder/getUserMedia path, browser-exposed model API keys, or autonomous Foreman action
 - no legal determination, TPIA compliance, TRAIGA compliance, public-record completeness, public portal behavior, or official disclosure approval claim
 - no V2-C root/shared contract widening, protected runtime substrate edits, Auth0/Vercel/env/package/deploy/config/secret/security edits, or manual proof completion claim
 - no V2-D++ root/shared contract widening, production city infrastructure, official Fort Worth workflow, legal/TPIA/TRAIGA sufficiency, live OpenFGA/CIBA/notification/public-portal behavior, model/API-backed Foreman, browser-exposed key behavior, root ForensicChain write, legal audit trail, live GIS/Accela/city-record behavior, mobile/judge-device proof claim, or manual/global proof completion claim
 - no V2-E root/shared contract widening, new state machine, new package, new external API/model call, live Constellation broker proof, production/legal/live-city claim, root ForensicChain write, or manual/global proof completion claim
 - no V2-F root/shared contract widening, new state machine, new package, new external API/model call, external voice service, Whisper/audio upload/transcription, MediaRecorder/getUserMedia path, deployed proof claim, screenshot proof claim, production/legal/live-city claim, root ForensicChain write, or manual/global proof completion claim
+- no V2-G root/shared contract widening, new package, browser-exposed ElevenLabs key, direct browser call to ElevenLabs, new Q&A/model behavior, mic input, speech-to-text, Whisper/audio upload/transcription, MediaRecorder/getUserMedia path, production/legal/live-city claim, deployed proof claim, screenshot proof claim, root ForensicChain write, or manual/global proof completion claim
 
 ## Local Commands
 
@@ -106,7 +108,7 @@ Config boundaries:
 
 - no secrets are committed here
 - no Vercel or Auth0 setting change is attempted by repo docs
-- no Auth0 Management API, database, WebSocket, realtime push, delivered notifications, OpenFGA, CIBA, public portal, legal/TPIA sufficiency, production identity, live-city integration, model/API calls, external voice service, or autonomous Foreman action is added here
+- no Auth0 Management API, database, WebSocket, realtime push, delivered notifications, OpenFGA, CIBA, public portal, legal/TPIA sufficiency, production identity, live-city integration, model/API answer generation, browser-exposed voice provider key, direct browser voice-provider call, or autonomous Foreman action is added here
 - model-provider secrets are outside this lane; any future model API mode requires an approved server-side/serverless proxy with server-side environment only
 
 ## AUTH-5 Deployed Demo Proof
@@ -350,6 +352,35 @@ Remaining V2-F HOLDs:
 - broader manual/global proof HOLDs remain unchanged
 - production/legal/live-city/OpenFGA/CIBA/notification/public-portal/model/API/audio-upload/root-ForensicChain claims remain unshipped
 
+## V2-G Live Foreman Voice Transport
+
+V2-G is recorded in:
+
+- `../docs/specs/MERIDIAN_V2G_LIVE_FOREMAN_VOICE.md`
+- `../docs/closeouts/MERIDIAN_V2G_LIVE_FOREMAN_VOICE_CLOSEOUT.md`
+
+V2-G ships dashboard-local live voice transport for already-produced Foreman text:
+
+- `dashboard/api/foreman-voice.js` is the single server-side ElevenLabs endpoint
+- `dashboard/src/foremanGuide/liveVoiceTransport.ts` calls same-origin `/api/foreman-voice` and plays returned audio
+- existing V2-F mission act lines are the narration source
+- existing Ask Foreman / Challenge Foreman response text is the Q&A voice source
+- typed text remains visible and authoritative
+- voice failure returns to typed/browser-native fallback without blocking mission progression or Q&A
+- Act 4 still shows the HOLD card immediately and waits 3000ms before voice/fallback begins
+
+V2-G requires server-side `ELEVENLABS_API_KEY` and `ELEVENLABS_VOICE_ID` for live audio proof. Missing env returns a fallback-safe unavailable response and does not break the demo path.
+
+V2-G is voice transport only. It does not widen root/shared contracts, does not add a `MIGRATIONS.md` row, does not add packages, does not expose an ElevenLabs key to browser code, does not add new Foreman answer generation, does not call a model for answers, and does not add mic input, speech-to-text, Whisper/audio upload/transcription, MediaRecorder, or getUserMedia behavior.
+
+Remaining V2-G HOLDs:
+
+- live ElevenLabs audio proof unless server-side env is configured and observed
+- deployed proof
+- screenshot proof
+- broader manual/global proof HOLDs remain unchanged
+- production/legal/live-city/OpenFGA/CIBA/notification/public-portal/model/API-answer/root-ForensicChain claims remain unshipped
+
 ## Demo Posture
 
 - Demo playback reads committed local files only.
@@ -358,6 +389,7 @@ Remaining V2-F HOLDs:
 - V2-D++ Embodied Foreman Civic Proof Theater is the room-facing proof theater over existing proof.
 - V2-E is the five-minute guided visibility path over existing proof.
 - V2-F is the simplified spoken walkthrough over existing proof.
+- V2-G is server-side-only live voice transport for already-produced Foreman text.
 - Live Mode is optional/local and fail-closed.
 - No env vars are required for logged-out snapshot mode.
 - Auth0 login proof requires the documented `VITE_AUTH0_DOMAIN`, `VITE_AUTH0_CLIENT_ID`, and `VITE_AUTH0_CALLBACK_URL` values.

@@ -25,6 +25,11 @@ import {
   MISSION_NARRATION_ABSENCE_SILENCE_MS,
   runForemanMissionNarration,
 } from "../src/foremanGuide/missionNarration.ts";
+import type {
+  ForemanLiveVoiceResult,
+  ForemanLiveVoiceState,
+  ForemanLiveVoiceTransport,
+} from "../src/foremanGuide/liveVoiceTransport.ts";
 import { submitVoiceTranscript } from "../src/foremanGuide/useForemanVoice.ts";
 import { createTestLiveProjection, renderMarkup, runTests } from "./scenarioTestUtils.ts";
 
@@ -145,6 +150,72 @@ function createFakeTimers() {
       return timer as unknown as ReturnType<typeof setTimeout>;
     },
     timers,
+  };
+}
+
+function createLiveVoiceTransport() {
+  const requests: string[] = [];
+  const states: ForemanLiveVoiceState[] = [];
+  const pending: Array<{
+    onState?: (state: ForemanLiveVoiceState) => void;
+    resolve: (result: ForemanLiveVoiceResult) => void;
+  }> = [];
+  let cancelCount = 0;
+  const transport: ForemanLiveVoiceTransport = {
+    speak: ({ onState, text }) => {
+      requests.push(text);
+      onState?.("requesting");
+      states.push("requesting");
+
+      let settled = false;
+      const finished = new Promise<ForemanLiveVoiceResult>((resolve) => {
+        pending.push({ onState, resolve });
+      });
+
+      return {
+        cancel: () => {
+          if (settled) {
+            return;
+          }
+
+          settled = true;
+          cancelCount += 1;
+          const entry = pending.shift();
+
+          entry?.onState?.("idle");
+          entry?.resolve({
+            issue: "Voice playback cancelled.",
+            ok: false,
+            state: "idle",
+          });
+        },
+        finished,
+      };
+    },
+    stop: () => {
+      cancelCount += 1;
+    },
+  };
+
+  return {
+    completeNext: (result: ForemanLiveVoiceResult) => {
+      const entry = pending.shift();
+
+      assert.ok(entry);
+      if (result.ok) {
+        entry.onState?.("playing");
+      } else {
+        entry.onState?.(result.state);
+      }
+      entry.resolve(result);
+    },
+    get cancelCount() {
+      return cancelCount;
+    },
+    pending,
+    requests,
+    states,
+    transport,
   };
 }
 
@@ -312,7 +383,7 @@ const tests = [
       assert.equal(markup.includes("Speech output"), true);
       assert.equal(markup.includes("Speak latest response"), true);
       assert.equal(markup.includes("Dictation unavailable"), true);
-      assert.equal(markup.includes("typed fallback remains primary"), true);
+      assert.equal(markup.includes("Typed fallback remains primary"), true);
     },
   },
   {
@@ -367,6 +438,95 @@ const tests = [
       assert.equal(phases.includes("speaking"), true);
       utterances[0]?.onend?.({});
       assert.deepEqual(completed, ["speech_end"]);
+    },
+  },
+  {
+    name: "mission act sends existing act line to live voice client",
+    run: () => {
+      const timers = createFakeTimers();
+      const liveVoice = createLiveVoiceTransport();
+      const narration = getMissionActNarration("capture");
+
+      runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        liveVoiceTransport: liveVoice.transport,
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "capture",
+      });
+
+      timers.fireNext(0);
+      assert.deepEqual(liveVoice.requests, [narration.line]);
+    },
+  },
+  {
+    name: "mission narration unlocks after live voice success",
+    run: async () => {
+      const timers = createFakeTimers();
+      const liveVoice = createLiveVoiceTransport();
+      const narration = getMissionActNarration("authority");
+      const completed: string[] = [];
+
+      runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        liveVoiceTransport: liveVoice.transport,
+        onComplete: (reason) => completed.push(reason),
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "authority",
+      });
+
+      timers.fireNext(0);
+      liveVoice.completeNext({
+        issue: null,
+        ok: true,
+        state: "idle",
+      });
+      await Promise.resolve();
+
+      assert.deepEqual(completed, ["speech_end"]);
+    },
+  },
+  {
+    name: "mission narration falls back and unlocks after live voice failure",
+    run: async () => {
+      const timers = createFakeTimers();
+      const liveVoice = createLiveVoiceTransport();
+      const narration = getMissionActNarration("governance");
+      const phases: string[] = [];
+      const visibleLines: Array<string | null> = [];
+      const completed: string[] = [];
+
+      runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        liveVoiceTransport: liveVoice.transport,
+        onComplete: (reason) => completed.push(reason),
+        onPhase: (phase) => phases.push(phase),
+        onVisibleLine: (line) => visibleLines.push(line),
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "governance",
+        target: {},
+      });
+
+      timers.fireNext(0);
+      liveVoice.completeNext({
+        issue: "Voice unavailable - showing typed answer.",
+        ok: false,
+        state: "unavailable",
+      });
+      await Promise.resolve();
+
+      assert.equal(phases.includes("fallback"), true);
+      assert.equal(visibleLines.at(-1), narration.line);
+      timers.fireNext(estimateMissionTypedFallbackMs(narration.line));
+      assert.deepEqual(completed, ["fallback_complete"]);
     },
   },
   {
@@ -485,6 +645,31 @@ const tests = [
     },
   },
   {
+    name: "mission narration holds Act 4 silent before live voice request",
+    run: () => {
+      const timers = createFakeTimers();
+      const liveVoice = createLiveVoiceTransport();
+      const narration = getMissionActNarration("absence");
+      const phases: string[] = [];
+
+      runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        liveVoiceTransport: liveVoice.transport,
+        onPhase: (phase) => phases.push(phase),
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "absence",
+      });
+
+      assert.deepEqual(phases, ["silence"]);
+      assert.equal(liveVoice.requests.length, 0);
+      timers.fireNext(MISSION_NARRATION_ABSENCE_SILENCE_MS);
+      assert.deepEqual(liveVoice.requests, [narration.line]);
+    },
+  },
+  {
     name: "mission narration cancel clears timers and stops speech",
     run: () => {
       const timers = createFakeTimers();
@@ -506,6 +691,33 @@ const tests = [
       assert.deepEqual(completed, ["cancelled"]);
       assert.equal(harness.cancelCount, 1);
       assert.equal(harness.utterances.length, 0);
+      assert.equal(timers.timers.every((timer) => !timer.active), true);
+    },
+  },
+  {
+    name: "mission narration cancel clears live voice and timers",
+    run: () => {
+      const timers = createFakeTimers();
+      const liveVoice = createLiveVoiceTransport();
+      const narration = getMissionActNarration("chain");
+      const completed: string[] = [];
+      const run = runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        liveVoiceTransport: liveVoice.transport,
+        onComplete: (reason) => completed.push(reason),
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "chain",
+      });
+
+      timers.fireNext(0);
+      assert.equal(liveVoice.requests.length, 1);
+      run.cancel();
+
+      assert.deepEqual(completed, ["cancelled"]);
+      assert.equal(liveVoice.cancelCount, 1);
       assert.equal(timers.timers.every((timer) => !timer.active), true);
     },
   },

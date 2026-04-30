@@ -13,6 +13,13 @@ import type {
 import type { ForemanGuideSignalV1 } from "../foremanGuide/foremanSignals.ts";
 import type { ForemanGuideResponseV1 } from "../foremanGuide/offlineNarration.ts";
 import { getForemanPanelLabel } from "../foremanGuide/panelRegistry.ts";
+import { speakLatestForemanAnswer } from "../foremanGuide/foremanAnswerVoice.ts";
+import {
+  createForemanLiveVoiceTransport,
+  type ForemanLiveVoicePlayback,
+  type ForemanLiveVoiceState,
+  type ForemanLiveVoiceTransport,
+} from "../foremanGuide/liveVoiceTransport.ts";
 import {
   useForemanGuide,
   type ForemanGuideModeId,
@@ -248,10 +255,15 @@ export function ForemanGuidePanel({
   const [collapsed, setCollapsed] = useState(false);
   const [question, setQuestion] = useState("");
   const [speechStatus, setSpeechStatus] = useState<string | null>(null);
+  const [liveVoiceState, setLiveVoiceState] =
+    useState<ForemanLiveVoiceState>("idle");
   const [audioMuted, setAudioMuted] = useState(true);
   const [audioVolume, setAudioVolume] = useState(DEFAULT_FOREMAN_AUDIO_VOLUME);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const previousAudioSourceRef = useRef<string | null>(null);
+  const liveVoicePlaybackRef = useRef<ForemanLiveVoicePlayback | null>(null);
+  const liveVoiceTransportRef = useRef<ForemanLiveVoiceTransport | null>(null);
+  const spokenForemanMessageIdsRef = useRef<Set<string>>(new Set());
   const {
     clearProactiveSignals,
     loading,
@@ -292,6 +304,60 @@ export function ForemanGuidePanel({
   const audioCue = getForemanAudioCueForPresenceState(presenceBadge.state);
   const audioSource = audioCue.source;
 
+  if (!liveVoiceTransportRef.current) {
+    liveVoiceTransportRef.current = createForemanLiveVoiceTransport();
+  }
+
+  function trackLiveVoicePlayback(playback: ForemanLiveVoicePlayback) {
+    liveVoicePlaybackRef.current?.cancel();
+    liveVoicePlaybackRef.current = playback;
+
+    void playback.finished.then((result) => {
+      if (liveVoicePlaybackRef.current !== playback) {
+        return;
+      }
+
+      liveVoicePlaybackRef.current = null;
+
+      if (result.ok) {
+        setSpeechStatus(null);
+        setLiveVoiceState("idle");
+        return;
+      }
+
+      if (result.state === "idle") {
+        setLiveVoiceState("idle");
+        return;
+      }
+
+      setSpeechStatus(result.issue ?? "Voice unavailable - showing typed answer.");
+      setLiveVoiceState(result.state);
+    });
+  }
+
+  function startLiveVoicePlayback(text: string) {
+    const trimmedText = text.trim();
+
+    if (!trimmedText) {
+      setSpeechStatus("HOLD: no Foreman answer is available to speak yet.");
+      setLiveVoiceState("failed");
+      return;
+    }
+
+    const playback = liveVoiceTransportRef.current?.speak({
+      onState: setLiveVoiceState,
+      text: trimmedText,
+    });
+
+    if (!playback) {
+      setSpeechStatus("Voice unavailable - showing typed answer.");
+      setLiveVoiceState("unavailable");
+      return;
+    }
+
+    trackLiveVoicePlayback(playback);
+  }
+
   useEffect(() => {
     const target = audioRef.current;
 
@@ -326,6 +392,30 @@ export function ForemanGuidePanel({
     }
   }, [audioMuted, audioSource, audioVolume]);
 
+  useEffect(() => {
+    const transport = liveVoiceTransportRef.current;
+
+    if (!transport) {
+      return undefined;
+    }
+
+    const routed = speakLatestForemanAnswer({
+      messages,
+      spokenMessageIds: spokenForemanMessageIdsRef.current,
+      transport,
+    });
+
+    if (!routed) {
+      return undefined;
+    }
+
+    trackLiveVoicePlayback(routed.playback);
+
+    return () => {
+      routed.playback.cancel();
+    };
+  }, [messages]);
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     submitQuestion(question);
@@ -333,48 +423,26 @@ export function ForemanGuidePanel({
   }
 
   function handleSpeakLatest() {
-    const target = getPanelSpeechWindow();
     const text = selectedSpeechText() ?? latestForemanText;
-
-    if (!target?.speechSynthesis || !target.SpeechSynthesisUtterance) {
-      setSpeechStatus(
-        "HOLD: browser speech synthesis is unavailable; typed response remains primary."
-      );
-      return;
-    }
 
     if (!text.trim()) {
       setSpeechStatus("HOLD: no Foreman answer is available to speak yet.");
       return;
     }
 
-    try {
-      const utterance = new target.SpeechSynthesisUtterance(text.trim());
-
-      utterance.onerror = () => {
-        setSpeechStatus(
-          "HOLD: browser speech output failed; typed response remains visible."
-        );
-      };
-      utterance.onend = () => {
-        setSpeechStatus("Speech output finished.");
-      };
-      target.speechSynthesis.speak(utterance);
-      setSpeechStatus("Speaking latest Foreman response.");
-    } catch {
-      setSpeechStatus(
-        "HOLD: browser speech output failed; typed response remains visible."
-      );
-    }
+    startLiveVoicePlayback(text);
   }
 
   function handleStopSpeech() {
+    liveVoicePlaybackRef.current?.cancel();
+    liveVoiceTransportRef.current?.stop();
+    liveVoicePlaybackRef.current = null;
+    setLiveVoiceState("idle");
+
     const target = getPanelSpeechWindow();
 
     if (!target?.speechSynthesis) {
-      setSpeechStatus(
-        "HOLD: browser speech synthesis is unavailable; typed response remains primary."
-      );
+      setSpeechStatus("Speech output stopped.");
       return;
     }
 
@@ -526,7 +594,7 @@ export function ForemanGuidePanel({
               <span className="fact-label">Speech output</span>
               <button
                 className="control-button"
-                disabled={!speechOutputSupported || !latestForemanText}
+                disabled={!latestForemanText}
                 type="button"
                 aria-label="Speak the latest Foreman response"
                 onClick={handleSpeakLatest}
@@ -535,7 +603,7 @@ export function ForemanGuidePanel({
               </button>
               <button
                 className="control-button"
-                disabled={!speechOutputSupported}
+                disabled={liveVoiceState !== "playing" && !speechOutputSupported}
                 type="button"
                 aria-label="Stop Foreman speech output"
                 onClick={handleStopSpeech}
@@ -552,10 +620,13 @@ export function ForemanGuidePanel({
                 {speechInputSupported ? "Start dictation" : "Dictation unavailable"}
               </button>
               <span className="detail-copy">
-                {speechStatus ??
-                  (speechOutputSupported
-                    ? "Typed fallback remains primary."
-                    : "HOLD: browser speech synthesis unavailable; typed fallback remains primary.")}
+                {liveVoiceState === "playing"
+                  ? "Foreman voice playing"
+                  : speechStatus ??
+                    (liveVoiceState === "failed" ||
+                    liveVoiceState === "unavailable"
+                      ? "Voice unavailable - showing typed answer."
+                      : "Typed fallback remains primary.")}
               </span>
               <div
                 className="foreman-guide-panel__audio-controls"

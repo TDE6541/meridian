@@ -96,6 +96,8 @@ docs/
   closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md
   closeouts/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER_CLOSEOUT.md
   closeouts/MERIDIAN_V2E_VISIBILITY_CLEANUP_CLOSEOUT.md
+  closeouts/MERIDIAN_V2F_FOREMAN_SIMPLIFICATION_VOICE_CLOSEOUT.md
+  closeouts/MERIDIAN_V2G_LIVE_FOREMAN_VOICE_CLOSEOUT.md
   specs/ENTITY_ONTOLOGY.md
   specs/MERIDIAN_V1_FINAL_TRUTH.md
   specs/MERIDIAN_V2A_LIVE_CIVIC_NERVOUS_SYSTEM.md
@@ -104,6 +106,8 @@ docs/
   specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md
   specs/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER.md
   specs/MERIDIAN_V2E_VISIBILITY_CLEANUP.md
+  specs/MERIDIAN_V2F_FOREMAN_SIMPLIFICATION_VOICE.md
+  specs/MERIDIAN_V2G_LIVE_FOREMAN_VOICE.md
   specs/NATS_EVENT_COMMAND_TRANSLATION.md
   specs/WAVE4A_GOVERNANCE_RUNTIME.md
   specs/WAVE4B_MEETING_CAPTURE_PIPELINE.md
@@ -122,6 +126,7 @@ scripts/
 dashboard/
   README.md
   api/authority-requests.js
+  api/foreman-voice.js
   package.json
   index.html
   public/audio/foreman/README.md
@@ -149,6 +154,7 @@ dashboard/
 - Treat V2-D++ Embodied Foreman Civic Proof Theater as dashboard-local demo/proof theater truth recorded in `docs/specs/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER.md` and `docs/closeouts/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER_CLOSEOUT.md`; D1-D14 are implementation-complete, D15 validated dashboard `593/593` plus repo-wide JS `719/719`, and manual/global HOLDs remain carried.
 - Treat V2-E Visibility Cleanup + Demo Thesis Lock as dashboard-local visibility/proof hierarchy truth recorded in `docs/specs/MERIDIAN_V2E_VISIBILITY_CLEANUP.md` and `docs/closeouts/MERIDIAN_V2E_VISIBILITY_CLEANUP_CLOSEOUT.md`; E0-E4 are implementation-complete, P0 restored guided mission progression and fixed duplicate-key warnings, browser proof passed at `http://127.0.0.1:5173/`, and broader manual/global HOLDs remain carried.
 - Treat V2-F Foreman Simplification + Voice as dashboard-local presentation/voice truth recorded in `docs/specs/MERIDIAN_V2F_FOREMAN_SIMPLIFICATION_VOICE.md` and `docs/closeouts/MERIDIAN_V2F_FOREMAN_SIMPLIFICATION_VOICE_CLOSEOUT.md`; F3 local verification and browser proof passed, deployed proof and screenshot proof remain HOLD, and broader manual/global HOLDs remain carried.
+- Treat V2-G Live Foreman Voice Transport as dashboard-local voice transport truth recorded in `docs/specs/MERIDIAN_V2G_LIVE_FOREMAN_VOICE.md` and `docs/closeouts/MERIDIAN_V2G_LIVE_FOREMAN_VOICE_CLOSEOUT.md`; existing mission act text and existing Ask Foreman / Challenge Foreman answers remain the source, ElevenLabs is server-side only, typed fallback remains authoritative, live ElevenLabs proof is HOLD unless server-side env is configured and observed, and broader manual/global HOLDs remain carried.
 - Keep scope locked to the approved block.
 - Preserve canon alignment across root documents.
 - Treat upstream references as references unless their contents are available in this repo.
@@ -170,6 +176,7 @@ dashboard/
 - Describe V2-D++ only as dashboard-local demo/proof theater over existing proof: Guided Mission, Foreman Autonomous deterministic scripted conduct, embodied avatar state, Proof Spotlight, Absence Shadow Map, Authority Handoff Theater, Judge Touchboard, Evidence Navigator, Civic Twin Diorama, Forensic Receipt Ribbon, Mission Run Receipt Panel, Physical Mode, Rehearsal Certification, Failure Injection, and reliability guards. Do not describe it as shared contract widening, production city infrastructure, official Fort Worth workflow, legal/TPIA/TRAIGA sufficiency, public portal behavior, live OpenFGA, CIBA, delivered notifications, live LLM/model/API-backed Foreman, browser-exposed key behavior, external voice service, Whisper/audio upload/transcription, root ForensicChain writes, legal audit trail behavior, live GIS/Accela/city-record behavior, mobile/judge-device proof, or manual/global HOLD completion.
 - Describe V2-E only as dashboard-local visibility/proof hierarchy over existing proof: hard mission-surface visibility, product-facing default state, six-act guided reveal, completion Review Mode, proof card polish, review-only Failure Injection surfacing, guided progression repair, and duplicate-key warning repair. Do not describe it as runtime behavior, shared contract widening, production city infrastructure, official Fort Worth workflow, legal/TPIA/TRAIGA sufficiency, public portal behavior, live OpenFGA, CIBA, delivered notifications, live LLM/model/API-backed Foreman, external voice service, Whisper/audio upload/transcription, root ForensicChain writes, live Constellation broker proof, mobile/judge-device proof, or manual/global HOLD completion.
 - Describe V2-F only as dashboard-local presentation/voice proof over existing proof: one Foreman line, one focal card, one Next/Finish button, six-act mission narration, existing B6 browser-native voice/fallback, Act 4 3000ms silence, and Review Mode cockpit restoration. Do not describe it as runtime behavior, shared contract widening, production city infrastructure, official Fort Worth workflow, legal/TPIA/TRAIGA sufficiency, public portal behavior, live OpenFGA, CIBA, delivered notifications, live LLM/model/API-backed Foreman, external voice service, Whisper/audio upload/transcription, MediaRecorder/getUserMedia, root ForensicChain writes, live city integration, live GIS/Accela automation, deployed proof completion, screenshot proof completion, mobile/judge-device proof, or manual/global HOLD completion.
+- Describe V2-G only as dashboard-local voice transport over already-produced Foreman text: existing V2-F mission act text, existing Ask Foreman / Challenge Foreman response text, one server-side ElevenLabs endpoint, same-origin browser playback, typed fallback, and fallback-safe mission/Q&A continuation. Do not describe it as runtime behavior, shared contract widening, production city infrastructure, official Fort Worth workflow, legal/TPIA/TRAIGA sufficiency, public portal behavior, live OpenFGA, CIBA, delivered notifications, live LLM/model/API-backed Foreman answers, browser-exposed ElevenLabs key behavior, direct browser ElevenLabs calls, mic input, speech-to-text, Whisper/audio upload/transcription, MediaRecorder/getUserMedia, root ForensicChain writes, live city integration, deployed proof completion, screenshot proof completion, live ElevenLabs proof without configured env and observation, mobile/judge-device proof, or manual/global HOLD completion.
 
 ## Planning Gate
 
@@ -195,7 +202,7 @@ dashboard/
 - Do not overstate V2-B/GARP local runway surfaces as Foreman-enabled, production, legally sufficient, OpenFGA-backed, CIBA-backed, notification-delivering, or official city workflow behavior.
 - Do not overstate V2-B Foreman/Auth proof cockpit surfaces as production, legally sufficient, OpenFGA-backed, CIBA-backed, notification-sending, model-backed, external-voice-backed, or official city workflow behavior; AUTH-5 deployed proof is bounded to demo URL/login/callback/role-session evidence.
 - Do not overstate V2-C or V2-B Demo UI Clarity presentation surfaces as new governance, authority, forensic, absence, skin, city, legal, auth, deploy, or production truth.
-- Do not overstate V2-D++, V2-E, or V2-F demo/proof theater, visibility, and voice surfaces as new governance, authority, forensic, absence, skin, city, legal, auth, deploy, package, or production truth.
+- Do not overstate V2-D++, V2-E, V2-F, or V2-G demo/proof theater, visibility, voice, and voice-transport surfaces as new governance, authority, forensic, absence, skin, city, legal, auth, deploy, package, model-answer, mic/STT, or production truth.
 - Stop if repo truth conflicts with the approved task.
 
 ## Verification Rules
@@ -229,6 +236,7 @@ dashboard/
 - V2-D++ adds dashboard-local demo/proof theater contracts only. No V2-D++ migration row is required unless a later approved packet promotes a shared/root contract or protected surface.
 - V2-E adds dashboard-local visibility/proof hierarchy only. No V2-E migration row is required unless a later approved packet promotes a shared/root contract or protected surface.
 - V2-F adds dashboard-local presentation/voice proof only. No V2-F migration row is required unless a later approved packet promotes a shared/root contract or protected surface.
+- V2-G adds dashboard-local voice transport only. No V2-G migration row is required unless a later approved packet promotes a shared/root contract or protected surface.
 - Migration records are append-only after real changes require them.
 - If a future task changes structure, update every affected canon surface in the same session.
 

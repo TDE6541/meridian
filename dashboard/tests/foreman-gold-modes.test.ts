@@ -346,7 +346,7 @@ const tests = [
     },
   },
   {
-    name: "B5 guide source avoids network model key and persona behavior",
+    name: "B5 guide source avoids model key direct network and persona behavior",
     run: async () => {
       const files = [
         "src/foremanGuide/foremanModes.ts",
@@ -359,10 +359,12 @@ const tests = [
         "anth" + "ropic",
         "op" + "enai",
         "." + "env" + ".local",
+        "ELEVENLABS_API_KEY",
+        "api.elevenlabs.io",
+        "xi-api-key",
         "fet" + "ch(",
         "new Web" + "Socket",
         "Event" + "Source",
-        "vo" + "ice",
         "ava" + "tar",
       ];
 

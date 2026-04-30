@@ -339,7 +339,7 @@ const tests = [
     },
   },
   {
-    name: "Foreman B4 guide files do not add model, network, secret, voice, or avatar tokens",
+    name: "Foreman guide files do not add model, direct network, secret, or avatar tokens",
     run: async () => {
       const files = [
         "src/foremanGuide/foremanSignals.ts",
@@ -353,8 +353,10 @@ const tests = [
         "anthropic",
         "openai",
         ".env.local",
+        "ELEVENLABS_API_KEY",
+        "api.elevenlabs.io",
+        "xi-api-key",
         "fetch(",
-        "voice",
         "avatar",
       ];
 

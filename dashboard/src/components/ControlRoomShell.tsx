@@ -61,6 +61,10 @@ import {
   runForemanMissionNarration,
   type ForemanMissionNarrationView,
 } from "../foremanGuide/missionNarration.ts";
+import {
+  createForemanLiveVoiceTransport,
+  type ForemanLiveVoiceTransport,
+} from "../foremanGuide/liveVoiceTransport.ts";
 import { CascadeChoreography } from "./CascadeChoreography.tsx";
 import { DemoReliabilityPanel } from "./DemoReliabilityPanel.tsx";
 import { EntityRelationshipGraph } from "./EntityRelationshipGraph.tsx";
@@ -230,6 +234,9 @@ export function ControlRoomShell({
   const missionNarrationRunRef = useRef<ReturnType<
     typeof runForemanMissionNarration
   > | null>(null);
+  const missionLiveVoiceTransportRef = useRef<ForemanLiveVoiceTransport | null>(
+    null
+  );
   const [foremanHighlightedPanelId, setForemanHighlightedPanelId] = useState<
     string | null
   >(null);
@@ -465,6 +472,10 @@ export function ControlRoomShell({
         })
       : null;
 
+  if (!missionLiveVoiceTransportRef.current) {
+    missionLiveVoiceTransportRef.current = createForemanLiveVoiceTransport();
+  }
+
   useEffect(() => {
     missionNarrationRunRef.current?.cancel();
     missionNarrationRunRef.current = null;
@@ -501,6 +512,7 @@ export function ControlRoomShell({
     const run = runForemanMissionNarration({
       line: activeMissionNarration.line,
       lineKey: activeMissionNarration.lineKey,
+      liveVoiceTransport: missionLiveVoiceTransportRef.current,
       onComplete: (reason) => {
         if (reason !== "cancelled") {
           completedMissionNarrationKeysRef.current.add(activeMissionNarrationKey);

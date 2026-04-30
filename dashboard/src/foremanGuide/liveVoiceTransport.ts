@@ -1,0 +1,289 @@
+export const FOREMAN_LIVE_VOICE_TRANSPORT_VERSION =
+  "meridian.v2g.foremanLiveVoiceTransport.v1" as const;
+
+export const FOREMAN_LIVE_VOICE_ENDPOINT = "/api/foreman-voice" as const;
+
+export type ForemanLiveVoiceState =
+  | "failed"
+  | "idle"
+  | "playing"
+  | "requesting"
+  | "unavailable";
+
+export interface ForemanLiveVoiceResult {
+  issue: string | null;
+  ok: boolean;
+  state: ForemanLiveVoiceState;
+}
+
+export interface ForemanLiveVoicePlayback {
+  cancel: () => void;
+  finished: Promise<ForemanLiveVoiceResult>;
+}
+
+export interface ForemanLiveVoiceTransport {
+  speak: (input: ForemanLiveVoiceSpeakInput) => ForemanLiveVoicePlayback;
+  stop: () => void;
+}
+
+export interface ForemanLiveVoiceSpeakInput {
+  onState?: (state: ForemanLiveVoiceState) => void;
+  text: string;
+}
+
+export interface ForemanLiveVoiceAudioElement {
+  onended: ((event: unknown) => void) | null;
+  onerror: ((event: unknown) => void) | null;
+  pause: () => void;
+  play: () => Promise<void> | void;
+}
+
+export interface ForemanLiveVoiceBrowserTarget {
+  Audio?: new (src?: string) => ForemanLiveVoiceAudioElement;
+  URL?: {
+    createObjectURL: (object: Blob) => string;
+    revokeObjectURL: (url: string) => void;
+  };
+}
+
+export interface CreateForemanLiveVoiceTransportInput {
+  endpoint?: string;
+  fetcher?: typeof fetch | null;
+  target?: ForemanLiveVoiceBrowserTarget | null;
+}
+
+const VOICE_UNAVAILABLE_COPY = "Voice unavailable - showing typed answer.";
+
+function getBrowserTarget(): ForemanLiveVoiceBrowserTarget | null {
+  return typeof window === "undefined"
+    ? null
+    : (window as unknown as ForemanLiveVoiceBrowserTarget);
+}
+
+function getFetch(fetcher?: typeof fetch | null): typeof fetch | null {
+  if (fetcher !== undefined) {
+    return fetcher;
+  }
+
+  return typeof fetch === "function" ? fetch.bind(globalThis) : null;
+}
+
+function resolveTarget(
+  target?: ForemanLiveVoiceBrowserTarget | null
+): ForemanLiveVoiceBrowserTarget | null {
+  return target === undefined ? getBrowserTarget() : target;
+}
+
+function result(
+  ok: boolean,
+  state: ForemanLiveVoiceState,
+  issue: string | null = null
+): ForemanLiveVoiceResult {
+  return {
+    issue,
+    ok,
+    state,
+  };
+}
+
+async function readJsonIssue(response: Response): Promise<string | null> {
+  try {
+    const payload = await response.clone().json();
+
+    return typeof payload?.issue === "string" ? payload.issue : null;
+  } catch {
+    return null;
+  }
+}
+
+function playAudio({
+  audio,
+  cleanup,
+  onState,
+  signal,
+}: {
+  audio: ForemanLiveVoiceAudioElement;
+  cleanup: () => void;
+  onState?: (state: ForemanLiveVoiceState) => void;
+  signal: AbortSignal;
+}): Promise<ForemanLiveVoiceResult> {
+  return new Promise((resolve) => {
+    let settled = false;
+
+    const finish = (playbackResult: ForemanLiveVoiceResult) => {
+      if (settled) {
+        return;
+      }
+
+      settled = true;
+      audio.onended = null;
+      audio.onerror = null;
+      signal.removeEventListener("abort", abort);
+      cleanup();
+      onState?.(playbackResult.state);
+      resolve(playbackResult);
+    };
+
+    const abort = () => {
+      try {
+        audio.pause();
+      } catch {
+        // Playback cancellation is best-effort; typed text remains primary.
+      }
+
+      finish(result(false, "idle", "Voice playback cancelled."));
+    };
+
+    audio.onended = () => finish(result(true, "idle"));
+    audio.onerror = () => finish(result(false, "failed", VOICE_UNAVAILABLE_COPY));
+    signal.addEventListener("abort", abort, { once: true });
+
+    try {
+      onState?.("playing");
+      const playResult = audio.play();
+
+      if (typeof playResult?.catch === "function") {
+        void playResult.catch(() =>
+          finish(result(false, "failed", VOICE_UNAVAILABLE_COPY))
+        );
+      }
+    } catch {
+      finish(result(false, "failed", VOICE_UNAVAILABLE_COPY));
+    }
+  });
+}
+
+export async function speakForemanLiveText({
+  endpoint = FOREMAN_LIVE_VOICE_ENDPOINT,
+  fetcher,
+  onState,
+  signal,
+  target,
+  text,
+}: ForemanLiveVoiceSpeakInput &
+  CreateForemanLiveVoiceTransportInput & {
+    signal?: AbortSignal;
+  }): Promise<ForemanLiveVoiceResult> {
+  const trimmedText = text.trim();
+  const resolvedFetch = getFetch(fetcher);
+  const resolvedTarget = resolveTarget(target);
+
+  if (!trimmedText) {
+    return result(false, "failed", "HOLD: no Foreman text is available.");
+  }
+
+  if (!resolvedFetch) {
+    onState?.("unavailable");
+    return result(false, "unavailable", VOICE_UNAVAILABLE_COPY);
+  }
+
+  try {
+    onState?.("requesting");
+    const response = await resolvedFetch(endpoint, {
+      body: JSON.stringify({ text: trimmedText }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      signal,
+    });
+
+    if (signal?.aborted) {
+      return result(false, "idle", "Voice playback cancelled.");
+    }
+
+    if (!response.ok) {
+      const issue = await readJsonIssue(response);
+      const state = response.status === 503 ? "unavailable" : "failed";
+
+      onState?.(state);
+      return result(false, state, issue ?? VOICE_UNAVAILABLE_COPY);
+    }
+
+    if (
+      !resolvedTarget?.Audio ||
+      !resolvedTarget.URL ||
+      typeof Blob === "undefined"
+    ) {
+      onState?.("unavailable");
+      return result(false, "unavailable", VOICE_UNAVAILABLE_COPY);
+    }
+
+    const audioBuffer = await response.arrayBuffer();
+
+    if (signal?.aborted) {
+      return result(false, "idle", "Voice playback cancelled.");
+    }
+
+    if (audioBuffer.byteLength === 0) {
+      onState?.("failed");
+      return result(false, "failed", VOICE_UNAVAILABLE_COPY);
+    }
+
+    const contentType = response.headers.get("content-type") ?? "audio/mpeg";
+    const objectUrl = resolvedTarget.URL.createObjectURL(
+      new Blob([audioBuffer], { type: contentType })
+    );
+    const audio = new resolvedTarget.Audio(objectUrl);
+    const cleanup = () => resolvedTarget.URL?.revokeObjectURL(objectUrl);
+
+    return playAudio({
+      audio,
+      cleanup,
+      onState,
+      signal: signal ?? new AbortController().signal,
+    });
+  } catch {
+    if (signal?.aborted) {
+      return result(false, "idle", "Voice playback cancelled.");
+    }
+
+    onState?.("failed");
+    return result(false, "failed", VOICE_UNAVAILABLE_COPY);
+  }
+}
+
+export function createForemanLiveVoiceTransport({
+  endpoint,
+  fetcher,
+  target,
+}: CreateForemanLiveVoiceTransportInput = {}): ForemanLiveVoiceTransport {
+  let currentAbortController: AbortController | null = null;
+
+  const stop = () => {
+    currentAbortController?.abort();
+    currentAbortController = null;
+  };
+
+  return {
+    speak: (input) => {
+      stop();
+      const abortController = new AbortController();
+      currentAbortController = abortController;
+      const finished = speakForemanLiveText({
+        endpoint,
+        fetcher,
+        onState: input.onState,
+        signal: abortController.signal,
+        target,
+        text: input.text,
+      }).finally(() => {
+        if (currentAbortController === abortController) {
+          currentAbortController = null;
+        }
+      });
+
+      return {
+        cancel: () => {
+          if (currentAbortController === abortController) {
+            stop();
+          } else {
+            abortController.abort();
+          }
+        },
+        finished,
+      };
+    },
+    stop,
+  };
+}
