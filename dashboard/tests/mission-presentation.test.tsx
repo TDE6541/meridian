@@ -38,7 +38,10 @@ import {
   buildMissionRailStages,
   MISSION_RAIL_LABELS,
 } from "../src/demo/missionRail.ts";
-import { getMissionActNarration } from "../src/foremanGuide/missionNarration.ts";
+import {
+  buildMissionNarrationKey,
+  getMissionActNarration,
+} from "../src/foremanGuide/missionNarration.ts";
 import {
   ROLE_SESSION_PROOF_CONTRACT,
   type DashboardRoleSessionProofV1,
@@ -201,6 +204,21 @@ function createRunningMissionPlaybackState(
   };
 }
 
+function completedNarrationView(stageId: MissionStageId, runId = "mission-run-f1") {
+  const narration = getMissionActNarration(stageId);
+
+  return {
+    issue: null,
+    key: buildMissionNarrationKey({
+      lineKey: narration.lineKey,
+      runId,
+      stageId,
+    }),
+    line: narration.line,
+    phase: "complete" as const,
+  };
+}
+
 function createCompletedMissionPlaybackState(): MissionPlaybackState {
   const runId = "mission-run-review";
 
@@ -307,11 +325,12 @@ const tests = [
     },
   },
   {
-    name: "active mission mode renders one line one focal card rail compact Foreman and mission controls",
+    name: "active mission mode renders compact rail narration and visual story panel",
     run: async () => {
       const playbackState = createRunningMissionPlaybackState("capture");
       const element = await renderMissionShellWithPlayback(playbackState);
       const markup = renderMarkup(element);
+      const styles = await readFile("src/styles.css", "utf8");
       const visibleButtons = collectButtons(element).filter(
         (button) =>
           String(button.props.className ?? "").includes(
@@ -321,6 +340,11 @@ const tests = [
 
       assert.equal(markup.includes('data-mission-active-walkthrough="true"'), true);
       assert.equal(markup.includes('data-mission-rail="true"'), true);
+      assert.equal(markup.includes('data-mission-narration-zone="true"'), true);
+      assert.equal(markup.includes('data-mission-story-panel="capture"'), true);
+      assert.equal(markup.includes('data-mission-story-proof="capture-intake"'), true);
+      assert.equal(markup.includes('data-mission-story-source="existing-state-only"'), true);
+      assert.equal(markup.includes("Visual proof zone"), true);
       assert.equal(markup.includes('data-mission-compact-foreman="true"'), true);
       assert.equal(
         [...markup.matchAll(/data-mission-active-foreman-line="true"/g)].length,
@@ -328,6 +352,12 @@ const tests = [
       );
       assert.equal([...markup.matchAll(/data-mission-focal-card="/g)].length, 1);
       assert.equal(markup.includes(getMissionActNarration("capture").line), true);
+      assert.equal(styles.includes(".mission-story-panel"), true);
+      assert.equal(
+        styles.includes(".mission-presentation--active-walkthrough .mission-rail__stage"),
+        true
+      );
+      assert.equal(styles.includes("min-height: 4.45rem"), true);
       assert.deepEqual(visibleButtons.map((button) => getElementText(button)), [
         "Previous Act",
         "Next Act",
@@ -336,6 +366,51 @@ const tests = [
       assert.equal(visibleButtons[0]?.props.disabled, true);
       assert.equal(visibleButtons[1]?.props.disabled, true);
       assert.equal(visibleButtons[2]?.props.disabled, false);
+    },
+  },
+  {
+    name: "all six active mission acts render distinct existing-truth story panels",
+    run: async () => {
+      const expectedPanels: Record<
+        MissionStageId,
+        { proof: string; text: string }
+      > = {
+        absence: {
+          proof: "absence-shadow",
+          text: "Missing evidence boundary",
+        },
+        authority: {
+          proof: "authority-gate",
+          text: "Authority gate",
+        },
+        capture: {
+          proof: "capture-intake",
+          text: fictionalPermitAnchor.title,
+        },
+        chain: {
+          proof: "chain-receipt",
+          text: "Forensic chain",
+        },
+        governance: {
+          proof: "governance-hold",
+          text: "Governance result",
+        },
+        public: {
+          proof: "public-boundary",
+          text: "Public-safe view",
+        },
+      };
+
+      for (const stageId of MISSION_STAGE_IDS) {
+        const markup = renderMarkup(
+          await renderMissionShellWithPlayback(createRunningMissionPlaybackState(stageId))
+        );
+        const expected = expectedPanels[stageId];
+
+        assert.equal(markup.includes(`data-mission-story-panel="${stageId}"`), true);
+        assert.equal(markup.includes(`data-mission-story-proof="${expected.proof}"`), true);
+        assert.equal(markup.includes(expected.text), true);
+      }
     },
   },
   {
@@ -362,6 +437,46 @@ const tests = [
       assert.deepEqual(calls, ["back"]);
       assert.equal(reset?.props.disabled, false);
       assert.equal(typeof reset?.props.onClick, "function");
+    },
+  },
+  {
+    name: "active mission mode keeps next and finish-review navigation wired after narration completes",
+    run: async () => {
+      const calls: string[] = [];
+      const captureState = createRunningMissionPlaybackState("capture");
+      const captureElement = await renderMissionShellWithPlayback(captureState, {
+        missionNarrationView: completedNarrationView("capture"),
+        onMissionAdvance: () => calls.push("next"),
+      });
+      const captureButtons = collectButtons(captureElement).filter(
+        (button) =>
+          String(button.props.className ?? "").includes(
+            "mission-primary-actions__button"
+          ) && button.props["aria-hidden"] !== true
+      );
+      const next = captureButtons.find((button) => getElementText(button) === "Next Act");
+
+      assert.equal(next?.props.disabled, false);
+      next?.props.onClick?.();
+
+      const publicState = createRunningMissionPlaybackState("public");
+      const publicElement = await renderMissionShellWithPlayback(publicState, {
+        missionNarrationView: completedNarrationView("public"),
+        onMissionAdvance: () => calls.push("finish"),
+      });
+      const publicButtons = collectButtons(publicElement).filter(
+        (button) =>
+          String(button.props.className ?? "").includes(
+            "mission-primary-actions__button"
+          ) && button.props["aria-hidden"] !== true
+      );
+      const finish = publicButtons.find(
+        (button) => getElementText(button) === "Finish / Review"
+      );
+
+      assert.equal(finish?.props.disabled, false);
+      finish?.props.onClick?.();
+      assert.deepEqual(calls, ["next", "finish"]);
     },
   },
   {

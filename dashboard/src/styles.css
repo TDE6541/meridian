@@ -4921,16 +4921,28 @@ kbd {
   order: 3;
   display: none;
   min-width: 0;
-  gap: 1rem;
-  align-items: center;
-  justify-items: center;
-  padding: 1.35rem 0;
+  gap: 0.65rem;
+  align-items: stretch;
+  justify-items: stretch;
+  padding: 0.2rem 0 0;
   pointer-events: none;
 }
 
 .mission-active-walkthrough.is-visible {
   display: grid;
   pointer-events: auto;
+}
+
+.mission-active-narration {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: center;
+  min-width: 0;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid rgba(232, 237, 242, 0.12);
+  border-radius: 8px;
+  background: rgba(232, 237, 242, 0.045);
 }
 
 .mission-active-foreman {
@@ -4982,24 +4994,22 @@ kbd {
 }
 
 .mission-active-walkthrough__line {
-  width: min(100%, 64rem);
-  min-height: 3.4rem;
+  min-width: 0;
+  min-height: 2.2rem;
   margin: 0;
   color: #ffffff;
-  font-size: clamp(1.38rem, 1.5vw, 1.5rem);
+  font-size: 1.16rem;
   font-weight: 700;
   letter-spacing: 0;
-  line-height: 1.16;
+  line-height: 1.22;
   overflow-wrap: anywhere;
-  text-wrap: balance;
 }
 
 .mission-active-focal-card {
   display: grid;
-  width: min(100%, 48rem);
+  width: 100%;
   min-width: 0;
   gap: 0.45rem;
-  justify-self: center;
   padding: 1rem;
   border: 1px solid rgba(232, 237, 242, 0.18);
   border-left: 5px solid var(--mission-dim-green-status);
@@ -5057,9 +5067,290 @@ kbd {
   overflow-wrap: anywhere;
 }
 
+.mission-story-panel {
+  display: grid;
+  min-width: 0;
+  min-height: 26rem;
+  gap: 0.8rem;
+  padding: 0.9rem;
+  border: 1px solid rgba(232, 237, 242, 0.16);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(232, 237, 242, 0.08), rgba(10, 22, 40, 0.42)),
+    rgba(7, 16, 30, 0.78);
+  box-shadow: inset 0 0 0 1px rgba(232, 237, 242, 0.045);
+}
+
+.mission-story-panel--authority,
+.mission-story-panel--governance,
+.mission-story-panel--absence {
+  border-color: rgba(245, 181, 71, 0.36);
+  background:
+    linear-gradient(135deg, rgba(245, 181, 71, 0.12), rgba(10, 22, 40, 0.48)),
+    rgba(7, 16, 30, 0.78);
+}
+
+.mission-story-panel--public {
+  border-color: rgba(99, 179, 255, 0.32);
+}
+
+.mission-story-panel__header {
+  display: grid;
+  grid-template-columns: minmax(0, 0.25fr) minmax(0, 0.35fr) minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: center;
+  min-width: 0;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(232, 237, 242, 0.12);
+}
+
+.mission-story-panel__header p,
+.mission-story-panel__header h2,
+.mission-story-panel__header span {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.mission-story-panel__header p {
+  color: rgba(245, 181, 71, 0.88);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.mission-story-panel__header h2 {
+  color: #ffffff;
+  font-size: 1.42rem;
+  line-height: 1.05;
+}
+
+.mission-story-panel__header span {
+  color: rgba(232, 237, 242, 0.76);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.mission-story-panel__body {
+  display: grid;
+  min-width: 0;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.mission-story-panel__body--capture,
+.mission-story-panel__body--authority,
+.mission-story-panel__body--governance,
+.mission-story-panel__body--chain,
+.mission-story-panel__body--public {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.25fr);
+}
+
+.mission-story-panel__body--absence {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+}
+
+.mission-story-intake,
+.mission-story-authority-gate,
+.mission-story-hold-verdict,
+.mission-story-chain-meter,
+.mission-story-public-window,
+.mission-story-flow,
+.mission-story-fact,
+.mission-story-request-list article,
+.mission-story-hold-fields article,
+.mission-story-absence-grid article,
+.mission-story-shadow-slots article,
+.mission-story-chain-latest article,
+.mission-story-public-list article,
+.mission-story-empty {
+  display: grid;
+  min-width: 0;
+  gap: 0.35rem;
+  padding: 0.78rem;
+  border: 1px solid rgba(232, 237, 242, 0.13);
+  border-radius: 8px;
+  background: rgba(232, 237, 242, 0.055);
+}
+
+.mission-story-intake,
+.mission-story-authority-gate,
+.mission-story-hold-verdict,
+.mission-story-chain-meter,
+.mission-story-public-window {
+  align-content: center;
+  min-height: 11rem;
+  border-left: 5px solid var(--mission-dim-green-status);
+}
+
+.mission-story-authority-gate,
+.mission-story-hold-verdict {
+  border-left-color: var(--mission-amber-warning);
+}
+
+.mission-story-public-window {
+  border-left-color: #63b3ff;
+}
+
+.mission-story-flow {
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.mission-story-flow span {
+  display: grid;
+  min-height: 4rem;
+  place-items: center;
+  padding: 0.55rem;
+  border: 1px solid rgba(61, 214, 140, 0.28);
+  border-radius: 8px;
+  background: rgba(61, 214, 140, 0.08);
+  color: #ffffff;
+  font-weight: 800;
+  text-align: center;
+}
+
+.mission-story-facts,
+.mission-story-counts,
+.mission-story-request-list,
+.mission-story-hold-fields,
+.mission-story-absence-grid,
+.mission-story-shadow-slots,
+.mission-story-chain-latest,
+.mission-story-public-list {
+  display: grid;
+  min-width: 0;
+  gap: 0.55rem;
+}
+
+.mission-story-counts,
+.mission-story-facts {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+}
+
+.mission-story-panel .mission-active-focal-card {
+  grid-column: 1 / -1;
+  min-height: auto;
+  align-content: start;
+  padding: 0.78rem;
+}
+
+.mission-story-panel span,
+.mission-story-panel em,
+.mission-story-panel small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.mission-story-panel span {
+  color: rgba(245, 181, 71, 0.84);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.mission-story-panel strong {
+  min-width: 0;
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.18;
+  overflow-wrap: anywhere;
+}
+
+.mission-story-intake strong,
+.mission-story-authority-gate strong,
+.mission-story-hold-verdict strong,
+.mission-story-chain-meter strong,
+.mission-story-public-window strong {
+  font-size: 1.9rem;
+  line-height: 1.02;
+}
+
+.mission-story-panel em,
+.mission-story-panel small {
+  color: rgba(232, 237, 242, 0.74);
+  font-size: 0.8rem;
+  font-style: normal;
+  line-height: 1.34;
+}
+
+.mission-story-fact--hold,
+.mission-story-empty,
+.mission-story-shadow-slots [data-mission-story-shadow-status="carried_hold"],
+.mission-story-shadow-slots [data-mission-story-shadow-status="absent"],
+.mission-story-hold-fields [data-mission-story-hold-field-status="unresolved"] {
+  border-color: rgba(245, 181, 71, 0.34);
+  background: rgba(245, 181, 71, 0.08);
+}
+
+.mission-story-fact--ready,
+.mission-story-shadow-slots [data-mission-story-shadow-status="present"] {
+  border-color: rgba(61, 214, 140, 0.28);
+  background: rgba(61, 214, 140, 0.07);
+}
+
+.mission-story-chain-latest,
+.mission-story-public-list {
+  grid-column: 1 / -1;
+}
+
 .mission-presentation--active-walkthrough .mission-rail__state,
 .mission-presentation--active-walkthrough .mission-rail__source {
   display: none;
+}
+
+.mission-presentation--active-walkthrough .mission-rail {
+  padding: 0;
+}
+
+.mission-presentation--active-walkthrough .mission-rail__list {
+  gap: 0.35rem;
+}
+
+.mission-presentation--active-walkthrough .mission-rail__stage {
+  min-height: 4.45rem;
+  gap: 0.12rem;
+  padding: 0.45rem 0.5rem;
+}
+
+.mission-presentation--active-walkthrough .mission-rail__index {
+  font-size: 0.66rem;
+}
+
+.mission-presentation--active-walkthrough .mission-rail__label {
+  font-size: 0.84rem;
+}
+
+@media (max-width: 860px) {
+  .mission-active-narration,
+  .mission-story-panel__header,
+  .mission-story-panel__body--capture,
+  .mission-story-panel__body--authority,
+  .mission-story-panel__body--governance,
+  .mission-story-panel__body--absence,
+  .mission-story-panel__body--chain,
+  .mission-story-panel__body--public,
+  .mission-story-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-story-panel {
+    min-height: 22rem;
+  }
+
+  .mission-story-intake,
+  .mission-story-authority-gate,
+  .mission-story-hold-verdict,
+  .mission-story-chain-meter,
+  .mission-story-public-window {
+    min-height: auto;
+  }
 }
 
 .mission-surface--chain {

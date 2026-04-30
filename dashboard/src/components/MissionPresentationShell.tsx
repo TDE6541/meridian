@@ -613,6 +613,15 @@ export function MissionPresentationShell({
           : "hidden";
   const isMissionSurfaceHidden = (stageId: MissionStageId) =>
     !isReviewMode && (isActiveMissionMode || !isMissionSurfaceActive(stageId));
+  const absenceShadowSlots = presentationProjection?.absence_shadow_slots ?? [];
+  const stageAbsenceShadowSlots = activeMissionStage
+    ? absenceShadowSlots.filter((slot) => slot.stage_id === activeMissionStage)
+    : [];
+  const latestForensicEntry =
+    forensicChain.cumulativeEntries.find((entry) => entry.isCurrentStep) ??
+    forensicChain.cumulativeEntries.at(-1) ??
+    null;
+  const latestMissionReceiptTicket = missionRunReceipt.events.at(-1) ?? null;
   const getMissionStageSurfaceClassName = (
     name: MissionSurfaceName,
     stageId: MissionStageId
@@ -752,6 +761,40 @@ export function MissionPresentationShell({
       </dl>
     </section>
   );
+  const valueOrHold = (
+    value: string | number | null | undefined,
+    label: string
+  ) => {
+    if (value === null || value === undefined) {
+      return `HOLD: ${label} unavailable`;
+    }
+
+    const normalized = String(value).trim();
+    return normalized.length > 0 ? normalized : `HOLD: ${label} unavailable`;
+  };
+  const renderStoryFact = ({
+    label,
+    tone = "neutral",
+    value,
+  }: {
+    label: string;
+    tone?: "hold" | "neutral" | "ready";
+    value: string | number | null | undefined;
+  }) => (
+    <div
+      className={`mission-story-fact mission-story-fact--${tone}`}
+      data-mission-story-fact={reviewKey(label)}
+    >
+      <span>{label}</span>
+      <strong>{valueOrHold(value, label)}</strong>
+    </div>
+  );
+  const renderStoryEmpty = (message: string) => (
+    <article className="mission-story-empty" data-mission-story-empty="true">
+      <strong>HOLD</strong>
+      <span>{message}</span>
+    </article>
+  );
   const renderActiveFocalCard = (stageId: MissionStageId) => {
     if (stageId === "capture") {
       return (
@@ -845,6 +888,329 @@ export function MissionPresentationShell({
       </section>
     );
   };
+  const renderMissionStoryPanel = (stageId: MissionStageId) => {
+    const storyBeat = MISSION_STAGE_STORY_BEATS[stageId];
+    const panelClassName = `mission-story-panel mission-story-panel--${stageId}`;
+    const panelHeader = (
+      <header className="mission-story-panel__header">
+        <p>Visual proof zone</p>
+        <h2>{storyBeat.title}</h2>
+        <span>{storyBeat.beat}</span>
+      </header>
+    );
+
+    if (stageId === "capture") {
+      return (
+        <section
+          className={panelClassName}
+          data-mission-story-panel="capture"
+          data-mission-story-source="existing-state-only"
+        >
+          {panelHeader}
+          <div
+            className="mission-story-panel__body mission-story-panel__body--capture"
+            data-mission-story-proof="capture-intake"
+          >
+            <div className="mission-story-intake">
+              <span>Intake packet</span>
+              <strong>{fictionalPermitAnchor.title}</strong>
+              <em>{fictionalPermitAnchor.context}</em>
+              <small>{fictionalPermitAnchor.boundary}</small>
+            </div>
+            <div className="mission-story-flow" aria-label="Capture proof path">
+              <span>Captured</span>
+              <span>Governed</span>
+              <span>{focalDecision}</span>
+            </div>
+            <div className="mission-story-facts">
+              {renderStoryFact({ label: "Scenario", value: scenarioLabel })}
+              {renderStoryFact({ label: "Active step", value: activeStepLabel })}
+              {renderStoryFact({
+                label: "Selected clause",
+                value: currentStep?.selectedClauseText,
+              })}
+              {renderStoryFact({ label: "Action", value: currentStep?.action })}
+            </div>
+            {renderActiveFocalCard("capture")}
+          </div>
+        </section>
+      );
+    }
+
+    if (stageId === "authority") {
+      return (
+        <section
+          className={panelClassName}
+          data-mission-story-panel="authority"
+          data-mission-story-source="existing-state-only"
+        >
+          {panelHeader}
+          <div
+            className="mission-story-panel__body mission-story-panel__body--authority"
+            data-mission-story-proof="authority-gate"
+          >
+            <div className="mission-story-authority-gate">
+              <span>Authority gate</span>
+              <strong>{authorityState.status}</strong>
+              <em>
+                {authorityState.counts.total === 0
+                  ? "EMPTY: no approval request is rendered in current dashboard state."
+                  : `${formatCount(
+                      authorityState.counts.total,
+                      "request"
+                    )} rendered from current authority state.`}
+              </em>
+            </div>
+            <div className="mission-story-counts" aria-label="Authority counts">
+              {renderStoryFact({
+                label: "Pending",
+                tone: authorityState.counts.pending > 0 ? "hold" : "neutral",
+                value: authorityState.counts.pending,
+              })}
+              {renderStoryFact({
+                label: "Approved",
+                tone: authorityState.counts.approved > 0 ? "ready" : "neutral",
+                value: authorityState.counts.approved,
+              })}
+              {renderStoryFact({
+                label: "Holding",
+                tone: authorityState.counts.holding > 0 ? "hold" : "neutral",
+                value: authorityState.counts.holding,
+              })}
+            </div>
+            <div className="mission-story-request-list">
+              {authorityState.requests.length > 0
+                ? authorityState.requests.slice(0, 3).map((request) => (
+                    <article key={request.request_id}>
+                      <span>{request.status}</span>
+                      <strong>{request.title}</strong>
+                      <em>{request.public_summary}</em>
+                    </article>
+                  ))
+                : renderStoryEmpty(
+                    "No existing authority request or approval row is available for this act."
+                  )}
+            </div>
+            {renderActiveFocalCard("authority")}
+          </div>
+        </section>
+      );
+    }
+
+    if (stageId === "governance") {
+      return (
+        <section
+          className={panelClassName}
+          data-mission-story-panel="governance"
+          data-mission-story-source="existing-state-only"
+        >
+          {panelHeader}
+          <div
+            className="mission-story-panel__body mission-story-panel__body--governance"
+            data-mission-story-proof="governance-hold"
+          >
+            <div className="mission-story-hold-verdict">
+              <span>Governance result</span>
+              <strong>{focalDecision}</strong>
+              <em>{focalDecisionReason}</em>
+            </div>
+            <div className="mission-story-facts">
+              {renderStoryFact({
+                label: "Governance state",
+                tone: focalDecision === "HOLD" ? "hold" : "neutral",
+                value: governanceState,
+              })}
+              {renderStoryFact({
+                label: "Trigger",
+                tone: holdWallView.triggered ? "hold" : "neutral",
+                value: holdWallView.triggerSource,
+              })}
+              {renderStoryFact({ label: "Step", value: currentStep?.stepId })}
+            </div>
+            <div className="mission-story-hold-fields">
+              {holdWallView.fields.map((field) => (
+                <article
+                  data-mission-story-hold-field={field.key}
+                  data-mission-story-hold-field-status={field.status}
+                  key={field.key}
+                >
+                  <span>{field.label}</span>
+                  <strong>{field.status}</strong>
+                  <em>{field.value}</em>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (stageId === "absence") {
+      return (
+        <section
+          className={panelClassName}
+          data-mission-story-panel="absence"
+          data-mission-story-source="existing-state-only"
+        >
+          {panelHeader}
+          <div
+            className="mission-story-panel__body mission-story-panel__body--absence"
+            data-mission-story-proof="absence-shadow"
+          >
+            <div className="mission-story-absence-grid">
+              {missionAbsenceLens.findings.length > 0
+                ? missionAbsenceLens.findings.map((finding) => (
+                    <article key={finding.id}>
+                      <span>{finding.category}</span>
+                      <strong>{finding.title}</strong>
+                      <em>{finding.summary}</em>
+                    </article>
+                  ))
+                : renderStoryEmpty(
+                    "No existing absence finding is available in the current dashboard state."
+                  )}
+            </div>
+            <div className="mission-story-shadow-slots">
+              {stageAbsenceShadowSlots.length > 0
+                ? stageAbsenceShadowSlots.map((slot) => (
+                    <article
+                      data-mission-story-shadow-status={slot.presence_status}
+                      key={slot.slot_id}
+                    >
+                      <span>{slot.presence_status}</span>
+                      <strong>{slot.expected_label}</strong>
+                      <em>{slot.closure_hint}</em>
+                    </article>
+                  ))
+                : renderStoryEmpty(
+                    "No existing absence shadow slot is available for this act."
+                  )}
+            </div>
+            {renderActiveFocalCard("absence")}
+          </div>
+        </section>
+      );
+    }
+
+    if (stageId === "chain") {
+      return (
+        <section
+          className={panelClassName}
+          data-mission-story-panel="chain"
+          data-mission-story-source="existing-state-only"
+        >
+          {panelHeader}
+          <div
+            className="mission-story-panel__body mission-story-panel__body--chain"
+            data-mission-story-proof="chain-receipt"
+          >
+            <div className="mission-story-chain-meter">
+              <span>Forensic chain</span>
+              <strong>
+                {formatCount(forensicChain.totalEntryCount, "entry", "entries")}
+              </strong>
+              <em>{forensicChain.sourceMode}</em>
+            </div>
+            <div className="mission-story-facts">
+              {renderStoryFact({
+                label: "Current step entries",
+                value: forensicChain.stepEntryCount,
+              })}
+              {renderStoryFact({
+                label: "Receipt tickets",
+                value: missionReceiptTicketCount,
+              })}
+              {renderStoryFact({
+                label: "Latest ticket",
+                value: latestMissionReceiptTicket?.kind,
+              })}
+            </div>
+            <div className="mission-story-chain-latest">
+              {latestForensicEntry ? (
+                <article>
+                  <span>{latestForensicEntry.entryType}</span>
+                  <strong>{latestForensicEntry.entryId}</strong>
+                  <em>{latestForensicEntry.sourcePath}</em>
+                </article>
+              ) : (
+                renderStoryEmpty(
+                  "No existing forensic chain entry is available in current dashboard state."
+                )
+              )}
+              {latestMissionReceiptTicket ? (
+                <article>
+                  <span>{latestMissionReceiptTicket.kind}</span>
+                  <strong>{latestMissionReceiptTicket.summary}</strong>
+                  <em>demo mission receipt / not a legal audit trail</em>
+                </article>
+              ) : null}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    return (
+      <section
+        className={panelClassName}
+        data-mission-story-panel="public"
+        data-mission-story-source="existing-state-only"
+      >
+        {panelHeader}
+        <div
+          className="mission-story-panel__body mission-story-panel__body--public"
+          data-mission-story-proof="public-boundary"
+        >
+          <div className="mission-story-public-window">
+            <span>Public-safe view</span>
+            <strong>{publicPayloadStatus}</strong>
+            <em>
+              {formatCount(publicSkinView?.redactions.length ?? 0, "redaction")} bound
+              the public presentation.
+            </em>
+          </div>
+          <div className="mission-story-facts">
+            {renderStoryFact({ label: "Audience", value: publicSkinView?.audience })}
+            {renderStoryFact({ label: "Claims", value: publicSkinView?.claims.length })}
+            {renderStoryFact({
+              label: "Redactions",
+              tone: (publicSkinView?.redactions.length ?? 0) > 0 ? "hold" : "neutral",
+              value: publicSkinView?.redactions.length,
+            })}
+            {renderStoryFact({
+              label: "Absences",
+              tone: (publicSkinView?.absences.length ?? 0) > 0 ? "hold" : "neutral",
+              value: publicSkinView?.absences.length,
+            })}
+          </div>
+          <div className="mission-story-public-list">
+            {publicSkinView?.redactions.length
+              ? publicSkinView.redactions.slice(0, 3).map((redaction, index) => (
+                  <article
+                    key={
+                      redaction.id ??
+                      redaction.noticeId ??
+                      redaction.marker ??
+                      `redaction-${index}`
+                    }
+                  >
+                    <span>{redaction.category ?? "redaction"}</span>
+                    <strong>
+                      {redaction.marker ?? redaction.noticeId ?? "bounded detail"}
+                    </strong>
+                    <em>
+                      {redaction.text ?? redaction.basis ?? "Public boundary redaction."}
+                    </em>
+                  </article>
+                ))
+              : renderStoryEmpty(
+                  "No existing public redaction rows are available in the current public view."
+                )}
+          </div>
+        </div>
+      </section>
+    );
+  };
   const renderActiveWalkthrough = () => {
     if (!activeMissionStage || !activeMissionNarration) {
       return null;
@@ -864,32 +1230,34 @@ export function MissionPresentationShell({
         data-mission-active-walkthrough="true"
         data-mission-narration-phase={activeNarrationPhase}
       >
-        <div
-          className="mission-active-foreman"
-          data-mission-compact-foreman="true"
-          data-mission-compact-foreman-state={compactForemanState.state}
-        >
-          <span
-            aria-hidden="true"
-            className={`mission-active-foreman__mark mission-active-foreman__mark--${compactForemanState.className}`}
-          />
-          <div>
-            <span>Foreman</span>
-            <strong aria-label={compactForemanState.ariaLabel}>
-              {compactForemanState.label}
-            </strong>
+        <div className="mission-active-narration" data-mission-narration-zone="true">
+          <div
+            className="mission-active-foreman"
+            data-mission-compact-foreman="true"
+            data-mission-compact-foreman-state={compactForemanState.state}
+          >
+            <span
+              aria-hidden="true"
+              className={`mission-active-foreman__mark mission-active-foreman__mark--${compactForemanState.className}`}
+            />
+            <div>
+              <span>Foreman</span>
+              <strong aria-label={compactForemanState.ariaLabel}>
+                {compactForemanState.label}
+              </strong>
+            </div>
           </div>
+
+          <p
+            aria-live="polite"
+            className="mission-active-walkthrough__line"
+            data-mission-active-foreman-line="true"
+          >
+            {activeNarrationLine}
+          </p>
         </div>
 
-        <p
-          aria-live="polite"
-          className="mission-active-walkthrough__line"
-          data-mission-active-foreman-line="true"
-        >
-          {activeNarrationLine}
-        </p>
-
-        {renderActiveFocalCard(activeMissionStage)}
+        {renderMissionStoryPanel(activeMissionStage)}
       </section>
     );
   };
