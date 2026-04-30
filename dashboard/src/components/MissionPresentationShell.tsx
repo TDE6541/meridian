@@ -890,7 +890,15 @@ export function MissionPresentationShell({
   };
   const renderMissionStoryPanel = (stageId: MissionStageId) => {
     const storyBeat = MISSION_STAGE_STORY_BEATS[stageId];
-    const panelClassName = `mission-story-panel mission-story-panel--${stageId}`;
+    const panelClassName = [
+      "mission-story-panel",
+      `mission-story-panel--${stageId}`,
+      activeMissionStage === "absence" && stageId === "absence"
+        ? "act-absence-active"
+        : null,
+    ]
+      .filter((className): className is string => className !== null)
+      .join(" ");
     const panelHeader = (
       <header className="mission-story-panel__header">
         <p>Visual proof zone</p>
