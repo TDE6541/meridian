@@ -27,8 +27,10 @@ Meridian is a governed city digital twin intelligence repo.
 19. [`docs/closeouts/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER_CLOSEOUT.md)
 20. [`docs/specs/MERIDIAN_V2E_VISIBILITY_CLEANUP.md`](docs/specs/MERIDIAN_V2E_VISIBILITY_CLEANUP.md)
 21. [`docs/closeouts/MERIDIAN_V2E_VISIBILITY_CLEANUP_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2E_VISIBILITY_CLEANUP_CLOSEOUT.md)
-22. Relevant active-task specs in `docs/specs/`
-23. Relevant active-task closeouts in `docs/closeouts/`
+22. [`docs/specs/MERIDIAN_V2F_FOREMAN_SIMPLIFICATION_VOICE.md`](docs/specs/MERIDIAN_V2F_FOREMAN_SIMPLIFICATION_VOICE.md)
+23. [`docs/closeouts/MERIDIAN_V2F_FOREMAN_SIMPLIFICATION_VOICE_CLOSEOUT.md`](docs/closeouts/MERIDIAN_V2F_FOREMAN_SIMPLIFICATION_VOICE_CLOSEOUT.md)
+24. Relevant active-task specs in `docs/specs/`
+25. Relevant active-task closeouts in `docs/closeouts/`
 
 ## Operating Posture
 
@@ -46,6 +48,7 @@ Meridian is a governed city digital twin intelligence repo.
 - Treat V2-C Demo Presentation Layer as shipped dashboard-local presentation/choreography/reliability truth only; DEMO-1 through DEMO-10 are implementation-complete and no root/shared contracts were widened.
 - Treat V2-D++ Embodied Foreman Civic Proof Theater as shipped dashboard-local demo/proof theater truth only; D1-D14 are implementation-complete, D15 validated dashboard `593/593` plus repo-wide JS `719/719`, and no root/shared contracts were widened.
 - Treat V2-E Visibility Cleanup + Demo Thesis Lock as shipped dashboard-local visibility/proof hierarchy truth only; E0-E4 are implementation-complete, P0 restored guided mission progression and fixed duplicate-key warnings, browser proof passed at `http://127.0.0.1:5173/`, and no root/shared contracts were widened.
+- Treat V2-F Foreman Simplification + Voice as shipped dashboard-local presentation/voice truth only; F3 local verification and browser proof passed, deployed proof and screenshot proof remain HOLD, and no root/shared contracts were widened.
 - Treat V2-C/V2-D++ manual proof items as HOLD: eval account warm-tabs, phone smoke, mobile/judge-device proof, full authority choreography screenshots, Walk-mode MP4 proof, clean logout proof, deploy-hook cleanup proof, and final V2-B closeout.
 - Treat Foreman behavior beyond the shipped dashboard-local guide/explainer cockpit as gated until Tim approves a later widening packet.
 
@@ -66,3 +69,4 @@ Meridian is a governed city digital twin intelligence repo.
 - Do not claim V2-C proves production city behavior, legal/TPIA/TRAIGA sufficiency, official Fort Worth workflow, public portal behavior, live OpenFGA, CIBA, delivered notifications, model/API-backed Foreman, external voice service, Whisper/audio upload/transcription, or any manual proof item still marked HOLD in `docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`.
 - Do not claim V2-D++ proves production city behavior, official Fort Worth workflow, legal/TPIA/TRAIGA sufficiency, public portal behavior, live OpenFGA, CIBA, delivered notifications, live LLM/model/API-backed Foreman, browser-exposed keys, external voice service, Whisper/audio upload/transcription, root ForensicChain writes, legal audit trail behavior, live GIS/Accela/city-record behavior, mobile/judge-device proof, or any manual/global HOLD still carried in `docs/closeouts/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER_CLOSEOUT.md`.
 - Do not claim V2-E proves production city behavior, official Fort Worth workflow, legal/TPIA/TRAIGA sufficiency, public portal behavior, live OpenFGA, CIBA, delivered notifications, live LLM/model/API-backed Foreman, external voice service, Whisper/audio upload/transcription, root ForensicChain writes, live Constellation broker proof, mobile/judge-device proof, or any broader manual/global HOLD still carried in `docs/closeouts/MERIDIAN_V2E_VISIBILITY_CLEANUP_CLOSEOUT.md`.
+- Do not claim V2-F proves production city behavior, official Fort Worth workflow, legal/TPIA/TRAIGA sufficiency, public portal behavior, live OpenFGA, CIBA, delivered notifications, live LLM/model/API-backed Foreman, external voice service, Whisper/audio upload/transcription, MediaRecorder/getUserMedia, root ForensicChain writes, live city integration, live GIS/Accela automation, deployed proof, screenshot proof, mobile/judge-device proof, or any broader manual/global HOLD still carried in `docs/closeouts/MERIDIAN_V2F_FOREMAN_SIMPLIFICATION_VOICE_CLOSEOUT.md`.
