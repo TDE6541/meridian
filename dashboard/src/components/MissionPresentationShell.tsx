@@ -206,18 +206,17 @@ const MISSION_STAGE_STORY_BEATS: Record<
     title: "Capture",
   },
   chain: {
-    beat: "Forensic chain records the decision path.",
+    beat: "The decision trail is recorded for inspection.",
     meaning: "Meridian gives the city an inspectable chain.",
     title: "Chain",
   },
   governance: {
-    beat: "Governance engine evaluates the permit across civic domains.",
-    meaning:
-      "Meridian separates intelligence from governance evaluation.",
+    beat: "Meridian checks the permit against civic rules.",
+    meaning: "Missing authority or evidence holds the action.",
     title: "Governance",
   },
   public: {
-    beat: "Public-facing version renders with disclosure boundaries.",
+    beat: "A redacted public summary is prepared.",
     meaning:
       "Meridian can be transparent without exposing what should remain bounded.",
     title: "Public",
@@ -328,6 +327,170 @@ function normalizeDecision(value: string | null | undefined): string {
   return normalizeStatus(value)?.toUpperCase() ?? "HOLD";
 }
 
+function getCivicDecisionDisplay(decision: string): string {
+  switch (decision.toUpperCase()) {
+    case "ALLOW":
+      return "Action allowed";
+    case "BLOCK":
+      return "Action blocked";
+    case "HOLD":
+      return "Action held";
+    case "REVOKE":
+      return "Action revoked";
+    case "SUPERVISE":
+      return "Supervised review";
+    default:
+      return decision;
+  }
+}
+
+function getRuleCheckDisplay(value: string | null | undefined): string {
+  const normalized = normalizeStatus(value);
+
+  if (!normalized) {
+    return "rule check pending";
+  }
+
+  switch (normalized.toUpperCase()) {
+    case "ALLOW":
+    case "PASS":
+      return "completed";
+    case "BLOCK":
+      return "blocked";
+    case "HOLD":
+      return "action held";
+    case "REVOKE":
+      return "revoked";
+    case "SUPERVISE":
+      return "supervised review";
+    default:
+      return normalized;
+  }
+}
+
+function getReviewStepDisplay(stepId: string | null | undefined): string | null {
+  const normalized = normalizeStatus(stepId);
+
+  if (!normalized) {
+    return null;
+  }
+
+  const reviewStep = /^R(\d+)$/i.exec(normalized);
+
+  if (reviewStep?.[1] === "1") {
+    return "initial review";
+  }
+
+  if (reviewStep?.[1]) {
+    return `review step ${reviewStep[1]}`;
+  }
+
+  return normalized;
+}
+
+function getTriggerDisplay(
+  triggerSource: string | null | undefined,
+  triggered: boolean
+): string {
+  const normalized = normalizeStatus(triggerSource);
+
+  if (!triggered || !normalized) {
+    return "no missing proof found";
+  }
+
+  if (normalized === "absenceLens.signals" || normalized.includes("absence")) {
+    return "missing proof";
+  }
+
+  return normalized.replace(/[._-]+/g, " ");
+}
+
+function getForensicSourceDisplay(sourceMode: string): string {
+  if (sourceMode === "derived-from-step-entries") {
+    return "mission step receipts";
+  }
+
+  return sourceMode.replace(/[._-]+/g, " ");
+}
+
+function getForensicEntryDisplay(entryType: string | null | undefined): string {
+  const normalized = normalizeStatus(entryType);
+
+  if (!normalized) {
+    return "Ledger entry recorded";
+  }
+
+  if (normalized === "GOVERNANCE_DECISION") {
+    return "Governance decision recorded";
+  }
+
+  return normalized
+    .toLowerCase()
+    .replace(/[._-]+/g, " ")
+    .replace(/^\w/, (letter) => letter.toUpperCase());
+}
+
+function getMissionTicketDisplay(kind: string | null | undefined): string {
+  const normalized = normalizeStatus(kind);
+
+  if (!normalized) {
+    return "mission receipt pending";
+  }
+
+  if (normalized === "absence.shadow") {
+    return "absence finding recorded";
+  }
+
+  return normalized.replace(/[._-]+/g, " ");
+}
+
+function getHoldFieldDisplay(field: HoldWallView["fields"][number]) {
+  if (field.key === "missing_authority") {
+    return {
+      body: "No director approval is present in the record.",
+      label: "Director approval",
+      status: "missing",
+    };
+  }
+
+  if (field.key === "missing_evidence") {
+    return {
+      body: "No supporting inspection evidence is attached.",
+      label: "Field evidence",
+      status: "missing",
+    };
+  }
+
+  if (field.key === "missing_public_boundary") {
+    return {
+      body:
+        field.status === "sourced"
+          ? "Sensitive details stay bounded in the public summary."
+          : "The public disclosure boundary still needs a supporting record.",
+      label: "Public boundary",
+      status: field.status === "sourced" ? "protected" : "needs review",
+    };
+  }
+
+  if (field.key === "required_next_proof") {
+    return {
+      body:
+        "Director approval and supporting field evidence are required before action can proceed.",
+      label: "Next required proof",
+      status: "approval + evidence",
+    };
+  }
+
+  return {
+    body: field.value.replace(
+      "source-supported field in the current dashboard state",
+      "supporting record in this demo state"
+    ),
+    label: field.label,
+    status: field.status === "unresolved" ? "missing" : "source-backed",
+  };
+}
+
 function getDecisionTone(
   currentStep: ControlRoomTimelineStep | null,
   decision: string,
@@ -412,12 +575,12 @@ function getProofNext({
   publicSkinView: DashboardSkinView | null;
 }): string {
   const proofTargets = [
-    holdWallView.triggered ? "HOLD Wall" : null,
-    absenceLens.signals.length > 0 ? "Absence Lens" : null,
-    authorityState.status !== "unavailable" ? "GARP authority" : null,
-    forensicChain.hasEntries ? "Forensic chain" : null,
-    publicSkinView?.hasPayload ? "Disclosure preview" : null,
-    "Engineer Mode",
+    holdWallView.triggered ? "missing proof review" : null,
+    absenceLens.signals.length > 0 ? "missing proof" : null,
+    authorityState.status !== "unavailable" ? "director approval path" : null,
+    forensicChain.hasEntries ? "audit trail" : null,
+    publicSkinView?.hasPayload ? "public summary" : null,
+    "operator review",
   ].filter((entry): entry is string => entry !== null);
 
   return proofTargets.slice(0, 4).join(" / ");
@@ -487,6 +650,14 @@ export function MissionPresentationShell({
     normalizeStatus(currentStep?.step.governance?.status) ??
     normalizeStatus(currentStep?.step.status) ??
     "HOLD: step unavailable";
+  const focalDecisionDisplay = getCivicDecisionDisplay(focalDecision);
+  const activeDecisionDisplay = getCivicDecisionDisplay(activeDecision);
+  const governanceStateDisplay = getRuleCheckDisplay(governanceState);
+  const reviewStepDisplay = getReviewStepDisplay(currentStep?.stepId);
+  const holdTriggerDisplay = getTriggerDisplay(
+    holdWallView.triggerSource,
+    holdWallView.triggered
+  );
   const decisionTone = getDecisionTone(currentStep, focalDecision, authorityState);
   const currentDecisionWhy = getCurrentDecisionWhy({
     authorityState,
@@ -530,9 +701,9 @@ export function MissionPresentationShell({
     .filter((entry): entry is string => Boolean(entry))
     .join(" / ");
   const missionReceiptTicketCount = missionRunReceipt.events.length;
-  const publicPayloadStatus = publicSkinView?.hasPayload
-    ? "public skin payload present"
-    : "public skin payload pending";
+  const publicSummaryStatus = publicSkinView?.hasPayload
+    ? "Redacted public summary generated."
+    : "Redacted public summary pending.";
   const primaryPlaybackAction =
     playbackState === "playing" ? onPausePlayback : onPlayPlayback;
   const physicalModeView = buildMissionPhysicalModeView({
@@ -660,6 +831,18 @@ export function MissionPresentationShell({
     forensicChain.cumulativeEntries.at(-1) ??
     null;
   const latestMissionReceiptTicket = missionRunReceipt.events.at(-1) ?? null;
+  const chainSourceDisplay = getForensicSourceDisplay(forensicChain.sourceMode);
+  const latestMissionTicketDisplay = getMissionTicketDisplay(
+    latestMissionReceiptTicket?.kind
+  );
+  const absenceLedgerSummary =
+    absenceLens.signals.length > 0
+      ? `${formatCount(absenceLens.signals.length, "absence finding")} recorded; ${
+          focalDecision === "HOLD"
+            ? "1 HOLD carried forward."
+            : "decision path carried forward."
+        }`
+      : "No absence findings recorded in this demo receipt.";
   const getMissionStageSurfaceClassName = (
     name: MissionSurfaceName,
     stageId: MissionStageId
@@ -776,21 +959,21 @@ export function MissionPresentationShell({
     >
       <div className="mission-current-card__headline">
         <p>Current decision / HOLD</p>
-        <h2>Current Decision: {focalDecision}</h2>
-        <span>{currentStep?.stepId ?? "HOLD: active step unavailable"}</span>
+        <h2>Current verdict: {focalDecisionDisplay}</h2>
+        <span>{reviewStepDisplay ?? "HOLD: active step unavailable"}</span>
       </div>
       <dl className="mission-current-card__facts">
         <div>
           <dt>Why it matters</dt>
-          <dd>Reason: {focalDecisionReason}</dd>
+          <dd>{focalDecisionReason}</dd>
         </div>
         <div>
           <dt>Current step</dt>
           <dd>{activeStepLabel}</dd>
         </div>
         <div>
-          <dt>Governance state</dt>
-          <dd>{governanceState}</dd>
+          <dt>Rule check</dt>
+          <dd>{governanceStateDisplay}</dd>
         </div>
         <div>
           <dt>Proof available next</dt>
@@ -870,8 +1053,8 @@ export function MissionPresentationShell({
           className="mission-active-focal-card mission-active-focal-card--governance"
           data-mission-focal-card="governance"
         >
-          <span>Governance</span>
-          <strong>{focalDecision === "HOLD" ? "HOLD" : governanceState}</strong>
+          <span>Rule check</span>
+          <strong>{focalDecisionDisplay}</strong>
           <em>{focalDecisionReason}</em>
         </section>
       );
@@ -922,7 +1105,7 @@ export function MissionPresentationShell({
         <span>Public disclosure</span>
         <strong>Public Transparency Report</strong>
         <em>
-          {publicPayloadStatus};{" "}
+          {publicSummaryStatus}{" "}
           {formatCount(publicSkinView?.redactions.length ?? 0, "redaction")} keep
           sensitive details bounded.
         </em>
@@ -1072,35 +1255,39 @@ export function MissionPresentationShell({
             data-mission-story-proof="governance-hold"
           >
             <div className="mission-story-hold-verdict">
-              <span>Governance result</span>
-              <strong>{focalDecision}</strong>
+              <span>Rule check</span>
+              <strong>{focalDecisionDisplay}</strong>
               <em>{focalDecisionReason}</em>
             </div>
             <div className="mission-story-facts">
               {renderStoryFact({
-                label: "Governance state",
+                label: "Rule check",
                 tone: focalDecision === "HOLD" ? "hold" : "neutral",
-                value: governanceState,
+                value: governanceStateDisplay,
               })}
               {renderStoryFact({
-                label: "Trigger",
+                label: "What it found",
                 tone: holdWallView.triggered ? "hold" : "neutral",
-                value: holdWallView.triggerSource,
+                value: holdTriggerDisplay,
               })}
-              {renderStoryFact({ label: "Step", value: currentStep?.stepId })}
+              {renderStoryFact({ label: "Review step", value: reviewStepDisplay })}
             </div>
             <div className="mission-story-hold-fields">
-              {holdWallView.fields.map((field) => (
-                <article
-                  data-mission-story-hold-field={field.key}
-                  data-mission-story-hold-field-status={field.status}
-                  key={field.key}
-                >
-                  <span>{field.label}</span>
-                  <strong>{field.status}</strong>
-                  <em>{field.value}</em>
-                </article>
-              ))}
+              {holdWallView.fields.map((field) => {
+                const fieldDisplay = getHoldFieldDisplay(field);
+
+                return (
+                  <article
+                    data-mission-story-hold-field={field.key}
+                    data-mission-story-hold-field-status={field.status}
+                    key={field.key}
+                  >
+                    <span>{fieldDisplay.label}</span>
+                    <strong>{fieldDisplay.status}</strong>
+                    <em>{fieldDisplay.body}</em>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -1167,33 +1354,33 @@ export function MissionPresentationShell({
             data-mission-story-proof="chain-receipt"
           >
             <div className="mission-story-chain-meter">
-              <span>Forensic chain</span>
+              <span>Audit trail</span>
               <strong>
                 {formatCount(forensicChain.totalEntryCount, "entry", "entries")} recorded
               </strong>
               <em>The decision was recorded. The trail can be inspected.</em>
-              <small>Source: {forensicChain.sourceMode}</small>
+              <small>Source: {chainSourceDisplay}</small>
             </div>
             <div className="mission-story-facts">
               {renderStoryFact({
-                label: "Current step entries",
+                label: "Ledger entries",
                 value: forensicChain.stepEntryCount,
               })}
               {renderStoryFact({
-                label: "Receipt tickets",
+                label: "Mission receipts",
                 value: missionReceiptTicketCount,
               })}
               {renderStoryFact({
                 label: "Latest ticket",
-                value: latestMissionReceiptTicket?.kind,
+                value: latestMissionTicketDisplay,
               })}
             </div>
             <div className="mission-story-chain-latest">
               {latestForensicEntry ? (
                 <article className="mission-story-chain-record">
-                  <span>Governance decision recorded</span>
-                  <strong>{latestForensicEntry.entryType}</strong>
-                  <em>{latestForensicEntry.sourcePath}</em>
+                  <span>Ledger entry</span>
+                  <strong>{getForensicEntryDisplay(latestForensicEntry.entryType)}</strong>
+                  <em>Source: {chainSourceDisplay}</em>
                   <small>Record key: {latestForensicEntry.entryId}</small>
                 </article>
               ) : (
@@ -1203,10 +1390,10 @@ export function MissionPresentationShell({
               )}
               {latestMissionReceiptTicket ? (
                 <article className="mission-story-chain-receipt">
-                  <span>Absence signals recorded</span>
-                  <strong>{latestMissionReceiptTicket.summary}</strong>
-                  <em>demo mission receipt / not a legal audit trail</em>
-                  <small>Receipt key: {latestMissionReceiptTicket.kind}</small>
+                  <span>Absence findings recorded</span>
+                  <strong>{absenceLedgerSummary}</strong>
+                  <em>Demo mission receipt; not a legal audit trail.</em>
+                  <small>Audit ticket: {latestMissionTicketDisplay}</small>
                 </article>
               ) : null}
             </div>
@@ -1227,10 +1414,10 @@ export function MissionPresentationShell({
           data-mission-story-proof="public-boundary"
         >
           <div className="mission-story-public-window">
-            <span>Public-safe view</span>
+            <span>Redacted public view</span>
             <strong>Public Transparency Report</strong>
             <em>
-              {publicPayloadStatus};{" "}
+              {publicSummaryStatus}{" "}
               {formatCount(publicSkinView?.redactions.length ?? 0, "redaction")} bound
               the public presentation.
             </em>
@@ -1721,7 +1908,7 @@ export function MissionPresentationShell({
 
       {renderReviewAccordion({
         group: "Authority and Public Boundary",
-        status: publicPayloadStatus,
+        status: publicSummaryStatus,
         title: "Civic Twin Diorama",
         children: (
           <section
@@ -1947,8 +2134,8 @@ export function MissionPresentationShell({
                 className="mission-public-boundary-card"
                 data-public-civic-view="bounded"
               >
-                <span>Public / redacted civic view</span>
-                <strong>{publicPayloadStatus}</strong>
+                <span>Redacted public civic view</span>
+                <strong>{publicSummaryStatus}</strong>
                 <dl>
                   <div>
                     <dt>Audience</dt>
@@ -2020,7 +2207,7 @@ export function MissionPresentationShell({
 
       {renderReviewAccordion({
         group: "Proof and Evidence",
-        status: `${formatCount(forensicChain.totalEntryCount, "chain entry", "chain entries")}; ${formatCount(absenceLens.signals.length, "absence signal")}`,
+        status: `${formatCount(forensicChain.totalEntryCount, "ledger entry", "ledger entries")}; ${formatCount(absenceLens.signals.length, "missing proof item")}`,
         title: "Outcome Summary",
         children: (
           <section
@@ -2039,12 +2226,12 @@ export function MissionPresentationShell({
               </div>
               <div className="mission-presentation__card">
                 <span>Governance</span>
-                <strong>{activeDecision}</strong>
-                <em>{currentStep?.stepId ?? "step pending"}</em>
+                <strong>{activeDecisionDisplay}</strong>
+                <em>{reviewStepDisplay ?? "step pending"}</em>
               </div>
               <div className="mission-presentation__card">
                 <span>Absence</span>
-                <strong>{formatCount(absenceLens.signals.length, "signal")}</strong>
+                <strong>{formatCount(absenceLens.signals.length, "missing proof item")}</strong>
                 <em>{absenceLens.activeStepId ?? "step pending"}</em>
               </div>
               <div className="mission-presentation__card">
@@ -2054,7 +2241,7 @@ export function MissionPresentationShell({
               </div>
               <div className="mission-presentation__card">
                 <span>Public</span>
-                <strong>{publicPayloadStatus}</strong>
+                <strong>{publicSummaryStatus}</strong>
                 <em>{formatCount(publicSkinView?.redactions.length ?? 0, "redaction")}</em>
               </div>
               <div className="mission-presentation__card">

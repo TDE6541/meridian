@@ -389,15 +389,15 @@ const tests = [
         },
         chain: {
           proof: "chain-receipt",
-          text: "Forensic chain",
+          text: "Audit trail",
         },
         governance: {
           proof: "governance-hold",
-          text: "Governance result",
+          text: "Rule check",
         },
         public: {
           proof: "public-boundary",
-          text: "Public-safe view",
+          text: "Redacted public view",
         },
       };
 
