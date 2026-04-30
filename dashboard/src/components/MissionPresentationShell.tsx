@@ -120,6 +120,35 @@ function reviewKey(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
+function getPublicRedactionWithheldLabel(
+  redaction: DashboardSkinView["redactions"][number]
+) {
+  const marker = [
+    redaction.category,
+    redaction.id,
+    redaction.marker,
+    redaction.noticeId,
+    redaction.path,
+  ]
+    .filter((entry): entry is string => Boolean(entry))
+    .join(" ")
+    .toLowerCase();
+
+  if (marker.includes("address") || marker.includes("subject")) {
+    return "[address/subject withheld]";
+  }
+
+  if (marker.includes("org")) {
+    return "[org id withheld]";
+  }
+
+  if (marker.includes("entity")) {
+    return "[entity id withheld]";
+  }
+
+  return "[bounded detail withheld]";
+}
+
 type PresenterDecisionTone =
   | "blocked"
   | "hold"
@@ -193,6 +222,15 @@ const MISSION_STAGE_STORY_BEATS: Record<
       "Meridian can be transparent without exposing what should remain bounded.",
     title: "Public",
   },
+};
+
+const MISSION_STAGE_ACTIVE_CLASS_NAMES: Record<MissionStageId, string> = {
+  absence: "act-absence-active",
+  authority: "act-authority-active",
+  capture: "act-capture-active",
+  chain: "act-chain-active",
+  governance: "act-governance-active",
+  public: "act-public-active",
 };
 
 type MissionPlaybackViewState = NonNullable<
@@ -817,8 +855,8 @@ export function MissionPresentationShell({
           data-mission-focal-card="authority"
         >
           <span>Authority gate</span>
-          <strong>{authorityState.status}</strong>
-          <em>Director approval is required before escalation can proceed.</em>
+          <strong>Director approval required</strong>
+          <em>No director approval has been granted.</em>
           {authorityRequirement ? (
             <small>Required authority: {authorityRequirement}</small>
           ) : null}
@@ -862,8 +900,10 @@ export function MissionPresentationShell({
           data-mission-focal-card="chain"
         >
           <span>Forensic chain</span>
-          <strong>{formatCount(forensicChain.totalEntryCount, "entry", "entries")}</strong>
-          <em>Receipt path remains inspectable without writing new chain truth.</em>
+          <strong>
+            {formatCount(forensicChain.totalEntryCount, "entry", "entries")} recorded
+          </strong>
+          <em>The decision trail remains inspectable.</em>
           {missionReceiptTicketCount > 0 ? (
             <small>
               Mission receipt:{" "}
@@ -880,10 +920,11 @@ export function MissionPresentationShell({
         data-mission-focal-card="public"
       >
         <span>Public disclosure</span>
-        <strong>{publicPayloadStatus}</strong>
+        <strong>Public Transparency Report</strong>
         <em>
+          {publicPayloadStatus};{" "}
           {formatCount(publicSkinView?.redactions.length ?? 0, "redaction")} keep
-          the public view bounded.
+          sensitive details bounded.
         </em>
       </section>
     );
@@ -893,8 +934,8 @@ export function MissionPresentationShell({
     const panelClassName = [
       "mission-story-panel",
       `mission-story-panel--${stageId}`,
-      activeMissionStage === "absence" && stageId === "absence"
-        ? "act-absence-active"
+      activeMissionStage === stageId
+        ? MISSION_STAGE_ACTIVE_CLASS_NAMES[stageId]
         : null,
     ]
       .filter((className): className is string => className !== null)
@@ -924,6 +965,14 @@ export function MissionPresentationShell({
               <strong>{fictionalPermitAnchor.title}</strong>
               <em>{fictionalPermitAnchor.context}</em>
               <small>{fictionalPermitAnchor.boundary}</small>
+            </div>
+            <div
+              className="mission-story-action-card"
+              data-mission-story-action="attempted-action"
+            >
+              <span>Action attempted</span>
+              <strong>{valueOrHold(currentStep?.action, "action")}</strong>
+              <em>The attempted action is captured before governance can allow it.</em>
             </div>
             <div className="mission-story-flow" aria-label="Capture proof path">
               <span>Captured</span>
@@ -959,15 +1008,20 @@ export function MissionPresentationShell({
           >
             <div className="mission-story-authority-gate">
               <span>Authority gate</span>
-              <strong>{authorityState.status}</strong>
+              <strong>Director approval required</strong>
               <em>
                 {authorityState.counts.total === 0
-                  ? "EMPTY: no approval request is rendered in current dashboard state."
+                  ? "No authority request has been submitted. No director approval has been granted."
                   : `${formatCount(
                       authorityState.counts.total,
-                      "request"
-                    )} rendered from current authority state.`}
+                    "request"
+                  )} rendered from current authority state.`}
               </em>
+              <small>
+                {authorityState.counts.total === 0
+                  ? "The gate remains closed until approval exists."
+                  : `Gate state: ${authorityState.status}`}
+              </small>
             </div>
             <div className="mission-story-counts" aria-label="Authority counts">
               {renderStoryFact({
@@ -996,7 +1050,7 @@ export function MissionPresentationShell({
                     </article>
                   ))
                 : renderStoryEmpty(
-                    "No existing authority request or approval row is available for this act."
+                    "No authority request has been submitted. No director approval has been granted."
                   )}
             </div>
             {renderActiveFocalCard("authority")}
@@ -1115,9 +1169,10 @@ export function MissionPresentationShell({
             <div className="mission-story-chain-meter">
               <span>Forensic chain</span>
               <strong>
-                {formatCount(forensicChain.totalEntryCount, "entry", "entries")}
+                {formatCount(forensicChain.totalEntryCount, "entry", "entries")} recorded
               </strong>
-              <em>{forensicChain.sourceMode}</em>
+              <em>The decision was recorded. The trail can be inspected.</em>
+              <small>Source: {forensicChain.sourceMode}</small>
             </div>
             <div className="mission-story-facts">
               {renderStoryFact({
@@ -1135,10 +1190,11 @@ export function MissionPresentationShell({
             </div>
             <div className="mission-story-chain-latest">
               {latestForensicEntry ? (
-                <article>
-                  <span>{latestForensicEntry.entryType}</span>
-                  <strong>{latestForensicEntry.entryId}</strong>
+                <article className="mission-story-chain-record">
+                  <span>Governance decision recorded</span>
+                  <strong>{latestForensicEntry.entryType}</strong>
                   <em>{latestForensicEntry.sourcePath}</em>
+                  <small>Record key: {latestForensicEntry.entryId}</small>
                 </article>
               ) : (
                 renderStoryEmpty(
@@ -1146,10 +1202,11 @@ export function MissionPresentationShell({
                 )
               )}
               {latestMissionReceiptTicket ? (
-                <article>
-                  <span>{latestMissionReceiptTicket.kind}</span>
+                <article className="mission-story-chain-receipt">
+                  <span>Absence signals recorded</span>
                   <strong>{latestMissionReceiptTicket.summary}</strong>
                   <em>demo mission receipt / not a legal audit trail</em>
+                  <small>Receipt key: {latestMissionReceiptTicket.kind}</small>
                 </article>
               ) : null}
             </div>
@@ -1171,8 +1228,9 @@ export function MissionPresentationShell({
         >
           <div className="mission-story-public-window">
             <span>Public-safe view</span>
-            <strong>{publicPayloadStatus}</strong>
+            <strong>Public Transparency Report</strong>
             <em>
+              {publicPayloadStatus};{" "}
               {formatCount(publicSkinView?.redactions.length ?? 0, "redaction")} bound
               the public presentation.
             </em>
@@ -1195,6 +1253,7 @@ export function MissionPresentationShell({
             {publicSkinView?.redactions.length
               ? publicSkinView.redactions.slice(0, 3).map((redaction, index) => (
                   <article
+                    className="mission-story-public-redaction"
                     key={
                       redaction.id ??
                       redaction.noticeId ??
@@ -1209,6 +1268,7 @@ export function MissionPresentationShell({
                     <em>
                       {redaction.text ?? redaction.basis ?? "Public boundary redaction."}
                     </em>
+                    <small>{getPublicRedactionWithheldLabel(redaction)}</small>
                   </article>
                 ))
               : renderStoryEmpty(
