@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { adaptAbsenceSignals } from "../adapters/absenceSignalAdapter.ts";
 import {
   adaptStepSkinPayloads,
@@ -46,6 +46,7 @@ import {
 import { buildMissionPhysicalProjection } from "../demo/missionPhysicalProjection.ts";
 import { buildMissionRehearsalCertification } from "../demo/missionRehearsalCertification.ts";
 import {
+  getForemanModeForMissionStage,
   MISSION_STAGE_IDS,
   type MissionPlaybackMode,
   type MissionStageId,
@@ -143,6 +144,17 @@ interface JudgeInterruptState {
   priorPlaybackStatus: MissionPlaybackState["status"];
   priorStageId: MissionStageId | null;
   questionId: JudgeQuestionId;
+}
+
+type ReviewGroupName =
+  | "Authority and Public Boundary"
+  | "Engineering / Demo Controls"
+  | "Foreman and Judge Controls"
+  | "Mission Run"
+  | "Proof and Evidence";
+
+function reviewKey(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
 export interface ControlRoomShellProps {
@@ -455,6 +467,46 @@ export function ControlRoomShell({
     missionRuntime.playbackState.completedAtMs !== null;
   const engineerCockpitVisible =
     presentationMode === "engineer" || missionCompletionReviewVisible;
+  const renderReviewGroupHeading = (group: ReviewGroupName) => (
+    <h2
+      aria-hidden={!missionCompletionReviewVisible}
+      className={`mission-review-group-heading mission-review-group-heading--engineer${
+        missionCompletionReviewVisible ? " is-review-visible" : ""
+      }`}
+      data-mission-review-group-heading={reviewKey(group)}
+    >
+      {group}
+    </h2>
+  );
+  const renderReviewAccordion = ({
+    children,
+    group,
+    status,
+    title,
+  }: {
+    children: ReactNode;
+    group: ReviewGroupName;
+    status?: string | null;
+    title: string;
+  }) => (
+    <details
+      className={`mission-review-accordion mission-review-accordion--engineer${
+        missionCompletionReviewVisible ? " is-review-visible" : ""
+      }`}
+      data-mission-review-accordion={reviewKey(title)}
+      data-mission-review-group={reviewKey(group)}
+      open={!missionCompletionReviewVisible}
+    >
+      <summary>
+        <span aria-hidden="true" className="mission-review-accordion__indicator" />
+        <span className="mission-review-accordion__title">{title}</span>
+        {status ? (
+          <span className="mission-review-accordion__status">{status}</span>
+        ) : null}
+      </summary>
+      <div className="mission-review-accordion__body">{children}</div>
+    </details>
+  );
   const activeMissionNarrationStage =
     missionRuntime.playbackState.status !== "idle" &&
     !missionCompletionReviewVisible
@@ -753,6 +805,10 @@ export function ControlRoomShell({
   }
 
   function handleMissionReset() {
+    missionNarrationRunRef.current?.cancel();
+    missionNarrationRunRef.current = null;
+    completedMissionNarrationKeysRef.current.clear();
+    setMissionNarrationView(IDLE_FOREMAN_MISSION_NARRATION_VIEW);
     setJudgeInterrupt(null);
     setMissionRuntime((current) => {
       const nowMs = getMissionClockMs(current.playbackState);
@@ -760,6 +816,94 @@ export function ControlRoomShell({
         cleanupOk: true,
         nowMs,
         type: "reset_mission",
+      });
+
+      return {
+        conductorOutput: null,
+        conductorState: createInitialForemanAutonomousConductorState(
+          playbackState.runId
+        ),
+        playbackState,
+      };
+    });
+  }
+
+  function handleMissionBack() {
+    missionNarrationRunRef.current?.cancel();
+    missionNarrationRunRef.current = null;
+
+    setMissionRuntime((current) => {
+      const { playbackState } = current;
+
+      if (
+        playbackState.mode !== "guided" ||
+        playbackState.status !== "running" ||
+        !playbackState.currentStageId
+      ) {
+        return current;
+      }
+
+      const currentStageIndex = MISSION_STAGE_IDS.indexOf(playbackState.currentStageId);
+
+      if (currentStageIndex <= 0) {
+        return current;
+      }
+
+      const previousStageId = MISSION_STAGE_IDS[currentStageIndex - 1];
+      const nowMs = getMissionClockMs(playbackState);
+      const completedStageIds = playbackState.completedStageIds.filter(
+        (stageId) => MISSION_STAGE_IDS.indexOf(stageId) < currentStageIndex - 1
+      );
+      const nextPlaybackState: MissionPlaybackState = {
+        ...playbackState,
+        activeForemanMode: getForemanModeForMissionStage(previousStageId),
+        completedStageIds,
+        currentStageId: previousStageId,
+        events: [
+          ...playbackState.events,
+          {
+            atMs: nowMs,
+            eventId: `${playbackState.runId}:${
+              playbackState.events.length + 1
+            }:stage_enter:${previousStageId}`,
+            runId: playbackState.runId,
+            stageId: previousStageId,
+            type: "stage_enter",
+          },
+        ],
+        hold: null,
+        pausedAtMs: null,
+        stageEnteredAtMs: nowMs,
+        status: "running",
+      };
+
+      return {
+        ...current,
+        conductorOutput: null,
+        playbackState: nextPlaybackState,
+      };
+    });
+  }
+
+  function handleMissionRestart() {
+    missionNarrationRunRef.current?.cancel();
+    missionNarrationRunRef.current = null;
+    completedMissionNarrationKeysRef.current.clear();
+    setMissionNarrationView(IDLE_FOREMAN_MISSION_NARRATION_VIEW);
+    setJudgeInterrupt(null);
+    setMissionRuntime((current) => {
+      const resetAtMs = getMissionClockMs(current.playbackState);
+      const resetState = missionPlaybackReducer(current.playbackState, {
+        cleanupOk: true,
+        nowMs: resetAtMs,
+        type: "reset_mission",
+      });
+      const beginAtMs = getMissionClockMs(resetState);
+      const stageId = getMissionActiveStageId(resetState);
+      const playbackState = missionPlaybackReducer(resetState, {
+        nowMs: beginAtMs,
+        readiness: buildMissionControllerReadiness(resetState, stageId, beginAtMs),
+        type: "begin_mission",
       });
 
       return {
@@ -1086,6 +1230,8 @@ export function ControlRoomShell({
         }}
         missionRailStages={missionRailStages}
         rehearsalCertification={rehearsalCertification}
+        onMissionBack={handleMissionBack}
+        onMissionRestart={handleMissionRestart}
         onDirectorModeOpen={() => {
           setPresentationMode("engineer");
           setDirectorModeEnabled(true);
@@ -1149,290 +1295,405 @@ export function ControlRoomShell({
         }
         hidden={!engineerCockpitVisible}
       >
+        {renderReviewGroupHeading("Mission Run")}
+
         {missionCompletionReviewVisible ? (
-          <section
-            className="mission-review-banner mission-review-banner--technical mission-review-card"
-            data-mission-review-banner="technical-stack"
-          >
-            <div>
-              <p className="mission-review-banner__eyebrow">Technical inspection</p>
-              <h2>Full proof cockpit visible after mission completion.</h2>
-              <p>
-                Existing presenter, authority, disclosure, Foreman, absence,
-                governance, skin, and chain surfaces are open for review.
-              </p>
-            </div>
-            <dl>
-              <div>
-                <dt>Playback source</dt>
-                <dd>{missionRuntime.playbackState.status}</dd>
-              </div>
-              <div>
-                <dt>Completion timestamp</dt>
-                <dd>{missionRuntime.playbackState.completedAtMs ?? "pending"}</dd>
-              </div>
-              <div>
-                <dt>Surface rule</dt>
-                <dd>no new review state</dd>
-              </div>
-            </dl>
-          </section>
+          renderReviewAccordion({
+            group: "Mission Run",
+            status: missionRuntime.playbackState.status,
+            title: "Wave 9 Packet 6 / Local Demo Control Room",
+            children: (
+              <section
+                className="mission-review-banner mission-review-banner--technical mission-review-card"
+                data-mission-review-banner="technical-stack"
+              >
+                <div>
+                  <p className="mission-review-banner__eyebrow">Technical inspection</p>
+                  <h2>Full proof cockpit visible after mission completion.</h2>
+                  <p>
+                    Existing presenter, authority, disclosure, Foreman, absence,
+                    governance, skin, and chain surfaces are open for review.
+                  </p>
+                </div>
+                <dl>
+                  <div>
+                    <dt>Playback source</dt>
+                    <dd>{missionRuntime.playbackState.status}</dd>
+                  </div>
+                  <div>
+                    <dt>Completion timestamp</dt>
+                    <dd>{missionRuntime.playbackState.completedAtMs ?? "pending"}</dd>
+                  </div>
+                  <div>
+                    <dt>Surface rule</dt>
+                    <dd>no new review state</dd>
+                  </div>
+                </dl>
+              </section>
+            ),
+          })
         ) : null}
 
-        <DemoHeader
-          activeOutcome={currentStep?.decision ?? null}
-          activeSkinLabel={activeSkinLabel}
-          activeStepLabel={activeStepLabel}
-          dataVersion={dataVersion}
-          scenarioDescription={scenarioMeta.description}
-          scenarioLabel={scenarioMeta.displayLabel}
-          scenarioStatus={scenarioStatusLabel}
-        />
+        {renderReviewAccordion({
+          group: "Mission Run",
+          status: scenarioStatusLabel,
+          title: "Dashboard Mode Snapshot/Live",
+          children: (
+            <>
+              <DemoHeader
+                activeOutcome={currentStep?.decision ?? null}
+                activeSkinLabel={activeSkinLabel}
+                activeStepLabel={activeStepLabel}
+                dataVersion={dataVersion}
+                scenarioDescription={scenarioMeta.description}
+                scenarioLabel={scenarioMeta.displayLabel}
+                scenarioStatus={scenarioStatusLabel}
+              />
 
-        <LiveModeToggle mode={dashboardMode} onModeChange={setDashboardMode} />
+              <LiveModeToggle mode={dashboardMode} onModeChange={setDashboardMode} />
+            </>
+          ),
+        })}
 
-        <RoleSessionPanel auth={authState} roleSession={roleSession} />
+        {renderReviewGroupHeading("Authority and Public Boundary")}
+
+        {renderReviewAccordion({
+          group: "Authority and Public Boundary",
+          status: `${roleSession.role} / ${roleSession.auth_status}`,
+          title: "Role Session",
+          children: <RoleSessionPanel auth={authState} roleSession={roleSession} />,
+        })}
+
+        {renderReviewGroupHeading("Engineering / Demo Controls")}
 
         <div className="control-room-toolbar">
-        <ScenarioSelector
-          records={records}
-          selectedScenarioKey={controlState.selectedScenarioKey}
-          onSelect={(scenarioKey) =>
-            setControlState((current) => selectScenario(current, scenarioKey))
-          }
-        />
+        {renderReviewAccordion({
+          group: "Engineering / Demo Controls",
+          status: scenarioMeta.displayLabel,
+          title: "Scenario Selector",
+          children: (
+            <ScenarioSelector
+              records={records}
+              selectedScenarioKey={controlState.selectedScenarioKey}
+              onSelect={(scenarioKey) =>
+                setControlState((current) => selectScenario(current, scenarioKey))
+              }
+            />
+          ),
+        })}
 
         <div className="control-room-driver-stack">
-          <PlaybackControls
-            activeStepIndex={controlState.activeStepIndex}
-            canInteract={selectedRecord?.status === "ready"}
-            isPlaying={controlState.playbackState === "playing"}
-            onNext={() =>
-              setControlState((current) => goToNextStep(current, totalSteps))
-            }
-            onPause={() => setControlState((current) => pausePlayback(current))}
-            onPlay={() =>
-              setControlState((current) => startPlayback(current, totalSteps))
-            }
-            onPrevious={() =>
-              setControlState((current) => goToPreviousStep(current, totalSteps))
-            }
-            onReset={() => setControlState((current) => resetControlRoom(current))}
-            totalSteps={totalSteps}
-          />
+          {renderReviewAccordion({
+            group: "Engineering / Demo Controls",
+            status: `${controlState.activeStepIndex + 1}/${totalSteps}`,
+            title: "Playback Controls",
+            children: (
+              <PlaybackControls
+                activeStepIndex={controlState.activeStepIndex}
+                canInteract={selectedRecord?.status === "ready"}
+                isPlaying={controlState.playbackState === "playing"}
+                onNext={() =>
+                  setControlState((current) => goToNextStep(current, totalSteps))
+                }
+                onPause={() => setControlState((current) => pausePlayback(current))}
+                onPlay={() =>
+                  setControlState((current) => startPlayback(current, totalSteps))
+                }
+                onPrevious={() =>
+                  setControlState((current) => goToPreviousStep(current, totalSteps))
+                }
+                onReset={() => setControlState((current) => resetControlRoom(current))}
+                totalSteps={totalSteps}
+              />
+            ),
+          })}
 
-          <KeyboardShortcutsHelp />
+          {renderReviewAccordion({
+            group: "Engineering / Demo Controls",
+            status: "local shortcuts",
+            title: "Keyboard Shortcuts",
+            children: <KeyboardShortcutsHelp />,
+          })}
 
-          <DemoReliabilityPanel
-            onResetToKnownCleanState={handleResetToKnownCleanState}
-            sharedEndpointStatus={sharedAuthority.endpointStatus}
-          />
+          {renderReviewAccordion({
+            group: "Engineering / Demo Controls",
+            status: sharedAuthority.endpointStatus,
+            title: "Engineer-only Reliability",
+            children: (
+              <DemoReliabilityPanel
+                onResetToKnownCleanState={handleResetToKnownCleanState}
+                sharedEndpointStatus={sharedAuthority.endpointStatus}
+              />
+            ),
+          })}
         </div>
       </div>
 
-      <DirectorModeToggle
-        bookmarks={directorBookmarks}
-        enabled={directorModeEnabled}
-        onSelectBookmark={(bookmark) =>
-          setControlState((current) => selectStep(current, bookmark.stepIndex, totalSteps))
-        }
-        onToggle={() => setDirectorModeEnabled((current) => !current)}
-        selectedBookmarkId={directorScene.activeBookmark?.id ?? null}
-      />
+      {renderReviewAccordion({
+        group: "Engineering / Demo Controls",
+        status: directorModeEnabled ? "enabled" : "off",
+        title: "Director Mode / Absence Lens",
+        children: (
+          <DirectorModeToggle
+            bookmarks={directorBookmarks}
+            enabled={directorModeEnabled}
+            onSelectBookmark={(bookmark) =>
+              setControlState((current) =>
+                selectStep(current, bookmark.stepIndex, totalSteps)
+              )
+            }
+            onToggle={() => setDirectorModeEnabled((current) => !current)}
+            selectedBookmarkId={directorScene.activeBookmark?.id ?? null}
+          />
+        ),
+      })}
 
       {dashboardMode === "live" ? (
-        <div className="live-mode-grid" data-live-mode="enabled">
-          <LiveConnectionBanner
-            holdMessage={liveProjection.holdMessage}
-            loading={liveProjection.loading}
-            onRefresh={() => {
-              void liveProjection.refresh();
-            }}
-            status={liveProjection.connectionStatus}
-          />
-
-          {liveProjection.projection ? (
-            <>
-              <LiveEventRail
-                events={liveProjection.projection.events}
-                foremanHighlighted={foremanHighlightedPanelId === "live-event-rail"}
+        renderReviewAccordion({
+          group: "Engineering / Demo Controls",
+          status: liveProjection.connectionStatus,
+          title: "Dashboard Live Mode",
+          children: (
+            <div className="live-mode-grid" data-live-mode="enabled">
+              <LiveConnectionBanner
+                holdMessage={liveProjection.holdMessage}
+                loading={liveProjection.loading}
+                onRefresh={() => {
+                  void liveProjection.refresh();
+                }}
+                status={liveProjection.connectionStatus}
               />
-              <LiveCapturePanel projection={liveProjection.projection} />
-            </>
-          ) : null}
-        </div>
+
+              {liveProjection.projection ? (
+                <>
+                  <LiveEventRail
+                    events={liveProjection.projection.events}
+                    foremanHighlighted={foremanHighlightedPanelId === "live-event-rail"}
+                  />
+                  <LiveCapturePanel projection={liveProjection.projection} />
+                </>
+              ) : null}
+            </div>
+          ),
+        })
       ) : null}
 
-      <ForemanMountPoint
-        eventBinding={{
-          activePanelId: activeForemanPanelId,
-          activeScenarioId: scenarioId,
-          activeSkin: activeSkinTab,
-          activeStepId: currentStep?.stepId ?? null,
-          createdAt:
-            liveProjection.projection?.session.updated_at ?? "dashboard-local",
-          disclosurePreviewReport,
-          liveEvents: liveProjection.projection?.events ?? [],
-          roleSession,
-          sharedAuthority,
-        }}
-        foremanContextSeed={liveProjection.projection?.foreman_context_seed ?? null}
-        guideContext={foremanGuideContext}
-        highlightedPanelId={foremanHighlightedPanelId}
-        onPanelHighlightChange={setForemanHighlightedPanelId}
-      />
+      {renderReviewGroupHeading("Foreman and Judge Controls")}
+
+      {renderReviewAccordion({
+        group: "Foreman and Judge Controls",
+        status: activeForemanPanelId,
+        title: "Foreman Panel offline guide",
+        children: (
+          <ForemanMountPoint
+            eventBinding={{
+              activePanelId: activeForemanPanelId,
+              activeScenarioId: scenarioId,
+              activeSkin: activeSkinTab,
+              activeStepId: currentStep?.stepId ?? null,
+              createdAt:
+                liveProjection.projection?.session.updated_at ?? "dashboard-local",
+              disclosurePreviewReport,
+              liveEvents: liveProjection.projection?.events ?? [],
+              roleSession,
+              sharedAuthority,
+            }}
+            foremanContextSeed={liveProjection.projection?.foreman_context_seed ?? null}
+            guideContext={foremanGuideContext}
+            highlightedPanelId={foremanHighlightedPanelId}
+            onPanelHighlightChange={setForemanHighlightedPanelId}
+          />
+        ),
+      })}
 
       {directorModeEnabled ? (
-        <>
-          <div className="director-grid">
-            <DirectorCueCard cue={directorScene.cueCard} />
-            <JudgeCuePanel panel={directorScene.judgePanel} />
-            <PreventedActionCard card={directorScene.preventedAction} />
-          </div>
+        renderReviewAccordion({
+          group: "Engineering / Demo Controls",
+          status: "absence lens enabled",
+          title: "Director Mode / Absence Lens Details",
+          children: (
+            <>
+              <div className="director-grid">
+                <DirectorCueCard cue={directorScene.cueCard} />
+                <JudgeCuePanel panel={directorScene.judgePanel} />
+                <PreventedActionCard card={directorScene.preventedAction} />
+              </div>
 
-          <AbsenceSignalRail
-            familyStates={absenceLensView.familyStates}
-            signals={absenceLensView.signals}
-          />
-        </>
+              <AbsenceSignalRail
+                familyStates={absenceLensView.familyStates}
+                signals={absenceLensView.signals}
+              />
+            </>
+          ),
+        })
       ) : null}
 
-      <div className="packet4-grid" data-authority-cockpit="true">
-        <div className="packet4-sidecar">
-          <GARPStatusIndicator
-            foremanHighlighted={foremanHighlightedPanelId === "garp-status"}
-            sharedAuthority={sharedAuthority}
-            state={authorityState}
-          />
-          <AuthorityResolutionPanel
-            foremanHighlighted={foremanHighlightedPanelId === "authority-resolution"}
-            sharedAuthority={sharedAuthority}
-            state={authorityState}
-          />
-        </div>
-
-        <div className="packet4-sidecar">
-          <AuthorityTimeline
-            foremanHighlighted={foremanHighlightedPanelId === "authority-timeline"}
-            sharedAuthority={sharedAuthority}
-            state={authorityState}
-          />
-          <AuthorityNotificationDemo state={authorityState} />
-          <DisclosurePreviewPanel
-            actionBundle={disclosurePreviewActionBundle}
-            foremanHighlighted={foremanHighlightedPanelId === "disclosure-preview"}
-            report={disclosurePreviewReport}
-          />
-        </div>
-      </div>
-
-      <div className="control-room-grid">
-        <TimelinePanel
-          activeStepIndex={controlState.activeStepIndex}
-          message={getShellMessage(selectedRecord)}
-          onSelectStep={(index) =>
-            setControlState((current) => selectStep(current, index, totalSteps))
-          }
-          status={selectedRecord?.status ?? "loading"}
-          timelineSteps={timelineSteps}
-        />
-
-        <div className="control-room-detail">
-          <AbsenceLensOverlay
-            active={directorModeEnabled}
-            highlights={absenceLensView.highlights}
-            panel="governance"
-          >
-            <GovernanceStatePanel
-              currentStep={currentStep}
-              message={getShellMessage(selectedRecord)}
-              status={selectedRecord?.status ?? "loading"}
-            />
-          </AbsenceLensOverlay>
-
-          <SkinSwitcher
-            activeSkinTab={activeSkinTab}
-            allowedSkins={roleSession.allowed_skins}
-            message={getShellMessage(selectedRecord)}
-            onSelect={(skinKey) => {
-              if (roleSession.allowed_skins.includes(skinKey)) {
-                setControlState((current) => selectSkinTab(current, skinKey));
-              }
-            }}
-            status={selectedRecord?.status ?? "loading"}
-            views={skinViews}
-          />
-
-          <AbsenceLensOverlay
-            active={directorModeEnabled}
-            highlights={absenceLensView.highlights}
-            panel="skin"
-          >
-            <SkinPanel
-              activeStepLabel={activeStepLabel}
-              message={getShellMessage(selectedRecord)}
-              skinView={activeSkinView}
-              status={selectedRecord?.status ?? "loading"}
-            />
-          </AbsenceLensOverlay>
-        </div>
-      </div>
-
-      <div className="packet4-grid">
-        <AbsenceLensOverlay
-          active={directorModeEnabled}
-          highlights={absenceLensView.highlights}
-          panel="forensic"
-        >
-          <ForensicChainPanel
-            chainView={forensicChainView}
-            message={getShellMessage(selectedRecord)}
-            status={selectedRecord?.status ?? "loading"}
-          />
-        </AbsenceLensOverlay>
-
-        <div className="packet4-sidecar">
-          <AbsenceLensOverlay
-            active={directorModeEnabled}
-            highlights={absenceLensView.highlights}
-            panel="relationships"
-          >
-            <div className="absence-overlay__stack">
-              <EntityRelationshipStrip
-                message={getShellMessage(selectedRecord)}
-                status={selectedRecord?.status ?? "loading"}
-                view={entityRelationshipView}
+      {renderReviewAccordion({
+        group: "Authority and Public Boundary",
+        status: `${authorityState.status}; ${authorityState.counts.total} requests`,
+        title: "GARP Authority State",
+        children: (
+          <div className="packet4-grid" data-authority-cockpit="true">
+            <div className="packet4-sidecar">
+              <GARPStatusIndicator
+                foremanHighlighted={foremanHighlightedPanelId === "garp-status"}
+                sharedAuthority={sharedAuthority}
+                state={authorityState}
               />
-
-              <EntityRelationshipGraph
-                message={getShellMessage(selectedRecord)}
-                status={selectedRecord?.status ?? "loading"}
-                view={entityRelationshipView}
+              <AuthorityResolutionPanel
+                foremanHighlighted={foremanHighlightedPanelId === "authority-resolution"}
+                sharedAuthority={sharedAuthority}
+                state={authorityState}
               />
             </div>
-          </AbsenceLensOverlay>
 
-          <AbsenceLensOverlay
-            active={directorModeEnabled}
-            highlights={absenceLensView.highlights}
-            panel="choreography"
-          >
-            <CascadeChoreography
+            <div className="packet4-sidecar">
+              <AuthorityTimeline
+                foremanHighlighted={foremanHighlightedPanelId === "authority-timeline"}
+                sharedAuthority={sharedAuthority}
+                state={authorityState}
+              />
+              <AuthorityNotificationDemo state={authorityState} />
+              <DisclosurePreviewPanel
+                actionBundle={disclosurePreviewActionBundle}
+                foremanHighlighted={foremanHighlightedPanelId === "disclosure-preview"}
+                report={disclosurePreviewReport}
+              />
+            </div>
+          </div>
+        ),
+      })}
+
+      {renderReviewGroupHeading("Proof and Evidence")}
+
+      {renderReviewAccordion({
+        group: "Proof and Evidence",
+        status: `${controlState.activeStepIndex + 1}/${totalSteps} steps`,
+        title: "Timeline / Cascade Steps",
+        children: (
+          <div className="control-room-grid">
+            <TimelinePanel
+              activeStepIndex={controlState.activeStepIndex}
               message={getShellMessage(selectedRecord)}
+              onSelectStep={(index) =>
+                setControlState((current) => selectStep(current, index, totalSteps))
+              }
               status={selectedRecord?.status ?? "loading"}
-              view={choreographyView}
+              timelineSteps={timelineSteps}
             />
-          </AbsenceLensOverlay>
-        </div>
-      </div>
 
-      <StatusBar
-        activeOutcome={currentStep?.decision ?? null}
-        activeSkinLabel={activeSkinLabel}
-        activeStepLabel={activeStepLabel}
-        dataVersion={dataVersion}
-        scenarioId={scenarioId}
-      />
+            <div className="control-room-detail">
+              <AbsenceLensOverlay
+                active={directorModeEnabled}
+                highlights={absenceLensView.highlights}
+                panel="governance"
+              >
+                <GovernanceStatePanel
+                  currentStep={currentStep}
+                  message={getShellMessage(selectedRecord)}
+                  status={selectedRecord?.status ?? "loading"}
+                />
+              </AbsenceLensOverlay>
+
+              <SkinSwitcher
+                activeSkinTab={activeSkinTab}
+                allowedSkins={roleSession.allowed_skins}
+                message={getShellMessage(selectedRecord)}
+                onSelect={(skinKey) => {
+                  if (roleSession.allowed_skins.includes(skinKey)) {
+                    setControlState((current) => selectSkinTab(current, skinKey));
+                  }
+                }}
+                status={selectedRecord?.status ?? "loading"}
+                views={skinViews}
+              />
+
+              <AbsenceLensOverlay
+                active={directorModeEnabled}
+                highlights={absenceLensView.highlights}
+                panel="skin"
+              >
+                <SkinPanel
+                  activeStepLabel={activeStepLabel}
+                  message={getShellMessage(selectedRecord)}
+                  skinView={activeSkinView}
+                  status={selectedRecord?.status ?? "loading"}
+                />
+              </AbsenceLensOverlay>
+            </div>
+          </div>
+        ),
+      })}
+
+      {renderReviewAccordion({
+        group: "Proof and Evidence",
+        status: `${forensicChainView.totalEntryCount} chain entries`,
+        title: "Forensic Chain cumulative",
+        children: (
+          <div className="packet4-grid">
+            <AbsenceLensOverlay
+              active={directorModeEnabled}
+              highlights={absenceLensView.highlights}
+              panel="forensic"
+            >
+              <ForensicChainPanel
+                chainView={forensicChainView}
+                message={getShellMessage(selectedRecord)}
+                status={selectedRecord?.status ?? "loading"}
+              />
+            </AbsenceLensOverlay>
+
+            <div className="packet4-sidecar">
+              <AbsenceLensOverlay
+                active={directorModeEnabled}
+                highlights={absenceLensView.highlights}
+                panel="relationships"
+              >
+                <div className="absence-overlay__stack">
+                  <EntityRelationshipStrip
+                    message={getShellMessage(selectedRecord)}
+                    status={selectedRecord?.status ?? "loading"}
+                    view={entityRelationshipView}
+                  />
+
+                  <EntityRelationshipGraph
+                    message={getShellMessage(selectedRecord)}
+                    status={selectedRecord?.status ?? "loading"}
+                    view={entityRelationshipView}
+                  />
+                </div>
+              </AbsenceLensOverlay>
+
+              <AbsenceLensOverlay
+                active={directorModeEnabled}
+                highlights={absenceLensView.highlights}
+                panel="choreography"
+              >
+                <CascadeChoreography
+                  message={getShellMessage(selectedRecord)}
+                  status={selectedRecord?.status ?? "loading"}
+                  view={choreographyView}
+                />
+              </AbsenceLensOverlay>
+            </div>
+          </div>
+        ),
+      })}
+
+      {renderReviewAccordion({
+        group: "Engineering / Demo Controls",
+        status: activeStepLabel,
+        title: "Outcome Summary Status Bar",
+        children: (
+          <StatusBar
+            activeOutcome={currentStep?.decision ?? null}
+            activeSkinLabel={activeSkinLabel}
+            activeStepLabel={activeStepLabel}
+            dataVersion={dataVersion}
+            scenarioId={scenarioId}
+          />
+        ),
+      })}
       </div>
     </section>
   );

@@ -63,8 +63,8 @@ export const MISSION_ACT_NARRATION: Record<MissionStageId, MissionActNarration> 
   absence: {
     index: 4,
     line:
-      "This is the moat. Meridian detected what is missing. The city cannot act until the absent evidence is present.",
-    lineKey: "act-4-absence-moat",
+      "Meridian detected what is missing. The city cannot act until the absent evidence is present.",
+    lineKey: "act-4-absence-evidence",
     stageId: "absence",
     title: "Absence",
   },

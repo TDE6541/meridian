@@ -2328,6 +2328,130 @@ kbd {
   gap: 1rem;
 }
 
+.mission-review-helper-banner {
+  order: 0;
+  display: none;
+  min-width: 0;
+  padding: 0.78rem 0.9rem;
+  border: 1px solid rgba(99, 179, 255, 0.28);
+  border-radius: 8px;
+  background: rgba(99, 179, 255, 0.08);
+  color: rgba(232, 237, 242, 0.86);
+  font-size: 0.88rem;
+  line-height: 1.36;
+}
+
+.mission-review-helper-banner.is-review-visible {
+  display: block;
+}
+
+.mission-review-group-heading {
+  display: none;
+  min-width: 0;
+  margin: 0.25rem 0 0;
+  color: rgba(245, 181, 71, 0.94);
+  font-size: 0.78rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.mission-review-group-heading.is-review-visible {
+  display: block;
+}
+
+.mission-review-accordion:not(.is-review-visible) {
+  display: contents;
+}
+
+.mission-review-accordion:not(.is-review-visible) > summary {
+  display: none;
+}
+
+.mission-review-accordion:not(.is-review-visible) > .mission-review-accordion__body {
+  display: contents;
+}
+
+.mission-review-accordion.is-review-visible {
+  display: grid;
+  min-width: 0;
+  border: 1px solid rgba(232, 237, 242, 0.16);
+  border-radius: 8px;
+  background: rgba(232, 237, 242, 0.045);
+}
+
+.mission-review-accordion.is-review-visible > summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  align-items: center;
+  min-width: 0;
+  padding: 0.78rem 0.85rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.mission-review-accordion.is-review-visible > summary::-webkit-details-marker {
+  display: none;
+}
+
+.mission-review-accordion__indicator {
+  display: inline-grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 1px solid rgba(232, 237, 242, 0.22);
+  border-radius: 999px;
+  color: var(--mission-dim-green-status);
+  font-weight: 800;
+}
+
+.mission-review-accordion__indicator::before {
+  content: "+";
+}
+
+.mission-review-accordion[open] .mission-review-accordion__indicator::before {
+  content: "-";
+}
+
+.mission-review-accordion__title,
+.mission-review-accordion__status {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.mission-review-accordion__title {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.mission-review-accordion__status {
+  color: rgba(232, 237, 242, 0.72);
+  font-size: 0.78rem;
+  text-align: right;
+}
+
+.mission-review-accordion__body {
+  display: grid;
+  min-width: 0;
+  gap: 0.75rem;
+  padding: 0 0.75rem 0.75rem;
+}
+
+.engineer-cockpit--review .mission-review-group-heading,
+.engineer-cockpit--review .mission-review-accordion__title {
+  color: #172432;
+}
+
+.engineer-cockpit--review .mission-review-accordion.is-review-visible {
+  border-color: rgba(23, 36, 50, 0.14);
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.engineer-cockpit--review .mission-review-accordion__status {
+  color: #607083;
+}
+
 .mission-review-banner {
   order: 0;
   display: grid;
@@ -4714,6 +4838,12 @@ kbd {
 }
 
 .mission-primary-actions--active-walkthrough .mission-primary-actions__button--secondary {
+  border-color: rgba(232, 237, 242, 0.16);
+  background: rgba(232, 237, 242, 0.035);
+  color: rgba(232, 237, 242, 0.74);
+}
+
+.mission-primary-actions--active-walkthrough .mission-primary-actions__button--proof-playback {
   display: none;
   pointer-events: none;
 }
@@ -4853,11 +4983,11 @@ kbd {
 
 .mission-active-walkthrough__line {
   width: min(100%, 64rem);
-  min-height: 5.4rem;
+  min-height: 3.4rem;
   margin: 0;
   color: #ffffff;
-  font-size: 2rem;
-  font-weight: 750;
+  font-size: clamp(1.38rem, 1.5vw, 1.5rem);
+  font-weight: 700;
   letter-spacing: 0;
   line-height: 1.16;
   overflow-wrap: anywhere;
@@ -4866,7 +4996,7 @@ kbd {
 
 .mission-active-focal-card {
   display: grid;
-  width: min(100%, 42rem);
+  width: min(100%, 48rem);
   min-width: 0;
   gap: 0.45rem;
   justify-self: center;
@@ -4905,7 +5035,7 @@ kbd {
 .mission-active-focal-card strong {
   margin: 0;
   color: #ffffff;
-  font-size: 1.35rem;
+  font-size: 1.42rem;
   line-height: 1.12;
   overflow-wrap: anywhere;
 }
@@ -4916,6 +5046,14 @@ kbd {
   font-size: 0.88rem;
   font-style: normal;
   line-height: 1.36;
+  overflow-wrap: anywhere;
+}
+
+.mission-active-focal-card small {
+  margin: 0;
+  color: rgba(99, 179, 255, 0.9);
+  font-size: 0.8rem;
+  line-height: 1.32;
   overflow-wrap: anywhere;
 }
 

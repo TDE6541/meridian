@@ -12,7 +12,10 @@ import { ControlRoomShell } from "../src/components/ControlRoomShell.tsx";
 import { DecisionCounter } from "../src/components/DecisionCounter.tsx";
 import { DemoAuditWall } from "../src/components/DemoAuditWall.tsx";
 import { HoldWall } from "../src/components/HoldWall.tsx";
-import { MissionPresentationShell } from "../src/components/MissionPresentationShell.tsx";
+import {
+  MissionPresentationShell,
+  type MissionPresentationShellProps,
+} from "../src/components/MissionPresentationShell.tsx";
 import { MissionRail } from "../src/components/MissionRail.tsx";
 import {
   buildDecisionCounter,
@@ -220,7 +223,10 @@ function createCompletedMissionPlaybackState(): MissionPlaybackState {
   };
 }
 
-async function renderMissionShellWithPlayback(playbackState: MissionPlaybackState) {
+async function renderMissionShellWithPlayback(
+  playbackState: MissionPlaybackState,
+  overrides: Partial<MissionPresentationShellProps> = {}
+) {
   const props = await buildSnapshotMissionFixture();
 
   return MissionPresentationShell({
@@ -240,6 +246,7 @@ async function renderMissionShellWithPlayback(playbackState: MissionPlaybackStat
     },
     onEngineerModeChange: () => undefined,
     onMissionAdvance: () => undefined,
+    ...overrides,
   });
 }
 
@@ -300,7 +307,7 @@ const tests = [
     },
   },
   {
-    name: "active mission mode renders one line one focal card rail compact Foreman and one visible button",
+    name: "active mission mode renders one line one focal card rail compact Foreman and mission controls",
     run: async () => {
       const playbackState = createRunningMissionPlaybackState("capture");
       const element = await renderMissionShellWithPlayback(playbackState);
@@ -322,9 +329,39 @@ const tests = [
       assert.equal([...markup.matchAll(/data-mission-focal-card="/g)].length, 1);
       assert.equal(markup.includes(getMissionActNarration("capture").line), true);
       assert.deepEqual(visibleButtons.map((button) => getElementText(button)), [
+        "Previous Act",
         "Next Act",
+        "Reset",
       ]);
       assert.equal(visibleButtons[0]?.props.disabled, true);
+      assert.equal(visibleButtons[1]?.props.disabled, true);
+      assert.equal(visibleButtons[2]?.props.disabled, false);
+    },
+  },
+  {
+    name: "active mission mode exposes previous act and reset navigation",
+    run: async () => {
+      const playbackState = createRunningMissionPlaybackState("authority");
+      const calls: string[] = [];
+      const element = await renderMissionShellWithPlayback(playbackState, {
+        onMissionBack: () => calls.push("back"),
+      });
+      const visibleButtons = collectButtons(element).filter(
+        (button) =>
+          String(button.props.className ?? "").includes(
+            "mission-primary-actions__button"
+          ) && button.props["aria-hidden"] !== true
+      );
+      const previous = visibleButtons.find(
+        (button) => getElementText(button) === "Previous Act"
+      );
+      const reset = visibleButtons.find((button) => getElementText(button) === "Reset");
+
+      assert.equal(previous?.props.disabled, false);
+      previous?.props.onClick?.();
+      assert.deepEqual(calls, ["back"]);
+      assert.equal(reset?.props.disabled, false);
+      assert.equal(typeof reset?.props.onClick, "function");
     },
   },
   {
@@ -398,11 +435,11 @@ const tests = [
         ),
         true
       );
-      assert.equal(hiddenButtons.length, 4);
+      assert.equal(hiddenButtons.length, 2);
     },
   },
   {
-    name: "Act 4 renders HOLD focal card before the moat narration appears",
+    name: "Act 4 renders HOLD focal card before absence narration appears",
     run: async () => {
       const playbackState = createRunningMissionPlaybackState("absence");
       const markup = renderMarkup(await renderMissionShellWithPlayback(playbackState));
@@ -420,16 +457,52 @@ const tests = [
     name: "Review Mode restores full cockpit after mission completion",
     run: async () => {
       const playbackState = createCompletedMissionPlaybackState();
-      const markup = renderMarkup(await renderMissionShellWithPlayback(playbackState));
+      const element = await renderMissionShellWithPlayback(playbackState, {
+        onMissionRestart: () => undefined,
+      });
+      const markup = renderMarkup(element);
+      const visibleButtons = collectButtons(element).filter(
+        (button) =>
+          String(button.props.className ?? "").includes(
+            "mission-primary-actions__button"
+          ) && button.props["aria-hidden"] !== true
+      );
+      const completionAccordionStart = markup.indexOf(
+        'data-mission-review-accordion="mission-complete-summary"'
+      );
+      const completionAccordionSnippet = markup.slice(
+        Math.max(0, completionAccordionStart - 120),
+        completionAccordionStart + 220
+      );
 
       assert.equal(markup.includes('data-mission-review-mode="visible"'), true);
       assert.equal(markup.includes("Review Mode: full governed chain visible"), true);
+      assert.equal(
+        markup.includes("Review Mode: the full cockpit is preserved below."),
+        true
+      );
+      assert.equal(markup.includes("inspect the proof."), true);
+      assert.equal(markup.includes("Mission Run"), true);
+      assert.equal(markup.includes("Proof and Evidence"), true);
+      assert.equal(markup.includes("Authority and Public Boundary"), true);
+      assert.equal(markup.includes("Foreman and Judge Controls"), true);
+      assert.equal(markup.includes("Engineering / Demo Controls"), true);
+      assert.notEqual(completionAccordionStart, -1);
+      assert.equal(completionAccordionSnippet.includes(" open"), false);
       assert.equal(markup.includes('data-mission-active-walkthrough="true"'), false);
       assert.equal(markup.includes('data-proof-tools="collapsed-by-default"'), true);
       assert.equal(markup.includes('data-mission-playback-controls="started"'), true);
       assert.equal(markup.includes('data-foreman-avatar-bay="true"'), true);
       assert.equal(markup.includes('data-proof-spotlight="true"'), true);
       assert.equal(markup.includes('data-mission-run-receipt-panel="true"'), true);
+      assert.equal(
+        visibleButtons.some((button) => getElementText(button) === "Run Again"),
+        true
+      );
+      assert.equal(
+        visibleButtons.some((button) => getElementText(button) === "Reset"),
+        true
+      );
     },
   },
   {

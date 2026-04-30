@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { DashboardForensicChainView } from "../adapters/forensicAdapter.ts";
 import type { DashboardSkinView } from "../adapters/skinPayloadAdapter.ts";
 import type { AuthorityDashboardStateV1 } from "../authority/authorityDashboardTypes.ts";
@@ -91,6 +92,8 @@ export interface MissionPresentationShellProps {
   onJudgeResumeMission?: () => void;
   onJudgeSelectQuestion?: (questionId: JudgeQuestionId) => void;
   onMissionAdvance?: () => void;
+  onMissionBack?: () => void;
+  onMissionRestart?: () => void;
   onNextStep?: () => void;
   onPausePlayback?: () => void;
   onPlayPlayback?: () => void;
@@ -113,6 +116,10 @@ function formatCount(count: number, singular: string, plural = `${singular}s`) {
   return `${count} ${count === 1 ? singular : plural}`;
 }
 
+function reviewKey(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 type PresenterDecisionTone =
   | "blocked"
   | "hold"
@@ -131,6 +138,13 @@ type MissionSurfaceName =
   | "presenter"
   | "public"
   | "review";
+
+type MissionReviewGroup =
+  | "Authority and Public Boundary"
+  | "Engineering / Demo Controls"
+  | "Foreman and Judge Controls"
+  | "Mission Run"
+  | "Proof and Evidence";
 
 const MISSION_STAGE_LABELS: Record<MissionStageId, MissionRailStage["label"]> = {
   absence: "Absence",
@@ -408,6 +422,8 @@ export function MissionPresentationShell({
   onJudgeResumeMission,
   onJudgeSelectQuestion,
   onMissionAdvance,
+  onMissionBack,
+  onMissionRestart,
   onNextStep,
   onPausePlayback,
   onPlayPlayback,
@@ -463,6 +479,19 @@ export function MissionPresentationShell({
     playbackState: missionPlaybackControls?.playbackState ?? null,
     projection: presentationProjection,
   });
+  const inspectionRole = fictionalPermitAnchor.roleFrames.find(
+    (frame) => frame.label === "Inspection"
+  )?.label;
+  const authorityRequestWithRole = authorityState.requests.find(
+    (request) => request.required_authority_role
+  );
+  const authorityRequirement = [
+    authorityRequestWithRole?.required_authority_department,
+    authorityRequestWithRole?.required_authority_role,
+  ]
+    .filter((entry): entry is string => Boolean(entry))
+    .join(" / ");
+  const missionReceiptTicketCount = missionRunReceipt.events.length;
   const publicPayloadStatus = publicSkinView?.hasPayload
     ? "public skin payload present"
     : "public skin payload pending";
@@ -525,8 +554,25 @@ export function MissionPresentationShell({
       resolvedMissionNarrationView.key === activeMissionNarrationKey &&
       resolvedMissionNarrationView.phase === "complete"
   );
+  const activeMissionStageIndex = activeMissionStage
+    ? MISSION_STAGE_IDS.indexOf(activeMissionStage)
+    : -1;
   const missionAdvanceDisabledByNarration = Boolean(
     isActiveMissionMode && activeMissionNarrationKey && !activeNarrationComplete
+  );
+  const canBackMission = Boolean(
+    onMissionBack &&
+      missionPlaybackState?.mode === "guided" &&
+      missionPlaybackState.status === "running" &&
+      activeMissionStageIndex > 0
+  );
+  const canResetMission = Boolean(
+    missionHasStarted && missionPlaybackControls?.onResetMission
+  );
+  const canRestartMission = Boolean(
+    isReviewMode &&
+      onMissionRestart &&
+      (missionPlaybackControls?.canStart ?? canDrive)
   );
   const canAdvanceMission = Boolean(
     onMissionAdvance &&
@@ -536,7 +582,19 @@ export function MissionPresentationShell({
       !missionAdvanceDisabledByNarration
   );
   const missionAdvanceLabel =
-    activeMissionStage === "public" ? "Finish / Review" : "Next Act";
+    isReviewMode
+      ? "Run Again"
+      : activeMissionStage === "public"
+        ? "Finish / Review"
+        : "Next Act";
+  const canUsePrimaryMissionAction = isReviewMode
+    ? canRestartMission
+    : canAdvanceMission;
+  const primaryMissionAction = isReviewMode
+    ? onMissionRestart
+    : canAdvanceMission
+      ? onMissionAdvance
+      : undefined;
   const displayedMissionRailStages = buildMissionRevealRailStages(
     missionRailStages,
     missionPlaybackState
@@ -604,6 +662,46 @@ export function MissionPresentationShell({
   ]
     .filter((className): className is string => className !== null)
     .join(" ");
+  const renderReviewGroupHeading = (group: MissionReviewGroup) => (
+    <h2
+      aria-hidden={!isReviewMode}
+      className={`mission-review-group-heading${
+        isReviewMode ? " is-review-visible" : ""
+      }`}
+      data-mission-review-group-heading={reviewKey(group)}
+    >
+      {group}
+    </h2>
+  );
+  const renderReviewAccordion = ({
+    children,
+    group,
+    status,
+    title,
+  }: {
+    children: ReactNode;
+    group: MissionReviewGroup;
+    status?: string | null;
+    title: string;
+  }) => (
+    <details
+      className={`mission-review-accordion${
+        isReviewMode ? " is-review-visible" : ""
+      }`}
+      data-mission-review-accordion={reviewKey(title)}
+      data-mission-review-group={reviewKey(group)}
+      open={!isReviewMode}
+    >
+      <summary>
+        <span aria-hidden="true" className="mission-review-accordion__indicator" />
+        <span className="mission-review-accordion__title">{title}</span>
+        {status ? (
+          <span className="mission-review-accordion__status">{status}</span>
+        ) : null}
+      </summary>
+      <div className="mission-review-accordion__body">{children}</div>
+    </details>
+  );
   const renderActFrame = (stageId: MissionStageId) => {
     const storyBeat = MISSION_STAGE_STORY_BEATS[stageId];
 
@@ -664,6 +762,7 @@ export function MissionPresentationShell({
           <span>Permit #4471</span>
           <strong>{fictionalPermitAnchor.title}</strong>
           <em>Field concern captured from the existing fictional demo permit.</em>
+          {inspectionRole ? <small>Inspector role: {inspectionRole}</small> : null}
         </section>
       );
     }
@@ -677,6 +776,9 @@ export function MissionPresentationShell({
           <span>Authority gate</span>
           <strong>{authorityState.status}</strong>
           <em>Director approval is required before escalation can proceed.</em>
+          {authorityRequirement ? (
+            <small>Required authority: {authorityRequirement}</small>
+          ) : null}
         </section>
       );
     }
@@ -719,6 +821,12 @@ export function MissionPresentationShell({
           <span>Forensic chain</span>
           <strong>{formatCount(forensicChain.totalEntryCount, "entry", "entries")}</strong>
           <em>Receipt path remains inspectable without writing new chain truth.</em>
+          {missionReceiptTicketCount > 0 ? (
+            <small>
+              Mission receipt:{" "}
+              {formatCount(missionReceiptTicketCount, "ticket")}
+            </small>
+          ) : null}
         </section>
       );
     }
@@ -896,304 +1004,428 @@ export function MissionPresentationShell({
 
       <section
         aria-hidden={!isReviewMode}
-        className={`${reviewSurfaceClassName} mission-review-banner mission-review-card`}
-        data-mission-review-banner="completion"
-        data-mission-surface="review"
+        className={`mission-review-helper-banner${
+          isReviewMode ? " is-review-visible" : ""
+        }`}
+        data-mission-review-helper="true"
       >
-        <div>
-          <p className="mission-review-banner__eyebrow">Completion review</p>
-          <h2>Mission Complete. Review Mode: full governed chain visible.</h2>
-          <p>
-            The AI tried to act. Meridian refused. The Foreman explained why.
-            The chain proves it. The city is safer.
-          </p>
-        </div>
-        <dl>
-          <div>
-            <dt>Mission status</dt>
-            <dd>{missionPlaybackState?.status ?? "idle"}</dd>
-          </div>
-          <div>
-            <dt>Acts complete</dt>
-            <dd>
-              {completedMissionStageIds.length}/{MISSION_STAGE_IDS.length}
-            </dd>
-          </div>
-          <div>
-            <dt>Inspection source</dt>
-            <dd>existing mission playback completion</dd>
-          </div>
-        </dl>
+        Review Mode: the full cockpit is preserved below. Open any section to
+        inspect the proof.
       </section>
 
-      <section
-        aria-hidden={!isReviewMode}
-        className={`${reviewSurfaceClassName} mission-internal-controls mission-review-card`}
-        data-internal-proof-controls="true"
-        data-mission-surface="review"
-      >
-        <div className="mission-presentation__header-tools">
-          <p className="mission-presentation__summary">
-            Show the scenario, current decision, safety logic, and proof path without
-            turning the first screen into the full control room.
-          </p>
-          <MissionControlPhysicalMode
-            enabled={missionPhysicalModeEnabled}
-            onEnabledChange={onMissionPhysicalModeChange}
-            view={physicalModeView}
-          />
+      {renderReviewGroupHeading("Mission Run")}
 
-          <details className="mission-proof-tools" data-proof-tools="collapsed-by-default">
-            <summary>Proof Tools</summary>
-            <div
-              className="mission-proof-tools__framing"
-              data-failure-injection-surface="review-proof-tools"
-            >
-              <span>Optional proof: controlled failure becomes evidence.</span>
+      {renderReviewAccordion({
+        group: "Mission Run",
+        status: `${completedMissionStageIds.length}/${MISSION_STAGE_IDS.length} acts`,
+        title: "Mission Complete summary",
+        children: (
+          <section
+            aria-hidden={!isReviewMode}
+            className={`${reviewSurfaceClassName} mission-review-banner mission-review-card`}
+            data-mission-review-banner="completion"
+            data-mission-surface="review"
+          >
+            <div>
+              <p className="mission-review-banner__eyebrow">Completion review</p>
+              <h2>Mission Complete. Review Mode: full governed chain visible.</h2>
               <p>
-                In a normal AI workflow, this is where confidence becomes risk. In
-                Meridian, failure becomes evidence.
+                The AI tried to act. Meridian refused. The Foreman explained why.
+                The chain proves it. The city is safer.
               </p>
             </div>
-            <div className="mission-proof-tools__buttons">
-              <button
-                aria-label={
-                  engineerMode ? "Return to Presenter View" : "Reveal Engineer Mode cockpit"
-                }
-                aria-pressed={engineerMode}
-                className="mission-presentation__mode-toggle"
-                onClick={() => onEngineerModeChange(!engineerMode)}
-                type="button"
-              >
-                {engineerMode ? "Presenter View" : "Engineer Mode"}
-              </button>
-              <button
-                aria-label="Open Director Mode in Engineer cockpit"
-                className="mission-presentation__mode-toggle"
-                onClick={onDirectorModeOpen}
-                type="button"
-              >
-                Director Mode
-              </button>
-              <button
-                aria-label="Toggle Absence Lens"
-                aria-pressed={absenceLensEnabled}
-                className="mission-presentation__mode-toggle mission-presentation__mode-toggle--lens"
-                onClick={onAbsenceLensToggle}
-                type="button"
-              >
-                Absence Lens
-              </button>
-              <button
-                aria-label="Open Demo Audit Wall"
-                className="mission-presentation__mode-toggle mission-presentation__mode-toggle--audit"
-                onClick={onAuditWallOpen}
-                type="button"
-              >
-                Audit Wall
-              </button>
-              <button
-                aria-label="Open HOLD Wall"
-                className="mission-presentation__mode-toggle mission-presentation__mode-toggle--hold"
-                data-hold-wall-trigger-state={holdWallView.triggered ? "available" : "unavailable"}
-                disabled={!holdWallView.triggered}
-                onClick={onHoldWallOpen}
-                type="button"
-              >
-                HOLD Wall
-              </button>
-            </div>
-            {rehearsalCertification ? (
-              <MissionRehearsalPanel certification={rehearsalCertification} />
-            ) : null}
-          </details>
-        </div>
-      </section>
-
-      <section
-        aria-hidden={!isReviewMode}
-        className={`${reviewSurfaceClassName} mission-status-strip mission-review-grid`}
-        data-demo-status-strip="presenter"
-        data-mission-surface="review"
-      >
-        <div className="mission-presentation__readout">
-          <span>Scenario</span>
-          <strong>{scenarioLabel}</strong>
-          <em>{scenarioStatus}</em>
-        </div>
-        <div className="mission-presentation__readout">
-          <span>Mode</span>
-          <strong>{dashboardMode === "live" ? "Live" : "Snapshot"}</strong>
-          <em>{dataVersion ?? "version pending"}</em>
-        </div>
-        <div className="mission-presentation__readout">
-          <span>Step</span>
-          <strong>{activeStepLabel}</strong>
-          <em>{formatCount(totalSteps, "step")}</em>
-        </div>
-        <div className="mission-presentation__readout">
-          <span>Auth proof</span>
-          <strong>{roleSession.auth_status}</strong>
-          <em>{roleSession.role} · {roleSession.auth_status}</em>
-        </div>
-        <div className="mission-presentation__readout">
-          <span>GARP endpoint</span>
-          <strong>{sharedEndpointStatus}</strong>
-          <em>authority state: {authorityState.status}</em>
-        </div>
-      </section>
-
-      <section
-        className={getMissionStageSurfaceClassName("chain", "chain")}
-        aria-hidden={isMissionSurfaceHidden("chain")}
-        data-mission-act-state={getMissionSurfaceState("chain")}
-        data-mission-act-wrapper="chain"
-        data-mission-chain-part="ribbon"
-        data-mission-surface="chain"
-      >
-        {renderActFrame("chain")}
-        <ForensicReceiptRibbon receipt={missionRunReceipt} />
-      </section>
-
-      <section
-        className={getMissionStageSurfaceClassName("governance", "governance")}
-        aria-hidden={isMissionSurfaceHidden("governance")}
-        data-mission-act-state={getMissionSurfaceState("governance")}
-        data-mission-act-wrapper="governance"
-        data-mission-governance-part="touchboard"
-        data-mission-surface="governance"
-      >
-        {renderActFrame("governance")}
-        <JudgeTouchboard
-          card={judgeCard}
-          interruptStatus={judgeInterruptStatus}
-          missionModeLabel={
-            presentationProjection?.mode === "foreman_autonomous"
-              ? "Foreman Autonomous"
-              : "Guided Mission"
-          }
-          onResetForNextJudge={onJudgeResetForNextJudge}
-          onResumeMission={onJudgeResumeMission}
-          onSelectQuestion={onJudgeSelectQuestion}
-          stageLabel={presentationProjection?.active_stage_id ?? "No active mission"}
-        />
-      </section>
-
-      <section
-        aria-hidden={!isReviewMode}
-        className={foremanSurfaceClassName}
-        data-mission-surface="foreman"
-      >
-        <ForemanAvatarBay
-          judgeChallenge={judgeCard}
-          projection={presentationProjection}
-        />
-      </section>
-
-      <section
-        className={getMissionStageSurfaceClassName("governance", "governance")}
-        aria-hidden={isMissionSurfaceHidden("governance")}
-        data-mission-act-state={getMissionSurfaceState("governance")}
-        data-mission-act-wrapper="governance"
-        data-mission-governance-part="evidence"
-        data-mission-surface="governance"
-      >
-        <MissionEvidenceNavigator card={judgeCard} />
-      </section>
-
-      <section
-        className={getMissionStageSurfaceClassName("public", "public")}
-        aria-hidden={isMissionSurfaceHidden("public")}
-        data-mission-act-state={getMissionSurfaceState("public")}
-        data-mission-act-wrapper="public"
-        data-mission-public-part="civic-twin"
-        data-mission-surface="public"
-      >
-        {renderActFrame("public")}
-        <CivicTwinDiorama projection={presentationProjection} />
-      </section>
-
-      <section
-        className={getMissionStageSurfaceClassName("authority", "authority")}
-        aria-hidden={isMissionSurfaceHidden("authority")}
-        data-mission-act-state={getMissionSurfaceState("authority")}
-        data-mission-act-wrapper="authority"
-        data-mission-surface="authority"
-      >
-        {renderActFrame("authority")}
-        <AuthorityHandoffTheater projection={presentationProjection} />
-      </section>
-
-      <section
-        className={getMissionStageSurfaceClassName("capture", "capture")}
-        aria-hidden={isMissionSurfaceHidden("capture")}
-        data-mission-act-state={getMissionSurfaceState("capture")}
-        data-mission-act-wrapper="capture"
-        data-mission-surface="capture"
-      >
-        {renderActFrame("capture")}
-        <div className="mission-act-grid mission-act-grid--capture">
-          {renderCurrentDecisionCard("capture")}
-          <ProofSpotlight projection={presentationProjection} />
-        </div>
-      </section>
-
-      <section
-        className={getMissionStageSurfaceClassName("absence", "absence")}
-        aria-hidden={isMissionSurfaceHidden("absence")}
-        data-mission-act-state={getMissionSurfaceState("absence")}
-        data-mission-act-wrapper="absence"
-        data-mission-surface="absence"
-      >
-        {renderActFrame("absence")}
-        <div className="mission-act-grid mission-act-grid--absence">
-          <AbsenceShadowMap projection={presentationProjection} />
-          <section
-            className="mission-act-hold-card"
-            data-absence-hold-focal-treatment="true"
-          >
-            <span>HOLD focal treatment</span>
-            <strong>
-              {holdWallView.triggered
-                ? "Missing proof is the proof moment."
-                : "No HOLD trigger is active in current dashboard state."}
-            </strong>
-            <em>
-              Trigger source: {holdWallView.triggerSource}; source mode:{" "}
-              {holdWallView.sourceMode}.
-            </em>
             <dl>
-              {holdWallView.fields.map((field) => (
-                <div key={field.key}>
-                  <dt>{field.label}</dt>
-                  <dd>{field.value}</dd>
-                </div>
-              ))}
+              <div>
+                <dt>Mission status</dt>
+                <dd>{missionPlaybackState?.status ?? "idle"}</dd>
+              </div>
+              <div>
+                <dt>Acts complete</dt>
+                <dd>
+                  {completedMissionStageIds.length}/{MISSION_STAGE_IDS.length}
+                </dd>
+              </div>
+              <div>
+                <dt>Inspection source</dt>
+                <dd>existing mission playback completion</dd>
+              </div>
             </dl>
           </section>
-        </div>
-      </section>
+        ),
+      })}
 
-      <section
-        aria-hidden={isActiveMissionMode}
-        className={presenterSurfaceClassName}
-        data-mission-surface="presenter"
-      >
-        <MissionPlaybackControls {...missionPlaybackControls} />
-      </section>
+      {renderReviewGroupHeading("Engineering / Demo Controls")}
 
-      <section
-        className={getMissionStageSurfaceClassName("chain", "chain")}
-        aria-hidden={isMissionSurfaceHidden("chain")}
-        data-mission-act-state={getMissionSurfaceState("chain")}
-        data-mission-act-wrapper="chain"
-        data-mission-chain-part="receipt"
-        data-mission-surface="chain"
-      >
-        <MissionRunReceiptPanel receipt={missionRunReceipt} />
-      </section>
+      {renderReviewAccordion({
+        group: "Engineering / Demo Controls",
+        status: "Proof tools and physical mode",
+        title: "Mission Control Physical Mode",
+        children: (
+          <section
+            aria-hidden={!isReviewMode}
+            className={`${reviewSurfaceClassName} mission-internal-controls mission-review-card`}
+            data-internal-proof-controls="true"
+            data-mission-surface="review"
+          >
+            <div className="mission-presentation__header-tools">
+              <p className="mission-presentation__summary">
+                Show the scenario, current decision, safety logic, and proof path without
+                turning the first screen into the full control room.
+              </p>
+              <MissionControlPhysicalMode
+                enabled={missionPhysicalModeEnabled}
+                onEnabledChange={onMissionPhysicalModeChange}
+                view={physicalModeView}
+              />
 
-      <MissionRail stages={displayedMissionRailStages} />
+              <details className="mission-proof-tools" data-proof-tools="collapsed-by-default">
+                <summary>Proof Tools</summary>
+                <div
+                  className="mission-proof-tools__framing"
+                  data-failure-injection-surface="review-proof-tools"
+                >
+                  <span>Optional proof: controlled failure becomes evidence.</span>
+                  <p>
+                    In a normal AI workflow, this is where confidence becomes risk. In
+                    Meridian, failure becomes evidence.
+                  </p>
+                </div>
+                <div className="mission-proof-tools__buttons">
+                  <button
+                    aria-label={
+                      engineerMode
+                        ? "Return to Presenter View"
+                        : "Reveal Engineer Mode cockpit"
+                    }
+                    aria-pressed={engineerMode}
+                    className="mission-presentation__mode-toggle"
+                    onClick={() => onEngineerModeChange(!engineerMode)}
+                    type="button"
+                  >
+                    {engineerMode ? "Presenter View" : "Engineer Mode"}
+                  </button>
+                  <button
+                    aria-label="Open Director Mode in Engineer cockpit"
+                    className="mission-presentation__mode-toggle"
+                    onClick={onDirectorModeOpen}
+                    type="button"
+                  >
+                    Director Mode
+                  </button>
+                  <button
+                    aria-label="Toggle Absence Lens"
+                    aria-pressed={absenceLensEnabled}
+                    className="mission-presentation__mode-toggle mission-presentation__mode-toggle--lens"
+                    onClick={onAbsenceLensToggle}
+                    type="button"
+                  >
+                    Absence Lens
+                  </button>
+                  <button
+                    aria-label="Open Demo Audit Wall"
+                    className="mission-presentation__mode-toggle mission-presentation__mode-toggle--audit"
+                    onClick={onAuditWallOpen}
+                    type="button"
+                  >
+                    Audit Wall
+                  </button>
+                  <button
+                    aria-label="Open HOLD Wall"
+                    className="mission-presentation__mode-toggle mission-presentation__mode-toggle--hold"
+                    data-hold-wall-trigger-state={
+                      holdWallView.triggered ? "available" : "unavailable"
+                    }
+                    disabled={!holdWallView.triggered}
+                    onClick={onHoldWallOpen}
+                    type="button"
+                  >
+                    HOLD Wall
+                  </button>
+                </div>
+                {rehearsalCertification ? (
+                  <MissionRehearsalPanel certification={rehearsalCertification} />
+                ) : null}
+              </details>
+            </div>
+          </section>
+        ),
+      })}
+
+      {renderReviewAccordion({
+        group: "Engineering / Demo Controls",
+        status: `${dashboardMode} mode; ${formatCount(totalSteps, "step")}`,
+        title: "Dashboard Mode Snapshot/Live",
+        children: (
+          <section
+            aria-hidden={!isReviewMode}
+            className={`${reviewSurfaceClassName} mission-status-strip mission-review-grid`}
+            data-demo-status-strip="presenter"
+            data-mission-surface="review"
+          >
+            <div className="mission-presentation__readout">
+              <span>Scenario</span>
+              <strong>{scenarioLabel}</strong>
+              <em>{scenarioStatus}</em>
+            </div>
+            <div className="mission-presentation__readout">
+              <span>Mode</span>
+              <strong>{dashboardMode === "live" ? "Live" : "Snapshot"}</strong>
+              <em>{dataVersion ?? "version pending"}</em>
+            </div>
+            <div className="mission-presentation__readout">
+              <span>Step</span>
+              <strong>{activeStepLabel}</strong>
+              <em>{formatCount(totalSteps, "step")}</em>
+            </div>
+            <div className="mission-presentation__readout">
+              <span>Auth proof</span>
+              <strong>{roleSession.auth_status}</strong>
+              <em>{roleSession.role} · {roleSession.auth_status}</em>
+            </div>
+            <div className="mission-presentation__readout">
+              <span>GARP endpoint</span>
+              <strong>{sharedEndpointStatus}</strong>
+              <em>authority state: {authorityState.status}</em>
+            </div>
+          </section>
+        ),
+      })}
+
+      {renderReviewGroupHeading("Proof and Evidence")}
+
+      {renderReviewAccordion({
+        group: "Proof and Evidence",
+        status: formatCount(missionReceiptTicketCount, "ticket"),
+        title: "Forensic Receipt Ribbon",
+        children: (
+          <section
+            className={getMissionStageSurfaceClassName("chain", "chain")}
+            aria-hidden={isMissionSurfaceHidden("chain")}
+            data-mission-act-state={getMissionSurfaceState("chain")}
+            data-mission-act-wrapper="chain"
+            data-mission-chain-part="ribbon"
+            data-mission-surface="chain"
+          >
+            {renderActFrame("chain")}
+            <ForensicReceiptRibbon receipt={missionRunReceipt} />
+          </section>
+        ),
+      })}
+
+      {renderReviewGroupHeading("Foreman and Judge Controls")}
+
+      {renderReviewAccordion({
+        group: "Foreman and Judge Controls",
+        status: judgeCard ? "challenge selected" : "ready",
+        title: "Judge Touchboard / Challenge Controls",
+        children: (
+          <section
+            className={getMissionStageSurfaceClassName("governance", "governance")}
+            aria-hidden={isMissionSurfaceHidden("governance")}
+            data-mission-act-state={getMissionSurfaceState("governance")}
+            data-mission-act-wrapper="governance"
+            data-mission-governance-part="touchboard"
+            data-mission-surface="governance"
+          >
+            {renderActFrame("governance")}
+            <JudgeTouchboard
+              card={judgeCard}
+              interruptStatus={judgeInterruptStatus}
+              missionModeLabel={
+                presentationProjection?.mode === "foreman_autonomous"
+                  ? "Foreman Autonomous"
+                  : "Guided Mission"
+              }
+              onResetForNextJudge={onJudgeResetForNextJudge}
+              onResumeMission={onJudgeResumeMission}
+              onSelectQuestion={onJudgeSelectQuestion}
+              stageLabel={presentationProjection?.active_stage_id ?? "No active mission"}
+            />
+          </section>
+        ),
+      })}
+
+      {renderReviewAccordion({
+        group: "Foreman and Judge Controls",
+        status: presentationProjection?.active_stage_id ?? "no active mission",
+        title: "Embodied Foreman / Avatar Bay",
+        children: (
+          <section
+            aria-hidden={!isReviewMode}
+            className={foremanSurfaceClassName}
+            data-mission-surface="foreman"
+          >
+            <ForemanAvatarBay
+              judgeChallenge={judgeCard}
+              projection={presentationProjection}
+            />
+          </section>
+        ),
+      })}
+
+      {renderReviewAccordion({
+        group: "Foreman and Judge Controls",
+        status: judgeCard ? "target selected" : "waiting",
+        title: "Evidence Navigator",
+        children: (
+          <section
+            className={getMissionStageSurfaceClassName("governance", "governance")}
+            aria-hidden={isMissionSurfaceHidden("governance")}
+            data-mission-act-state={getMissionSurfaceState("governance")}
+            data-mission-act-wrapper="governance"
+            data-mission-governance-part="evidence"
+            data-mission-surface="governance"
+          >
+            <MissionEvidenceNavigator card={judgeCard} />
+          </section>
+        ),
+      })}
+
+      {renderReviewGroupHeading("Authority and Public Boundary")}
+
+      {renderReviewAccordion({
+        group: "Authority and Public Boundary",
+        status: publicPayloadStatus,
+        title: "Civic Twin Diorama",
+        children: (
+          <section
+            className={getMissionStageSurfaceClassName("public", "public")}
+            aria-hidden={isMissionSurfaceHidden("public")}
+            data-mission-act-state={getMissionSurfaceState("public")}
+            data-mission-act-wrapper="public"
+            data-mission-public-part="civic-twin"
+            data-mission-surface="public"
+          >
+            {renderActFrame("public")}
+            <CivicTwinDiorama projection={presentationProjection} />
+          </section>
+        ),
+      })}
+
+      {renderReviewAccordion({
+        group: "Authority and Public Boundary",
+        status: `${authorityState.status}; ${formatCount(
+          authorityState.counts.total,
+          "request"
+        )}`,
+        title: "Authority Handoff Theater",
+        children: (
+          <section
+            className={getMissionStageSurfaceClassName("authority", "authority")}
+            aria-hidden={isMissionSurfaceHidden("authority")}
+            data-mission-act-state={getMissionSurfaceState("authority")}
+            data-mission-act-wrapper="authority"
+            data-mission-surface="authority"
+          >
+            {renderActFrame("authority")}
+            <AuthorityHandoffTheater projection={presentationProjection} />
+          </section>
+        ),
+      })}
+
+      {renderReviewAccordion({
+        group: "Proof and Evidence",
+        status: `decision ${focalDecision}`,
+        title: "Current Decision / HOLD focal card",
+        children: (
+          <section
+            className={getMissionStageSurfaceClassName("capture", "capture")}
+            aria-hidden={isMissionSurfaceHidden("capture")}
+            data-mission-act-state={getMissionSurfaceState("capture")}
+            data-mission-act-wrapper="capture"
+            data-mission-surface="capture"
+          >
+            {renderActFrame("capture")}
+            <div className="mission-act-grid mission-act-grid--capture">
+              {renderCurrentDecisionCard("capture")}
+              <ProofSpotlight projection={presentationProjection} />
+            </div>
+          </section>
+        ),
+      })}
+
+      {renderReviewAccordion({
+        group: "Proof and Evidence",
+        status: formatCount(absenceLens.signals.length, "signal"),
+        title: "Absence Shadow Map",
+        children: (
+          <section
+            className={getMissionStageSurfaceClassName("absence", "absence")}
+            aria-hidden={isMissionSurfaceHidden("absence")}
+            data-mission-act-state={getMissionSurfaceState("absence")}
+            data-mission-act-wrapper="absence"
+            data-mission-surface="absence"
+          >
+            {renderActFrame("absence")}
+            <div className="mission-act-grid mission-act-grid--absence">
+              <AbsenceShadowMap projection={presentationProjection} />
+              <section
+                className="mission-act-hold-card"
+                data-absence-hold-focal-treatment="true"
+              >
+                <span>HOLD focal treatment</span>
+                <strong>
+                  {holdWallView.triggered
+                    ? "Missing proof is the proof moment."
+                    : "No HOLD trigger is active in current dashboard state."}
+                </strong>
+                <em>
+                  Trigger source: {holdWallView.triggerSource}; source mode:{" "}
+                  {holdWallView.sourceMode}.
+                </em>
+                <dl>
+                  {holdWallView.fields.map((field) => (
+                    <div key={field.key}>
+                      <dt>{field.label}</dt>
+                      <dd>{field.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            </div>
+          </section>
+        ),
+      })}
+
+      {renderReviewAccordion({
+        group: "Mission Run",
+        status: missionPlaybackState?.status ?? "idle",
+        title: "Mission Controls",
+        children: (
+          <section
+            aria-hidden={isActiveMissionMode}
+            className={presenterSurfaceClassName}
+            data-mission-surface="presenter"
+          >
+            <MissionPlaybackControls {...missionPlaybackControls} />
+          </section>
+        ),
+      })}
+
+      {renderReviewAccordion({
+        group: "Mission Run",
+        status: formatCount(missionReceiptTicketCount, "ticket"),
+        title: "Mission Run Receipt",
+        children: (
+          <section
+            className={getMissionStageSurfaceClassName("chain", "chain")}
+            aria-hidden={isMissionSurfaceHidden("chain")}
+            data-mission-act-state={getMissionSurfaceState("chain")}
+            data-mission-act-wrapper="chain"
+            data-mission-chain-part="receipt"
+            data-mission-surface="chain"
+          >
+            <MissionRunReceiptPanel receipt={missionRunReceipt} />
+          </section>
+        ),
+      })}
+
+      {renderReviewAccordion({
+        group: "Mission Run",
+        status: `${completedMissionStageIds.length}/${MISSION_STAGE_IDS.length} acts`,
+        title: "Mission Rail",
+        children: <MissionRail stages={displayedMissionRailStages} />,
+      })}
 
       <div
         className={`mission-primary-actions${
@@ -1204,17 +1436,23 @@ export function MissionPresentationShell({
         data-primary-action-row="presenter"
       >
         <button
-          aria-hidden={isActiveMissionMode}
+          aria-label={isActiveMissionMode ? "Previous mission act" : "Previous proof step"}
           className="mission-primary-actions__button mission-primary-actions__button--secondary"
-          disabled={!canDrive}
-          onClick={onPreviousStep}
+          disabled={isActiveMissionMode ? !canBackMission : !canDrive}
+          onClick={
+            isActiveMissionMode
+              ? canBackMission
+                ? onMissionBack
+                : undefined
+              : onPreviousStep
+          }
           type="button"
         >
-          Previous
+          {isActiveMissionMode ? "Previous Act" : "Previous"}
         </button>
         <button
           aria-hidden={isActiveMissionMode}
-          className="mission-primary-actions__button mission-primary-actions__button--secondary"
+          className="mission-primary-actions__button mission-primary-actions__button--secondary mission-primary-actions__button--proof-playback"
           disabled={!canDrive}
           onClick={primaryPlaybackAction}
           type="button"
@@ -1223,15 +1461,15 @@ export function MissionPresentationShell({
         </button>
         <button
           className="mission-primary-actions__button mission-primary-actions__button--primary"
-          disabled={!canAdvanceMission}
-          onClick={canAdvanceMission ? onMissionAdvance : undefined}
+          disabled={!canUsePrimaryMissionAction}
+          onClick={canUsePrimaryMissionAction ? primaryMissionAction : undefined}
           type="button"
         >
           {missionAdvanceLabel}
         </button>
         <button
           aria-hidden={isActiveMissionMode}
-          className="mission-primary-actions__button mission-primary-actions__button--secondary"
+          className="mission-primary-actions__button mission-primary-actions__button--secondary mission-primary-actions__button--proof-playback"
           disabled={!canDrive}
           onClick={onNextStep}
           type="button"
@@ -1239,51 +1477,64 @@ export function MissionPresentationShell({
           Next Proof Step
         </button>
         <button
-          aria-hidden={isActiveMissionMode}
+          aria-label={missionHasStarted ? "Reset mission walkthrough" : "Reset proof step"}
           className="mission-primary-actions__button mission-primary-actions__button--secondary"
-          disabled={!canDrive}
-          onClick={onResetStep}
+          disabled={missionHasStarted ? !canResetMission : !canDrive}
+          onClick={
+            missionHasStarted
+              ? canResetMission
+                ? missionPlaybackControls?.onResetMission
+                : undefined
+              : onResetStep
+          }
           type="button"
         >
           Reset
         </button>
       </div>
 
-      <section
-        className={getMissionStageSurfaceClassName("public", "public")}
-        aria-hidden={isMissionSurfaceHidden("public")}
-        data-mission-act-state={getMissionSurfaceState("public")}
-        data-mission-act-wrapper="public"
-        data-mission-public-part="boundary"
-        data-mission-surface="public"
-      >
-        <div className="mission-act-grid mission-act-grid--public">
+      {renderReviewAccordion({
+        group: "Authority and Public Boundary",
+        status: formatCount(publicSkinView?.redactions.length ?? 0, "redaction"),
+        title: "Public / Redacted Civic View",
+        children: (
           <section
-            className="mission-public-boundary-card"
-            data-public-civic-view="bounded"
+            className={getMissionStageSurfaceClassName("public", "public")}
+            aria-hidden={isMissionSurfaceHidden("public")}
+            data-mission-act-state={getMissionSurfaceState("public")}
+            data-mission-act-wrapper="public"
+            data-mission-public-part="boundary"
+            data-mission-surface="public"
           >
-            <span>Public / redacted civic view</span>
-            <strong>{publicPayloadStatus}</strong>
-            <dl>
-              <div>
-                <dt>Audience</dt>
-                <dd>{publicSkinView?.audience ?? "public boundary pending"}</dd>
-              </div>
-              <div>
-                <dt>Claims</dt>
-                <dd>{formatCount(publicSkinView?.claims.length ?? 0, "claim")}</dd>
-              </div>
-              <div>
-                <dt>Redactions</dt>
-                <dd>
-                  {formatCount(publicSkinView?.redactions.length ?? 0, "redaction")}
-                </dd>
-              </div>
-            </dl>
+            <div className="mission-act-grid mission-act-grid--public">
+              <section
+                className="mission-public-boundary-card"
+                data-public-civic-view="bounded"
+              >
+                <span>Public / redacted civic view</span>
+                <strong>{publicPayloadStatus}</strong>
+                <dl>
+                  <div>
+                    <dt>Audience</dt>
+                    <dd>{publicSkinView?.audience ?? "public boundary pending"}</dd>
+                  </div>
+                  <div>
+                    <dt>Claims</dt>
+                    <dd>{formatCount(publicSkinView?.claims.length ?? 0, "claim")}</dd>
+                  </div>
+                  <div>
+                    <dt>Redactions</dt>
+                    <dd>
+                      {formatCount(publicSkinView?.redactions.length ?? 0, "redaction")}
+                    </dd>
+                  </div>
+                </dl>
+              </section>
+              <SyncPill vibrationStatus={vibrationStatus} view={syncChoreography} />
+            </div>
           </section>
-          <SyncPill vibrationStatus={vibrationStatus} view={syncChoreography} />
-        </div>
-      </section>
+        ),
+      })}
 
       {absenceLensEnabled ? (
         <section
@@ -1331,49 +1582,56 @@ export function MissionPresentationShell({
         </section>
       ) : null}
 
-      <section
-        aria-hidden={!isReviewMode}
-        className={`${reviewSurfaceClassName} mission-secondary-proof mission-review-grid`}
-        data-mission-surface="review"
-        data-secondary-proof-summary="true"
-      >
-        <DecisionCounter view={auditWallView.counter} />
+      {renderReviewAccordion({
+        group: "Proof and Evidence",
+        status: `${formatCount(forensicChain.totalEntryCount, "chain entry", "chain entries")}; ${formatCount(absenceLens.signals.length, "absence signal")}`,
+        title: "Outcome Summary",
+        children: (
+          <section
+            aria-hidden={!isReviewMode}
+            className={`${reviewSurfaceClassName} mission-secondary-proof mission-review-grid`}
+            data-mission-surface="review"
+            data-secondary-proof-summary="true"
+          >
+            <DecisionCounter view={auditWallView.counter} />
 
-        <div className="mission-proof-summary-grid" data-proof-summary-grid="secondary">
-          <div className="mission-presentation__card">
-            <span>Authority</span>
-            <strong>{authorityState.status}</strong>
-            <em>{formatCount(authorityState.counts.total, "request")}</em>
-          </div>
-          <div className="mission-presentation__card">
-            <span>Governance</span>
-            <strong>{activeDecision}</strong>
-            <em>{currentStep?.stepId ?? "step pending"}</em>
-          </div>
-          <div className="mission-presentation__card">
-            <span>Absence</span>
-            <strong>{formatCount(absenceLens.signals.length, "signal")}</strong>
-            <em>{absenceLens.activeStepId ?? "step pending"}</em>
-          </div>
-          <div className="mission-presentation__card">
-            <span>Chain</span>
-            <strong>{formatCount(forensicChain.totalEntryCount, "entry", "entries")}</strong>
-            <em>{forensicChain.activeStepId ?? "step pending"}</em>
-          </div>
-          <div className="mission-presentation__card">
-            <span>Public</span>
-            <strong>{publicPayloadStatus}</strong>
-            <em>{formatCount(publicSkinView?.redactions.length ?? 0, "redaction")}</em>
-          </div>
-          <div className="mission-presentation__card">
-            <span>Snapshots</span>
-            <strong>{formatCount(readyCount, "snapshot")}</strong>
-            <em>{formatCount(errorCount, "error")}</em>
-          </div>
-        </div>
+            <div className="mission-proof-summary-grid" data-proof-summary-grid="secondary">
+              <div className="mission-presentation__card">
+                <span>Authority</span>
+                <strong>{authorityState.status}</strong>
+                <em>{formatCount(authorityState.counts.total, "request")}</em>
+              </div>
+              <div className="mission-presentation__card">
+                <span>Governance</span>
+                <strong>{activeDecision}</strong>
+                <em>{currentStep?.stepId ?? "step pending"}</em>
+              </div>
+              <div className="mission-presentation__card">
+                <span>Absence</span>
+                <strong>{formatCount(absenceLens.signals.length, "signal")}</strong>
+                <em>{absenceLens.activeStepId ?? "step pending"}</em>
+              </div>
+              <div className="mission-presentation__card">
+                <span>Chain</span>
+                <strong>{formatCount(forensicChain.totalEntryCount, "entry", "entries")}</strong>
+                <em>{forensicChain.activeStepId ?? "step pending"}</em>
+              </div>
+              <div className="mission-presentation__card">
+                <span>Public</span>
+                <strong>{publicPayloadStatus}</strong>
+                <em>{formatCount(publicSkinView?.redactions.length ?? 0, "redaction")}</em>
+              </div>
+              <div className="mission-presentation__card">
+                <span>Snapshots</span>
+                <strong>{formatCount(readyCount, "snapshot")}</strong>
+                <em>{formatCount(errorCount, "error")}</em>
+              </div>
+            </div>
 
-        <DoctrineCard />
-      </section>
+            <DoctrineCard />
+          </section>
+        ),
+      })}
 
       <DemoAuditWall
         onDismiss={onAuditWallDismiss}

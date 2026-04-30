@@ -398,7 +398,12 @@ const tests = [
         ["capture", "authority", "governance", "absence", "chain", "public"]
       );
       assert.equal(stages[0]?.line.includes("Permit 4471"), true);
-      assert.equal(stages[3]?.line.startsWith("This is the moat."), true);
+      assert.equal(
+        stages[3]?.line,
+        "Meridian detected what is missing. The city cannot act until the absent evidence is present."
+      );
+      assert.equal(stages[3]?.line.toLowerCase().includes("moat"), false);
+      assert.equal(stages[3]?.lineKey, "act-4-absence-evidence");
       assert.equal(stages[4]?.line.includes("Every decision"), true);
       assert.equal(
         buildMissionNarrationKey({
