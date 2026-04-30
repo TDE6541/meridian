@@ -149,6 +149,45 @@ const tests = [
     },
   },
   {
+    name: "transport speak resolves only after audio ended and then cleans up",
+    run: async () => {
+      const target = createAudioTarget();
+      const transport = createForemanLiveVoiceTransport({
+        fetcher: async () =>
+          new Response(new Uint8Array([1, 2, 3]), {
+            headers: { "content-type": "audio/mpeg" },
+            status: 200,
+          }),
+        target,
+      });
+      let settled = false;
+      const playback = transport.speak({
+        source: FOREMAN_LIVE_VOICE_MISSION_SOURCE,
+        text: "This is Permit 4471. A field inspector flagged a concern during a routine corridor walk.",
+      });
+
+      void playback.finished.then(() => {
+        settled = true;
+      });
+
+      await waitFor(() => MockAudio.instances.length === 1, "audio instance");
+      assert.equal(MockAudio.instances[0]?.playCount, 1);
+      await Promise.resolve();
+      await Promise.resolve();
+
+      assert.equal(settled, false);
+      assert.deepEqual(target.revoked, []);
+
+      MockAudio.instances[0]?.onended?.({});
+
+      const result = await playback.finished;
+
+      assert.equal(result.ok, true);
+      assert.equal(settled, true);
+      assert.deepEqual(target.revoked, ["blob:foreman-1"]);
+    },
+  },
+  {
     name: "live voice client gates non-mission text before fetch",
     run: async () => {
       const target = createAudioTarget();
@@ -231,6 +270,7 @@ const tests = [
       assert.equal(result.ok, false);
       assert.equal(result.state, "idle");
       assert.equal(MockAudio.instances[0]?.paused, true);
+      assert.deepEqual(target.revoked, ["blob:foreman-1"]);
     },
   },
   {

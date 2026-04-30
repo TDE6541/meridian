@@ -300,11 +300,6 @@ export function runForemanMissionNarration({
       text: safeLine,
     });
 
-    addTimer(
-      () => finish("failsafe"),
-      estimateMissionNarrationFailsafeMs(safeLine)
-    );
-
     void liveVoicePlayback.finished.then((result) => {
       if (complete) {
         return;

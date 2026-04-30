@@ -536,6 +536,49 @@ const tests = [
     },
   },
   {
+    name: "mission narration awaits live voice completion without failsafe cancellation",
+    run: async () => {
+      const timers = createFakeTimers();
+      const liveVoice = createLiveVoiceTransport();
+      const narration = getMissionActNarration("capture");
+      const completed: string[] = [];
+
+      runForemanMissionNarration({
+        clearTimer: timers.clearTimer,
+        line: narration.line,
+        lineKey: narration.lineKey,
+        liveVoiceTransport: liveVoice.transport,
+        onComplete: (reason) => completed.push(reason),
+        runId: "mission-run-1",
+        setTimer: timers.setTimer,
+        stageId: "capture",
+      });
+
+      timers.fireNext(0);
+      await Promise.resolve();
+
+      assert.deepEqual(completed, []);
+      assert.equal(liveVoice.pending.length, 1);
+      assert.equal(
+        timers.timers.some(
+          (timer) =>
+            timer.active &&
+            timer.delayMs === estimateMissionNarrationFailsafeMs(narration.line)
+        ),
+        false
+      );
+
+      liveVoice.completeNext({
+        issue: null,
+        ok: true,
+        state: "idle",
+      });
+      await Promise.resolve();
+
+      assert.deepEqual(completed, ["speech_end"]);
+    },
+  },
+  {
     name: "mission narration falls back and unlocks after live voice failure",
     run: async () => {
       const timers = createFakeTimers();
