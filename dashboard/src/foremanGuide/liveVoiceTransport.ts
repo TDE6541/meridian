@@ -32,10 +32,22 @@ export interface ForemanLiveVoiceSpeakInput {
 }
 
 export interface ForemanLiveVoiceAudioElement {
+  addEventListener?: (
+    type: string,
+    listener: (event: unknown) => void,
+    options?: { once?: boolean }
+  ) => void;
+  load?: () => void;
   onended: ((event: unknown) => void) | null;
   onerror: ((event: unknown) => void) | null;
   pause: () => void;
   play: () => Promise<void> | void;
+  preload?: string;
+  readyState?: number;
+  removeEventListener?: (
+    type: string,
+    listener: (event: unknown) => void
+  ) => void;
 }
 
 export interface ForemanLiveVoiceBrowserTarget {
@@ -53,6 +65,8 @@ export interface CreateForemanLiveVoiceTransportInput {
 }
 
 const VOICE_UNAVAILABLE_COPY = "Voice unavailable - showing typed answer.";
+const AUDIO_CAN_PLAY_THROUGH_READY_STATE = 4;
+const AUDIO_LOAD_TIMEOUT_MS = 5000;
 
 function getBrowserTarget(): ForemanLiveVoiceBrowserTarget | null {
   return typeof window === "undefined"
@@ -153,6 +167,96 @@ function playAudio({
   });
 }
 
+function waitForAudioBlobLoad({
+  audio,
+  signal,
+}: {
+  audio: ForemanLiveVoiceAudioElement;
+  signal: AbortSignal;
+}): Promise<ForemanLiveVoiceResult | null> {
+  if (signal.aborted) {
+    return Promise.resolve(
+      result(false, "idle", "Voice playback cancelled.")
+    );
+  }
+
+  const addEventListener = audio.addEventListener?.bind(audio);
+  const removeEventListener = audio.removeEventListener?.bind(audio);
+  const load = audio.load?.bind(audio);
+
+  if (
+    typeof addEventListener !== "function" ||
+    typeof removeEventListener !== "function" ||
+    typeof load !== "function"
+  ) {
+    return Promise.resolve(null);
+  }
+
+  if (
+    typeof audio.readyState === "number" &&
+    audio.readyState >= AUDIO_CAN_PLAY_THROUGH_READY_STATE
+  ) {
+    return Promise.resolve(null);
+  }
+
+  return new Promise((resolve) => {
+    let settled = false;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    const isReadyToPlayThrough = () =>
+      typeof audio.readyState !== "number" ||
+      audio.readyState >= AUDIO_CAN_PLAY_THROUGH_READY_STATE;
+
+    const finish = (playbackResult: ForemanLiveVoiceResult | null) => {
+      if (settled) {
+        return;
+      }
+
+      settled = true;
+      removeEventListener("canplaythrough", ready);
+      removeEventListener("loadeddata", ready);
+      removeEventListener("error", fail);
+      signal.removeEventListener("abort", abort);
+
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
+
+      resolve(playbackResult);
+    };
+
+    const ready = () => {
+      if (isReadyToPlayThrough()) {
+        finish(null);
+      }
+    };
+    const fail = () => finish(result(false, "failed", VOICE_UNAVAILABLE_COPY));
+    const abort = () => {
+      try {
+        audio.pause();
+      } catch {
+        // Playback cancellation is best-effort; typed text remains primary.
+      }
+
+      finish(result(false, "idle", "Voice playback cancelled."));
+    };
+
+    addEventListener("canplaythrough", ready, { once: true });
+    addEventListener("loadeddata", ready, { once: true });
+    addEventListener("error", fail, { once: true });
+    signal.addEventListener("abort", abort, { once: true });
+    timeoutId = setTimeout(() => {
+      finish(result(false, "failed", VOICE_UNAVAILABLE_COPY));
+    }, AUDIO_LOAD_TIMEOUT_MS);
+
+    try {
+      audio.preload = "auto";
+      load();
+    } catch {
+      finish(result(false, "failed", VOICE_UNAVAILABLE_COPY));
+    }
+  });
+}
+
 export async function speakForemanLiveText({
   endpoint = FOREMAN_LIVE_VOICE_ENDPOINT,
   fetcher,
@@ -226,12 +330,23 @@ export async function speakForemanLiveText({
     );
     const audio = new resolvedTarget.Audio(objectUrl);
     const cleanup = () => resolvedTarget.URL?.revokeObjectURL(objectUrl);
+    const playbackSignal = signal ?? new AbortController().signal;
+    const loadResult = await waitForAudioBlobLoad({
+      audio,
+      signal: playbackSignal,
+    });
+
+    if (loadResult) {
+      cleanup();
+      onState?.(loadResult.state);
+      return loadResult;
+    }
 
     return playAudio({
       audio,
       cleanup,
       onState,
-      signal: signal ?? new AbortController().signal,
+      signal: playbackSignal,
     });
   } catch {
     if (signal?.aborted) {

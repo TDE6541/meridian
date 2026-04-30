@@ -49,13 +49,15 @@ function sendJson(res, statusCode, payload, extraHeaders = {}) {
   return undefined;
 }
 
-function sendAudio(res, audioBuffer, contentType) {
-  const body = Buffer.from(audioBuffer);
+function sendAudio(res, audioBuffer) {
+  const body = Buffer.isBuffer(audioBuffer)
+    ? audioBuffer
+    : Buffer.from(audioBuffer);
 
   setResponseHeaders(res, {
     "Cache-Control": "no-store",
     "Content-Length": String(body.length),
-    "Content-Type": contentType || "audio/mpeg",
+    "Content-Type": "audio/mpeg",
     "X-Foreman-Voice-Contract": FOREMAN_VOICE_CONTRACT,
     "X-Foreman-Voice-Status": "available",
   });
@@ -148,6 +150,16 @@ function voiceUnavailable(res, issue, statusCode = 503) {
   });
 }
 
+async function readCompleteAudioBuffer(voiceResponse) {
+  const audioArrayBuffer = await voiceResponse.arrayBuffer();
+
+  if (!audioArrayBuffer || audioArrayBuffer.byteLength === 0) {
+    return null;
+  }
+
+  return Buffer.from(audioArrayBuffer);
+}
+
 async function handlePost(req, res) {
   const parsed = await parseJsonBody(req);
 
@@ -220,9 +232,9 @@ async function handlePost(req, res) {
       );
     }
 
-    const audioBuffer = await voiceResponse.arrayBuffer();
+    const audioBuffer = await readCompleteAudioBuffer(voiceResponse);
 
-    if (!audioBuffer || audioBuffer.byteLength === 0) {
+    if (!audioBuffer || audioBuffer.length === 0) {
       return voiceUnavailable(
         res,
         "Voice unavailable - showing typed answer.",
@@ -230,11 +242,7 @@ async function handlePost(req, res) {
       );
     }
 
-    return sendAudio(
-      res,
-      audioBuffer,
-      voiceResponse.headers?.get?.("content-type") ?? "audio/mpeg"
-    );
+    return sendAudio(res, audioBuffer);
   } catch {
     return voiceUnavailable(
       res,
