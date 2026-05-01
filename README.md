@@ -5,7 +5,7 @@ Meridian is a governed civic intelligence system. It captures decisions, risks, 
 ## Live Demo
 
 - Live demo: https://meridian-holdpoint.vercel.app
-- Video demo: https://youtu.be/4C28pTbKbYM
+- Video demo: https://youtu.be/7no_hL7GHTc
 - Repository: https://github.com/TDE6541/meridian
 - Repository posture: this is the public GitHub repository for HackFW review. The repo includes deeper governed implementation history, but this README is the public submission front door.
 
@@ -15,11 +15,11 @@ Log in at the live demo URL with Auth0 to see role-specific views. These account
 
 | Role | Email | Password |
 | --- | --- | --- |
-| Field Inspector | timdeavenport+inspector@gmail.com | Meridian2026! |
-| Department Director | timdeavenport+director@gmail.com | Meridian2026! |
-| Council Member | timdeavenport+council@gmail.com | Meridian2026! |
-| Operations Lead | timdeavenport+operations@gmail.com | Meridian2026! |
-| Public Viewer | timdeavenport+public@gmail.com | Meridian2026! |
+| Field Inspector | timdeavenport+inspector@gmail.com | Meridian1!! |
+| Department Director | timdeavenport+director@gmail.com | Meridian1!! |
+| Council Member | timdeavenport+council@gmail.com | Meridian1!! |
+| Operations Lead | timdeavenport+operations@gmail.com | Meridian1!! |
+| Public Viewer | timdeavenport+public@gmail.com | Meridian1!! |
 
 ## Built for HackFW
 
