@@ -72,6 +72,8 @@ In short: AI can explain the civic record, but deterministic governance decides 
 
 ## How It Works
 
+Meridian is designed to govern AI agents that act on civic infrastructure. In the full architecture, an AI ensemble pipeline — adapted from HoldPoint, a construction meeting intelligence system — captures decisions, risks, and commitments from city meetings: planning commissions, permitting boards, council sessions. AI agents then try to act on that captured intelligence: approving permits, scheduling inspections, escalating concerns. Meridian sits between the AI agent and the action. The AI captures and explains. The deterministic engines govern.
+
 - React/Vite dashboard renders the proof cockpit.
 - Deterministic JavaScript governance logic evaluates action posture.
 - Authority and evidence checks produce HOLDs when proof is missing.
