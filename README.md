@@ -1,6 +1,6 @@
 # Meridian
 
-Meridian is a governed civic intelligence proof cockpit for AI-assisted permit workflows. It demonstrates how an AI action can be stopped when authority or evidence is missing, recorded in an audit/proof chain, and translated into a public-safe view.
+Meridian is a governed civic intelligence system. It captures decisions, risks, and commitments from city meetings using AI ensemble pipelines, governs what happens next with deterministic engines, records every decision in an immutable audit chain, and renders role-appropriate views for inspectors, directors, council members, and the public.
 
 ## Live Demo
 
@@ -37,7 +37,7 @@ Meridian is a governed civic intelligence pipeline.
 
 It captures civic decision context, governs proposed AI-assisted actions, records the decision path, and renders the right view for the right audience.
 
-Capture — AI ensemble pipelines, adapted from HoldPoint, ingest unstructured civic data: meeting transcripts, permit filings, inspection reports, field notes, and council sessions. The AI extracts structured decisions, risks, commitments, evidence posture, and action items from raw civic input.
+Capture — AI ensemble pipelines, adapted from HoldPoint, ingest unstructured civic data: meeting transcripts, permit filings, inspection reports, field notes, and council sessions. The AI extracts structured decisions, risks, commitments, and action items from raw civic input.
 
 Govern — When an AI agent tries to act on captured intelligence — approving a permit, scheduling an inspection, escalating a concern, or moving a civic workflow forward — deterministic JavaScript governance engines evaluate the action against authority, evidence, and disclosure rules. No language model decides what is allowed. The engines decide. If required authority is missing, the action holds. If required evidence is missing, the action holds.
 
