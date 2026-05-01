@@ -33,16 +33,21 @@ AI can summarize, draft, and recommend actions quickly. In civic workflows, spee
 
 ## What Meridian Does
 
-Meridian governs fictional Permit #4471 and shows what happens when an attempted AI approval does not have the authority or evidence required to move forward.
+Meridian is a governed civic intelligence pipeline.
 
-Meridian:
+It captures civic decision context, governs proposed AI-assisted actions, records the decision path, and renders the right view for the right audience.
 
-- captures an attempted AI approval
-- checks whether the right authority is present
-- checks whether required evidence exists
-- holds the action when required proof is missing
-- records the decision path in an audit/proof chain
-- shows a public-safe disclosure view with sensitive details separated from public context
+Capture — AI ensemble pipelines, adapted from HoldPoint, ingest unstructured civic data: meeting transcripts, permit filings, inspection reports, field notes, and council sessions. The AI extracts structured decisions, risks, commitments, evidence posture, and action items from raw civic input.
+
+Govern — When an AI agent tries to act on captured intelligence — approving a permit, scheduling an inspection, escalating a concern, or moving a civic workflow forward — deterministic JavaScript governance engines evaluate the action against authority, evidence, and disclosure rules. No language model decides what is allowed. The engines decide. If required authority is missing, the action holds. If required evidence is missing, the action holds.
+
+Record — Every governance decision is recorded in an audit/proof chain: what was attempted, what was present, what was missing, and why the action was held.
+
+Render — Different roles see different views of the same governance truth. An inspector can see inspection context. A director can see authority and approval posture. A council member can review civic status. The public can see a redacted transparency report with sensitive details withheld.
+
+Foreman explains the recorded governance path and guides the demo narrative. It does not create governance truth or decide which actions are allowed.
+
+The deployed demo applies this pipeline to fictional Permit #4471: a field inspector flags a structural concern during a corridor walk, an AI agent tries to approve the reconstruction package, and Meridian refuses because director-level authority and supporting field evidence are both missing.
 
 Operating rule:
 
