@@ -1,14 +1,16 @@
 # Demo Day Commander Packet
 
-Status: Final operator-facing V2-C Demo Day readiness packet. This is a demo operations artifact only; it adds no runtime behavior, proof claim, shared contract, migration row, source change, auth/config/deploy/env change, or protected-surface widening.
+Status: Current operator-facing Demo Day commander packet for May 2, 2026. This is a demo operations artifact only; it adds no runtime behavior, proof claim, shared contract, migration row, source change, auth/config/deploy/env change, or protected-surface widening.
 
 ## 1. Demo Day Status
 
-- V2-C required lane complete through DEMO-10.
-- V2-C optional artifact lane complete through DEMO-14 artifacts.
-- Current repo floor: dashboard `283/283`, repo-wide JS `719/719`, dashboard typecheck green, dashboard build green.
+- README capture-first framing is the public front door for judges.
+- Deployed dashboard demo cockpit is the primary demo surface.
+- Dashboard verification: PASS via `npm --prefix dashboard test`.
+- Repo-wide JS verification: PASS, `719/719`.
+- Demo story is capture-first: HoldPoint captures, governance refuses unsafe or unsupported action, Foreman explains, the chain proves, and the dashboard renders.
 - Repo is inspection-ready pending manual proof HOLDs.
-- DEMO-14 live use remains rehearsal-gated HOLD until Friday rehearsal proof exists.
+- V2-C packet history remains historical; this packet is no longer V2-C-only current posture.
 
 ## 2. Open First
 

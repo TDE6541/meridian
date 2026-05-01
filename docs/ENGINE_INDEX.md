@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, shipped Wave 7 civic skins rendering/proof surfaces, shipped Wave 8 corridor scenario integration/proof surfaces, Wave 9 local dashboard proof surfaces, V2-A local/demo-day live civic nervous system surfaces, V2-B/GARP local Authority Runway surfaces, V2-B Foreman/Auth local proof cockpit surfaces, V2-C dashboard-local Demo Presentation Layer surfaces, and V2-D++ dashboard-local Embodied Foreman Civic Proof Theater surfaces. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
+This file lists the current logic-bearing Meridian surfaces that exist in-repo for the Wave 1 foundation, Wave 2 entity ontology extension, shipped Wave 3 bridge substrate, bounded Wave 4A governance runtime lane, bounded Wave 4B meeting-capture pipeline lane, Wave 4.5 calibration truth lock surfaces, shipped Wave 5 authority-topology surfaces, shipped Wave 6 forensic-chain surfaces, shipped Wave 7 civic skins rendering/proof surfaces, shipped Wave 8 corridor scenario integration/proof surfaces, Wave 9 local dashboard proof surfaces, V2-A local/demo-day live civic nervous system surfaces, V2-B/GARP local Authority Runway surfaces, V2-B Foreman/Auth local proof cockpit surfaces, V2-C dashboard-local Demo Presentation Layer surfaces, V2-D++ dashboard-local Embodied Foreman Civic Proof Theater surfaces, V2-E visibility/proof hierarchy surfaces, V2-F presentation/voice surfaces, V2-G voice transport surfaces, and post-V2-G demo-day / capture-first presentation polish over the existing dashboard proof cockpit. Meridian V1 is complete through Wave 9. Wave 9 is the final V1 wave, and there is no Wave 10 in V1.
 
 ## V1 Closure Reference
 
@@ -15,6 +15,8 @@ This file lists the current logic-bearing Meridian surfaces that exist in-repo f
 - AUTH-5 deployed Vercel URL proof and Auth0 callback/login proof are recorded in `docs/closeouts/MERIDIAN_V2B_AUTH5_DEPLOYED_PROOF_CLOSEOUT.md`; final V2-B closeout remains HOLD.
 - V2-C Demo Presentation Layer is recorded separately in `docs/specs/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER.md` and `docs/closeouts/MERIDIAN_V2C_DEMO_PRESENTATION_LAYER_CLOSEOUT.md`; manual Demo Day proof HOLDs remain carried.
 - V2-D++ Embodied Foreman Civic Proof Theater is recorded separately in `docs/specs/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER.md` and `docs/closeouts/MERIDIAN_V2D_EMBODIED_FOREMAN_CIVIC_PROOF_THEATER_CLOSEOUT.md`; manual/global proof HOLDs remain carried.
+- V2-E Visibility Cleanup, V2-F Foreman Simplification + Voice, and V2-G Live Foreman Voice Transport are recorded in their specs/closeouts; post-V2-G demo-day / capture-first presentation polish is current judge-facing polish over the existing dashboard proof cockpit, not a new engine lane.
+- Current verification posture: Dashboard verification: PASS via `npm --prefix dashboard test`. Repo-wide JS verification: PASS, `719/719`.
 
 ## Bridge Substrate
 
@@ -139,7 +141,7 @@ Purpose: bounded local V2-B/GARP authority surfaces for deterministic authority 
 
 ## Local Dashboard Lane
 
-Purpose: bounded Wave 9 local dashboard proof over committed Wave 8 runner payload snapshots, V2-A optional local Live Mode, V2-B/GARP dashboard-local role-session/authority cockpit surfaces, V2-B Foreman/Auth local guide/explainer cockpit surfaces, V2-C dashboard-local presentation/choreography/reliability surfaces, and V2-D++ dashboard-local demo/proof theater surfaces. The dashboard consumes `dashboard/public/scenarios/*.json`, uses `step.skins.outputs` as the canonical skin payload seam, keeps Director Mode / Absence Lens view-only, keeps snapshot mode default, consumes `DashboardLiveProjectionV1` only when Live Mode is enabled, and exposes dashboard-local Auth0 Universal Login role-session proof, payload-only notification preview, Foreman guide/explainer narration, shared local authority endpoint behavior, browser-native voice fallback, deterministic avatar state, prepared disclosure preview actions, Mission presentation, Mission Rail, HOLD Wall, Demo Audit Wall, reliability runbook/checklists, SyncPill/approval pulse/vibration fallback, Guided Mission, Foreman Autonomous scripted conduct, embodied avatar state, Proof Spotlight, Absence Shadow Map, Authority Handoff Theater, Judge Touchboard, Evidence Navigator, Civic Twin Diorama, Forensic Receipt Ribbon, Mission Run Receipt Panel, Physical Mode, Rehearsal Certification, Failure Injection, and reliability guards. It does not import `src/skins/**` or root `src/live/**` in the browser and does not recompute governance, authority, matching, forensic, absence, skin, city, or cascade truth.
+Purpose: bounded Wave 9 local dashboard proof over committed Wave 8 runner payload snapshots, V2-A optional local Live Mode, V2-B/GARP dashboard-local role-session/authority cockpit surfaces, V2-B Foreman/Auth local guide/explainer cockpit surfaces, V2-C dashboard-local presentation/choreography/reliability surfaces, V2-D++ dashboard-local demo/proof theater surfaces, V2-E visibility/proof hierarchy surfaces, V2-F presentation/voice surfaces, V2-G voice transport surfaces, and post-V2-G demo-day / capture-first presentation polish. The dashboard consumes `dashboard/public/scenarios/*.json`, uses `step.skins.outputs` as the canonical skin payload seam, keeps Director Mode / Absence Lens view-only, keeps snapshot mode default, consumes `DashboardLiveProjectionV1` only when Live Mode is enabled, and exposes dashboard-local Auth0 Universal Login role-session proof, payload-only notification preview, Foreman guide/explainer narration, shared local authority endpoint behavior, browser-native voice fallback, deterministic avatar state, prepared disclosure preview actions, Mission presentation, Mission Rail, HOLD Wall, Demo Audit Wall, reliability runbook/checklists, SyncPill/approval pulse/vibration fallback, Guided Mission, Foreman Autonomous scripted conduct, embodied avatar state, Proof Spotlight, Absence Shadow Map, Authority Handoff Theater, Judge Touchboard, Evidence Navigator, Civic Twin Diorama, Forensic Receipt Ribbon, Mission Run Receipt Panel, Physical Mode, Rehearsal Certification, Failure Injection, reliability guards, server-side-only Foreman voice transport for already-produced text, and current capture-first mission presentation polish. Dashboard verification: PASS via `npm --prefix dashboard test`. Repo-wide JS verification: PASS, `719/719`. It does not import `src/skins/**` or root `src/live/**` in the browser and does not recompute governance, authority, matching, forensic, absence, skin, city, or cascade truth.
 
 - `dashboard/package.json`
 - `dashboard/index.html`
@@ -214,6 +216,16 @@ Purpose: dashboard-local demo/proof theater over existing proof only. V2-D++ shi
 - `dashboard/src/demo/**/*.ts`
 - `dashboard/tests/**/*.ts*`
 
+## Current Dashboard Demo-Day Proof Lane
+
+Purpose: current judge-facing demo-day proof over the shipped dashboard surfaces. The proof story is capture-first: HoldPoint captures, governance refuses unsafe or unsupported action, Foreman explains the recorded path, the chain proves the decision, and the dashboard renders the proof cockpit. The deployed demo URL is recorded in README/dashboard docs. This lane is presentation/proof posture only; it does not change source/runtime behavior, dashboard behavior, tests, packages, shared contracts, or migration status.
+
+- `README.md`
+- `dashboard/README.md`
+- `docs/demo/DEMO_DAY_COMMANDER_PACKET.md`
+- `docs/MERIDIAN_CURRENT_STATE_LEDGER.md`
+- `docs/UI_INDEX.md`
+
 ## Governance Substrate
 
 Purpose: legacy/compatibility governance shadow container factories and validators for entity scaffolds. The `authority`, `evidence`, `obligation`, and `absence` shadows are structural containers only; active governance data lives in typed `signal_tree`.
@@ -246,7 +258,7 @@ Purpose: read-only Meridian publisher subject builders and connection config imp
 
 ## Proof Surfaces
 
-Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, Wave 5 authority-topology proof surfaces, Wave 6 forensic-chain proof surfaces, Wave 7 civic skins proof surfaces, Wave 8 corridor scenario integration proof surfaces, Wave 9 dashboard-local proof surfaces, V2-A local live proof surfaces, V2-B/GARP local authority proof surfaces, and V2-D++ dashboard-local demo/proof theater proof surfaces.
+Purpose: structural proof suite plus Wave 3 bridge proof surfaces, Wave 4A runtime activation/sweep proof, Wave 4B pipeline/frozen-handoff proof surfaces, Wave 4.5 calibration replay proof surfaces, Wave 5 authority-topology proof surfaces, Wave 6 forensic-chain proof surfaces, Wave 7 civic skins proof surfaces, Wave 8 corridor scenario integration proof surfaces, Wave 9 dashboard-local proof surfaces, V2-A local live proof surfaces, V2-B/GARP local authority proof surfaces, V2-D++ dashboard-local demo/proof theater proof surfaces, V2-E/V2-F/V2-G dashboard-local proof surfaces, and current demo-day dashboard proof. Current test posture for navigation docs is count-neutral on dashboard aggregate: Dashboard verification: PASS via `npm --prefix dashboard test`; repo-wide JS verification: PASS, `719/719`.
 
 - `tests/config.test.js`
 - `tests/deny-patterns.test.js`
